@@ -27,7 +27,7 @@
 
 ## 문서 작성 원칙
 
-이 문서는 기초 설계서(docs/DESIGN.md)와 서비스 기획 초안(docs/PROJECT_PLAN.md)을 양식에 맞게 정리한 것입니다. [ ]로 남은 항목은 팀 확정(인원·일정·모델 크기·GPU 등) 이후 채웁니다. 목표값과 시장 비교는 **가설·제안**이며 실측 결과나 확인된 사실이 아닙니다. ALIO에 공개된 사규를 쓰는 교육 프로젝트로, **실제 IBK 사내 시스템이 아니며** 시연에는 가상의 질문·사안만 사용합니다.
+이 문서는 기초 설계서(docs/MLE_2팀_기초 설계.md)와 서비스 기획 초안(docs/PROJECT_PLAN.md)을 양식에 맞게 정리한 것입니다. [ ]로 남은 항목은 팀 확정(인원·일정·모델 크기·GPU 등) 이후 채웁니다. 목표값과 시장 비교는 **가설·제안**이며 실측 결과나 확인된 사실이 아닙니다. ALIO에 공개된 사규를 쓰는 교육 프로젝트로, **실제 IBK 사내 시스템이 아니며** 시연에는 가상의 질문·사안만 사용합니다.
 
 ## 1. 프로젝트 주제
 
@@ -374,4 +374,4 @@ ALIO에서 HWP 수동 다운로드 → olefile 기반 변환(텍스트·구조 J
 | 지식 그래프 | 문서·조문·의무 등을 노드로, 인용·위임 등을 관계로 저장한 데이터 |
 | 판단 불가(UNDETERMINED) | 근거나 사실이 부족해 결론을 내리지 않고 확인 사항을 제시하는 결과 |
 | 사원 모드 / 인사 모드 | 이 서비스의 두 사용 방식(부록 A) |
-| 참고 문서 | docs/DESIGN.md(기초 설계서), docs/PROJECT_PLAN.md(기획 초안), docs/PROJECT_GUIDE_SUMMARY.md, docs/LAW_COLLECTION_LIST.md, data/DATA_SOURCES.md |
+| 참고 문서 | docs/MLE_2팀_기초 설계.md(기초 설계서), docs/PROJECT_PLAN.md(기획 초안), docs/PROJECT_GUIDE_SUMMARY.md, docs/LAW_COLLECTION_LIST.md, data/DATA_SOURCES.md |

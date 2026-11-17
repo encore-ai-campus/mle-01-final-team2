@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-"""docs/DESIGN.md 의 ```mermaid 블록을 읽어 확대·축소·이동이 되는 docs/architecture.html 을 만든다.
+"""docs/MLE_2팀_기초 설계.md 의 ```mermaid 블록을 읽어 확대·축소·이동이 되는 docs/architecture.html 을 만든다.
 
-다이어그램 원본은 DESIGN.md 한 곳에만 둔다(이 스크립트는 복사본을 만들 뿐이다).
+다이어그램 원본은 MLE_2팀_기초 설계.md 한 곳에만 둔다(이 스크립트는 복사본을 만들 뿐이다).
 설계서의 다이어그램을 고치면 이 스크립트를 다시 실행한다.
 
     python tools/build_architecture_html.py
@@ -17,7 +17,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-SRC = ROOT / "docs" / "DESIGN.md"
+SRC = ROOT / "docs" / "MLE_2팀_기초 설계.md"
 OUT = ROOT / "docs" / "architecture.html"
 
 MERMAID_VER = "10.9.1"
@@ -60,7 +60,7 @@ PAGE = """<!doctype html>
 <body>
 <header>
   <h1>시스템 아키텍처 다이어그램</h1>
-  <p class="hint">마우스 휠: 확대·축소 · 드래그: 이동 · 더블클릭: 확대 · 키보드 + − 0 · 원본: docs/DESIGN.md</p>
+  <p class="hint">마우스 휠: 확대·축소 · 드래그: 이동 · 더블클릭: 확대 · 키보드 + − 0 · 원본: docs/MLE_2팀_기초 설계.md</p>
 </header>
 <main id="root">__BLOCKS__</main>
 

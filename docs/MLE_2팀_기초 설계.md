@@ -1079,7 +1079,7 @@ Vercel AI SDK를 쓸지는 선택 사항이다. 이벤트 종류가 커스텀이
 data/ibk기업/            원본 HWP·PDF
 data/ibk_converted/      text/ parsed/ manifest.*   (변환 산출물)
 tools/                   convert_ibk.py, requirements.txt
-docs/                    DESIGN.md (본 문서)
+docs/                    MLE_2팀_기초 설계.md (본 문서)
 sample_data/             합성 샘플(스키마 검증용)
 train/                   QLoRA 학습·병합·양자화, vLLM 서빙 설정 (RunPod)
 web/                     Next.js 프론트 (Vercel 배포)
