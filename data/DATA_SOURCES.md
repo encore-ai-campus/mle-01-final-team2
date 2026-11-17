@@ -23,6 +23,11 @@
 
 주의: 수집 시점이 달라 최신 개정이 빠졌을 수 있음 → API로 갱신.
 
+### 추가 확인 (2026-11-17, HF API 태그 기준 · 내용 품질 미확인)
+- 법령 원문: `Rootpye/korean-lawdata1~4`(Apache-2.0), `Wookhyeon/korean-law-articles`(CC0-1.0), `chaannwooff/Korean_law`·`mosshoon/korean-laws`(CC-BY-4.0)
+- 법률 QA·지시: `ggh5454/korean-legal-qa-dataset`(CC-BY-4.0), `gyung/korean-bar-exam-hard-current-law-precedent-sft-1000`(other), `neuralfoundry-coder/korean-legal-instruction-sample`(other)
+- 용어: `JusWis/korean-legal-terminology`(CC-BY-4.0)
+
 ## 3. 판결·AI Hub
 
 - [AI Hub](https://wikidocs.net/316114) — 2026-08 독자 AI 파운데이션 모델용 데이터에 법률 추론 데이터가 포함됐다는 보도. 세부 구성 미확인 → aihub.or.kr에서 "법률/판결문/약관" 직접 검색.
