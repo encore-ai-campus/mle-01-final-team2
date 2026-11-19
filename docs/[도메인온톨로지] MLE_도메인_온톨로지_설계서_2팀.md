@@ -11,7 +11,7 @@ IBK기업은행 사규와 상위 국가 법령을 잇는 규정 준수 검토 �
 | 작성일·버전 | 2026-11-17 / v0.1 |
 | 연계 일정 | 2주차 (2026.11.23.~11.27.) |
 | 저장소·증빙 | https://github.com/encore-ai-campus/mle-01-final-team2 / docs/ONTOLOGY_DESIGN.md(상세 설계), docs/diagrams/, data/상위법령_변환/, sample_data/ |
-| 문서 상태 | ■ 초안  □ 검토  □ 보완  □ 승인 |
+| 문서 상태 | ■ 초안 □ 검토 □ 보완 □ 승인 |
 
 ## 1. 설계 목적 및 도메인 경계
 
