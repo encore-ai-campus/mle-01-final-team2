@@ -1,0 +1,37 @@
+{
+ "candidates": 18021,
+ "evidence_not_found": 0,
+ "notices": {
+  "BIZINFO": 1294,
+  "KSTARTUP": 3819
+ },
+ "notices_with_candidate": {
+  "BIZINFO": 1170,
+  "KSTARTUP": 2451
+ },
+ "by_source_attribute": {
+  "BIZINFO:business_age": 248,
+  "BIZINFO:certification": 2251,
+  "BIZINFO:company_size": 3220,
+  "BIZINFO:exclusion": 3365,
+  "BIZINFO:founder_age": 189,
+  "BIZINFO:law_reference": 2466,
+  "BIZINFO:region": 1380,
+  "KSTARTUP:business_age": 1620,
+  "KSTARTUP:certification": 559,
+  "KSTARTUP:company_size": 868,
+  "KSTARTUP:exclusion": 193,
+  "KSTARTUP:founder_age": 209,
+  "KSTARTUP:law_reference": 324,
+  "KSTARTUP:region": 1129
+ },
+ "ambiguous_region_candidates": 44,
+ "unresolved_region_candidates": 44,
+ "kstartup_business_age_conflict": {
+  "consistent": 1233,
+  "no_text_or_unparsed": 2414,
+  "text_narrower": 145,
+  "text_wider": 22,
+  "no_upper_bound_in_text": 5
+ }
+}

@@ -1,0 +1,154 @@
+{
+ "note": "공고 텍스트에서 '○○권'이 3개 이상 공고에 나온 후보. 구성 시도는 공고 본문이 정의한 것만 근거가 되며 사람이 검수하기 전에는 활성 사전에 넣지 않는다.",
+ "summary": {
+  "distinct_labels_ge3_notices": 9,
+  "with_definition_sentence": 2,
+  "top": [
+   [
+    "수도권",
+    26,
+    true
+   ],
+   [
+    "동남권",
+    25,
+    true
+   ],
+   [
+    "충청권",
+    12,
+    false
+   ],
+   [
+    "호남권",
+    12,
+    false
+   ],
+   [
+    "전북권",
+    9,
+    false
+   ],
+   [
+    "동부권",
+    4,
+    false
+   ],
+   [
+    "대경권",
+    4,
+    false
+   ],
+   [
+    "영남권",
+    4,
+    false
+   ],
+   [
+    "강원권",
+    3,
+    false
+   ]
+  ]
+ },
+ "excluded_non_region_labels": [
+  "구상채권",
+  "금융권",
+  "누리상품권",
+  "대리권",
+  "디자인권",
+  "매출채권",
+  "비수도권",
+  "산업재산권",
+  "상표권",
+  "상품권",
+  "생활권",
+  "실시권",
+  "실용신안권",
+  "유가증권",
+  "은행권",
+  "재산권",
+  "전용실시권",
+  "증보험증권",
+  "지식재산권",
+  "지역상권",
+  "지재권",
+  "지적재산권",
+  "통상실시권",
+  "특수채권"
+ ],
+ "candidates": [
+  {
+   "label": "수도권",
+   "notices": 26,
+   "has_definition_sentence": true,
+   "definitions": [
+    {
+     "notice_id": "BIZINFO:PBLN_000000000119137",
+     "text": "수도권: 서울, 경기, 인천 지역 / 비수도권"
+    },
+    {
+     "notice_id": "BIZINFO:PBLN_000000000119137",
+     "text": "수도권: 서울, 경기, 인천 지역 / 비수도권"
+    }
+   ]
+  },
+  {
+   "label": "동남권",
+   "notices": 25,
+   "has_definition_sentence": true,
+   "definitions": [
+    {
+     "notice_id": "KSTARTUP:179304",
+     "text": "동남권: 부산, 울산, 경남 지역"
+    },
+    {
+     "notice_id": "KSTARTUP:178907",
+     "text": "동남권: 부산 울산 경남"
+    }
+   ]
+  },
+  {
+   "label": "충청권",
+   "notices": 12,
+   "has_definition_sentence": false,
+   "definitions": []
+  },
+  {
+   "label": "호남권",
+   "notices": 12,
+   "has_definition_sentence": false,
+   "definitions": []
+  },
+  {
+   "label": "전북권",
+   "notices": 9,
+   "has_definition_sentence": false,
+   "definitions": []
+  },
+  {
+   "label": "동부권",
+   "notices": 4,
+   "has_definition_sentence": false,
+   "definitions": []
+  },
+  {
+   "label": "대경권",
+   "notices": 4,
+   "has_definition_sentence": false,
+   "definitions": []
+  },
+  {
+   "label": "영남권",
+   "notices": 4,
+   "has_definition_sentence": false,
+   "definitions": []
+  },
+  {
+   "label": "강원권",
+   "notices": 3,
+   "has_definition_sentence": false,
+   "definitions": []
+  }
+ ]
+}

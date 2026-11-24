@@ -1,0 +1,69 @@
+{
+ "version": "v0.1-unverified",
+ "note": "구성원은 코드표의 하위 지역 이름으로 추정한 값이며 행정 자료로 검수하기 전이다(H11·H12). 검수 전에는 판정에 쓰되 근거에 '미검수 묶음'을 표시한다.",
+ "groups": [
+  {
+   "group_id": "REGION_GROUP:GWANGJU_OLD",
+   "label": "광주(구)",
+   "kind": "ADMIN_REORG",
+   "parent": "REGION:1200000000",
+   "members": [
+    "REGION:1221000000",
+    "REGION:1224000000",
+    "REGION:1227000000",
+    "REGION:1230000000",
+    "REGION:1233000000"
+   ],
+   "basis": "통합 전 광주광역시 5개 자치구(동·서·남·북·광산구). 코드표에서 이름으로 식별",
+   "reviewed": false
+  },
+  {
+   "group_id": "REGION_GROUP:JEONNAM_OLD",
+   "label": "전남(구)",
+   "kind": "ADMIN_REORG",
+   "parent": "REGION:1200000000",
+   "members": "__REST__",
+   "basis": "통합시 하위 시군 중 광주(구)에 속하지 않는 22개 시·군",
+   "reviewed": false
+  },
+  {
+   "group_id": "REGION_GROUP:GYEONGSANG",
+   "label": "경상권",
+   "kind": "NOTICE_DEFINED",
+   "parent": "REGION:NATIONWIDE",
+   "members": [
+    "REGION:2600000000",
+    "REGION:2700000000",
+    "REGION:3100000000",
+    "REGION:4700000000",
+    "REGION:4800000000"
+   ],
+   "basis": "KSTARTUP:179834 본문 '*경상권 : 부산/대구/울산/경상남북도'",
+   "defined_in": "KSTARTUP:179834",
+   "reviewed": false
+  }
+ ],
+ "sido_abbreviations": {
+  "서울": "REGION:1100000000",
+  "부산": "REGION:2600000000",
+  "대구": "REGION:2700000000",
+  "인천": "REGION:2800000000",
+  "대전": "REGION:3000000000",
+  "울산": "REGION:3100000000",
+  "세종": "REGION:3600000000",
+  "경기": "REGION:4100000000",
+  "충북": "REGION:4300000000",
+  "충남": "REGION:4400000000",
+  "경북": "REGION:4700000000",
+  "경남": "REGION:4800000000",
+  "제주": "REGION:5000000000",
+  "강원": "REGION:5100000000",
+  "전북": "REGION:5200000000",
+  "전남광주": "REGION:1200000000",
+  "전국": "REGION:NATIONWIDE"
+ },
+ "legacy_abbreviations": {
+  "광주": "REGION_GROUP:GWANGJU_OLD",
+  "전남": "REGION_GROUP:JEONNAM_OLD"
+ }
+}

@@ -1,0 +1,17 @@
+{
+  "notice_id": "BIZINFO:PBLN_000000000127745",
+  "reviewer": null,
+  "time_minutes": null,
+  "read": [],
+  "materials": [
+    "data/bizinfo/extracted/20261124_101546/127745_1_(붙임1) 27 춘계 서울패션위크 브랜드 모집공고★.pdf.txt",
+    "원본 첨부(로컬 전용): data/bizinfo/files/20261124_101546/127745_1_(붙임1) 27 춘계 서울패션위크 브랜드 모집공고★.pdf",
+    "API 필드: bsnsSumryCn(사업개요), reqstMthPapersCn(신청 방법)",
+    "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000127745"
+  ],
+  "tracks": [],
+  "requirements": [],
+  "source_conflicts": [],
+  "ambiguities": [],
+  "_instructions": "docs/GOLDSET_라벨링_가이드_v0.1.md의 라벨 A 스키마를 따른다. 자동 추출 후보는 보지 않는다. 비워 둔 값은 원문에 없다는 뜻이며 '제한 없음'이 아니다."
+}
