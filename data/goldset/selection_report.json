@@ -1,0 +1,125 @@
+{
+  "seed": 20261124,
+  "inputs": {
+    "bizinfo_parsed_run": "20261124_091601",
+    "bizinfo_extracted_run": "20261124_101546",
+    "notices_sha256": "70a3263fbe5a089faf670d8be9f959f8c242b5ecc4718473c13fdc4aa4e308e4",
+    "extraction_report_sha256": "34955fc4f6b92e9c91d617df7f9663928fe1869ee03860adb7fb24c6c12ab33f",
+    "kstartup_json": "neo4j_import.json",
+    "kstartup_json_sha256": "b77affd352658dd08b6f44b237742698df1abd1651b150c16f48ea2db47128c4"
+  },
+  "pool": {
+    "bizinfo_total_notices": 1294,
+    "bizinfo_eligible_pool": 990,
+    "bizinfo_excluded": {
+      "text_length_out_of_range": 109,
+      "not_plain_text_extract:OK_OCR": 126,
+      "individual_target_hint(D-5)": 67,
+      "not_plain_text_extract:DISTRIBUTION_DOC_UNSUPPORTED": 2
+    },
+    "kstartup_pool": 30
+  },
+  "selected": {
+    "bizinfo_primary": 15,
+    "bizinfo_backup": 10,
+    "kstartup_primary": 15,
+    "kstartup_backup": 10,
+    "pilot": 10
+  },
+  "targets": {
+    "bizinfo": {
+      "nofm_or_open": 2,
+      "track": 2,
+      "law5": 2,
+      "excl_and_cond": 3,
+      "age_or_bizage": 4,
+      "local_date": 2,
+      "central": 2,
+      "basic_local_gov": 2,
+      "non_date": 4,
+      "fmt_pdf": 3,
+      "fmt_hwp": 3,
+      "fmt_hwpx": 3
+    },
+    "kstartup": {
+      "region_specific": 6,
+      "nationwide": 1,
+      "bizage_restricted": 4,
+      "age_restricted": 3,
+      "track": 2,
+      "open": 1,
+      "trivial": 1,
+      "long_elig": 3
+    }
+  },
+  "coverage_bizinfo_primary": {
+    "nofm_or_open": 7,
+    "track": 5,
+    "law5": 8,
+    "excl_and_cond": 7,
+    "age_or_bizage": 8,
+    "local_date": 6,
+    "central": 4,
+    "basic_local_gov": 5,
+    "non_date": 7,
+    "fmt_pdf": 7,
+    "fmt_hwp": 3,
+    "fmt_hwpx": 5
+  },
+  "coverage_kstartup_primary": {
+    "region_specific": 12,
+    "nationwide": 3,
+    "bizage_restricted": 10,
+    "age_restricted": 6,
+    "track": 3,
+    "open": 1,
+    "trivial": 2,
+    "long_elig": 4
+  },
+  "pool_feature_counts_bizinfo": {
+    "nofm_or_open": 281,
+    "track": 177,
+    "law5": 275,
+    "excl_and_cond": 254,
+    "age_or_bizage": 419,
+    "local_date": 234,
+    "central": 212,
+    "basic_local_gov": 243,
+    "non_date": 696,
+    "fmt_pdf": 447,
+    "fmt_hwp": 320,
+    "fmt_hwpx": 223
+  },
+  "diversity_bizinfo_primary": {
+    "orgs": 15,
+    "support": {
+      "기술": 2,
+      "창업": 2,
+      "경영": 2,
+      "내수": 2,
+      "인력": 2,
+      "수출": 2,
+      "금융": 2,
+      "기타": 1
+    },
+    "format": {
+      "hwp": 3,
+      "hwpx": 5,
+      "pdf": 7
+    },
+    "period_kind": {
+      "ALWAYS_OPEN": 2,
+      "UNTIL_BUDGET_EXHAUSTED": 5,
+      "DATE_RANGE": 8
+    }
+  },
+  "diversity_kstartup_primary": {
+    "supervising": {
+      "교육기관": 4,
+      "지자체": 4,
+      "민간": 3,
+      "공공기관": 4
+    }
+  },
+  "note": "특징은 정규식·필드 기반 힌트이며 정답이 아니다. 후보 교체는 가이드라인의 교체 규칙을 따른다."
+}

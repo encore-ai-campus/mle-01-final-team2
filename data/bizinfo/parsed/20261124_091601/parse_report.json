@@ -1,0 +1,39 @@
+{
+  "run": "20261124_091601",
+  "parsed_at": "2026-11-24T09:19:46+09:00",
+  "raw_manifest_complete": true,
+  "raw_items": 1294,
+  "notices": 1294,
+  "duplicates_dropped": 0,
+  "attachments": 2654,
+  "warnings": {
+    "APPLY_URL_NOT_HTTP": 1,
+    "PERIOD_UNPARSED": 2
+  },
+  "apply_status_kind": {
+    "DATE_RANGE": 379,
+    "UNTIL_BUDGET_EXHAUSTED": 646,
+    "ALWAYS_OPEN": 143,
+    "FIRST_COME": 35,
+    "UNTIL_FILLED": 54,
+    "VARIES_OR_TBD": 35,
+    "UNPARSED": 2
+  },
+  "region_scope_hint": {
+    "ALL_SIDO_TAGGED": 347,
+    "SPECIFIC_SIDO_TAGGED": 947
+  },
+  "executor_kind": {
+    "ORG": 947,
+    "SELF_OPERATED": 52,
+    "LOCAL_GOVERNMENT_UNSPECIFIED": 295
+  },
+  "with_eligibility_text": 1294,
+  "with_attachments": 1294,
+  "roles": {
+    "PRINT_BODY": 1294,
+    "ATTACHMENT": 1360
+  },
+  "version_bumped": 0,
+  "missing_from_current_vs_prev": null
+}

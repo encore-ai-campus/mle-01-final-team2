@@ -1,0 +1,83 @@
+{
+  "collected_at": "2026-11-24T09:16:01+09:00",
+  "finished_at": "2026-11-24T09:16:20+09:00",
+  "endpoint": "https://www.bizinfo.go.kr/uss/rss/bizinfoApi.do",
+  "query_conditions": {
+    "dataType": "json",
+    "pageUnit": 100,
+    "pageIndex": "1..13"
+  },
+  "totCnt_reported": 1294,
+  "rows_retrieved": 1294,
+  "unique_pblancId": 1294,
+  "duplicate_rows": 0,
+  "complete": true,
+  "pages": [
+    {
+      "file": "page_001.json",
+      "items": 100,
+      "sha256": "30300643760daf5e573f32a4505e316f488fc9d23aa1eb07e652cb7c1e10eeb1"
+    },
+    {
+      "file": "page_002.json",
+      "items": 100,
+      "sha256": "88d1c9de3b11da61082ddec788825cbab025db2a1dbb4bef6688cac65f9066a7"
+    },
+    {
+      "file": "page_003.json",
+      "items": 100,
+      "sha256": "7bf4013f131b6ac2fd3a735206e40404bb495999b0a21c3afea0aa40375eeb7e"
+    },
+    {
+      "file": "page_004.json",
+      "items": 100,
+      "sha256": "55a1fec09c218d8526a9f993ea6b830a3ab3d0f2958c33b92ac5f84046d233a9"
+    },
+    {
+      "file": "page_005.json",
+      "items": 100,
+      "sha256": "cefe14860e7baa7d281bfd1a9f1bea9f990ad9cf598f4c5832f2c1f449a4fc91"
+    },
+    {
+      "file": "page_006.json",
+      "items": 100,
+      "sha256": "1c3146ed784c4ebead4586dec297685be3b35a1d5be95288ec7cbaba8a7efc69"
+    },
+    {
+      "file": "page_007.json",
+      "items": 100,
+      "sha256": "10936849fab657fd95c746b2197912e7a65e1ff03c015e0266efc94138437820"
+    },
+    {
+      "file": "page_008.json",
+      "items": 100,
+      "sha256": "8db90c9913990c2091324927ec7b3cbf32c2754188da5b3a4ab4e774636e0ef0"
+    },
+    {
+      "file": "page_009.json",
+      "items": 100,
+      "sha256": "677d7eada62a217f6e762867b9fd3d6ff20bc5ede9255a99b34aba2926898804"
+    },
+    {
+      "file": "page_010.json",
+      "items": 100,
+      "sha256": "62a9a28a607cc45fe1b458a24a062d460caf4d4f5feb30e94d631e070838d6c6"
+    },
+    {
+      "file": "page_011.json",
+      "items": 100,
+      "sha256": "25d0bf41bf373dc961f95bc12e0766b3e522c63a76d0d84c421894d1836a5a32"
+    },
+    {
+      "file": "page_012.json",
+      "items": 100,
+      "sha256": "09527d02f8f9d031474f84072a4629bd70745eef135e07196690f6221b22ce16"
+    },
+    {
+      "file": "page_013.json",
+      "items": 94,
+      "sha256": "f9c53fbe25a5040885ab7b0027db6ab9da9003434dcabf73e68c1145427a96d4"
+    }
+  ],
+  "scope_note": "공식 API는 마감되지 않은 공고 범위만 제공. 인증키·다운로드 토큰은 저장하지 않음(downloadToken=[REDACTED])."
+}
