@@ -2,3 +2,7 @@
 .venv/
 __pycache__/
 .omc/
+# 기업마당 첨부 원본(로컬 전용, 용량·저작권 때문에 git 제외)
+data/bizinfo/files/
+# 첨부에서 뽑은 텍스트도 원본의 파생물이므로 로컬 전용
+data/bizinfo/extracted/
