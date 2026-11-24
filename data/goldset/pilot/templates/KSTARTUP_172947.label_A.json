@@ -1,0 +1,16 @@
+{
+  "notice_id": "KSTARTUP:172947",
+  "reviewer": null,
+  "time_minutes": null,
+  "read": [],
+  "materials": [
+    "API 필드: aply_trgt_ctnt, aply_excl_trgt_ctnt, pbanc_ctnt, support_ctnt, eval_method, biz_enyy, biz_trgt_age, supt_regin, aply_trgt",
+    "data/kstartup/processed/kstartup_cleaned.jsonl (announcement_id=172947)",
+    "https://www.k-startup.go.kr/web/contents/bizpbanc-ongoing.do?schM=view&pbancSn=172947 (상세 페이지는 사람이 직접 열어 확인, 자동 수집 금지)"
+  ],
+  "tracks": [],
+  "requirements": [],
+  "source_conflicts": [],
+  "ambiguities": [],
+  "_instructions": "docs/GOLDSET_라벨링_가이드_v0.1.md의 라벨 A 스키마를 따른다. 자동 추출 후보는 보지 않는다. 비워 둔 값은 원문에 없다는 뜻이며 '제한 없음'이 아니다."
+}

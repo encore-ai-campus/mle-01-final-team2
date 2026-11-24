@@ -8,3 +8,9 @@ data/bizinfo/files/
 data/bizinfo/extracted/
 data/kstartup/documents/attachments/
 data/kstartup/attachment_extractions/
+# 그래프 RAG 산출물: 재생성 가능하거나 첨부 원문의 파생물
+data/graph/nodes.jsonl
+data/graph/edges.jsonl
+data/graph/requirement_candidates.jsonl
+# K-Startup 원본 수집분(로컬 전용)
+data/kstartup/raw/

@@ -1,0 +1,24 @@
+{
+ "built": "2026-11-24",
+ "nodes": {
+  "Concept": 237,
+  "Notice": 5113,
+  "Requirement": 4783,
+  "Condition": 16240,
+  "Organization": 1434,
+  "SupportCategory": 19
+ },
+ "edges": {
+  "WITHIN": 268,
+  "ANNOUNCED_BY": 5113,
+  "EXECUTED_BY": 947,
+  "IN_SUPPORT_CATEGORY": 5113,
+  "HAS_REQUIREMENT": 4783,
+  "HAS_CONDITION": 16240,
+  "ABOUT": 4783
+ },
+ "skipped": {
+  "bizinfo_no_region_condition": 330
+ },
+ "note": "구조화 조건만 포함(본문 요건 미추출). Neo4j에는 적재하지 않았다."
+}
