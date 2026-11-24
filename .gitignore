@@ -6,3 +6,5 @@ __pycache__/
 data/bizinfo/files/
 # 첨부에서 뽑은 텍스트도 원본의 파생물이므로 로컬 전용
 data/bizinfo/extracted/
+data/kstartup/documents/attachments/
+data/kstartup/attachment_extractions/
