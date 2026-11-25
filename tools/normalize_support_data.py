@@ -7,9 +7,11 @@ It never edits the input snapshot or database loader files.
 from __future__ import annotations
 
 import argparse
+import csv
 import hashlib
 import json
 import re
+import tempfile
 from collections import Counter
 from functools import lru_cache
 from jsonschema import Draft202012Validator, FormatChecker
@@ -359,7 +361,7 @@ def normalize_notice(row: dict[str, Any], issues: list[dict[str, Any]]) -> tuple
     published_not_provided = str(source_system).upper() == "KSTARTUP" and row.get("published_at") in (None, "")
     source_updated_not_provided = str(source_system).upper() == "KSTARTUP" and row.get("source_updated_at") in (None, "")
     apply_url, apply_url_status = scrubbed_url(row.get("apply_url"))
-    official_domain = {"KSTARTUP": "k-startup.go.kr", "BIZINFO": "bizinfo.go.kr"}.get(str(source_system).upper())
+    official_domain = {"KSTARTUP": "k-startup.go.kr", "BIZINFO": "bizinfo.go.kr", "G2B": "g2b.go.kr"}.get(str(source_system).upper())
     guide_url, guide_url_status = scrubbed_url(row.get("guide_url"), allowed_domain="k-startup.go.kr" if source_system == "KSTARTUP" else official_domain)
     notice_url, notice_url_status = scrubbed_url(row.get("detail_url"), allowed_domain=official_domain)
     flags = row.get("guide_url_flags") or []
@@ -669,13 +671,417 @@ def normalize_snapshot(input_dir: Path, output_dir: Path, *, schema_dir: Path | 
     return report
 
 
+def _g2b_string(value: Any, *, field: str, notice_id: str, issues: list[dict[str, Any]]) -> str | None:
+    if value is None:
+        return None
+    if isinstance(value, str):
+        return value
+    issues.append({"notice_id": notice_id, "field": field, "issue": "INVALID_G2B_FIELD_TYPE", "input_type": type(value).__name__})
+    return None
+
+
+def _g2b_source_metadata(row: dict[str, Any], issues: list[dict[str, Any]]) -> dict[str, Any]:
+    nid = str(row.get("notice_id") or "")
+    licenses = row.get("licenses")
+    regions = row.get("regions")
+    documents = row.get("documents")
+    if not isinstance(licenses, list):
+        issues.append({"notice_id": nid, "field": "licenses", "issue": "INVALID_G2B_FIELD_TYPE", "input_type": type(licenses).__name__})
+        licenses = []
+    if not isinstance(regions, list):
+        issues.append({"notice_id": nid, "field": "regions", "issue": "INVALID_G2B_FIELD_TYPE", "input_type": type(regions).__name__})
+        regions = []
+    if not isinstance(documents, list):
+        issues.append({"notice_id": nid, "field": "documents", "issue": "INVALID_G2B_FIELD_TYPE", "input_type": type(documents).__name__})
+        documents = []
+
+    license_rows = []
+    for index, item in enumerate(licenses):
+        if not isinstance(item, dict):
+            issues.append({"notice_id": nid, "field": f"licenses[{index}]", "issue": "INVALID_G2B_FIELD_TYPE", "input_type": type(item).__name__})
+            continue
+        permitted = item.get("permitted_industries")
+        if permitted is not None and not isinstance(permitted, str):
+            issues.append({"notice_id": nid, "field": f"licenses[{index}].permitted_industries", "issue": "INVALID_G2B_FIELD_TYPE", "input_type": type(permitted).__name__})
+            permitted = None
+        license_rows.append({
+            "group": _g2b_string(item.get("group"), field=f"licenses[{index}].group", notice_id=nid, issues=issues),
+            "name": _g2b_string(item.get("name"), field=f"licenses[{index}].name", notice_id=nid, issues=issues),
+            "permitted_industries": permitted,
+        })
+
+    region_rows = []
+    for index, value in enumerate(regions):
+        if not isinstance(value, str):
+            issues.append({"notice_id": nid, "field": f"regions[{index}]", "issue": "INVALID_G2B_FIELD_TYPE", "input_type": type(value).__name__})
+            continue
+        region_rows.append(value)
+
+    document_rows = []
+    for index, item in enumerate(documents):
+        if not isinstance(item, dict):
+            issues.append({"notice_id": nid, "field": f"documents[{index}]", "issue": "INVALID_G2B_FIELD_TYPE", "input_type": type(item).__name__})
+            continue
+        raw_url = item.get("url")
+        safe_url, url_status = scrubbed_url(raw_url, allowed_domain="g2b.go.kr")
+        if url_status == "INVALID":
+            issues.append({"notice_id": nid, "field": f"documents[{index}].url", "issue": "INVALID_G2B_DOCUMENT_URL"})
+            safe_url = None
+        document_rows.append({
+            "name": _g2b_string(item.get("name"), field=f"documents[{index}].name", notice_id=nid, issues=issues),
+            "source": _g2b_string(item.get("source"), field=f"documents[{index}].source", notice_id=nid, issues=issues),
+            "url": safe_url,
+            "url_status": url_status,
+        })
+
+    def text(field: str):
+        return _g2b_string(row.get(field), field=field, notice_id=nid, issues=issues)
+
+    for field in ("is_negotiated", "is_cancelled"):
+        value = row.get(field)
+        if value is not None and not isinstance(value, bool):
+            issues.append({"notice_id": nid, "field": field, "issue": "INVALID_G2B_FIELD_TYPE", "input_type": type(value).__name__})
+
+    return {
+        "bid_notice_no": text("bid_notice_no"), "bid_notice_ord": text("bid_notice_ord"),
+        "category": text("category"), "notice_kind": text("notice_kind"), "service_division": text("service_division"),
+        "procurement_large": text("procurement_large"), "procurement_mid": text("procurement_mid"),
+        "procurement_detail": text("procurement_detail"), "industry_limit_yn": text("industry_limit_yn"),
+        "participation_limit_yn": text("participation_limit_yn"), "license_status": text("license_status"),
+        "licenses": license_rows, "region_status": text("region_status"), "regions": region_rows,
+        "region_basis": text("region_basis"), "notice_at": text("notice_at"), "close_at": text("close_at"),
+        "open_at": text("open_at"), "contract_method": text("contract_method"), "award_method": text("award_method"),
+        "estimated_price": text("estimated_price"), "is_negotiated": row.get("is_negotiated"),
+        "is_cancelled": row.get("is_cancelled"), "documents": document_rows,
+    }
+
+
+def normalize_g2b_notice(row: dict[str, Any], issues: list[dict[str, Any]]) -> tuple[dict[str, Any], PrivacyReport]:
+    """Map one existing monthly G2B record without deriving bid conditions."""
+    raw_id = row.get("notice_id")
+    bid_no, bid_ord = row.get("bid_notice_no"), row.get("bid_notice_ord")
+    if not all(isinstance(value, str) and value.strip() for value in (raw_id, bid_no, bid_ord)):
+        issues.append({"notice_id": raw_id, "issue": "INVALID_G2B_NOTICE_ID"})
+        safe_no = str(bid_no or raw_id or "MISSING")
+        safe_ord = str(bid_ord or "UNKNOWN")
+    else:
+        safe_no, safe_ord = bid_no, bid_ord
+    notice_id = f"G2B:{safe_no}:{safe_ord}"
+    if row.get("source_system") != "G2B":
+        issues.append({"notice_id": notice_id, "field": "source_system", "issue": "UNEXPECTED_G2B_SOURCE_SYSTEM"})
+
+    notice_org = row.get("notice_org") if isinstance(row.get("notice_org"), str) else None
+    demand_org = row.get("demand_org") if isinstance(row.get("demand_org"), str) else None
+    contact_emails = [value for value in (row.get("contact_email"), row.get("demand_contact_email"))
+                      if isinstance(value, str) and value.strip()]
+    raw_documents = row.get("documents") if isinstance(row.get("documents"), list) else []
+    common_row = {
+        "notice_id": notice_id, "source_system": "G2B", "source_id": raw_id,
+        "title": row.get("title"), "title_raw": row.get("title"), "published_at": row.get("notice_at"),
+        "deadline_at": row.get("close_at"), "detail_url": row.get("detail_url"),
+        "org_raw": notice_org,
+        "org_names": [value for value in (notice_org, demand_org) if value],
+        "org_role_titles": [role for value, role in ((notice_org, "NOTICE_ORGANIZATION"), (demand_org, "DEMAND_ORGANIZATION")) if value],
+        "category_major": row.get("category"), "category_medium": row.get("service_division"),
+        "region_raw": None, "region_concept_ids": None, "region_basis": row.get("region_basis"),
+        # Contact person names are deliberately not copied. Phone/email values are only passed
+        # to the existing classifier, which withholds ambiguous values from service output.
+        "contact_phone_raw": row.get("contact_phone") if isinstance(row.get("contact_phone"), str) else None,
+        "contact_text": "; ".join(contact_emails) if contact_emails else None,
+        "attachments": {"count": len(raw_documents), "text_extracted": None, "preview_only": None,
+                        "note": "공유 월별 입력에는 첨부 텍스트가 포함되지 않음"},
+        "source_record_id": raw_id,
+    }
+    normalized, privacy_report = normalize_notice(common_row, issues)
+    normalized["notice_type"] = "PROCUREMENT_BID"
+    normalized["source_metadata"]["legacy_deadline_at"] = None
+    normalized["source_metadata"]["source_specific"] = {"G2B": _g2b_source_metadata(row, issues)}
+    for field in ("industry_limit_yn", "participation_limit_yn", "license_status", "licenses",
+                  "region_status", "regions", "region_basis", "documents", "contract_method",
+                  "award_method", "estimated_price", "notice_kind", "open_at", "is_cancelled"):
+        normalized["field_availability"][f"source_metadata.source_specific.G2B.{field}"] = field_status(row, field)
+    # Sanitize source-native fields as well as common fields before any file is written.
+    ext = normalized["source_metadata"]["source_specific"]
+    normalized["source_metadata"]["source_specific"] = scrub_record_text(sanitize_tree(ext, privacy_report), privacy_report)
+    return normalized, privacy_report
+
+
+def _atomic_jsonl_writer(path: Path):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    stream = tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", newline="\n", dir=path.parent,
+                                         delete=False, prefix=f".{path.name}.", suffix=".tmp")
+    return stream, Path(stream.name)
+
+
+def _write_jsonl_row(stream, row: dict[str, Any]) -> None:
+    stream.write(json.dumps(row, ensure_ascii=False, separators=(",", ":"), allow_nan=False) + "\n")
+
+
+def normalize_g2b_archive(g2b_dir: Path, support_dir: Path, output_dir: Path,
+                          *, schema_dir: Path | None = None) -> dict[str, Any]:
+    """Create a new three-source normalized snapshot from shared G2B files and the frozen support snapshot."""
+    g2b_dir, support_dir, output_dir = g2b_dir.resolve(), support_dir.resolve(), output_dir.resolve()
+    if output_dir == g2b_dir or output_dir.is_relative_to(g2b_dir):
+        raise ValueError("Output directory must be outside G2B input data")
+    if output_dir == support_dir or output_dir.is_relative_to(support_dir):
+        raise ValueError("Output directory must be outside the existing normalized support snapshot")
+    schema_dir = schema_dir or ROOT / "schemas" / "support-data"
+    notice_validator = load_validator(schema_dir / "support-notice-v1.schema.json")
+    chunk_validator = load_validator(schema_dir / "support-chunk-v1.schema.json")
+    base_notice_path, base_chunk_path = support_dir / "notices.jsonl", support_dir / "chunks.jsonl"
+    if not base_notice_path.is_file() or not base_chunk_path.is_file():
+        raise FileNotFoundError(f"Expected notices.jsonl and chunks.jsonl in {support_dir}")
+    month_files = sorted(g2b_dir.glob("*/notices.jsonl"))
+    if not month_files:
+        raise FileNotFoundError(f"No monthly notices.jsonl files in {g2b_dir}")
+
+    base_notices, base_issues = read_jsonl(base_notice_path)
+    base_chunks, chunk_issues = read_jsonl(base_chunk_path)
+    issues = [*base_issues, *chunk_issues]
+    base_report_path = support_dir / "normalization_report.json"
+    base_report = json.loads(base_report_path.read_text(encoding="utf-8")) if base_report_path.is_file() else {}
+    notice_ids: set[str] = set()
+    source_counts: Counter[str] = Counter()
+    redactions: Counter[str] = Counter(base_report.get("privacy_redactions", {}))
+    contacts_by_source: dict[str, Counter[str]] = {
+        name: Counter(counts) for name, counts in base_report.get("contact_processing_by_source", {}).items()
+    }
+    contact_name_fields_omitted = 0
+    executor_name_fields_omitted = 0
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    notice_path, chunk_path = output_dir / "notices.jsonl", output_dir / "chunks.jsonl"
+    notice_stream, notice_temp = _atomic_jsonl_writer(notice_path)
+    chunk_stream, chunk_temp = _atomic_jsonl_writer(chunk_path)
+    try:
+        for row in base_notices:
+            row = dict(row)
+            row["notice_type"] = "SUPPORT_PROGRAM"
+            notice_id = row.get("notice_id")
+            if not isinstance(notice_id, str) or notice_id in notice_ids:
+                issues.append({"notice_id": notice_id, "issue": "DUPLICATE_OR_INVALID_NOTICE_ID"})
+            else:
+                notice_ids.add(notice_id)
+            source = row.get("source", {}).get("source_system", "UNKNOWN")
+            source_counts[f"notice:{source}"] += 1
+            for message in schema_errors(row, notice_validator):
+                issues.append({"notice_id": notice_id, "issue": "SCHEMA_VALIDATION", "detail": message})
+            for finding in pii_findings(row):
+                issues.append({"notice_id": notice_id, "issue": "PII_REMAINS_AFTER_SCRUB", "detail": finding})
+            _write_jsonl_row(notice_stream, row)
+
+        chunk_counts: Counter[str] = Counter()
+        chunk_ids: set[str] = set()
+        for row in base_chunks:
+            chunk_id = row.get("chunk_id")
+            if chunk_id in chunk_ids:
+                issues.append({"chunk_id": chunk_id, "issue": "DUPLICATE_CHUNK_ID"})
+            chunk_ids.add(chunk_id)
+            if row.get("notice_id") not in notice_ids:
+                issues.append({"chunk_id": row.get("chunk_id"), "issue": "CHUNK_WITHOUT_NOTICE"})
+            chunk_counts[row.get("source_system", "UNKNOWN")] += 1
+            for message in schema_errors(row, chunk_validator):
+                issues.append({"chunk_id": row.get("chunk_id"), "issue": "SCHEMA_VALIDATION", "detail": message})
+            for finding in pii_findings(row):
+                issues.append({"chunk_id": row.get("chunk_id"), "issue": "PII_REMAINS_AFTER_SCRUB", "detail": finding})
+            _write_jsonl_row(chunk_stream, row)
+        monthly_counts: dict[str, int] = {}
+        g2b_aux_counts = Counter()
+        g2b_flag_counts = Counter()
+        notice_date_min, notice_date_max = None, None
+        g2b_count = 0
+        for month_file in month_files:
+            month = month_file.parent.name
+            monthly_counts[month] = 0
+            with month_file.open(encoding="utf-8") as stream:
+                for line_number, line in enumerate(stream, 1):
+                    if not line.strip():
+                        continue
+                    try:
+                        raw = json.loads(line)
+                    except json.JSONDecodeError:
+                        issues.append({"file": month_file.name, "month": month, "line": line_number,
+                                       "issue": "INVALID_JSONL", "raw_sha256": hashlib.sha256(line.encode("utf-8")).hexdigest()})
+                        continue
+                    if not isinstance(raw, dict):
+                        issues.append({"file": month_file.name, "month": month, "line": line_number,
+                                       "issue": "NON_OBJECT_JSONL_RECORD", "raw_sha256": hashlib.sha256(line.encode("utf-8")).hexdigest()})
+                        continue
+                    monthly_counts[month] += 1
+                    g2b_count += 1
+                    for field in ("licenses", "regions", "documents"):
+                        value = raw.get(field)
+                        if isinstance(value, list):
+                            g2b_aux_counts[f"{field}_rows_nonempty"] += bool(value)
+                            g2b_aux_counts[f"{field}_items"] += len(value)
+                    for field in ("industry_limit_yn", "participation_limit_yn", "license_status", "region_status", "is_cancelled"):
+                        g2b_flag_counts[f"{field}:{raw.get(field)}"] += 1
+                    for field in ("contact_name", "executor_name", "contact_phone", "contact_email", "demand_contact_email"):
+                        g2b_flag_counts[f"{field}:present"] += raw.get(field) not in (None, "")
+                    date_value = raw.get("notice_at")
+                    if isinstance(date_value, str) and date_value:
+                        day = date_value[:10]
+                        notice_date_min = min(notice_date_min, day) if notice_date_min else day
+                        notice_date_max = max(notice_date_max, day) if notice_date_max else day
+                    if raw.get("contact_name") not in (None, ""):
+                        contact_name_fields_omitted += 1
+                    if raw.get("executor_name") not in (None, ""):
+                        executor_name_fields_omitted += 1
+
+                    normalized, privacy_report = normalize_g2b_notice(raw, issues)
+                    notice_id = normalized["notice_id"]
+                    if notice_id in notice_ids:
+                        issues.append({"notice_id": notice_id, "issue": "DUPLICATE_NOTICE_ID"})
+                        continue
+                    notice_ids.add(notice_id)
+                    source_counts["notice:G2B"] += 1
+                    contact_stats = contacts_by_source.setdefault("G2B", Counter())
+                    contact_stats["contact_candidates_found"] += len(normalized["contacts"])
+                    contact_stats["official_business_contacts_preserved"] += sum(c["classification"] == "OFFICIAL_BUSINESS" for c in normalized["contacts"])
+                    contact_stats["personal_identifiers_redacted"] += sum(c["classification"] == "PERSONAL" for c in normalized["contacts"])
+                    contact_stats["unclassified_contacts_queued"] += sum(c["classification"] == "UNCLASSIFIED" for c in normalized["contacts"])
+                    redactions.update({"emails": privacy_report.email_count, "phones": privacy_report.phone_count,
+                                       "url_tokens": privacy_report.url_token_count, "contextual_names": privacy_report.contextual_name_count,
+                                       "ambiguous_contexts": privacy_report.ambiguous_context_count})
+                    for message in schema_errors(normalized, notice_validator):
+                        issues.append({"notice_id": notice_id, "issue": "SCHEMA_VALIDATION", "detail": message})
+                    for finding in pii_findings(normalized):
+                        issues.append({"notice_id": notice_id, "issue": "PII_REMAINS_AFTER_SCRUB", "detail": finding})
+                    _write_jsonl_row(notice_stream, normalized)
+
+        # Verify the shared monthly manifest and related flattened files against the records used.
+        manifest_path = g2b_dir / "manifest.csv"
+        manifest_mismatches = []
+        manifest_rows = {}
+        if manifest_path.is_file():
+            with manifest_path.open(encoding="utf-8-sig", newline="") as stream:
+                for item in csv.DictReader(stream):
+                    manifest_rows[item.get("month", "")] = item
+            for month, actual in monthly_counts.items():
+                declared = manifest_rows.get(month, {}).get("notices.jsonl_rows")
+                if declared is not None and int(declared) != actual:
+                    manifest_mismatches.append({"month": month, "file": "notices.jsonl", "declared": int(declared), "actual": actual})
+        else:
+            issues.append({"issue": "G2B_MANIFEST_NOT_FOUND"})
+
+        flat_counts = {}
+        for filename in ("notices.csv", "licenses.csv", "regions.csv"):
+            total = 0
+            for csv_path in sorted(g2b_dir.glob(f"*/{filename}")):
+                with csv_path.open(encoding="utf-8-sig", newline="") as stream:
+                    total += sum(1 for _ in csv.DictReader(stream))
+            flat_counts[filename] = total
+        jsonl_license_items = g2b_aux_counts["licenses_items"]
+        jsonl_region_items = g2b_aux_counts["regions_items"]
+        if flat_counts.get("notices.csv") != g2b_count:
+            manifest_mismatches.append({"file": "notices.csv", "declared": flat_counts.get("notices.csv"), "actual": g2b_count})
+        if flat_counts.get("licenses.csv") != jsonl_license_items:
+            manifest_mismatches.append({"file": "licenses.csv", "declared": flat_counts.get("licenses.csv"), "actual": jsonl_license_items})
+        if flat_counts.get("regions.csv") != jsonl_region_items:
+            manifest_mismatches.append({"file": "regions.csv", "declared": flat_counts.get("regions.csv"), "actual": jsonl_region_items})
+
+        notice_stream.flush()
+        chunk_stream.flush()
+        notice_stream.close()
+        chunk_stream.close()
+
+        blocking = {"SCHEMA_VALIDATION", "PII_REMAINS_AFTER_SCRUB", "DUPLICATE_NOTICE_ID", "DUPLICATE_CHUNK_ID", "DUPLICATE_OR_INVALID_NOTICE_ID",
+                    "INVALID_G2B_NOTICE_ID", "INVALID_G2B_FIELD_TYPE", "UNEXPECTED_G2B_SOURCE_SYSTEM", "CHUNK_WITHOUT_NOTICE",
+                    "INVALID_JSONL", "NON_OBJECT_JSONL_RECORD", "INVALID_G2B_DOCUMENT_URL"}
+        publishable = not any(issue.get("issue") in blocking for issue in issues)
+        if publishable:
+            notice_temp.replace(notice_path)
+            chunk_temp.replace(chunk_path)
+        else:
+            notice_temp.unlink(missing_ok=True)
+            chunk_temp.unlink(missing_ok=True)
+
+        input_files = [base_notice_path, base_chunk_path, *month_files]
+        if manifest_path.is_file():
+            input_files.append(manifest_path)
+        input_files.extend(sorted(g2b_dir.glob("*/notices.csv")))
+        input_files.extend(sorted(g2b_dir.glob("*/licenses.csv")))
+        input_files.extend(sorted(g2b_dir.glob("*/regions.csv")))
+        counts_by_source = {source: {"notices": source_counts[f"notice:{source}"],
+                                     "chunks": chunk_counts[source]}
+                            for source in ("BIZINFO", "KSTARTUP", "G2B")}
+        totals = {"notices": sum(value["notices"] for value in counts_by_source.values()),
+                  "chunks": len(base_chunks), "issues": len(issues)}
+        report = {
+            "normalizer_version": NORMALIZER_VERSION, "run_at": datetime.now().astimezone().isoformat(timespec="seconds"),
+            "input_sources": {"support_snapshot": report_input_path(base_notice_path),
+                              "support_report": report_input_path(base_report_path) if base_report_path.is_file() else None,
+                              "g2b_monthly_dir": report_input_path(g2b_dir / "manifest.csv")},
+            "input_sha256": {report_input_path(path): sha256_file(path) for path in input_files},
+            "input_counts": {"support_notices": len(base_notices), "support_chunks": len(base_chunks),
+                             "g2b_notices": g2b_count, "g2b_chunks": 0, "g2b_notices_by_month": monthly_counts,
+                             "g2b_related_items": dict(g2b_aux_counts)},
+            "g2b_notice_date_range": {"earliest": notice_date_min, "latest": notice_date_max},
+            "g2b_flat_file_rows": flat_counts,
+            "g2b_list_vs_flat_file_mismatches": manifest_mismatches,
+            "g2b_field_value_counts": dict(g2b_flag_counts),
+            "g2b_condition_candidate_counts": {
+                "license_notice_count": g2b_aux_counts["licenses_rows_nonempty"],
+                "license_item_count": g2b_aux_counts["licenses_items"],
+                "region_notice_count": g2b_aux_counts["regions_rows_nonempty"],
+                "region_item_count": g2b_aux_counts["regions_items"],
+                "industry_limit_yes": g2b_flag_counts["industry_limit_yn:Y"],
+                "participation_limit_yes": g2b_flag_counts["participation_limit_yn:Y"],
+                "natural_language_eligibility_records": 0,
+                "exclusion_text_records": 0,
+                "preference_or_score_text_records": 0,
+            },
+            "output_counts": totals, "output_counts_by_source": counts_by_source,
+            "duplicate_notice_ids": sum(i.get("issue") in {"DUPLICATE_NOTICE_ID", "DUPLICATE_OR_INVALID_NOTICE_ID"} for i in issues),
+            "duplicate_chunk_ids": sum(i.get("issue") == "DUPLICATE_CHUNK_ID" for i in issues),
+            "chunks_without_notice": sum(c.get("notice_id") not in notice_ids for c in base_chunks),
+            "contact_processing_by_source": {k: dict(v) for k, v in contacts_by_source.items()},
+            "unclassified_contact_review_coverage": {
+                **base_report.get("unclassified_contact_review_coverage", {}),
+                "G2B": 1.0,
+            },
+            "g2b_contact_name_fields_omitted": contact_name_fields_omitted,
+            "g2b_executor_name_fields_omitted": executor_name_fields_omitted,
+            "g2b_contact_phone_fields_withheld_for_review": g2b_flag_counts["contact_phone:present"],
+            "privacy_redactions": dict(redactions),
+            "schema_validation_errors": sum(i.get("issue") == "SCHEMA_VALIDATION" for i in issues),
+            "privacy_residual_findings": sum(i.get("issue") == "PII_REMAINS_AFTER_SCRUB" for i in issues),
+            "attachment_downloads_performed": False, "attachment_text_extraction_performed": False,
+            "condition_extraction_performed": False, "database_writes_performed": False,
+            "publishable": publishable, "output_files_updated": publishable,
+        }
+        write_jsonl(output_dir / "normalization_issues.jsonl", issues)
+        (output_dir / "normalization_report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        return report
+    except Exception:
+        if not notice_stream.closed:
+            notice_stream.close()
+        if not chunk_stream.closed:
+            chunk_stream.close()
+        notice_temp.unlink(missing_ok=True)
+        chunk_temp.unlink(missing_ok=True)
+        raise
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--snapshot", default=DEFAULT_SNAPSHOT, help="cleaned snapshot directory name (default: 20261124)")
     parser.add_argument("--input-dir", type=Path, help="override data/cleaned/<snapshot>")
     parser.add_argument("--output-dir", type=Path, help="override data/normalized/v1/<snapshot>")
     parser.add_argument("--schema-dir", type=Path, default=ROOT / "schemas" / "support-data")
+    parser.add_argument("--g2b-monthly-dir", type=Path, help="normalize existing data/g2b_monthly inputs and combine with a frozen normalized support snapshot")
+    parser.add_argument("--support-normalized-dir", type=Path, help="existing BIZINFO/K-Startup normalized snapshot used with --g2b-monthly-dir")
     args = parser.parse_args(argv)
+    if args.g2b_monthly_dir:
+        if not args.support_normalized_dir:
+            parser.error("--support-normalized-dir is required with --g2b-monthly-dir")
+        output_dir = args.output_dir or (OUTPUT_BASE / "20261125_g2b")
+        report = normalize_g2b_archive(args.g2b_monthly_dir, args.support_normalized_dir, output_dir,
+                                       schema_dir=args.schema_dir)
+        print(json.dumps({"output_dir": str(output_dir), **report}, ensure_ascii=False, indent=2))
+        return 0 if report["publishable"] else 1
+    if args.support_normalized_dir:
+        parser.error("--support-normalized-dir is only valid with --g2b-monthly-dir")
     input_dir = args.input_dir or (ROOT / "data" / "cleaned" / args.snapshot)
     output_dir = args.output_dir or (OUTPUT_BASE / args.snapshot)
     report = normalize_snapshot(input_dir, output_dir, schema_dir=args.schema_dir)

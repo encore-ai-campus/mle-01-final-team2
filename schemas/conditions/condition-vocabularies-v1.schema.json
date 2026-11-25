@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:mle-team2:support-conditions:v1:vocab",
+  "title": "Shared vocabulary definitions for support conditions v1",
+  "$defs": {
+    "conditionType": {
+      "type": "string",
+      "enum": ["ELIGIBILITY", "EXCLUSION", "PREFERENCE", "UNCLASSIFIED"]
+    },
+    "categoryId": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]*$",
+      "description": "Open vocabulary identifier. Initial values are documented in CONDITION_SCHEMA_V1.md; new IDs do not require a structural schema change."
+    },
+    "logicalOperator": {"type": "string", "enum": ["AND", "OR", "NOT", "UNRESOLVED"]},
+    "comparisonOperator": {
+      "type": "string",
+      "enum": ["EQ", "NEQ", "GT", "GTE", "LT", "LTE", "IN", "NOT_IN", "BETWEEN", "EXISTS", "NOT_EXISTS"]
+    },
+    "operator": {
+      "type": "string",
+      "enum": ["AND", "OR", "NOT", "EQ", "NEQ", "GT", "GTE", "LT", "LTE", "IN", "NOT_IN", "BETWEEN", "EXISTS", "NOT_EXISTS"]
+    },
+    "valueType": {"type": "string", "enum": ["STRING", "NUMBER", "DATE", "BOOLEAN", "ARRAY", "OBJECT", "RANGE", "NULL", "UNKNOWN"]},
+    "availabilityStatus": {
+      "type": "string",
+      "enum": ["AVAILABLE", "NOT_COLLECTED", "EMPTY", "NOT_EXTRACTED", "NO_CONDITION_CONFIRMED", "UNKNOWN"]
+    },
+    "completenessStatus": {"type": "string", "enum": ["COMPLETE", "PARTIAL", "UNKNOWN"]},
+    "reviewStatus": {"type": "string", "enum": ["UNREVIEWED", "NEEDS_REVIEW", "VERIFIED", "REJECTED"]},
+    "structureStatus": {"type": "string", "enum": ["UNSTRUCTURED", "PARTIALLY_STRUCTURED", "STRUCTURED", "NOT_APPLICABLE"]},
+    "logicStatus": {"type": "string", "enum": ["RESOLVED", "UNRESOLVED", "NOT_APPLICABLE"]},
+    "referenceDateType": {
+      "type": "string",
+      "enum": ["PUBLICATION_DATE", "APPLICATION_START", "APPLICATION_END", "SPECIFIC_DATE", "RULE", "UNKNOWN"]
+    },
+    "referenceDatePrecision": {"type": "string", "enum": ["DATE", "DATETIME", "DATETIME_WITH_TIMEZONE", "UNKNOWN"]},
+    "sourceKind": {
+      "type": "string",
+      "enum": ["NOTICE_FIELD", "CHUNK", "ATTACHMENT", "ATTACHMENT_OCR", "ATTACHMENT_PREVIEW", "SYNTHETIC_TEST"]
+    },
+    "benefitType": {"type": "string", "enum": ["BONUS_POINTS", "PRIORITY_SELECTION", "FINANCIAL_BENEFIT", "OTHER", "UNKNOWN"]},
+    "qualifierType": {"type": "string", "enum": ["EXCEPTION", "CAVEAT", "BENEFIT_TRIGGER", "OTHER"]},
+    "linkageStatus": {"type": "string", "enum": ["LINKED", "UNRESOLVED"]},
+    "searchReason": {
+      "type": "string",
+      "enum": ["SOURCE_CHUNK_AVAILABLE", "SOURCE_FIELD_ONLY", "UNREVIEWED_ATTACHMENT", "PRIVACY_REVIEW_REQUIRED", "UNKNOWN"]
+    }
+  },
+  "type": "object"
+}

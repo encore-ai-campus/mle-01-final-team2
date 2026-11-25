@@ -1,0 +1,22 @@
+{
+  "fixture_version": "1.0",
+  "kind": "SYNTHETIC_TEST",
+  "used_for_real_notice_metrics": false,
+  "scenarios": [
+    {"id": "CONDITION_PERFECT", "expected": {"tp": 1, "fp": 0, "fn": 0, "precision": 1.0, "recall": 1.0, "f1": 1.0}},
+    {"id": "CONDITION_MISSING", "expected": {"tp": 1, "fp": 0, "fn": 1, "precision": 1.0, "recall": 0.5}},
+    {"id": "CONDITION_EXTRA", "expected": {"tp": 1, "fp": 1, "fn": 0, "precision": 0.5, "recall": 1.0}},
+    {"id": "CONDITION_DUPLICATE", "expected": {"one_gold_matches_at_most_one_prediction": true, "duplicate_prediction_is_fp": true}},
+    {"id": "CONDITION_OPERATOR_VALUE_MISMATCH", "expected": {"tp": 0, "fp": 1, "fn": 1, "partial_match_is_tp": false}},
+    {"id": "LOGIC_CHILD_ORDER_ONLY", "expected": {"notice_structure_exact": true}},
+    {"id": "LOGIC_AND_OR_SWAP", "expected": {"notice_structure_exact": false, "operator_accuracy": 0.0}},
+    {"id": "LOGIC_NOT_SCOPE_MISMATCH", "expected": {"notice_structure_exact": false}},
+    {"id": "EXCEPTION_TARGET_MISMATCH", "expected": {"exception_tp": 0, "exception_fp": 1, "exception_fn": 1}},
+    {"id": "UNRESOLVED_APPROPRIATE", "expected": {"unresolved_correct": 1, "overcautious": 0}},
+    {"id": "UNRESOLVED_OVERCAUTIOUS", "expected": {"unresolved_correct": 0, "overcautious": 1}},
+    {"id": "EMPTY_GOLD_AND_PREDICTION", "expected": {"precision": null, "recall": null, "accuracy_not_zero_or_one": true}},
+    {"id": "UNREVIEWED_GOLD", "expected": {"score_status": "BLOCKED", "metrics": null}},
+    {"id": "EMPTY_GOLDSET", "expected": {"score_status": "BLOCKED", "metrics": null}},
+    {"id": "UNITS_NORMALIZED_WITHOUT_CONVERSION", "expected": {"equivalent_numeric_surface_forms_match": true, "different_units_require_explicit_conversion": true}}
+  ]
+}
