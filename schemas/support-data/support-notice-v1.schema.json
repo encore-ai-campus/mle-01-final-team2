@@ -1,0 +1,1075 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mle-team2.example/schemas/support-notice-v1.schema.json",
+  "title": "Source-neutral support notice v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "record_type",
+    "notice_id",
+    "source",
+    "title",
+    "title_raw",
+    "timestamps",
+    "application_period",
+    "urls",
+    "organization",
+    "category",
+    "region",
+    "structured",
+    "condition_texts",
+    "content",
+    "attachments",
+    "contacts",
+    "field_availability",
+    "source_metadata",
+    "normalizer_version"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "record_type": {
+      "const": "notice"
+    },
+    "notice_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "title": {
+      "$ref": "#/$defs/nullableString"
+    },
+    "title_raw": {
+      "$ref": "#/$defs/nullableString"
+    },
+    "timestamps": {
+      "type": "object",
+      "required": [
+        "fetched_at",
+        "published_at",
+        "source_updated_at"
+      ],
+      "properties": {
+        "fetched_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "published_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "source_updated_at": {
+          "$ref": "#/$defs/timestamp"
+        }
+      },
+      "additionalProperties": false
+    },
+    "application_period": {
+      "type": "object",
+      "required": [
+        "start",
+        "end",
+        "deadline",
+        "status_kind",
+        "is_open",
+        "period_status"
+      ],
+      "properties": {
+        "start": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "end": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "deadline": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "status_kind": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "is_open": {
+          "$ref": "#/$defs/nullableBoolean"
+        },
+        "period_status": {
+          "$ref": "#/$defs/nullableString"
+        }
+      },
+      "additionalProperties": false
+    },
+    "urls": {
+      "type": "object",
+      "required": [
+        "apply_url",
+        "guide_url",
+        "notice_url",
+        "apply_methods",
+        "apply_method_text",
+        "url_status"
+      ],
+      "properties": {
+        "apply_url": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "guide_url": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "notice_url": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "apply_methods": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/applyMethod"
+          }
+        },
+        "apply_method_text": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "url_status": {
+          "type": "object",
+          "additionalProperties": {
+            "enum": [
+              "VALID",
+              "INVALID",
+              "EMPTY",
+              "NOT_COLLECTED"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "url_status": {
+                "required": [
+                  "apply_url"
+                ],
+                "properties": {
+                  "apply_url": {
+                    "const": "VALID"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "apply_url": {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^https?://"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "url_status": {
+                "required": [
+                  "guide_url"
+                ],
+                "properties": {
+                  "guide_url": {
+                    "const": "VALID"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "guide_url": {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^https?://"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "url_status": {
+                "required": [
+                  "notice_url"
+                ],
+                "properties": {
+                  "notice_url": {
+                    "const": "VALID"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "notice_url": {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^https?://"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "organization": {
+      "type": "object",
+      "required": [
+        "raw",
+        "names",
+        "role_titles",
+        "flags",
+        "executor_name",
+        "executor_kind",
+        "operating_department",
+        "organization_kind"
+      ],
+      "properties": {
+        "raw": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "names": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/nullableString"
+          }
+        },
+        "role_titles": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/nullableString"
+          }
+        },
+        "flags": {
+          "$ref": "#/$defs/nullableStringArray"
+        },
+        "executor_name": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "executor_kind": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "operating_department": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "organization_kind": {
+          "$ref": "#/$defs/nullableString"
+        }
+      },
+      "additionalProperties": false
+    },
+    "category": {
+      "type": "object",
+      "required": [
+        "source_major",
+        "source_medium"
+      ],
+      "properties": {
+        "source_major": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "source_medium": {
+          "$ref": "#/$defs/nullableString"
+        }
+      },
+      "additionalProperties": false
+    },
+    "region": {
+      "type": "object",
+      "required": [
+        "raw",
+        "concept_ids",
+        "basis",
+        "scope_hint",
+        "tags_hint"
+      ],
+      "properties": {
+        "raw": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "concept_ids": {
+          "$ref": "#/$defs/nullableStringArray"
+        },
+        "basis": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "scope_hint": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "tags_hint": {
+          "$ref": "#/$defs/nullableStringArray"
+        }
+      },
+      "additionalProperties": false
+    },
+    "structured": {
+      "type": "object",
+      "required": [
+        "target_group_text",
+        "business_age_raw",
+        "founder_age_raw",
+        "applicant_target_raw"
+      ],
+      "properties": {
+        "target_group_text": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "business_age_raw": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "founder_age_raw": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "applicant_target_raw": {
+          "$ref": "#/$defs/nullableString"
+        }
+      },
+      "additionalProperties": false
+    },
+    "condition_texts": {
+      "type": "object",
+      "required": [
+        "eligibility",
+        "exclusion",
+        "preference"
+      ],
+      "properties": {
+        "eligibility": {
+          "$ref": "#/$defs/sourceText"
+        },
+        "exclusion": {
+          "$ref": "#/$defs/sourceText"
+        },
+        "preference": {
+          "$ref": "#/$defs/sourceText"
+        }
+      },
+      "additionalProperties": false
+    },
+    "content": {
+      "type": "object",
+      "required": [
+        "summary_text",
+        "body_text",
+        "support_text",
+        "evaluation_text"
+      ],
+      "properties": {
+        "summary_text": {
+          "$ref": "#/$defs/sourceText"
+        },
+        "body_text": {
+          "$ref": "#/$defs/sourceText"
+        },
+        "support_text": {
+          "$ref": "#/$defs/sourceText"
+        },
+        "evaluation_text": {
+          "$ref": "#/$defs/sourceText"
+        }
+      },
+      "additionalProperties": false
+    },
+    "attachments": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/attachments"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "contacts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/contact"
+      }
+    },
+    "field_availability": {
+      "type": "object",
+      "additionalProperties": {
+        "enum": [
+          "PRESENT",
+          "EMPTY",
+          "NOT_COLLECTED",
+          "DERIVED",
+          "UNPARSEABLE"
+        ]
+      },
+      "description": "Availability map; field paths are maintained by the normalizer. Cross-field completeness is checked outside JSON Schema."
+    },
+    "source_metadata": {
+      "type": "object",
+      "required": [
+        "source_record_id",
+        "version",
+        "is_latest",
+        "raw_hash",
+        "source_run",
+        "content_hash",
+        "related_group_id",
+        "is_integrated",
+        "program_name",
+        "legacy_deadline_at",
+        "guide_url_flags"
+      ],
+      "properties": {
+        "source_record_id": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "version": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "is_latest": {
+          "$ref": "#/$defs/nullableBoolean"
+        },
+        "raw_hash": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "source_run": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "content_hash": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "related_group_id": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "is_integrated": {
+          "$ref": "#/$defs/nullableBoolean"
+        },
+        "program_name": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "legacy_deadline_at": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "guide_url_flags": {
+          "$ref": "#/$defs/nullableStringArray"
+        },
+        "source_id": {
+          "$ref": "#/$defs/nullableString"
+        }
+      },
+      "additionalProperties": false
+    },
+    "timestamp": {
+      "type": "object",
+      "required": [
+        "value",
+        "raw_value",
+        "precision",
+        "timezone",
+        "status",
+        "basis"
+      ],
+      "properties": {
+        "value": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "raw_value": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "precision": {
+          "enum": [
+            "DATE",
+            "DATETIME",
+            "DATETIME_WITH_TIMEZONE",
+            "UNKNOWN"
+          ]
+        },
+        "timezone": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "status": {
+          "enum": [
+            "PRESENT",
+            "EMPTY",
+            "NOT_COLLECTED",
+            "UNPARSEABLE",
+            "DERIVED_FROM_END_DATE"
+          ]
+        },
+        "basis": {
+          "enum": [
+            "SOURCE",
+            "APPLICATION_END_DATE",
+            "UNKNOWN"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "enum": [
+                  "PRESENT",
+                  "DERIVED_FROM_END_DATE"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "enum": [
+                  "EMPTY",
+                  "NOT_COLLECTED",
+                  "UNPARSEABLE"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "precision"
+            ],
+            "properties": {
+              "precision": {
+                "const": "DATE"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "precision"
+            ],
+            "properties": {
+              "precision": {
+                "const": "DATETIME_WITH_TIMEZONE"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "const": "DERIVED_FROM_END_DATE"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "basis": {
+                "const": "APPLICATION_END_DATE"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "sourceText": {
+      "type": "object",
+      "required": [
+        "text",
+        "availability"
+      ],
+      "properties": {
+        "text": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "availability": {
+          "enum": [
+            "PRESENT",
+            "EMPTY",
+            "NOT_COLLECTED"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "availability"
+            ],
+            "properties": {
+              "availability": {
+                "const": "PRESENT"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "text": {
+                "type": "string",
+                "pattern": "\\S"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "availability"
+            ],
+            "properties": {
+              "availability": {
+                "const": "NOT_COLLECTED"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "text": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "availability"
+            ],
+            "properties": {
+              "availability": {
+                "const": "EMPTY"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "text": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "pattern": "^\\s*$"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "attachments": {
+      "type": "object",
+      "required": [
+        "count",
+        "text_extracted",
+        "preview_only",
+        "note",
+        "collection_status",
+        "extraction_status",
+        "review_status"
+      ],
+      "properties": {
+        "count": {
+          "$ref": "#/$defs/nullableNonnegativeInteger"
+        },
+        "text_extracted": {
+          "$ref": "#/$defs/nullableNonnegativeInteger"
+        },
+        "preview_only": {
+          "$ref": "#/$defs/nullableNonnegativeInteger"
+        },
+        "note": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "collection_status": {
+          "enum": [
+            "COLLECTED",
+            "NOT_COLLECTED",
+            "UNKNOWN"
+          ]
+        },
+        "extraction_status": {
+          "enum": [
+            "COMPLETE",
+            "PARTIAL",
+            "NOT_ATTEMPTED",
+            "NO_ATTACHMENTS",
+            "UNKNOWN"
+          ]
+        },
+        "review_status": {
+          "enum": [
+            "UNREVIEWED",
+            "NOT_APPLICABLE",
+            "UNKNOWN"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "extraction_status"
+            ],
+            "properties": {
+              "extraction_status": {
+                "const": "NO_ATTACHMENTS"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "count": {
+                "const": 0
+              },
+              "text_extracted": {
+                "enum": [
+                  0,
+                  null
+                ]
+              },
+              "preview_only": {
+                "enum": [
+                  0,
+                  null
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "count"
+            ],
+            "properties": {
+              "count": {
+                "const": 0
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "text_extracted": {
+                "enum": [
+                  0,
+                  null
+                ]
+              },
+              "preview_only": {
+                "enum": [
+                  0,
+                  null
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "applyMethod": {
+      "type": "object",
+      "required": [
+        "method_code",
+        "raw_text",
+        "source_field",
+        "urls"
+      ],
+      "properties": {
+        "method_code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "raw_text": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "source_field": {
+          "type": "string",
+          "minLength": 1
+        },
+        "urls": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "value",
+              "purpose",
+              "source_field"
+            ],
+            "properties": {
+              "value": {
+                "type": "string",
+                "minLength": 1
+              },
+              "purpose": {
+                "const": "UNCLASSIFIED"
+              },
+              "source_field": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "contact": {
+      "type": "object",
+      "required": [
+        "type",
+        "value",
+        "normalized_value",
+        "source_system",
+        "source_fields",
+        "organization",
+        "department",
+        "classification",
+        "classification_basis",
+        "review_status",
+        "service_visibility"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "PHONE",
+            "EMAIL",
+            "UNKNOWN"
+          ]
+        },
+        "value": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "normalized_value": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "source_system": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "organization": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "department": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "classification": {
+          "enum": [
+            "OFFICIAL_BUSINESS",
+            "PERSONAL",
+            "UNCLASSIFIED"
+          ]
+        },
+        "classification_basis": {
+          "enum": [
+            "EXPLICIT_OFFICIAL_CONTEXT",
+            "SOURCE_CONTACT_DEPARTMENT_PAIR",
+            "PERSONAL_LABEL_OR_NAME",
+            "INSUFFICIENT_CONTEXT"
+          ]
+        },
+        "review_status": {
+          "enum": [
+            "AUTO_CLASSIFIED",
+            "REDACTED",
+            "NEEDS_REVIEW"
+          ]
+        },
+        "service_visibility": {
+          "type": "boolean"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "classification"
+            ],
+            "properties": {
+              "classification": {
+                "const": "OFFICIAL_BUSINESS"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "string",
+                "pattern": "\\S"
+              },
+              "service_visibility": {
+                "const": true
+              },
+              "review_status": {
+                "const": "AUTO_CLASSIFIED"
+              },
+              "classification_basis": {
+                "enum": [
+                  "EXPLICIT_OFFICIAL_CONTEXT",
+                  "SOURCE_CONTACT_DEPARTMENT_PAIR"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "classification"
+            ],
+            "properties": {
+              "classification": {
+                "const": "PERSONAL"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              },
+              "normalized_value": {
+                "type": "null"
+              },
+              "service_visibility": {
+                "const": false
+              },
+              "review_status": {
+                "const": "REDACTED"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "classification"
+            ],
+            "properties": {
+              "classification": {
+                "const": "UNCLASSIFIED"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              },
+              "normalized_value": {
+                "type": "null"
+              },
+              "service_visibility": {
+                "const": false
+              },
+              "review_status": {
+                "enum": [
+                  "NEEDS_REVIEW",
+                  "REDACTED"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "nullableString": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "nullableBoolean": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "nullableStringArray": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "nullableNonnegativeInteger": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false,
+  "description": "Source-neutral normalized support notice. Preserve source differences and distinguish unavailable values from collected values."
+}

@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mle-team2.example/schemas/support-chunk-v1.schema.json",
+  "title": "Source-neutral support notice chunk v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "record_type",
+    "chunk_id",
+    "notice_id",
+    "source_system",
+    "section",
+    "section_original",
+    "origin",
+    "text",
+    "source_content_hash",
+    "is_open",
+    "region_concept_ids",
+    "privacy_status",
+    "search_eligible",
+    "content_review_status",
+    "normalizer_version"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "record_type": {"const": "chunk"},
+    "chunk_id": {"$ref": "#/$defs/nonBlankString"},
+    "notice_id": {"$ref": "#/$defs/nonBlankString"},
+    "source_system": {"$ref": "#/$defs/nonBlankString"},
+    "section": {"$ref": "#/$defs/nonBlankString"},
+    "section_original": {"$ref": "#/$defs/nonBlankString"},
+    "origin": {"$ref": "#/$defs/nonBlankString"},
+    "text": {"type": "string"},
+    "source_content_hash": {
+      "anyOf": [
+        {"$ref": "#/$defs/nonBlankString"},
+        {"type": "null"}
+      ]
+    },
+    "is_open": {
+      "type": ["boolean", "null"]
+    },
+    "region_concept_ids": {
+      "type": ["array", "null"],
+      "items": {"$ref": "#/$defs/nonBlankString"},
+      "uniqueItems": true
+    },
+    "privacy_status": {
+      "enum": ["CLEARED", "REVIEW_REQUIRED"]
+    },
+    "search_eligible": {
+      "type": "boolean",
+      "description": "Whether this chunk may be included in retrieval indexes."
+    },
+    "content_review_status": {
+      "const": "UNREVIEWED"
+    },
+    "normalizer_version": {
+      "const": "1.0"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "origin": {
+            "enum": [
+              "ATTACHMENT",
+              "ATTACHMENT_OCR",
+              "ATTACHMENT_PREVIEW"
+            ]
+          }
+        },
+        "required": ["origin"]
+      },
+      "then": {
+        "properties": {
+          "search_eligible": {"const": false}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "search_eligible": {"const": true}
+        },
+        "required": ["search_eligible"]
+      },
+      "then": {
+        "properties": {
+          "privacy_status": {"const": "CLEARED"},
+          "text": {"$ref": "#/$defs/nonBlankString"}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "nonBlankString": {
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "additionalProperties": false
+}
