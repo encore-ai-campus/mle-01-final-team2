@@ -136,7 +136,10 @@
               "VALID",
               "INVALID",
               "EMPTY",
-              "NOT_COLLECTED"
+              "NOT_COLLECTED",
+              "SCHEME_MISSING",
+              "INSECURE_HTTP",
+              "NOT_A_URL"
             ]
           }
         }
@@ -385,12 +388,113 @@
       "additionalProperties": false
     },
     "attachments": {
-      "oneOf": [
+      "type": "object",
+      "required": [
+        "count",
+        "text_extracted",
+        "preview_only",
+        "note",
+        "collection_status",
+        "extraction_status",
+        "review_status"
+      ],
+      "properties": {
+        "count": {
+          "$ref": "#/$defs/nullableNonnegativeInteger"
+        },
+        "text_extracted": {
+          "$ref": "#/$defs/nullableNonnegativeInteger"
+        },
+        "preview_only": {
+          "$ref": "#/$defs/nullableNonnegativeInteger"
+        },
+        "note": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "collection_status": {
+          "enum": [
+            "COLLECTED",
+            "NOT_COLLECTED",
+            "UNKNOWN"
+          ]
+        },
+        "extraction_status": {
+          "enum": [
+            "COMPLETE",
+            "PARTIAL",
+            "NOT_ATTEMPTED",
+            "NO_ATTACHMENTS",
+            "UNKNOWN"
+          ]
+        },
+        "review_status": {
+          "enum": [
+            "UNREVIEWED",
+            "NOT_APPLICABLE",
+            "UNKNOWN"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
         {
-          "$ref": "#/$defs/attachments"
+          "if": {
+            "required": [
+              "extraction_status"
+            ],
+            "properties": {
+              "extraction_status": {
+                "const": "NO_ATTACHMENTS"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "count": {
+                "const": 0
+              },
+              "text_extracted": {
+                "enum": [
+                  0,
+                  null
+                ]
+              },
+              "preview_only": {
+                "enum": [
+                  0,
+                  null
+                ]
+              }
+            }
+          }
         },
         {
-          "type": "null"
+          "if": {
+            "required": [
+              "count"
+            ],
+            "properties": {
+              "count": {
+                "const": 0
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "text_extracted": {
+                "enum": [
+                  0,
+                  null
+                ]
+              },
+              "preview_only": {
+                "enum": [
+                  0,
+                  null
+                ]
+              }
+            }
+          }
         }
       ]
     },
@@ -471,6 +575,12 @@
       },
       "additionalProperties": false
     },
+    "normalizer_version": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "$defs": {
     "timestamp": {
       "type": "object",
       "required": [
@@ -715,117 +825,6 @@
         }
       ]
     },
-    "attachments": {
-      "type": "object",
-      "required": [
-        "count",
-        "text_extracted",
-        "preview_only",
-        "note",
-        "collection_status",
-        "extraction_status",
-        "review_status"
-      ],
-      "properties": {
-        "count": {
-          "$ref": "#/$defs/nullableNonnegativeInteger"
-        },
-        "text_extracted": {
-          "$ref": "#/$defs/nullableNonnegativeInteger"
-        },
-        "preview_only": {
-          "$ref": "#/$defs/nullableNonnegativeInteger"
-        },
-        "note": {
-          "$ref": "#/$defs/nullableString"
-        },
-        "collection_status": {
-          "enum": [
-            "COLLECTED",
-            "NOT_COLLECTED",
-            "UNKNOWN"
-          ]
-        },
-        "extraction_status": {
-          "enum": [
-            "COMPLETE",
-            "PARTIAL",
-            "NOT_ATTEMPTED",
-            "NO_ATTACHMENTS",
-            "UNKNOWN"
-          ]
-        },
-        "review_status": {
-          "enum": [
-            "UNREVIEWED",
-            "NOT_APPLICABLE",
-            "UNKNOWN"
-          ]
-        }
-      },
-      "additionalProperties": false,
-      "allOf": [
-        {
-          "if": {
-            "required": [
-              "extraction_status"
-            ],
-            "properties": {
-              "extraction_status": {
-                "const": "NO_ATTACHMENTS"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "count": {
-                "const": 0
-              },
-              "text_extracted": {
-                "enum": [
-                  0,
-                  null
-                ]
-              },
-              "preview_only": {
-                "enum": [
-                  0,
-                  null
-                ]
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "required": [
-              "count"
-            ],
-            "properties": {
-              "count": {
-                "const": 0
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "text_extracted": {
-                "enum": [
-                  0,
-                  null
-                ]
-              },
-              "preview_only": {
-                "enum": [
-                  0,
-                  null
-                ]
-              }
-            }
-          }
-        }
-      ]
-    },
     "applyMethod": {
       "type": "object",
       "required": [
@@ -932,7 +931,8 @@
             "EXPLICIT_OFFICIAL_CONTEXT",
             "SOURCE_CONTACT_DEPARTMENT_PAIR",
             "PERSONAL_LABEL_OR_NAME",
-            "INSUFFICIENT_CONTEXT"
+            "INSUFFICIENT_CONTEXT",
+            "SOURCE_PUBLIC_AGENCY_CONTACT_FIELD"
           ]
         },
         "review_status": {
@@ -973,7 +973,8 @@
               "classification_basis": {
                 "enum": [
                   "EXPLICIT_OFFICIAL_CONTEXT",
-                  "SOURCE_CONTACT_DEPARTMENT_PAIR"
+                  "SOURCE_CONTACT_DEPARTMENT_PAIR",
+                  "SOURCE_PUBLIC_AGENCY_CONTACT_FIELD"
                 ]
               }
             }
@@ -1068,6 +1069,23 @@
         "null"
       ],
       "minimum": 0
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "source_system",
+        "source_id"
+      ],
+      "properties": {
+        "source_system": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_id": {
+          "$ref": "#/$defs/nullableString"
+        }
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": false,

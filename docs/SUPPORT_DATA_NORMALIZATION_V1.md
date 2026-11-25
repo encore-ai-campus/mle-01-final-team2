@@ -45,13 +45,15 @@ K-Startup과 기업마당의 형식 차이를 출처 중립 스키마로 맞추�
 ### URL, 연락처, 분류, 지역
 
 - `detail_url`은 `notice_url`, 명시적으로 제공된 `apply_url`은 신청 URL, `guide_url`은 안내 URL이다. 없는 URL을 생성하거나 신청 방법 본문에서 신청 URL로 추론하지 않는다. 신청 방법 텍스트에 포함된 URL은 용도 `UNCLASSIFIED`로만 보존한다.
-- URL은 HTTPS와 호스트를 검사한다. 공고 상세 URL은 K-Startup은 `k-startup.go.kr`, 기업마당은 `bizinfo.go.kr` 계열 호스트만 VALID다. 안내 URL도 출처 공식 도메인에 제한하며, 외부 신청 URL은 HTTPS면 유지하되 호스트 검증을 완료한 것으로 표시하지 않는다. INVALID URL을 고치거나 요청하지 않는다.
-- `contact_text`, `contact_phone_raw`는 `contacts[]`로 변환한다. 전화번호 형식이나 이메일 도메인만으로 분류하지 않고, `대표전화`, `사업문의`, `신청문의`, `문의처`처럼 명시된 공식 업무 문맥 또는 K-Startup 원천의 연락처 전화번호와 연락 부서 필드 쌍이 있는 경우만 `OFFICIAL_BUSINESS`로 보존한다. 이 값은 공고 메타데이터에만 두고 청크에서는 제외한다.
-- 명시적 개인 문맥이나 담당자 이름과 가까운 연락처는 값과 개인 이름을 출력하지 않고 `PERSONAL`/`REDACTED`로 집계한다. 공식·개인 여부를 확인할 문맥이 부족하면 값은 출력하지 않고 `UNCLASSIFIED`/`NEEDS_REVIEW`, `service_visibility=false`로 검수 대기열에 둔다. 이 때문에 원문 값이 필요한 검수는 접근 통제된 기존 cleaned 입력에서 수행한다.
-- 공식 연락처의 `normalized_value`는 전화번호의 구분 문자를 제거하거나 이메일 도메인만 소문자로 바꾼다. 원본 표기는 `value`에 유지한다. 기관명과 부서명은 출처 필드가 명시적으로 연결되지 않아 이번 스냅샷에서는 추정하지 않고 null로 둔다.
-- 연락처가 본문·조건·청크 등 다른 텍스트 필드에 나타나면 해당 텍스트에서는 전화번호·이메일을 마스킹하고 담당자 이름 문맥을 제거한다. 연락처 원본 필드 자체는 이번 변경으로 수정하지 않았다.
-- BIZINFO 원본 API `refrncNm`은 기존 파서가 `contact_text`로 옮긴 값임을 확인했다. K-Startup 원본 API의 `prch_cnpl_no`와 `biz_prch_dprt_nm`이 정제 필드 `contact_phone_raw` 및 `operating_dept`에 각각 연결되는 것도 확인해 부서와 연락처 쌍의 근거로 사용했다. 원본 파일은 수정하지 않았다.
-- 이번 입력에서 공식 업무 문맥 또는 출처 부서/전화 필드 쌍으로 분류해 보존한 연락처는 BIZINFO 219건, K-Startup 3,695건이다. BIZINFO 개인 연락처 후보 2건은 값과 이름을 제거했다. 미분류 연락처는 BIZINFO 2,000건, K-Startup 119건이며 모두 검수 대기열에 등록되어 검수 등록률은 100%다. 세부 수치는 실행 보고서의 `contact_processing_by_source`와 `unclassified_contact_review_coverage`에 기록한다.
+- URL은 원문 그대로 보존하고(비밀값만 가림) 상태를 구분한다. `VALID`는 https와 호스트가 있는 경우이고, 공고 상세 URL(`notice_url`)만 출처 공식 도메인(K-Startup `k-startup.go.kr`, 기업마당 `bizinfo.go.kr` 계열)을 추가로 요구한다. 안내 URL(`guide_url`)과 신청 URL은 외부 기관 페이지일 수 있어 도메인을 제한하지 않으며, 호스트를 검증했다는 뜻은 아니다. 이전 판에서는 안내 URL에도 출처 도메인을 요구해 K-Startup 안내 URL 3,145건 중 3,143건이 `INVALID`가 되었다.
+- 도메인으로 보이지만 스킴이 없는 값(`event-us.kr/...`)은 `SCHEME_MISSING`, http는 `INSECURE_HTTP`, URL이 아닌 문자열(제목 등)은 `NOT_A_URL`, 자격 정보 포함·파싱 불가·공백 포함·공식 도메인 밖(상세 URL)은 `INVALID`다. 값은 고치지 않고 이슈 코드(`URL_SCHEME_MISSING`, `URL_INSECURE_HTTP`, `URL_FIELD_NOT_A_URL`, `INVALID_OR_MALFORMED_URL`)로 남긴다. 소비 측이 스킴을 보충할지 정한다.
+- `contact_text`, `contact_phone_raw`는 `contacts[]`로 변환한다. 공공기관 공고의 연락처 필드에 적힌 전화·이메일은 **기관 연락처로 보존**한다(`OFFICIAL_BUSINESS`). 근거는 세 가지이며 `classification_basis`에 남긴다: 명시된 업무 문맥(`EXPLICIT_OFFICIAL_CONTEXT`), K-Startup 연락처 번호와 연락 부서 필드 쌍(`SOURCE_CONTACT_DEPARTMENT_PAIR`), 연락처 필드에 적힌 값(`SOURCE_PUBLIC_AGENCY_CONTACT_FIELD`). 이전 판은 앞의 두 근거가 있을 때만 보존해 기업마당 연락처 2,221건 중 2,000건의 값이 비었다.
+- 값을 가리는 경우는 둘뿐이다. ① 휴대전화·개인·성명 같은 개인 표지가 같은 구획(`/`, `;`, `|`, 줄바꿈으로 나눈 범위)에 있는 연락처(`PERSONAL`, 값 없음). ② 연락처 필드에 번호나 이메일이 없는 항목(`UNCLASSIFIED`, 검수 대기). 이 항목은 값이 없어 개인정보가 아니라 문구만 있는 경우다.
+- `organization`은 연락처 바로 앞에 적힌 기관·부서 문구를 그대로 쓴다(추정 아님). 같은 구획에서 번호 뒤에 이메일이 이어지면 앞 연락처의 기관을 이어 쓴다. K-Startup은 부서 필드 쌍이 있으면 `department`에 부서를, `organization`에 공고 기관명을 둔다. 앞 문구가 없으면 null이다.
+- **본문·청크의 이메일·전화는 가리지 않는다**(공공기관 연락처). 지우는 것은 담당자 이름 문맥(`담당자 홍길동` → `담당자 [이름 삭제]`)과 그 바로 뒤(같은 구획, 40자 안)에 붙은 전화·이메일, URL 토큰뿐이다. 이전 판은 모든 이메일·전화를 `[개인정보 마스킹]`으로 바꿔 신청 방법의 제출 이메일이 사라졌고, 이름 라벨 뒤 연락처 문구 전체를 `[문의 정보 삭제]`로 지웠다.
+- 휴대전화 번호 형태(`01x`)는 정리층 연락처 필드에는 0건이고, 본문에는 53건이 있으며 모두 검색 제외된 기업마당 첨부 청크 안이다. 건수는 보고서 `contact_text_policy.kept_in_text`에 기록한다.
+- BIZINFO 원본 API `refrncNm`은 기존 파서가 `contact_text`로 옮긴 값이고, K-Startup 원본 API의 `prch_cnpl_no`와 `biz_prch_dprt_nm`은 정제 필드 `contact_phone_raw`와 `operating_dept`로 연결된다.
+- 이번 입력의 분류 결과: 기관 연락처 보존 기업마당 2,198건, K-Startup 3,695건. 개인 연락처로 값을 가린 것은 1건, 검수 대기는 141건(기업마당 22, K-Startup 119)이다. 세부 수치는 보고서 `contact_processing_by_source`에 있다.
 - 분류는 `category.source_major/source_medium`에 원출처 값을 그대로 둔다. 통합 분류 체계는 확정하지 않는다.
 - `region.raw`, concept ID, basis, scope/tag hint를 분리한다. 소관기관 소재지를 신청 대상 지역으로 승격하지 않는다.
 
@@ -62,16 +64,20 @@ K-Startup과 기업마당의 형식 차이를 출처 중립 스키마로 맞추�
 
 ## 변환 결과 및 검증
 
-입력 SHA-256은 보고서에 기록했다. 변환 결과 공고 5,116건, 청크 32,947건이며 출처별 입력/출력 건수가 일치한다. 공고 ID 중복 0, 청크 ID 중복 0, 공고 참조가 없는 청크 0, 스키마 검사 오류 0이다. 개인정보 검사는 개인/미분류 연락처 원문이 아닌 모든 출력 텍스트에서 잔존 0건이며, 명시적 업무 문맥으로 자동 분류된 공식 연락처는 의도적으로 공고 metadata에 보존한다. API 텍스트 청크 20,642개만 검색 허용되며 첨부 청크는 검수 전 검색에서 제외했다. 저장된 출력 집계는 `normalization_report.json`에 있다.
+입력 SHA-256은 보고서에 기록했다. 변환 결과 공고 5,116건, 청크 32,947건이며 출처별 입력/출력 건수가 일치한다. 공고 ID 중복 0, 청크 ID 중복 0, 공고 참조가 없는 청크 0, 스키마 검사 오류 0이다. 개인정보 검사는 담당자 이름 문맥, 그 바로 뒤에 붙은 전화·이메일, URL 토큰의 잔존만 센다(잔존 0건). 기관 연락처는 의도적으로 남기므로 "연락처 잔존 0"을 뜻하지 않는다. 남긴 건수는 `contact_text_policy.kept_in_text`(이메일 6,117, 전화 3,477, 휴대전화 형태 53)에 따로 기록한다. API 텍스트 청크 20,642개만 검색 허용되며 첨부 청크는 검수 전 검색에서 제외했다. 저장된 출력 집계는 `normalization_report.json`에 있다.
 
-자동 검토 issue는 아래 유형을 포함한다.
+자동 검토 issue(`normalization_issues.jsonl`)는 아래 유형을 포함한다.
 
 - 기존 마감 시각을 종료일에서 유래한 날짜로 표시한 기록 4,201건(정보성 근거 기록)
-- HTTPS/출처 공식 도메인 기준을 통과하지 못했거나 URL 형식이 잘못된 값 3,143건(값은 임의 수정하지 않음)
+- URL 상태 이슈 2,658건: 스킴 없음 2,593, http 57, URL 아님 6, 파싱·자격 정보 문제 2(값은 임의 수정하지 않음)
 - 기존 조건 후보 파일의 공고 3건 차이
 - BIZINFO/K-Startup 간 원천 필드 제공 범위 차이 및 과거 K-Startup `guide_url_malformed` 플래그
 
 기존 `data/normalized/20261124` 값 후보는 계속 검수 전 상태다. K-Startup의 `not_found`는 추출 규칙이 후보를 찾지 못한 상태일 뿐 원문에 조건이 없다는 확정값이 아니다. 이 단계에서는 조건 후보를 조건 판단에 쓰거나 고치지 않았다.
+
+## 검수 대기열
+
+`review_queue.jsonl`에 사람이 확인할 항목을 값 없이 사유만 적는다. 이번 입력은 141건이며 전부 "연락처 필드에 번호·이메일이 없는 항목"(`CONTACT`)이다. 개인정보 검사에서 걸린 청크(`CHUNK`, `PRIVACY_REVIEW_REQUIRED`)는 0건이다. 검수는 접근이 통제된 정리층(`data/cleaned`)의 원문과 대조하며, 담당자는 팀에서 지정한다(지정 전에는 전처리 담당이 맡는다). 처리 결과는 정규화기 재실행으로 반영하고, 대기열 항목 수가 0이 되거나 남은 이유를 보고서에 적을 때까지 `publishable` 외에 별도 확인이 필요하다.
 
 ## 테스트
 
