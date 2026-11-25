@@ -1,0 +1,14 @@
+﻿클래스,층,식별자(예),핵심 속성,현재 데이터·예시(2026-11-24)
+Notice,메타,notice_id,"source_system, source_id, notice_kind, title, summary, deadline_at, deadline_raw, apply_status_kind, version, is_latest, fetched_at, content_hash, raw_hash, detail_url","기업마당 1,294건은 위 속성이 모두 있음(BIZINFO:PBLN_000000000128083). K-Startup은 KSTARTUP:{pbanc_sn} 규칙을 요청했지만 정리본에는 아직 없음(announcement_id만 있음)"
+Organization,메타,org_id,"name, normalized_name, source_org_code, role_title, org_kind","기업마당 소관 36곳·수행 기관 320곳(직접수행 52건·기초자치단체 295건은 범주값이라 기관 노드가 아님). K-Startup은 직함이 붙은 기관명 정리 필요(정규식 근사 약 190건), 주관 유형(sprv_inst) 공공기관 1,792·민간 1,327·교육기관 509·지자체 191"
+SupportCategory,메타,category_id,"name, level(major/medium/source_label)","기업마당 대 8·중 37, K-Startup 11. 통합 매핑표 필요"
+Attachment,메타,attachment_id,"file_name, file_extension, role, source_url, text_status, usable","기업마당 2,654개(본문출력 1,294 + 일반 1,360). K-Startup은 정보 없음"
+Tag,메타,tag_id,name,기업마당 해시태그. 지역 이름은 Concept로 연결하고 태그로 두지 않음(§5.3)
+Region → Concept(scheme=REGION),개념,region_id,"name, level, region_code, parent_region_id, code_source, code_version",코드표 234개. 두 출처 모두 지역 값을 시도 단위 약칭으로 주므로(K-Startup 19종) 시군구 계층은 본문 추출 조건에서만 쓰인다
+Program,요건,program_id,"name, level",미구축
+Track,요건,track_id,"name, benefit_summary, benefit_limit",미구축. K-Startup 통합공고 854건이 후보
+Requirement,요건,req_id,"kind, logic(AND/OR/NONE_OF/AT_LEAST), min_count, logic_basis, source_sentence, status, extraction_run_id",미구축. 입력은 기업마당 첨부 자격·제외 구간과 두 출처의 자격 문구
+Condition,요건,cond_id,"attribute, operator, value(JSON), unit, ref_date_kind, negate, source_conflict, open_ended, confidence, reviewed","미구축. K-Startup 동료 정리본에 후보 46,176건(needs_review 27,945·not_found 18,231·확정 0)"
+Concept,개념,concept_id,"scheme, code, label, aliases, code_version",지역만 코드표로 가능
+Definition,개념,def_id,"term, rule_json, basis_note",미구축(P1)
+ExternalLaw,개념,law_id,"name, article_no, text_hash, source_url",미구축(P1)

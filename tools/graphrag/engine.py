@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from collections import Counter
 
+from . import cleaned
 from .data import load_all
 from .evaluator import ELIGIBLE, NEEDS_CHECK, NOT_ELIGIBLE, Profile, evaluate_notice
 from .search import BM25
@@ -15,8 +16,12 @@ TODAY = "2026-11-24"
 
 
 class Engine:
-    def __init__(self):
-        d = load_all()
+    def __init__(self, use_cleaned: bool | None = None):
+        # 정리 층(data/cleaned)이 있으면 그것을 쓰고, 없으면 원본 파서 결과를 직접 읽는다
+        use = cleaned.available() if use_cleaned is None else use_cleaned
+        d = cleaned.load_cleaned() if use else load_all()
+        self.input_layer = "cleaned" if use else "parsed"
+
         self.rg, self.notices, self.chunks, self.skipped = d["rg"], d["notices"], d["chunks"], d["skipped"]
         self.by_id = {n["notice_id"]: n for n in self.notices}
         self.bm25 = BM25(self.chunks)

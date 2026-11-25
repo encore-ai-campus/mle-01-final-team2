@@ -1,0 +1,129 @@
+{
+ "note": "null은 '미입력'(알 수 없음)이다. 빈 배열 []은 '해당 없음'이다. 미입력이 필요한 조건은 UNKNOWN이다. 공고별 경계값·미입력 프로필은 profiles_extra.json에 PX-<공고번호끝6자리>-<번호>로 추가한다.",
+ "profiles": [
+  {
+   "profile_id": "P1",
+   "summary": "서울 성동구, 법인 제조업, 업력 2년, 대표 만 35세, 소기업, 직원 8명",
+   "region": "서울 성동구",
+   "business_status": "사업자",
+   "business_age_years": 2,
+   "founder_age": 35,
+   "company_size": "소기업",
+   "industry": "제조업",
+   "employees": 8,
+   "revenue_krw": null,
+   "certifications": [],
+   "gender": null,
+   "special_group": []
+  },
+  {
+   "profile_id": "P2",
+   "summary": "경북 구미시, 개인사업자 도소매업, 업력 8년, 대표 만 45세, 소상공인, 직원 3명",
+   "region": "경북 구미시",
+   "business_status": "사업자",
+   "business_age_years": 8,
+   "founder_age": 45,
+   "company_size": "소상공인",
+   "industry": "도소매업",
+   "employees": 3,
+   "revenue_krw": null,
+   "certifications": [],
+   "gender": null,
+   "special_group": []
+  },
+  {
+   "profile_id": "P3",
+   "summary": "사업자 없음(예비창업자), 경남 창원시 거주, 만 24세",
+   "region": "경남 창원시",
+   "business_status": "예비창업자",
+   "business_age_years": null,
+   "founder_age": 24,
+   "company_size": null,
+   "industry": null,
+   "employees": null,
+   "revenue_krw": null,
+   "certifications": [],
+   "gender": null,
+   "special_group": []
+  },
+  {
+   "profile_id": "P4",
+   "summary": "광주 남구, 법인 서비스업, 업력 5년, 만 39세, 중기업(구 광주광역시 지역)",
+   "region": "광주 남구",
+   "business_status": "사업자",
+   "business_age_years": 5,
+   "founder_age": 39,
+   "company_size": "중기업",
+   "industry": "서비스업",
+   "employees": null,
+   "revenue_krw": null,
+   "certifications": [],
+   "gender": null,
+   "special_group": []
+  },
+  {
+   "profile_id": "P5",
+   "summary": "충북 청주시, 법인 IT업, 업력 0.5년, 만 29세, 벤처기업 확인서 보유",
+   "region": "충북 청주시",
+   "business_status": "사업자",
+   "business_age_years": 0.5,
+   "founder_age": 29,
+   "company_size": null,
+   "industry": "IT업",
+   "employees": null,
+   "revenue_krw": null,
+   "certifications": [
+    "벤처기업 확인서"
+   ],
+   "gender": null,
+   "special_group": []
+  },
+  {
+   "profile_id": "P6",
+   "summary": "경기 성남시, 여성 대표 법인, 업력 정확히 3년, 만 40세 정각(경계값)",
+   "region": "경기 성남시",
+   "business_status": "사업자",
+   "business_age_years": 3.0,
+   "founder_age": 40,
+   "company_size": null,
+   "industry": null,
+   "employees": null,
+   "revenue_krw": null,
+   "certifications": null,
+   "gender": "여성",
+   "special_group": []
+  },
+  {
+   "profile_id": "P7",
+   "summary": "대전, 사회적기업 인증, 업력 10년, 직원 12명, 연 매출 30억 원",
+   "region": "대전",
+   "business_status": "사업자",
+   "business_age_years": 10,
+   "founder_age": null,
+   "company_size": null,
+   "industry": null,
+   "employees": 12,
+   "revenue_krw": 3000000000,
+   "certifications": [
+    "사회적기업 인증"
+   ],
+   "gender": null,
+   "special_group": []
+  },
+  {
+   "profile_id": "P8",
+   "summary": "제주시, 양식업 예정자(사업자 미등록), 만 36세",
+   "region": "제주시",
+   "business_status": "예비창업자",
+   "business_age_years": null,
+   "founder_age": 36,
+   "company_size": null,
+   "industry": "양식업",
+   "employees": null,
+   "revenue_krw": null,
+   "certifications": [],
+   "gender": null,
+   "special_group": []
+  }
+ ]
+}

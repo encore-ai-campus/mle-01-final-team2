@@ -1,0 +1,265 @@
+{
+ "corpus": {
+  "BIZINFO": 1294,
+  "KSTARTUP": 3819
+ },
+ "variants": {
+  "업력 표현(접두)": {
+   "업력": {
+    "BIZINFO": 47,
+    "KSTARTUP": 356,
+    "total": 403
+   },
+   "창업 N년·창업 후·창업한지": {
+    "BIZINFO": 66,
+    "KSTARTUP": 795,
+    "total": 861
+   },
+   "설립 N년·설립 후": {
+    "BIZINFO": 20,
+    "KSTARTUP": 84,
+    "total": 104
+   },
+   "사업개시(일)": {
+    "BIZINFO": 33,
+    "KSTARTUP": 47,
+    "total": 80
+   },
+   "사업자등록(일) 기준": {
+    "BIZINFO": 25,
+    "KSTARTUP": 33,
+    "total": 58
+   }
+  },
+  "연산 표현(N년)": {
+   "N년 이내": {
+    "BIZINFO": 225,
+    "KSTARTUP": 1081,
+    "total": 1306
+   },
+   "N년 이하": {
+    "BIZINFO": 37,
+    "KSTARTUP": 51,
+    "total": 88
+   },
+   "N년 미만": {
+    "BIZINFO": 68,
+    "KSTARTUP": 416,
+    "total": 484
+   },
+   "N년 초과": {
+    "BIZINFO": 4,
+    "KSTARTUP": 20,
+    "total": 24
+   },
+   "N년 이상": {
+    "BIZINFO": 113,
+    "KSTARTUP": 113,
+    "total": 226
+   }
+  },
+  "기준일 표현": {
+   "공고일 기준·현재": {
+    "BIZINFO": 145,
+    "KSTARTUP": 535,
+    "total": 680
+   },
+   "접수(신청) 마감일 기준": {
+    "BIZINFO": 64,
+    "KSTARTUP": 52,
+    "total": 116
+   },
+   "신청일·접수일 기준": {
+    "BIZINFO": 346,
+    "KSTARTUP": 79,
+    "total": 425
+   },
+   "전년도·직전 연도": {
+    "BIZINFO": 135,
+    "KSTARTUP": 16,
+    "total": 151
+   },
+   "협약(선정)일 기준": {
+    "BIZINFO": 2,
+    "KSTARTUP": 8,
+    "total": 10
+   }
+  },
+  "지역 기준 표현": {
+   "소재(지)": {
+    "BIZINFO": 609,
+    "KSTARTUP": 912,
+    "total": 1521
+   },
+   "관내": {
+    "BIZINFO": 181,
+    "KSTARTUP": 74,
+    "total": 255
+   },
+   "거주": {
+    "BIZINFO": 93,
+    "KSTARTUP": 189,
+    "total": 282
+   },
+   "본사": {
+    "BIZINFO": 234,
+    "KSTARTUP": 350,
+    "total": 584
+   },
+   "주소(지)": {
+    "BIZINFO": 159,
+    "KSTARTUP": 147,
+    "total": 306
+   },
+   "사업장": {
+    "BIZINFO": 405,
+    "KSTARTUP": 215,
+    "total": 620
+   },
+   "사업자등록 상 소재": {
+    "BIZINFO": 79,
+    "KSTARTUP": 47,
+    "total": 126
+   }
+  },
+  "우대·제외 표현": {
+   "우대·가점·우선": {
+    "BIZINFO": 159,
+    "KSTARTUP": 263,
+    "total": 422
+   },
+   "제외": {
+    "BIZINFO": 783,
+    "KSTARTUP": 103,
+    "total": 886
+   },
+   "불가·제한": {
+    "BIZINFO": 402,
+    "KSTARTUP": 66,
+    "total": 468
+   }
+  },
+  "신청자 유형 표현": {
+   "중소기업": {
+    "BIZINFO": 533,
+    "KSTARTUP": 502,
+    "total": 1035
+   },
+   "소기업": {
+    "BIZINFO": 105,
+    "KSTARTUP": 39,
+    "total": 144
+   },
+   "중기업": {
+    "BIZINFO": 12,
+    "KSTARTUP": 4,
+    "total": 16
+   },
+   "소상공인": {
+    "BIZINFO": 252,
+    "KSTARTUP": 105,
+    "total": 357
+   },
+   "중견기업": {
+    "BIZINFO": 133,
+    "KSTARTUP": 64,
+    "total": 197
+   },
+   "창업기업": {
+    "BIZINFO": 73,
+    "KSTARTUP": 778,
+    "total": 851
+   },
+   "초기창업기업·초기창업자": {
+    "BIZINFO": 8,
+    "KSTARTUP": 289,
+    "total": 297
+   },
+   "예비창업자": {
+    "BIZINFO": 39,
+    "KSTARTUP": 1219,
+    "total": 1258
+   },
+   "재창업": {
+    "BIZINFO": 36,
+    "KSTARTUP": 18,
+    "total": 54
+   },
+   "스타트업": {
+    "BIZINFO": 25,
+    "KSTARTUP": 760,
+    "total": 785
+   },
+   "벤처기업": {
+    "BIZINFO": 164,
+    "KSTARTUP": 175,
+    "total": 339
+   },
+   "이노비즈·메인비즈": {
+    "BIZINFO": 30,
+    "KSTARTUP": 3,
+    "total": 33
+   },
+   "사회적기업": {
+    "BIZINFO": 52,
+    "KSTARTUP": 53,
+    "total": 105
+   },
+   "협동조합": {
+    "BIZINFO": 52,
+    "KSTARTUP": 39,
+    "total": 91
+   },
+   "여성기업": {
+    "BIZINFO": 24,
+    "KSTARTUP": 39,
+    "total": 63
+   },
+   "장애인기업": {
+    "BIZINFO": 27,
+    "KSTARTUP": 12,
+    "total": 39
+   },
+   "1인 창조기업": {
+    "BIZINFO": 2,
+    "KSTARTUP": 39,
+    "total": 41
+   },
+   "개인사업자": {
+    "BIZINFO": 86,
+    "KSTARTUP": 132,
+    "total": 218
+   },
+   "법인": {
+    "BIZINFO": 337,
+    "KSTARTUP": 410,
+    "total": 747
+   },
+   "청년": {
+    "BIZINFO": 110,
+    "KSTARTUP": 380,
+    "total": 490
+   },
+   "중장년": {
+    "BIZINFO": 8,
+    "KSTARTUP": 35,
+    "total": 43
+   },
+   "대학생": {
+    "BIZINFO": 4,
+    "KSTARTUP": 46,
+    "total": 50
+   },
+   "청소년": {
+    "BIZINFO": 10,
+    "KSTARTUP": 6,
+    "total": 16
+   },
+   "농업인·어업인": {
+    "BIZINFO": 88,
+    "KSTARTUP": 2,
+    "total": 90
+   }
+  }
+ }
+}

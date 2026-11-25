@@ -1,0 +1,425 @@
+{
+ "source_dir": "20261124",
+ "counts": {
+  "BIZINFO": 1294,
+  "KSTARTUP": 3822,
+  "total": 5116
+ },
+ "open": {
+  "BIZINFO": 1294,
+  "KSTARTUP": 158
+ },
+ "fill_rate": {
+  "BIZINFO": {
+   "자격 문구": 100.0,
+   "본문(요약)": 100.0,
+   "접수 방법": 99.9,
+   "온라인 접수 URL": 43.0,
+   "문의처": 100.0,
+   "마감일(날짜)": 29.3,
+   "수행 기관": 73.2,
+   "지역 코드(소관 기관)": 74.5,
+   "지원분야 중분류": 100.0,
+   "일반 첨부 있음": 65.4,
+   "첨부 본문 텍스트 추출": 100.0
+  },
+  "KSTARTUP": {
+   "자격 문구": 100.0,
+   "제외 대상 문구": 0.0,
+   "우대 사항": 0.0,
+   "본문": 100.0,
+   "지원 내용": 77.6,
+   "평가 방법": 100.0,
+   "접수 방법": 100.0,
+   "온라인 접수 URL": 0.0,
+   "안내 URL": 82.3,
+   "지역 코드": 100.0,
+   "업력 옵션": 100.0,
+   "연령 옵션": 100.0
+  }
+ },
+ "duplicates": {
+  "notice_id_duplicates": 0,
+  "BIZINFO": {
+   "duplicate_titles": 4,
+   "notices_in_duplicate_titles": 8
+  },
+  "KSTARTUP": {
+   "duplicate_titles": 88,
+   "notices_in_duplicate_titles": 239
+  },
+  "related_group_notices": {
+   "BIZINFO": 58,
+   "KSTARTUP": 1004
+  },
+  "related_group_with_extension_signal": 111,
+  "cross_source_same_title_key_candidates": 15
+ },
+ "bizinfo_apply_status_kind": {
+  "UNTIL_BUDGET_EXHAUSTED": 646,
+  "DATE_RANGE": 379,
+  "ALWAYS_OPEN": 143,
+  "UNTIL_FILLED": 54,
+  "FIRST_COME": 35,
+  "VARIES_OR_TBD": 35,
+  "UNPARSED": 2
+ },
+ "kstartup_start_month": {
+  "2024-12": 1,
+  "2025-05": 1,
+  "2025-10": 1,
+  "2025-11": 45,
+  "2025-12": 142,
+  "2026-01": 248,
+  "2026-02": 309,
+  "2026-03": 479,
+  "2026-04": 472,
+  "2026-05": 364,
+  "2026-06": 427,
+  "2026-07": 358,
+  "2026-08": 314,
+  "2026-09": 277,
+  "2026-10": 239,
+  "2026-11": 145
+ },
+ "category": {
+  "BIZINFO_major": {
+   "경영": 404,
+   "금융": 226,
+   "기술": 225,
+   "인력": 154,
+   "수출": 137,
+   "내수": 81,
+   "창업": 62,
+   "기타": 5
+  },
+  "BIZINFO_medium": {
+   "디자인/상품화/사업화": 171,
+   "융자": 163,
+   "컨설팅": 118,
+   "기술사업화/이전/지도": 110,
+   "시설/입지지원": 101,
+   "시험/인증": 70,
+   "해외진출": 70,
+   "고용유지": 55,
+   "사업화지원": 52,
+   "보증": 47,
+   "해외진출준비": 44,
+   "고용환경개선": 34,
+   "오프라인": 32,
+   "기술인력/장비지원": 30,
+   "홍보지원": 26,
+   "국내일반인력": 26,
+   "온라인": 22,
+   "작업환경개선": 19,
+   "보험(수출+무역)": 14,
+   "시장개척": 12,
+   "혼합(단독+공동)": 10,
+   "교육": 10,
+   "교육/훈련/연수": 9,
+   "FTA활용/대응": 8,
+   "국내전문인력": 6,
+   "제도": 5,
+   "창업공간지원": 4,
+   "예비창업자지원": 4,
+   "해외인력": 4,
+   "기술정보제공": 4,
+   "정보화지원": 4,
+   "수출정보제공": 3,
+   "창업정보제공": 2,
+   "펀드/투자": 2,
+   "공동기술개발": 1,
+   "공공구매": 1,
+   "인력정보제공": 1
+  },
+  "KSTARTUP": {
+   "사업화": 1026,
+   "시설ㆍ공간ㆍ보육": 850,
+   "멘토링ㆍ컨설팅ㆍ교육": 737,
+   "행사ㆍ네트워크": 483,
+   "창업교육": 293,
+   "판로ㆍ해외진출": 169,
+   "글로벌": 158,
+   "기술개발(R&D)": 52,
+   "인력": 25,
+   "정책자금": 23,
+   "융자ㆍ보증": 6
+  }
+ },
+ "kstartup_org_kind": {
+  "공공기관": 1794,
+  "민간": 1327,
+  "교육기관": 510,
+  "지자체": 191
+ },
+ "kstartup_region": {
+  "전국": 2192,
+  "서울": 519,
+  "경기": 336,
+  "부산": 106,
+  "대전": 96,
+  "충남": 87,
+  "대구": 81,
+  "경남": 55,
+  "인천": 51,
+  "경북": 49,
+  "강원": 48,
+  "전북": 45,
+  "충북": 39,
+  "광주": 39,
+  "전남광주": 20,
+  "울산": 19,
+  "제주": 17,
+  "세종": 14,
+  "전남": 9
+ },
+ "bizinfo_region_scope_hint": {
+  "ALL_SIDO_TAGGED": 347,
+  "SPECIFIC_SIDO_TAGGED": 947
+ },
+ "bizinfo_jurisdiction": {
+  "경기도": 125,
+  "전남광주통합특별시": 113,
+  "경상남도": 104,
+  "중소벤처기업부": 102,
+  "경상북도": 102,
+  "강원특별자치도": 74,
+  "산업통상부": 67,
+  "부산광역시": 56,
+  "인천광역시": 55,
+  "전북특별자치도": 53,
+  "충청북도": 51,
+  "충청남도": 48
+ },
+ "bizinfo_executor_kind": {
+  "ORG": 947,
+  "SELF_OPERATED": 52,
+  "LOCAL_GOVERNMENT_UNSPECIFIED": 295
+ },
+ "kstartup_business_age_option_count": {
+  "1": 589,
+  "2": 378,
+  "3": 71,
+  "4": 268,
+  "5": 162,
+  "6": 1000,
+  "7": 1354
+ },
+ "kstartup_founder_age_options": {
+  "만 20세 미만,만 20세 이상 ~ 만 39세 이하,만 40세 이상": 2602,
+  "만 20세 이상 ~ 만 39세 이하,만 40세 이상": 810,
+  "만 20세 이상 ~ 만 39세 이하": 307,
+  "만 20세 미만,만 20세 이상 ~ 만 39세 이하": 76,
+  "만 40세 이상": 24,
+  "만 20세 미만": 3
+ },
+ "kstartup_applicant_target_top": {
+  "청소년,대학생,일반인,대학,연구기관,일반기업,1인 창조기업": 1380,
+  "일반기업": 546,
+  "대학생,일반인,대학,연구기관,일반기업,1인 창조기업": 416,
+  "일반기업,1인 창조기업": 371,
+  "대학생,일반인,일반기업,1인 창조기업": 203,
+  "일반인,일반기업,1인 창조기업": 113,
+  "대학생,일반인": 83,
+  "일반인,대학,연구기관,일반기업,1인 창조기업": 81
+ },
+ "bizinfo_target_group": {
+  "중소기업": 1000,
+  "소상공인": 177,
+  "창업벤처": 78,
+  "사회적기업": 25,
+  "장애인기업": 7,
+  "제조업": 4,
+  "여성기업": 3
+ },
+ "attachment_chunk_origin": {
+  "ATTACHMENT": 4265,
+  "ATTACHMENT_OCR": 93
+ },
+ "text_len": {
+  "BIZINFO_api_eligibility": {
+   "n": 1294,
+   "mean": 83,
+   "median": 65.0,
+   "p95": 215.3499999999999,
+   "lt20": 98
+  },
+  "KSTARTUP_api_eligibility": {
+   "n": 3819,
+   "mean": 104,
+   "median": 64.0,
+   "p95": 316.0,
+   "lt20": 340
+  },
+  "BIZINFO_attachment_eligibility_exclusion": {
+   "n": 1142,
+   "mean": 1493,
+   "median": 582.0,
+   "p95": 6346.650000000001,
+   "lt20": 0
+  }
+ },
+ "requirement_flags": {
+  "denominators": {
+   "BIZINFO_api": 1294,
+   "BIZINFO_att": 1142,
+   "KSTARTUP_api": 3819
+  },
+  "counts": {
+   "업력·창업 연수": {
+    "BIZINFO_api": 90,
+    "BIZINFO_att": 292,
+    "KSTARTUP_api": 1592
+   },
+   "소재·관내·거주·본사": {
+    "BIZINFO_api": 642,
+    "BIZINFO_att": 688,
+    "KSTARTUP_api": 1221
+   },
+   "제외·제한·불가": {
+    "BIZINFO_api": 73,
+    "BIZINFO_att": 814,
+    "KSTARTUP_api": 163
+   },
+   "인증·확인서·등록": {
+    "BIZINFO_api": 193,
+    "BIZINFO_att": 487,
+    "KSTARTUP_api": 438
+   },
+   "법령 인용(「」)": {
+    "BIZINFO_api": 223,
+    "BIZINFO_att": 416,
+    "KSTARTUP_api": 191
+   },
+   "연령(만 N세·청년)": {
+    "BIZINFO_api": 84,
+    "BIZINFO_att": 132,
+    "KSTARTUP_api": 488
+   },
+   "매출·고용": {
+    "BIZINFO_api": 131,
+    "BIZINFO_att": 325,
+    "KSTARTUP_api": 101
+   }
+  },
+  "chi2_bizinfo_api_vs_kstartup_api": {
+   "업력·창업 연수": {
+    "chi2": 528.14,
+    "p": 7.16386374662571e-117,
+    "phi": 0.321
+   },
+   "소재·관내·거주·본사": {
+    "chi2": 129.88,
+    "p": 4.345938191389881e-30,
+    "phi": 0.159
+   },
+   "제외·제한·불가": {
+    "chi2": 4.14,
+    "p": 0.04187681452313131,
+    "phi": 0.028
+   },
+   "인증·확인서·등록": {
+    "chi2": 10.61,
+    "p": 0.0011250881758932125,
+    "phi": 0.046
+   },
+   "법령 인용(「」)": {
+    "chi2": 194.34,
+    "p": 3.5961124050273153e-44,
+    "phi": 0.195
+   },
+   "연령(만 N세·청년)": {
+    "chi2": 38.45,
+    "p": 5.626794341304776e-10,
+    "phi": 0.087
+   },
+   "매출·고용": {
+    "chi2": 124.81,
+    "p": 5.602610968821377e-29,
+    "phi": 0.156
+   }
+  }
+ },
+ "normalized": {
+  "facts": 17211,
+  "facts_by_source_kind": {
+   "TEXT_RULE": 17144,
+   "OCR_TEXT": 67
+  },
+  "notice_coverage_any_fact": {
+   "BIZINFO": 90.2,
+   "KSTARTUP": 64.2
+  },
+  "notice_coverage_by_attribute": {
+   "BIZINFO": {
+    "business_age": 10.7,
+    "founder_age": 5.4,
+    "region": 44.5,
+    "company_size": 55.0,
+    "certification": 39.6,
+    "law_reference": 39.2,
+    "exclusion": 64.1
+   },
+   "KSTARTUP": {
+    "business_age": 36.8,
+    "founder_age": 4.2,
+    "region": 22.1,
+    "company_size": 18.9,
+    "certification": 11.4,
+    "law_reference": 6.1,
+    "exclusion": 4.3
+   }
+  },
+  "notice_with_applicant_term": {
+   "BIZINFO": 71.0,
+   "KSTARTUP": 72.1
+  },
+  "top_applicant_terms": {
+   "APPLICANT_TYPE:예비창업자": 1362,
+   "APPLICANT_TYPE:중소기업": 1307,
+   "APPLICANT_TYPE:창업기업": 854,
+   "APPLICANT_TYPE:법인": 755,
+   "APPLICANT_TYPE:소상공인": 529,
+   "SPECIAL_GROUP:청년": 505,
+   "APPLICANT_TYPE:대학": 361,
+   "APPLICANT_TYPE:벤처기업": 320,
+   "APPLICANT_TYPE:초기창업기업": 267,
+   "APPLICANT_TYPE:중견기업": 260
+  },
+  "kstartup_filter_all_options": {
+   "business_age": 1354,
+   "founder_age": 2602,
+   "applicant_target": 1380
+  },
+  "kstartup_filter_all_options_pct": {
+   "business_age": 35.4,
+   "founder_age": 68.1,
+   "applicant_target": 36.1
+  },
+  "business_age_text_vs_structured": {
+   "consistent": 1169,
+   "text_narrower": 78,
+   "text_wider": 22
+  },
+  "bizinfo_region_missing": 330,
+  "ocr_review": {
+   "ocr_files": 126,
+   "need_human_check": 16,
+   "median_conf": 84.9,
+   "thresholds": {
+    "low_conf": 75.0,
+    "short_chars": 200
+   }
+  }
+ },
+ "figures": {
+  "overview": "figures/eda_overview.png",
+  "missing": "figures/eda_missing.png",
+  "period": "figures/eda_period.png",
+  "category_region": "figures/eda_category_region.png",
+  "age_options": "figures/eda_age_options.png",
+  "textlen": "figures/eda_textlen.png",
+  "reqtypes": "figures/eda_reqtypes.png",
+  "normalized": "figures/eda_normalized.png"
+ }
+}
