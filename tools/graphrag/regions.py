@@ -25,7 +25,8 @@ ADMIN, MEMBER = "WITHIN", "MEMBER_OF"
 
 def _norm_id(value: str | None) -> str:
     value = (value or "").strip()
-    return value[3:] if value.startswith("KR:") else value
+    value = value[3:] if value.startswith("KR:") else value
+    return NATIONWIDE if value == "NATIONWIDE" else value  # 표의 전국 행은 `KR:NATIONWIDE`
 
 
 def _read_table(path: Path) -> tuple[list[dict], list[dict]]:
@@ -42,7 +43,8 @@ def _read_table(path: Path) -> tuple[list[dict], list[dict]]:
         if rec["level"] == "SIDO" and not rec["parent_region_id"] and rec["status"] != "폐지":
             rec["parent_region_id"] = NATIONWIDE  # 시도의 상위는 전국(표에는 비어 있음)
         if rec["status"] == "폐지":
-            rec["successor_ids"] = [f"REGION:{c.strip()}" for c in (row.get("successor_ids") or "").split(";") if c.strip()]
+            # 후계 값은 코드 목록이거나 `MERGED_INTO:{코드}`(통합)이다
+            rec["successor_ids"] = [f"REGION:{c.strip().removeprefix('MERGED_INTO:')}" for c in (row.get("successor_ids") or "").split(";") if c.strip()]
             retired.append(rec)
         else:
             active.append(rec)

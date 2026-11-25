@@ -75,6 +75,17 @@ class RegionTableTests(unittest.TestCase):
                 continue
             self.assertEqual(len(RG.admin_parents(rid)), 1, rid)
 
+    def test_every_edge_endpoint_is_a_node(self):
+        """전국 노드와 통합 후계(MERGED_INTO)가 실제 노드로 이어져야 한다(그래프 내보내기 점검에서 발견)."""
+        self.assertIn(RG.nodes["REGION:NATIONWIDE"]["level"], ("NATIONWIDE",))
+        known = set(RG.nodes) | set(RG.retired)
+        for rid, parents in RG.parents.items():
+            for p, _ in parents:
+                self.assertIn(p, known, (rid, p))
+        for rid, succ in RG.successors.items():
+            for sid in succ:
+                self.assertIn(sid, known, (rid, sid))
+
     def test_group_membership_uses_member_of_not_within(self):
         namgu = "REGION:1227000000"
         rels = {p: rel for p, rel in RG.parents[namgu]}
