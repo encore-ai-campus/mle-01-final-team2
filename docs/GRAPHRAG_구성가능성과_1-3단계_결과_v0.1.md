@@ -66,7 +66,7 @@ flowchart LR
 | 공고 | 5,113건(기업마당 1,294 + K-Startup 3,819). 모집 중 1,449건(1,294 + 155) |
 | 구조화 조건 | 16,240개: 지역 4,783(K-Startup 3,819 + 기업마당 964), 업력 3,819, 대표자 연령 3,819, 신청 대상 3,819 |
 | 검색 청크 | 28,060개: K-Startup API 13,282, 기업마당 API 2,490, 기업마당 첨부 12,057(OCR 231 포함). 20자 미만과 `[REDACTED…]`만 있는 청크는 만들지 않음 |
-| 그래프 파일 | 노드 Concept 237·Notice 5,113·Requirement 4,783·Condition 16,240·Organization 1,434·SupportCategory 19, 관계 WITHIN 268·ANNOUNCED_BY 5,113·EXECUTED_BY 947·IN_SUPPORT_CATEGORY 5,113·HAS_REQUIREMENT 4,783·HAS_CONDITION 16,240·ABOUT 4,783. `data/graph/`에 있고 **Neo4j에는 적재하지 않았다** |
+| 그래프 파일 | 노드 Concept 237·Notice 5,113·Requirement 4,783·Condition 16,240·Organization 1,434·SupportCategory 19, 관계 WITHIN 268·ANNOUNCED_BY 5,113·EXECUTED_BY 947·IN_SUPPORT_CATEGORY 5,113·HAS_REQUIREMENT 4,783·HAS_CONDITION 16,240·ABOUT 4,783. `data/graph/`에 있고 **Neo4j에는 적재하지 않았다**(2026-11-24 당시. 2026-11-25에 다시 만들어 적재했다: [적재 기록](LOAD_Neo4j_적재기록_v0.1.md)) |
 | 처리 시간 | 로드+색인 약 4.5초, 질의 1회 약 0.04초 |
 
 ### 3.2 평가 규칙과 **가정**(검증 전)
@@ -313,7 +313,7 @@ OK
  "skipped": {
   "bizinfo_no_region_condition": 330
  },
- "note": "구조화 조건만 포함(본문 요건 미추출). Neo4j에는 적재하지 않았다."
+ "note": "구조화 조건만 포함(본문 요건 미추출). Neo4j에는 적재하지 않았다."  // 2026-11-24 출력. 2026-11-25에 적재함
 }
 ```
 
