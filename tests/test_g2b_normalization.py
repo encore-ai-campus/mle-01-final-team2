@@ -43,7 +43,7 @@ def g2b_row(**overrides):
 
 
 class G2BNormalizationTests(unittest.TestCase):
-    def test_g2b_specific_fields_are_preserved_and_ambiguous_contact_withheld(self):
+    def test_g2b_specific_fields_are_preserved_and_agency_contact_kept_and_person_names_removed(self):
         issues = []
         normalized, _ = normalize_g2b_notice(g2b_row(), issues)
         self.assertEqual(schema_errors(normalized, NOTICE_VALIDATOR), [])
@@ -60,12 +60,11 @@ class G2BNormalizationTests(unittest.TestCase):
         self.assertEqual(normalized["attachments"]["extraction_status"], "UNKNOWN")
         self.assertEqual(normalized["condition_texts"]["eligibility"]["availability"], "NOT_COLLECTED")
         phone = next(c for c in normalized["contacts"] if c["type"] == "PHONE")
-        self.assertEqual(phone["classification"], "UNCLASSIFIED")
-        self.assertIsNone(phone["value"])
+        self.assertEqual(phone["classification"], "OFFICIAL_BUSINESS")  # 기관 연락처는 보존한다(담당자 이름만 제거)
+        self.assertEqual(phone["value"], "02-1234-5678")
         serialized = json.dumps(normalized, ensure_ascii=False)
         self.assertNotIn("홍길동", serialized)
         self.assertNotIn("김철수", serialized)
-        self.assertNotIn("02-1234-5678", serialized)
         self.assertEqual(pii_findings(normalized), [])
         self.assertFalse(issues)
 

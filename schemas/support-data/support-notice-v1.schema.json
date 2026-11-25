@@ -392,6 +392,100 @@
       "additionalProperties": false
     },
     "attachments": {
+      "oneOf": [
+        {"$ref": "#/$defs/attachments"},
+        {"type": "null"}
+      ]
+    },
+    "contacts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/contact"
+      }
+    },
+    "field_availability": {
+      "type": "object",
+      "additionalProperties": {
+        "enum": [
+          "PRESENT",
+          "EMPTY",
+          "NOT_COLLECTED",
+          "DERIVED",
+          "UNPARSEABLE"
+        ]
+      },
+      "description": "Availability map; field paths are maintained by the normalizer. Cross-field completeness is checked outside JSON Schema."
+    },
+    "source_metadata": {
+      "type": "object",
+      "required": [
+        "source_record_id",
+        "version",
+        "is_latest",
+        "raw_hash",
+        "source_run",
+        "content_hash",
+        "related_group_id",
+        "is_integrated",
+        "program_name",
+        "legacy_deadline_at",
+        "guide_url_flags"
+      ],
+      "properties": {
+        "source_record_id": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "version": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "is_latest": {
+          "$ref": "#/$defs/nullableBoolean"
+        },
+        "raw_hash": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "source_run": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "content_hash": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "related_group_id": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "is_integrated": {
+          "$ref": "#/$defs/nullableBoolean"
+        },
+        "program_name": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "legacy_deadline_at": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "guide_url_flags": {
+          "$ref": "#/$defs/nullableStringArray"
+        },
+        "source_specific": {
+          "type": "object",
+          "properties": {
+            "G2B": {"$ref": "#/$defs/g2bSourceMetadata"}
+          },
+          "additionalProperties": {"type": "object"},
+          "description": "Namespaced source-native fields retained when no common field has the same meaning."
+        }
+      },
+      "additionalProperties": false
+    },
+    "normalizer_version": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "$defs": {
+    "attachments": {
       "type": "object",
       "required": [
         "count",
@@ -502,93 +596,6 @@
         }
       ]
     },
-    "contacts": {
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/contact"
-      }
-    },
-    "field_availability": {
-      "type": "object",
-      "additionalProperties": {
-        "enum": [
-          "PRESENT",
-          "EMPTY",
-          "NOT_COLLECTED",
-          "DERIVED",
-          "UNPARSEABLE"
-        ]
-      },
-      "description": "Availability map; field paths are maintained by the normalizer. Cross-field completeness is checked outside JSON Schema."
-    },
-    "source_metadata": {
-      "type": "object",
-      "required": [
-        "source_record_id",
-        "version",
-        "is_latest",
-        "raw_hash",
-        "source_run",
-        "content_hash",
-        "related_group_id",
-        "is_integrated",
-        "program_name",
-        "legacy_deadline_at",
-        "guide_url_flags"
-      ],
-      "properties": {
-        "source_record_id": {
-          "$ref": "#/$defs/nullableString"
-        },
-        "version": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "is_latest": {
-          "$ref": "#/$defs/nullableBoolean"
-        },
-        "raw_hash": {
-          "$ref": "#/$defs/nullableString"
-        },
-        "source_run": {
-          "$ref": "#/$defs/nullableString"
-        },
-        "content_hash": {
-          "$ref": "#/$defs/nullableString"
-        },
-        "related_group_id": {
-          "$ref": "#/$defs/nullableString"
-        },
-        "is_integrated": {
-          "$ref": "#/$defs/nullableBoolean"
-        },
-        "program_name": {
-          "$ref": "#/$defs/nullableString"
-        },
-        "legacy_deadline_at": {
-          "$ref": "#/$defs/nullableString"
-        },
-        "guide_url_flags": {
-          "$ref": "#/$defs/nullableStringArray"
-        },
-        "source_specific": {
-          "type": "object",
-          "properties": {
-            "G2B": {"$ref": "#/$defs/g2bSourceMetadata"}
-          },
-          "additionalProperties": {"type": "object"},
-          "description": "Namespaced source-native fields retained when no common field has the same meaning."
-        }
-      },
-      "additionalProperties": false
-    },
-    "normalizer_version": {
-      "const": "1.0"
-    }
-  },
-  "$defs": {
     "source": {
       "type": "object",
       "required": [
@@ -637,12 +644,6 @@
       },
       "additionalProperties": false
     },
-    "normalizer_version": {
-      "type": "string",
-      "minLength": 1
-    }
-  },
-  "$defs": {
     "timestamp": {
       "type": "object",
       "required": [
@@ -1131,23 +1132,6 @@
         "null"
       ],
       "minimum": 0
-    },
-    "source": {
-      "type": "object",
-      "required": [
-        "source_system",
-        "source_id"
-      ],
-      "properties": {
-        "source_system": {
-          "type": "string",
-          "minLength": 1
-        },
-        "source_id": {
-          "$ref": "#/$defs/nullableString"
-        }
-      },
-      "additionalProperties": false
     }
   },
   "additionalProperties": false,

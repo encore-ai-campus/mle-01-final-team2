@@ -438,8 +438,6 @@ def normalize_notice(row: dict[str, Any], issues: list[dict[str, Any]]) -> tuple
     source_updated_not_provided = str(source_system).upper() == "KSTARTUP" and row.get("source_updated_at") in (None, "")
     apply_url, apply_url_status = scrubbed_url(row.get("apply_url"))
     official_domain = {"KSTARTUP": "k-startup.go.kr", "BIZINFO": "bizinfo.go.kr", "G2B": "g2b.go.kr"}.get(str(source_system).upper())
-    guide_url, guide_url_status = scrubbed_url(row.get("guide_url"), allowed_domain="k-startup.go.kr" if source_system == "KSTARTUP" else official_domain)
-    official_domain = {"KSTARTUP": "k-startup.go.kr", "BIZINFO": "bizinfo.go.kr"}.get(str(source_system).upper())
     guide_url, guide_url_status = scrubbed_url(row.get("guide_url"))  # 안내 URL은 외부 기관 페이지일 수 있어 도메인을 제한하지 않는다
     notice_url, notice_url_status = scrubbed_url(row.get("detail_url"), allowed_domain=official_domain)
     flags = row.get("guide_url_flags") or []
