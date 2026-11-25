@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>수기 정규화 도우미</title>
+<style>
+:root{--bg:#f6f5f1;--card:#fff;--ink:#23211d;--sub:#6b675e;--line:#dedbd2;--accent:#2f6f5e;--accent-bg:#e3f1ec;--warn:#9a5b00;--warn-bg:#fff3d6;--err:#a32d2d;--err-bg:#fdeaea;--ok:#2e6b2e;--ok-bg:#e8f4e3;--g:#6a4fb3;--g-bg:#efeafa}
+@media (prefers-color-scheme:dark){:root{--bg:#1c1b19;--card:#262522;--ink:#ece9e1;--sub:#a29e92;--line:#3b3934;--accent:#6fc2a8;--accent-bg:#23382f;--warn:#f0b659;--warn-bg:#3b2f17;--err:#f09090;--err-bg:#3d2020;--ok:#8fd08f;--ok-bg:#223320;--g:#b5a1ee;--g-bg:#2c2640}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 -apple-system,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif}
+header{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);padding:8px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+header h1{font-size:16px;margin:0;font-weight:600}
+header .sp{flex:1}
+select,input[type=text],input[type=number],textarea{font:inherit;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:5px 8px;max-width:100%}
+textarea{width:100%;resize:vertical}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;padding:5px 12px}
+button:hover{border-color:var(--accent)}
+button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+button.small{padding:2px 8px;font-size:13px}
+button.danger{color:var(--err)}
+.tabs{display:flex;gap:4px;padding:8px 16px 0;flex-wrap:wrap}
+.tabs button{border-radius:8px 8px 0 0;border-bottom:none;background:transparent;color:var(--sub)}
+.tabs button.on{background:var(--card);color:var(--ink);font-weight:600;border-color:var(--line)}
+main{display:grid;grid-template-columns:minmax(300px,42%) 1fr;gap:12px;padding:0 16px 40px}
+main.single{grid-template-columns:1fr}
+#viewer[hidden]{display:none}
+#viewer{position:sticky;top:88px;align-self:start;max-height:calc(100vh - 100px);display:flex;flex-direction:column}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+#packet{flex:1;overflow:auto;white-space:pre-wrap;word-break:break-word;font-size:14px;line-height:1.7;margin:8px 0 0;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--bg)}
+mark{background:#ffe27a;color:#000}
+#seltool{position:fixed;display:none;z-index:50;background:var(--ink);color:var(--bg);padding:6px;border-radius:8px;gap:6px;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+#seltool button{background:var(--accent);color:#fff;border:none}
+h2{font-size:17px;margin:4px 0 8px}h3{font-size:15px;margin:14px 0 6px}
+.muted{color:var(--sub);font-size:13px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:4px 0}
+.row>label{min-width:84px;color:var(--sub);font-size:13px}
+.card{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:10px 0;background:var(--card)}
+.card.req{border-left:4px solid var(--accent)}
+.card.grp{border-left:4px solid var(--g);background:var(--g-bg)}
+.card.cond{background:var(--bg)}
+.badge{display:inline-block;padding:0 8px;border-radius:10px;background:var(--accent-bg);color:var(--accent);font-size:12px;font-weight:600}
+.badge.g{background:var(--g-bg);color:var(--g)}
+.tip{background:var(--accent-bg);border-radius:8px;padding:8px 10px;margin:6px 0;font-size:13.5px}
+.warn{background:var(--warn-bg);color:var(--warn);border-radius:8px;padding:6px 10px;margin:4px 0;font-size:13.5px}
+.err{background:var(--err-bg);color:var(--err);border-radius:8px;padding:6px 10px;margin:4px 0;font-size:13.5px}
+.ok{background:var(--ok-bg);color:var(--ok);border-radius:8px;padding:6px 10px;margin:4px 0;font-size:13.5px}
+table{border-collapse:collapse;width:100%;font-size:13.5px}th,td{border:1px solid var(--line);padding:4px 8px;text-align:left;vertical-align:top}th{background:var(--bg)}
+details{margin:6px 0}summary{cursor:pointer;font-weight:600}
+code{background:var(--bg);padding:0 4px;border-radius:4px;font-size:13px}
+.dropzone{border:2px dashed var(--line);border-radius:10px;padding:18px;text-align:center;color:var(--sub)}
+.dropzone.hot{border-color:var(--accent);background:var(--accent-bg)}
+.chips span{display:inline-block;margin:2px 4px 2px 0;padding:1px 8px;border:1px solid var(--line);border-radius:12px;font-size:13px}
+.chips span b{cursor:pointer;margin-left:4px;color:var(--err)}
+.status{font-size:13px;color:var(--sub)}
+.step{display:flex;gap:10px;margin:8px 0}.step .n{flex:none;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;text-align:center;line-height:26px;font-weight:600}
+@media (max-width:900px){main{grid-template-columns:1fr}#viewer{position:static;max-height:50vh}}
+</style>
+</head>
+<body>
+<header>
+  <h1>수기 정규화 도우미</h1>
+  <span class="status" id="privacy" title="이 페이지는 인터넷으로 아무것도 보내지 않습니다">내 컴퓨터 안에서만 동작</span>
+  <span class="sp"></span>
+  <label>검수자 이름 <input type="text" id="reviewer" size="8" placeholder="예: kwan"></label>
+  <label>공고 <select id="noticeSel"></select></label>
+  <span id="timerBox"><button class="small" id="timerBtn" title="이 공고를 읽고 쓰는 시간을 잽니다">▶ 시간 재기</button> <span id="timerOut" class="muted"></span></span>
+  <span id="saveState" class="status"></span>
+</header>
+<div class="tabs" id="tabs"></div>
+<main id="main">
+  <section id="viewer" class="panel" hidden>
+    <div class="row"><b>공고 원문(자료 패킷)</b><span class="sp"></span><input type="text" id="find" placeholder="원문에서 찾기" size="14"></div>
+    <div class="muted">글자를 드래그하면 [근거로 쓰기] 버튼이 나타납니다. 직접 옮겨 적지 말고 이 방법을 쓰면 원문과 한 글자도 다르지 않게 복사됩니다.</div>
+    <pre id="packet"></pre>
+  </section>
+  <section id="editor"></section>
+</main>
+<div id="seltool"><button id="useBasis">근거로 쓰기</button><button id="useExtra">추가 근거</button></div>
+<input type="file" id="fileAny" multiple hidden>
+<input type="file" id="fileDir" webkitdirectory directory multiple hidden>
+
+<script id="core">
+/* ===== 점검 규칙(tools/goldset_check.py와 같은 규칙). DOM을 쓰지 않는다. ===== */
+(function (root) {
+  const ATTRS = ["region","zone","industry","applicant_type","business_age","founder_age","company_size","revenue","employees","certification","prior_award","registration","other"];
+  const OPS = ["EQ","LT","LTE","GT","GTE","BETWEEN","IN","WITHIN","IS_A","EXISTS"];
+  const KINDS = ["ELIGIBILITY","EXCLUSION","PREFERENCE","DOCUMENT","LIMIT","CRITERION"];
+  const LOGICS = ["AND","OR","NONE_OF","AT_LEAST"];
+  const REF_KINDS = ["NONE","NOTICE_DATE","DEADLINE","PREV_YEAR","OTHER"];
+  const NEEDS_REF = ["business_age","founder_age","revenue","employees"];
+  const RESULTS = ["SATISFIED","UNSATISFIED","UNKNOWN"];
+  const OVERALL = ["ELIGIBLE","NOT_ELIGIBLE","NEEDS_CHECK"];
+  const REASONS = ["ASSUMED_LOGIC","REQ_UNPARSED","OPEN_ENDED","PROFILE_MISSING_ATTR","NEEDS_DEFINITION","SOURCE_CONFLICT","BOUNDARY_UNCLEAR","TRACK_SPLIT"];
+  const has = (a, v) => a.indexOf(v) >= 0;
+  const norm = s => String(s == null ? "" : s).replace(/\s+/g, "");
+  const falsy = v => v == null || v === "" || v === false || v === 0 || (Array.isArray(v) && !v.length);
+  const isGroup = c => Array.isArray(c.children) && c.children.length > 0;
+
+  function leaves(conds, rid, errs, depth, out) {
+    depth = depth || 0; out = out || [];
+    (conds || []).forEach(c => {
+      if (isGroup(c)) {
+        const cid = c.cond_id == null ? "?" : c.cond_id;
+        if (!has(LOGICS, c.logic)) errs.push(`${rid}/${cid}: 그룹의 logic 값 오류 ${c.logic == null ? "None" : c.logic}`);
+        if (c.logic === "AT_LEAST" && falsy(c.min_count)) errs.push(`${rid}/${cid}: 그룹이 AT_LEAST인데 min_count 없음`);
+        if (depth >= 3) { errs.push(`${rid}/${cid}: 그룹 중첩이 3단을 넘음`); return; }
+        leaves(c.children, rid, errs, depth + 1, out);
+      } else out.push(c);
+    });
+    return out;
+  }
+
+  function validateA(a, packet) {
+    const errs = [];
+    ["notice_id","reviewer","requirements","ambiguities"].forEach(k => { if (!(k in a)) errs.push(`필수 필드 없음: ${k}`); });
+    const seen = {}; const ptxt = norm(packet);
+    (a.requirements || []).forEach(r => {
+      const rid = r.req_id == null ? "?" : r.req_id;
+      if (!has(KINDS, r.kind)) errs.push(`${rid}: kind 값 오류 ${r.kind == null ? "None" : r.kind}`);
+      if (!has(LOGICS, r.logic)) errs.push(`${rid}: logic 값 오류 ${r.logic == null ? "None" : r.logic}`);
+      if (r.logic === "AT_LEAST" && falsy(r.min_count)) errs.push(`${rid}: AT_LEAST인데 min_count 없음`);
+      if (!r.source_sentence) errs.push(`${rid}: source_sentence 없음(근거 필수)`);
+      else if (ptxt && ptxt.indexOf(norm(r.source_sentence)) < 0) errs.push(`${rid}: source_sentence가 자료 패킷에 그대로 없음(원문 복사 여부 확인, 첨부 원문에서 온 문장이면 패킷에 없을 수 있음)`);
+      leaves(r.conditions, rid, errs).forEach(c => {
+        const cid = c.cond_id == null ? "?" : c.cond_id;
+        if (seen[cid]) errs.push(`${rid}/${cid}: cond_id 중복`);
+        seen[cid] = 1;
+        if (!has(ATTRS, c.attribute)) errs.push(`${rid}/${cid}: attribute 허용 목록 밖 ${c.attribute == null ? "None" : c.attribute}`);
+        if (!has(OPS, c.operator)) errs.push(`${rid}/${cid}: operator 허용 목록 밖 ${c.operator == null ? "None" : c.operator}`);
+        if (has(NEEDS_REF, c.attribute) && (c.ref_date_kind == null || c.ref_date_kind === "NONE") && (r.kind === "ELIGIBILITY" || r.kind === "EXCLUSION"))
+          errs.push(`${rid}/${cid}: ${c.attribute}는 기준일(ref_date_kind)을 적어야 함(원문에 없으면 OTHER와 note)`);
+        if (!(c.ref_date_kind == null || has(REF_KINDS, c.ref_date_kind))) errs.push(`${rid}/${cid}: ref_date_kind 값 오류`);
+        if ((c.attribute === "company_size" || c.attribute === "applicant_type") && !c.needs_definition && c.operator === "IS_A")
+          errs.push(`${rid}/${cid}: 법령·제도 용어면 needs_definition=true (정의 뜻은 쓰지 않음)`);
+      });
+    });
+    if (!(a.requirements && a.requirements.length) && !(a.ambiguities && a.ambiguities.length)) errs.push("요건이 없는데 ambiguities에 이유가 없음");
+    return errs;
+  }
+
+  function allCondIds(a) {
+    const out = {};
+    const walk = cs => (cs || []).forEach(c => { out[c.cond_id] = 1; walk(c.children); });
+    ((a || {}).requirements || []).forEach(r => walk(r.conditions));
+    return out;
+  }
+  const judgmentsOf = b => b.judgments ? b.judgments : ("profile_id" in b ? [b] : []);
+
+  function validateB(b, a, profs) {
+    const errs = []; const ids = allCondIds(a); const hasIds = Object.keys(ids).length > 0;
+    const js = judgmentsOf(b);
+    if (!js.length) errs.push("판정이 없음");
+    js.forEach(j => {
+      const pid = j.profile_id == null ? "None" : j.profile_id;
+      if (!(j.profile_id in profs)) errs.push(`${pid}: 알 수 없는 프로필(profiles.json/profiles_extra.json 확인)`);
+      if (!has(OVERALL, j.overall)) errs.push(`${pid}: overall 값 오류 ${j.overall == null ? "None" : j.overall}`);
+      (j.conditions || []).forEach(c => {
+        if (!has(RESULTS, c.result)) errs.push(`${pid}/${c.cond_ref == null ? "None" : c.cond_ref}: result 값 오류`);
+        if (hasIds && !(c.cond_ref in ids)) errs.push(`${pid}: cond_ref ${c.cond_ref == null ? "None" : c.cond_ref}가 라벨 A에 없음`);
+      });
+      (j.reason_codes || []).forEach(rc => { if (!has(REASONS, rc)) errs.push(`${pid}: reason_code 허용 목록 밖 ${rc}`); });
+    });
+    return errs;
+  }
+
+  /* 막지는 않지만 확인하면 좋은 것(가이드 §7 체크리스트) */
+  function hintsA(a, packet) {
+    const out = [];
+    (a.requirements || []).forEach(r => {
+      const rid = r.req_id, s = r.source_sentence || "";
+      if (/등\s*[)\]]?\s*$/.test(s.trim()) && !r.open_ended) out.push(`${rid}: 문장이 "…등"으로 끝납니다. 목록 전체를 알 수 없다면 '열린 목록'에 체크하세요.`);
+      if (/(모두|하나\s*이상|다음\s*중|중\s*\d+\s*개|각\s*호)/.test(s) && r.logic_basis !== "explicit") out.push(`${rid}: 원문에 "모두·하나 이상·다음 중 N개" 같은 표현이 있습니다. 논리 근거를 '원문에 명시'로 바꿀 수 있는지 보세요.`);
+      if (r.kind === "EXCLUSION" && r.logic !== "NONE_OF") out.push(`${rid}: 제외 요건은 보통 논리를 '하나라도 해당하면 제외(NONE_OF)'로 씁니다.`);
+      if (r.status === "unparsed" && r.kind === "ELIGIBILITY") out.push(`${rid}: 읽을 수 없는 자격 요건이 있으면 판정은 NEEDS_CHECK가 됩니다(라벨 B에서 reason_codes에 REQ_UNPARSED).`);
+      if (/중소기업|소상공인|창업기업|여성기업|장애인기업|벤처기업|사회적기업|소기업|중기업/.test(s)) {
+        const anyDef = leaves(r.conditions, rid, []).some(c => c.needs_definition);
+        if (!anyDef) out.push(`${rid}: 법령·제도 용어(중소기업·소상공인 등)가 보입니다. 해당 조건에 '정의 확인 필요'를 체크했는지 확인하세요.`);
+      }
+      leaves(r.conditions, rid, []).forEach(c => {
+        if (c.attribute === "other" && !c.note) out.push(`${rid}/${c.cond_id}: '기타' 조건에는 메모(note)에 이유나 제안 이름을 적어 주세요.`);
+      });
+      if ((r.conditions || []).length === 0 && r.status === "parsed") out.push(`${rid}: 조건이 하나도 없습니다. 원문에 확인 가능한 조건이 없다면 이 요건을 지우고 '모호한 점'에 이유를 적으세요.`);
+    });
+    if (!(a.ambiguities && a.ambiguities.length)) out.push("'모호한 점'이 비어 있습니다. 확신이 없었던 곳을 적어 주세요(가이드 개정의 재료입니다). 정말 없다면 '없음'이라고 적습니다.");
+    if (a.time_minutes == null) out.push("작업 시간(time_minutes)이 비어 있습니다. 위쪽 '시간 재기'를 쓰거나 직접 적어 주세요.");
+    return out;
+  }
+
+  /* "7년 이내", "만 39세 이하", "10인 미만", "3억원 이상" -> {op, num, kind} */
+  function parsePhrase(t) {
+    t = String(t || "").replace(/,/g, "");
+    const m = t.match(/(\d+(?:\.\d+)?)\s*(년|개월|세|인|명|조|억|천만|백만|만)?\s*(?:원)?\s*(이내|이하|미만|이상|초과)/);
+    if (!m) return null;
+    const op = { 이내: "LTE", 이하: "LTE", 미만: "LT", 이상: "GTE", 초과: "GT" }[m[3]];
+    const unit = m[2] || "";
+    const mul = { 조: 1e12, 억: 1e8, 천만: 1e7, 백만: 1e6, 만: 1e4 }[unit];
+    return { op: op, num: Number(m[1]), unit: unit, krw: mul ? Number(m[1]) * mul : null, word: m[3] };
+  }
+
+  /* ---- ZIP(저장만, 압축 없음) ---- */
+  const CRC = (() => { const t = []; for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+  function crc32(u8) { let c = 0xFFFFFFFF; for (let i = 0; i < u8.length; i++) c = CRC[(c ^ u8[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+  function makeZip(files) {
+    const enc = new TextEncoder(); const parts = []; const central = []; let off = 0;
+    const w16 = (v, n) => { v[0] = n & 255; v[1] = (n >> 8) & 255; };
+    files.forEach(f => {
+      const name = enc.encode(f.name); const data = f.data; const crc = crc32(data);
+      const h = new Uint8Array(30 + name.length); const dv = new DataView(h.buffer);
+      dv.setUint32(0, 0x04034b50, true); dv.setUint16(4, 20, true); dv.setUint16(6, 0x0800, true); dv.setUint16(8, 0, true);
+      dv.setUint16(10, 0, true); dv.setUint16(12, 0x21, true); dv.setUint32(14, crc, true); dv.setUint32(18, data.length, true); dv.setUint32(22, data.length, true);
+      dv.setUint16(26, name.length, true); dv.setUint16(28, 0, true); h.set(name, 30);
+      parts.push(h, data);
+      const c = new Uint8Array(46 + name.length); const cv = new DataView(c.buffer);
+      cv.setUint32(0, 0x02014b50, true); cv.setUint16(4, 20, true); cv.setUint16(6, 20, true); cv.setUint16(8, 0x0800, true); cv.setUint16(10, 0, true);
+      cv.setUint16(12, 0, true); cv.setUint16(14, 0x21, true); cv.setUint32(16, crc, true); cv.setUint32(20, data.length, true); cv.setUint32(24, data.length, true);
+      cv.setUint16(28, name.length, true); cv.setUint32(42, off, true); c.set(name, 46); central.push(c);
+      off += h.length + data.length;
+    });
+    const csize = central.reduce((s, c) => s + c.length, 0);
+    const end = new Uint8Array(22); const ev = new DataView(end.buffer);
+    ev.setUint32(0, 0x06054b50, true); ev.setUint16(8, files.length, true); ev.setUint16(10, files.length, true); ev.setUint32(12, csize, true); ev.setUint32(16, off, true);
+    const all = parts.concat(central, [end]); const total = all.reduce((s, p) => s + p.length, 0);
+    const out = new Uint8Array(total); let p = 0; all.forEach(x => { out.set(x, p); p += x.length; }); return out;
+  }
+
+  root.LabelerCore = { ATTRS, OPS, KINDS, LOGICS, REF_KINDS, NEEDS_REF, RESULTS, OVERALL, REASONS, norm, leaves, validateA, validateB, hintsA, allCondIds, judgmentsOf, parsePhrase, crc32, makeZip };
+  if (typeof module !== "undefined") module.exports = root.LabelerCore;
+})(typeof window !== "undefined" ? window : globalThis);
+</script>
+
+<script id="app">
+(function () {
+const C = window.LabelerCore;
+const DEFAULT_PROFILES = /*__PROFILES__*/[];
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+/* ---------- 용어(한글 설명) ---------- */
+const KIND_INFO = { ELIGIBILITY: ["신청 자격", "이 조건을 만족해야 신청할 수 있다"], EXCLUSION: ["신청 제외", "이 조건에 해당하면 신청할 수 없다"], PREFERENCE: ["우대", "가점·우선 선정(판정에는 쓰지 않음)"], DOCUMENT: ["제출 서류", "내야 하는 서류(판정에는 쓰지 않음)"], LIMIT: ["한도·의무", "지원 한도, 횟수, 선정 후 의무(판정에는 쓰지 않음)"], CRITERION: ["평가·선정 기준", "점수 배점 등(판정에는 쓰지 않음)"] };
+const LOGIC_INFO = { AND: ["모두 충족(AND)", "아래 조건을 전부 만족해야 함"], OR: ["하나라도 충족(OR)", "아래 중 하나만 만족해도 됨"], NONE_OF: ["하나라도 해당하면 제외(NONE_OF)", "제외 요건용. 하나라도 해당하면 신청 불가"], AT_LEAST: ["N개 이상 충족(AT_LEAST)", "아래 중 N개 이상 만족해야 함"] };
+const ATTR_INFO = { region: ["지역(소재지·관내)", "WITHIN"], zone: ["지정 구역", "WITHIN"], industry: ["업종", "IS_A"], applicant_type: ["신청자 유형(청년·창업기업 등)", "IS_A"], business_age: ["업력(창업 후 경과 기간)", "LTE"], founder_age: ["대표자 나이", "LTE"], company_size: ["기업 규모(중소·소상공인 등)", "IS_A"], revenue: ["매출액", "LTE"], employees: ["종업원(상시근로자) 수", "LT"], certification: ["인증·확인서 보유(벤처 등)", "EXISTS"], prior_award: ["과거 수혜·수상 이력", "EXISTS"], registration: ["등록·허가·신고", "EXISTS"], other: ["기타(위에 없음, 메모 필수)", "EQ"] };
+const OPS_BY_ATTR = { numeric: ["LTE", "LT", "GTE", "GT", "EQ", "BETWEEN"], place: ["WITHIN", "IN", "EQ"], kind: ["IS_A", "IN", "EQ"], exists: ["EXISTS"], other: ["EQ"] };
+const OP_INFO = { LTE: "이하·이내", LT: "미만", GTE: "이상", GT: "초과", EQ: "같다", BETWEEN: "A 이상 ~ B 미만처럼 범위", IN: "여러 값 중 하나", WITHIN: "(지역에) 속한다", IS_A: "(유형에) 해당한다", EXISTS: "가지고 있다" };
+const REF_INFO = { NONE: "해당 없음", NOTICE_DATE: "공고일 기준", DEADLINE: "접수 마감일 기준", PREV_YEAR: "전년도 기준", OTHER: "기타·불명확(메모 필수)" };
+const UNIT_BY_ATTR = { business_age: "YEAR", founder_age: "YEAR", revenue: "KRW", employees: "PERSON" };
+const RESULT_INFO = { SATISFIED: "충족", UNSATISFIED: "불충족", UNKNOWN: "알 수 없음" };
+const OVERALL_INFO = { ELIGIBLE: ["신청 가능", "모든 자격을 충족하고 제외에 해당하지 않음이 확실"], NOT_ELIGIBLE: ["신청 불가", "하나라도 확실히 불충족이거나 제외에 해당"], NEEDS_CHECK: ["확인 필요", "모르는 조건이 남아 있어 확정할 수 없음(정답입니다. 억지로 가능/불가로 쓰지 마세요)"] };
+const REASON_INFO = { ASSUMED_LOGIC: "조건 사이 논리(AND/OR)를 추측함", REQ_UNPARSED: "읽을 수 없는 자격 요건이 있음", OPEN_ENDED: "목록이 '…등'으로 열려 있음", PROFILE_MISSING_ATTR: "프로필에 필요한 값이 비어 있음", NEEDS_DEFINITION: "법령·제도 용어의 정의 확인이 필요함", SOURCE_CONFLICT: "구조화 필드와 본문이 다름", BOUNDARY_UNCLEAR: "경계값이라 기준일이 불명확함", TRACK_SPLIT: "트랙마다 결과가 다름" };
+const FIX_HINT = [
+  [/source_sentence가 자료 패킷에 그대로 없음/, "왼쪽 원문에서 문장을 드래그해 [근거로 쓰기]를 누르면 글자가 그대로 복사됩니다. 직접 타이핑하거나 요약하면 안 됩니다."],
+  [/source_sentence 없음/, "근거 문장은 필수입니다. 왼쪽 원문에서 해당 문장을 드래그해 [근거로 쓰기]를 누르세요."],
+  [/기준일\(ref_date_kind\)/, "업력·나이·매출·종업원은 '언제 기준인지'를 골라야 합니다. 원문에 없으면 '기타·불명확'을 고르고 메모에 이유를 적으세요."],
+  [/needs_definition/, "'중소기업', '창업기업' 같은 법령·제도 용어는 뜻을 직접 쓰지 않고 '정의 확인 필요'에 체크합니다."],
+  [/min_count/, "'N개 이상 충족'을 골랐다면 N을 적어야 합니다."],
+  [/3단을 넘음/, "묶음(그룹)은 3단까지만 허용됩니다. 구조를 단순하게 바꿔 보세요."],
+  [/cond_id 중복/, "조건 번호가 겹쳤습니다. 번호를 바꿔 주세요."],
+  [/ambiguities/, "요건이 없다면 왜 없는지 '모호한 점'에 한 줄 적어 주세요."]
+];
+
+/* ---------- 상태 ---------- */
+const S = { reviewer: "", current: null, tab: "start", notices: {}, profiles: {}, assignment: {}, titles: {}, activeReq: 0, timerOn: false, timerAt: 0, find: "" };
+DEFAULT_PROFILES.forEach(p => S.profiles[p.profile_id] = p);
+
+const newA = id => ({ notice_id: id, reviewer: S.reviewer || "", time_minutes: null, read: [], materials: [], tracks: [], requirements: [], source_conflicts: [], ambiguities: [] });
+const newB = id => ({ notice_id: id, reviewer: S.reviewer || "", time_minutes: null, judgments: [] });
+function ensureNotice(id) {
+  if (!S.notices[id]) S.notices[id] = { id: id, title: S.titles[id] || "", packet: null, A: newA(id), B: newB(id), secs: 0, check: {}, bsel: [] };
+  return S.notices[id];
+}
+const N = () => S.current ? S.notices[S.current] : null;
+const fileId = id => id.replace(/:/g, "_");
+
+/* ---------- 저장(브라우저 안에만) ---------- */
+function storeKey() { return "labeler:v1:" + (S.reviewer || "anon"); }
+function save() {
+  try {
+    const slim = { reviewer: S.reviewer, current: S.current, assignment: S.assignment, titles: S.titles, notices: {} };
+    Object.values(S.notices).forEach(n => { slim.notices[n.id] = { id: n.id, title: n.title, A: n.A, B: n.B, secs: n.secs, check: n.check, bsel: n.bsel }; });
+    localStorage.setItem(storeKey(), JSON.stringify(slim));
+    $("#saveState").textContent = "자동 저장됨 " + new Date().toLocaleTimeString();
+  } catch (e) { $("#saveState").textContent = "자동 저장 불가(내려받기를 자주 하세요)"; }
+}
+function restore() {
+  try {
+    const raw = localStorage.getItem(storeKey()); if (!raw) return false;
+    const d = JSON.parse(raw);
+    Object.values(d.notices || {}).forEach(n => { const x = ensureNotice(n.id); Object.assign(x, { title: n.title, A: n.A, B: n.B, secs: n.secs || 0, check: n.check || {}, bsel: n.bsel || [] }); });
+    S.assignment = Object.assign({}, d.assignment, S.assignment); S.titles = Object.assign({}, d.titles, S.titles);
+    if (!S.current && d.current && S.notices[d.current]) S.current = d.current;
+    return true;
+  } catch (e) { return false; }
+}
+let saveT = null; const saveSoon = () => { clearTimeout(saveT); saveT = setTimeout(save, 400); };
+
+/* ---------- 파일 읽기 ---------- */
+function parseCsv(text) {
+  text = text.replace(/^﻿/, ""); const rows = []; let row = [], cell = "", q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) { if (c === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += c; }
+    else if (c === '"') q = true; else if (c === ",") { row.push(cell); cell = ""; }
+    else if (c === "\n") { row.push(cell); rows.push(row); row = []; cell = ""; } else if (c !== "\r") cell += c;
+  }
+  if (cell || row.length) { row.push(cell); rows.push(row); } return rows;
+}
+async function ingest(files) {
+  const log = [];
+  for (const f of files) {
+    const path = (f.webkitRelativePath || f.name).replace(/\\/g, "/"), name = f.name;
+    try {
+      const text = await f.text();
+      if (/\.txt$/i.test(name) && /packets\//.test(path) || (/\.txt$/i.test(name) && /^#\s*[A-Z]+:/.test(text))) {
+        const m = text.match(/^#\s*(\S+)/); const id = m ? m[1] : name.replace(/\.txt$/i, "").replace("_", ":");
+        const n = ensureNotice(id); n.packet = text; const t = text.match(/^제목:\s*(.+)$/m); if (t) { n.title = t[1].trim(); S.titles[id] = n.title; }
+        log.push("원문 " + id);
+      } else if (name === "profiles.json" || name === "profiles_extra.json") {
+        (JSON.parse(text).profiles || []).forEach(p => S.profiles[p.profile_id] = p); log.push("프로필 " + name);
+      } else if (name === "profiles_assignment.csv") {
+        parseCsv(text).slice(1).forEach(r => { const ids = r.slice(1, 6).map(x => x.trim()).filter(Boolean); if (r[0] && ids.length) S.assignment[r[0].trim()] = ids; }); log.push("프로필 배정표");
+      } else if (name === "pilot_assignment.csv") {
+        parseCsv(text).slice(1).forEach(r => { if (r[1] && r[3]) S.titles[r[1]] = r[3]; ensureNotice(r[1]); }); log.push("공고 배정표");
+      } else if (/\.json$/i.test(name)) {
+        const d = JSON.parse(text);
+        if (d.requirements !== undefined && d.notice_id) {
+          const n = ensureNotice(d.notice_id);
+          if (/templates\//.test(path) || /label_A\.json$/.test(name) && !(d.requirements || []).length) { n.A.materials = d.materials || n.A.materials; log.push("서식 " + d.notice_id); }
+          else { n.A = Object.assign(newA(d.notice_id), d); if (!n.A.reviewer && S.reviewer) n.A.reviewer = S.reviewer; log.push("라벨 A 불러옴 " + d.notice_id); }
+        } else if (d.judgments !== undefined && d.notice_id) {
+          if (/templates_B\//.test(path)) continue;
+          const n = ensureNotice(d.notice_id); n.B = Object.assign(newB(d.notice_id), d); n.bsel = (d.judgments || []).map(j => j.profile_id).filter(Boolean); log.push("라벨 B 불러옴 " + d.notice_id);
+        }
+      }
+    } catch (e) { log.push("읽지 못함: " + name + " (" + e.message + ")"); }
+  }
+  if (!S.current) { const ids = Object.keys(S.notices); if (ids.length) S.current = ids[0]; }
+  save(); fillNoticeSel(); render();
+  $("#loadlog") && ($("#loadlog").textContent = log.length ? "불러온 것: " + log.join(", ") : "읽을 수 있는 파일이 없습니다.");
+}
+
+/* ---------- 공통 UI ---------- */
+const TABS = [["start", "① 시작하기"], ["A", "② 요건 쓰기(라벨 A)"], ["B", "③ 판정 쓰기(라벨 B)"], ["export", "④ 점검·내려받기"], ["help", "도움말"]];
+function renderTabs() {
+  $("#tabs").innerHTML = TABS.map(t => `<button data-tab="${t[0]}" class="${S.tab === t[0] ? "on" : ""}">${t[1]}</button>`).join("");
+  $("#viewer").hidden = !(S.tab === "A" || S.tab === "B");
+  $("#main").classList.toggle("single", !(S.tab === "A" || S.tab === "B"));
+}
+function fillNoticeSel() {
+  const ids = Object.keys(S.notices);
+  $("#noticeSel").innerHTML = ids.length ? ids.map(id => { const n = S.notices[id]; return `<option value="${esc(id)}" ${id === S.current ? "selected" : ""}>${esc(id)} ${esc((n.title || "").slice(0, 28))}</option>`; }).join("") : '<option value="">(공고 없음)</option>';
+}
+function renderPacket() {
+  const n = N(); const el = $("#packet");
+  if (!n) { el.textContent = "공고를 먼저 불러오세요."; return; }
+  if (!n.packet) { el.innerHTML = '<span class="muted">이 공고의 원문(자료 패킷)이 아직 없습니다. ① 시작하기에서 <code>data/goldset/pilot</code> 폴더를 열어 주세요.</span>'; return; }
+  let h = esc(n.packet);
+  if (S.find && S.find.length > 0) { const q = esc(S.find).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); h = h.replace(new RegExp(q, "g"), m => "<mark>" + m + "</mark>"); }
+  el.innerHTML = h;
+}
+
+/* ---------- 시작 화면 ---------- */
+function renderStart() {
+  const n = N(); const cnt = Object.keys(S.notices).length;
+  const withPacket = Object.values(S.notices).filter(x => x.packet).length;
+  return `<div class="panel">
+  <h2>처음이세요? 이렇게 하면 됩니다</h2>
+  <div class="step"><div class="n">1</div><div><b>이름을 적고 폴더를 엽니다.</b><br>위쪽에 짧은 영문 이름(예: kwan)을 적고, 아래 상자에 <code>data/goldset/pilot</code> 폴더를 끌어다 놓거나 [폴더 열기]를 누릅니다. 공고 원문과 가상 프로필이 한 번에 들어옵니다.</div></div>
+  <div class="step"><div class="n">2</div><div><b>② 요건 쓰기:</b> 공고 원문에서 "누가 신청할 수 있는가(자격)", "누가 안 되는가(제외)"를 찾아 <b>카드</b>로 채웁니다. 원문 문장을 드래그해서 근거로 붙입니다.</div></div>
+  <div class="step"><div class="n">3</div><div><b>③ 판정 쓰기:</b> 가상 회사 5곳이 이 공고에 신청할 수 있는지 <b>원문을 보고</b> 판단합니다. 모르면 "확인 필요"가 정답입니다.</div></div>
+  <div class="step"><div class="n">4</div><div><b>④ 점검·내려받기:</b> 빨간 오류를 고치고 ZIP으로 내려받아 <code>data/goldset/</code>에 풀어 넣습니다. 그다음 <code>python tools/goldset_check.py validate</code>.</div></div>
+  <div class="tip"><b>꼭 지킬 3가지</b><br>① 자동 추출 결과나 다른 검수자의 파일을 보지 않습니다(평가가 오염됩니다). ② 근거 문장은 원문에서 <b>드래그로 복사</b>합니다. ③ 원문에 없는 내용은 만들지 않고, 모르겠으면 '모호한 점'에 적습니다.</div>
+  <div class="tip">이 페이지는 <b>내 컴퓨터 안에서만</b> 동작합니다. 공고 원문(첨부 추출 텍스트)은 인터넷으로 보내지 않고 이 브라우저 창 안에만 있습니다. 작업 내용은 이 브라우저에 자동 저장되며, 내려받기를 해 두면 안전합니다.</div>
+  <h3>자료 불러오기</h3>
+  <div id="drop" class="dropzone">여기에 <code>data/goldset/pilot</code> 폴더(또는 파일들)를 끌어다 놓으세요<br><br>
+    <button class="primary" id="openDir">폴더 열기</button> <button id="openFiles">파일 여러 개 열기</button>
+    <div class="muted" style="margin-top:8px">폴더 안의 packets/*.txt, profiles.json, profiles_extra.json, profiles_assignment.csv, pilot_assignment.csv를 알아서 찾습니다.<br>이전에 내려받은 라벨 JSON을 열면 이어서 작업할 수 있습니다.</div></div>
+  <div id="loadlog" class="status" style="margin-top:6px"></div>
+  <div class="row" style="margin-top:10px"><span>공고 ${cnt}건 중 원문이 있는 것 ${withPacket}건, 프로필 ${Object.keys(S.profiles).length}개</span>
+    <button id="practiceBtn">연습용 예시 공고 만들기</button></div>
+  <div class="muted">연습용 예시는 가이드 §6-2(구미 스타트업 제작센터)의 공개 문구와 작성 예시를 넣어 줍니다. 정답이 아니라 <b>작성 방법을 보여 주는 예</b>입니다.</div>
+  </div>`;
+}
+
+/* ---------- 라벨 A ---------- */
+function valueEditor(c, p) {
+  const a = c.attribute, op = c.operator; c.value = c.value || {};
+  const kind = C.NEEDS_REF.includes(a) ? "numeric" : (a === "region" || a === "zone") ? "place" : (a === "applicant_type" || a === "company_size" || a === "industry") ? "kind" : (a === "certification" || a === "registration" || a === "prior_award") ? "exists" : "other";
+  const unit = UNIT_BY_ATTR[a];
+  if (kind === "numeric") {
+    const money = a === "revenue";
+    if (op === "BETWEEN") return `<div class="row"><label>범위</label><input type="number" step="any" data-p="${p}.value.min" data-t="num" value="${esc(c.value.min ?? "")}" placeholder="최소"> ~ <input type="number" step="any" data-p="${p}.value.max" data-t="num" value="${esc(c.value.max ?? "")}" placeholder="최대"> ${unit ? esc(unit) : ""}
+      <label><input type="checkbox" data-p="${p}.value.min_inclusive" data-t="bool" ${c.value.min_inclusive ? "checked" : ""}>최소 포함(이상)</label> <label><input type="checkbox" data-p="${p}.value.max_inclusive" data-t="bool" ${c.value.max_inclusive ? "checked" : ""}>최대 포함(이하)</label></div>
+      <div class="muted">예: "만 18세 이상 ~ 만 40세 미만" → 최소 18(포함 체크), 최대 40(포함 체크 해제)</div>`;
+    if (money) return `<div class="row"><label>금액</label><input type="number" step="any" data-p="${p}._amt" data-t="num" data-act="money" value="${esc(c._amt ?? "")}" style="width:110px"> <select data-p="${p}._mul" data-t="num" data-act="money">${[[1, "원"], [10000, "만원"], [1e6, "백만원"], [1e8, "억원"]].map(m => `<option value="${m[0]}" ${(c._mul || 1) == m[0] ? "selected" : ""}>${m[1]}</option>`).join("")}</select>
+      <span class="muted">= ${c.value.value != null ? Number(c.value.value).toLocaleString() : "?"}원 (KRW로 저장)</span></div>`;
+    return `<div class="row"><label>값</label><input type="number" step="any" data-p="${p}.value.value" data-t="num" value="${esc(c.value.value ?? "")}" style="width:110px"> ${unit ? `<span class="muted">${unit === "YEAR" ? (a === "founder_age" ? "세(만 나이)" : "년") : unit === "PERSON" ? "명" : unit}</span>` : ""}</div>
+      <div class="row"><label>표현 도우미</label><input type="text" id="ph-${p}" placeholder='예: 7년 이내 / 10인 미만' size="16"><button class="small" data-act="phrase" data-p="${p}">적용</button><span class="muted">"이내·이하"=이하(LTE), "미만"=미만(LT)로 정해 줍니다</span></div>`;
+  }
+  if (kind === "kind" && op === "IN") return `<div class="row"><label>값 목록</label><input type="text" data-p="${p}.value.labels" data-t="csv" value="${esc((c.value.labels || []).join(", "))}" size="34" placeholder="쉼표로 구분: 광업, 제조업, 건설업"></div><div class="muted">"A, B, C 중 하나라도 해당"일 때만 씁니다. 모두 충족이어야 하면 조건을 나누세요.</div>`;
+  if (kind === "place" && op === "IN") return `<div class="row"><label>지역 목록</label><input type="text" data-p="${p}.value.labels" data-t="csv" value="${esc((c.value.labels || []).join(", "))}" size="34" placeholder="쉼표로 구분"></div>`;
+  return `<div class="row"><label>${kind === "place" ? "지역" : kind === "exists" ? "인증·등록명" : "값"}</label><input type="text" data-p="${p}.value.label" data-t="str" value="${esc(c.value.label || "")}" size="30" placeholder="${kind === "place" ? "예: 구미 (원문 표기 그대로)" : kind === "exists" ? "예: 벤처기업 확인서" : "예: 창업기업"}"></div>`;
+}
+function condEditor(c, p, depth) {
+  if (c.children) return grpEditor(c, p, depth);
+  const attrOpts = C.ATTRS.map(a => `<option value="${a}" ${c.attribute === a ? "selected" : ""}>${esc(ATTR_INFO[a][0])}</option>`).join("");
+  const grp = C.NEEDS_REF.includes(c.attribute) ? "numeric" : (c.attribute === "region" || c.attribute === "zone") ? "place" : (["applicant_type", "company_size", "industry"].includes(c.attribute)) ? "kind" : (["certification", "registration", "prior_award"].includes(c.attribute)) ? "exists" : "other";
+  const ops = (S.allOps ? C.OPS : OPS_BY_ATTR[grp]);
+  const opOpts = ops.map(o => `<option value="${o}" ${c.operator === o ? "selected" : ""}>${o} · ${esc(OP_INFO[o])}</option>`).join("");
+  const refReq = C.NEEDS_REF.includes(c.attribute);
+  return `<div class="card cond"><div class="row"><span class="badge">${esc(c.cond_id)}</span>
+    <select data-p="${p}.attribute" data-act="attr" title="무엇에 대한 조건인가요?">${attrOpts}</select>
+    <select data-p="${p}.operator" data-act="op" title="어떻게 비교하나요?">${opOpts}</select><span class="sp"></span><button class="small danger" data-act="del" data-p="${p}">삭제</button></div>
+    ${valueEditor(c, p)}
+    ${refReq ? `<div class="row"><label>기준일 <b style="color:var(--err)">*</b></label><select data-p="${p}.ref_date_kind" data-t="str">${C.REF_KINDS.map(r => `<option value="${r}" ${(c.ref_date_kind || "NONE") === r ? "selected" : ""}>${esc(REF_INFO[r])}</option>`).join("")}</select><span class="muted">"언제를 기준으로 7년 이내인가?" 원문에 없으면 '기타'+메모</span></div>` : ""}
+    <div class="row"><label><input type="checkbox" data-p="${p}.negate" data-t="bool" ${c.negate ? "checked" : ""}> ~이 아닌 자(부정)</label>
+      <label><input type="checkbox" data-p="${p}.needs_definition" data-t="bool" ${c.needs_definition ? "checked" : ""}> 정의 확인 필요(법령·제도 용어)</label></div>
+    <div class="row"><label>메모</label><input type="text" data-p="${p}.note" data-t="str" value="${esc(c.note || "")}" size="42" placeholder="기준·예외·출생연도 병기 등 (선택, '기타'와 '기타·불명확'은 필수)"></div></div>`;
+}
+function grpEditor(g, p, depth) {
+  const logicOpts = C.LOGICS.map(l => `<option value="${l}" ${g.logic === l ? "selected" : ""}>${esc(LOGIC_INFO[l][0])}</option>`).join("");
+  return `<div class="card grp"><div class="row"><span class="badge g">${esc(g.cond_id)} 묶음</span><select data-p="${p}.logic" data-t="str" data-act="relayout">${logicOpts}</select>
+    ${g.logic === "AT_LEAST" ? `<label>N = <input type="number" min="1" style="width:60px" data-p="${p}.min_count" data-t="num" value="${esc(g.min_count ?? "")}"></label>` : ""}
+    <span class="sp"></span><button class="small danger" data-act="del" data-p="${p}">묶음 삭제</button></div>
+    <div class="muted">${esc(LOGIC_INFO[g.logic][1])}</div>
+    ${condList(g.children, p + ".children", depth + 1)}</div>`;
+}
+function condList(list, p, depth) {
+  const canGroup = depth < 3;
+  return list.map((c, i) => condEditor(c, `${p}.${i}`, depth)).join("") +
+    `<div class="row"><button class="small" data-act="addcond" data-p="${p}">+ 조건 추가</button>${canGroup ? `<button class="small" data-act="addgrp" data-p="${p}">+ 묶음(그룹) 추가</button>` : '<span class="muted">(묶음은 3단까지)</span>'}</div>`;
+}
+function reqEditor(r, i, errs) {
+  const mine = errs.filter(e => e.startsWith(r.req_id + ":") || e.startsWith(r.req_id + "/"));
+  const p = `A.requirements.${i}`; const active = S.activeReq === i;
+  const kindOpts = C.KINDS.map(k => `<option value="${k}" ${r.kind === k ? "selected" : ""}>${esc(KIND_INFO[k][0])}</option>`).join("");
+  const logicOpts = C.LOGICS.map(l => `<option value="${l}" ${r.logic === l ? "selected" : ""}>${esc(LOGIC_INFO[l][0])}</option>`).join("");
+  const trackOpts = `<option value="">(트랙 없음·공통)</option>` + (N().A.tracks || []).map(t => `<option value="${esc(t.track_id)}" ${r.track_id === t.track_id ? "selected" : ""}>${esc(t.track_id)} ${esc(t.name || "")}</option>`).join("");
+  return `<div class="card req" data-req="${i}" style="${active ? "outline:2px solid var(--accent)" : ""}"><div class="row"><span class="badge">${esc(r.req_id)}</span>
+    <select data-p="${p}.kind" data-t="str" data-act="relayout" title="이 요건은 어떤 종류인가요?">${kindOpts}</select>
+    <button class="small" data-act="activate" data-i="${i}">${active ? "● 근거를 붙일 요건" : "근거를 붙일 요건으로 선택"}</button><span class="sp"></span><button class="small danger" data-act="del" data-p="${p}">요건 삭제</button></div>
+    <div class="muted">${esc(KIND_INFO[r.kind] ? KIND_INFO[r.kind][1] : "")}</div>
+    <div class="row"><label>논리</label><select data-p="${p}.logic" data-t="str" data-act="relayout">${logicOpts}</select>
+      ${r.logic === "AT_LEAST" ? `<label>N = <input type="number" min="1" style="width:60px" data-p="${p}.min_count" data-t="num" value="${esc(r.min_count ?? "")}"></label>` : ""}
+      <select data-p="${p}.logic_basis" data-t="str" title="원문에 '모두', '하나 이상', '다음 중 N개'가 적혀 있나요?"><option value="assumed" ${r.logic_basis !== "explicit" ? "selected" : ""}>논리를 추측함(원문에 명시 없음)</option><option value="explicit" ${r.logic_basis === "explicit" ? "selected" : ""}>원문에 명시됨</option></select></div>
+    <div class="row"><label>상태</label><select data-p="${p}.status" data-t="str"><option value="parsed" ${r.status !== "unparsed" ? "selected" : ""}>읽었음</option><option value="unparsed" ${r.status === "unparsed" ? "selected" : ""}>읽을 수 없음("공고문 참조" 등)</option></select>
+      <label><input type="checkbox" data-p="${p}.open_ended" data-t="bool" ${r.open_ended ? "checked" : ""}> 열린 목록("…등"으로 끝남)</label><select data-p="${p}.track_id" data-t="str">${trackOpts}</select></div>
+    <div class="row"><label>근거 문장</label><textarea rows="2" data-p="${p}.source_sentence" data-t="str" placeholder="왼쪽 원문에서 문장을 드래그 → [근거로 쓰기]">${esc(r.source_sentence || "")}</textarea></div>
+    <div class="row"><label>출처</label><input type="text" data-p="${p}.source" data-t="str" value="${esc(r.source || "")}" size="34" placeholder="파일명·쪽 또는 API 필드명(자동으로 채워집니다)"></div>
+    ${(r.source_extra || []).length ? `<div class="muted">추가 근거 ${r.source_extra.length}건: ${(r.source_extra || []).map(esc).join(" | ").slice(0, 160)}…</div>` : ""}
+    <h3 style="margin:8px 0 2px">조건</h3>${condList(r.conditions, `${p}.conditions`, 0)}
+    ${mine.map(m => `<div class="err">${esc(m)}${(FIX_HINT.find(h => h[0].test(m)) || [0, ""])[1] ? `<br><span class="muted">→ ${esc(FIX_HINT.find(h => h[0].test(m))[1])}</span>` : ""}</div>`).join("")}</div>`;
+}
+function renderA() {
+  const n = N(); if (!n) return `<div class="panel">먼저 ① 시작하기에서 공고를 불러오세요.</div>`;
+  const A = n.A; const errs = C.validateA(A, n.packet || ""); const hints = C.hintsA(A, n.packet || "");
+  return `<div class="panel"><h2>${esc(n.id)} <span class="muted">${esc(n.title || "")}</span></h2>
+  <details><summary>이 화면 사용법</summary><div class="tip">① 원문에서 자격·제외 문장을 찾아 드래그 → <b>[근거로 쓰기]</b>.<br>② 문장 하나가 <b>요건 카드 하나</b>입니다. 카드 안에 그 문장이 말하는 <b>조건</b>들을 만듭니다(예: "구미 소재, 업력 7년 이내" → 조건 2개).<br>③ "또는"이면 논리를 '하나라도 충족(OR)', "그리고"면 '모두 충족(AND)'. 원문에 그런 말이 없으면 '논리를 추측함'을 고르세요.<br>④ 서류·평가·우대는 있는지만 표시하고 조건은 만들지 않아도 됩니다.<br>⑤ 맨 아래 빨간 오류가 없어질 때까지 고치세요.</div></details>
+  <div class="row"><label>읽은 자료</label><div class="chips" id="readChips">${(A.read || []).map((x, i) => `<span>${esc(x)}<b data-act="delread" data-i="${i}">×</b></span>`).join("")}</div><input type="text" id="readNew" placeholder="예: 공고문.pdf p.1-3 (Enter)" size="26"></div>
+  ${(A.materials || []).length ? `<details><summary class="muted">읽을 자료 안내(서식에서 가져옴)</summary><div class="muted">${A.materials.map(esc).join("<br>")}</div></details>` : ""}
+  <h3>트랙(대상별로 조건이 다를 때만)</h3>
+  <div class="muted">예: "농업인은 …, 농업법인은 추가로 …". 공통 요건은 트랙 밖에 둡니다. 대부분의 공고는 필요 없습니다.</div>
+  ${(A.tracks || []).map((t, i) => `<div class="row"><span class="badge">${esc(t.track_id)}</span><input type="text" data-p="A.tracks.${i}.name" data-t="str" value="${esc(t.name || "")}" placeholder="트랙 이름" size="22"><button class="small danger" data-act="del" data-p="A.tracks.${i}">삭제</button></div>`).join("")}
+  <button class="small" data-act="addtrack">+ 트랙 추가</button>
+  <h3>요건 카드</h3>${A.requirements.map((r, i) => reqEditor(r, i, errs)).join("") || '<div class="muted">아직 요건이 없습니다. 원문에서 자격 문장을 드래그하거나 아래 버튼을 누르세요.</div>'}
+  <div class="row"><button class="primary" data-act="addreq">+ 요건 카드 추가</button><span class="muted">처음에는 '신청 자격'과 '신청 제외'만 찾아도 됩니다.</span></div>
+  <h3>원문과 구조화 필드가 다른 곳</h3>${listEditor("A.source_conflicts", A.source_conflicts, "예: API 지역 태그는 전 시도인데 본문은 구미시만")}
+  <h3>모호한 점 <span class="muted">(비워 두지 마세요 · 가이드 개정의 재료입니다)</span></h3>${listEditor("A.ambiguities", A.ambiguities, "예: '초격차 분야'가 어떤 업종 목록인지 문서에 없음")}
+  <h3>점검 결과</h3>
+  ${errs.length ? errs.map(m => `<div class="err">${esc(m)}</div>`).join("") : '<div class="ok">형식 오류가 없습니다.</div>'}
+  ${hints.map(h => `<div class="warn">${esc(h)}</div>`).join("")}</div>`;
+}
+function listEditor(path, list, ph) {
+  return `<div>${list.map((x, i) => `<div class="row"><input type="text" style="flex:1" data-p="${path}.${i}" data-t="str" value="${esc(x)}"><button class="small danger" data-act="del" data-p="${path}.${i}">삭제</button></div>`).join("")}<button class="small" data-act="addstr" data-p="${path}" data-ph="${esc(ph)}">+ 추가</button><div class="muted">${esc(ph)}</div></div>`;
+}
+
+/* ---------- 라벨 B ---------- */
+function profileSummary(p) { return p ? esc(p.summary || "") : '<span class="err">알 수 없는 프로필</span>'; }
+function leafList(A) {
+  const out = [];
+  const label = c => { const v = c.value || {}; const val = v.label != null ? v.label : v.labels ? v.labels.join("/") : v.value != null ? v.value : v.min != null ? `${v.min}~${v.max}` : ""; return `${ATTR_INFO[c.attribute] ? ATTR_INFO[c.attribute][0].split("(")[0] : c.attribute} ${c.operator} ${val}${c.negate ? " (부정)" : ""}`; };
+  const walk = (cs, rid, ind) => (cs || []).forEach(c => { if (c.children) { out.push({ id: c.cond_id, text: "묶음 " + c.logic, rid, ind }); walk(c.children, rid, ind + 1); } else out.push({ id: c.cond_id, text: label(c), rid, ind }); });
+  (A.requirements || []).forEach(r => walk(r.conditions, r.req_id, 0)); return out;
+}
+function renderB() {
+  const n = N(); if (!n) return `<div class="panel">먼저 ① 시작하기에서 공고를 불러오세요.</div>`;
+  const B = n.B; const allIds = Object.keys(S.profiles);
+  const assigned = S.assignment[n.id] || [];
+  const errs = C.validateB(B, n.A, S.profiles);
+  const leaves = leafList(n.A);
+  const jOf = pid => (B.judgments || []).find(j => j.profile_id === pid);
+  return `<div class="panel"><h2>${esc(n.id)} <span class="muted">${esc(n.title || "")}</span></h2>
+  <div class="tip"><b>라벨 B는 라벨 A를 보지 않고, 공고 원문으로 판단합니다.</b> 가상 회사가 이 공고에 신청할 수 있는지 답하세요. 모르는 조건이 남아 있으면 <b>"확인 필요"</b>가 정답입니다. 먼저 ①단계(전체 판정)를 모두 쓰고, 라벨 A를 다 쓴 뒤 ②단계(조건별 연결)를 채웁니다.</div>
+  <details><summary>3값 판정 규칙 보기</summary><table><tr><th>논리</th><th>충족</th><th>불충족</th><th>알 수 없음</th></tr>
+   <tr><td>모두(AND)</td><td>전부 충족</td><td>하나라도 불충족</td><td>그 외</td></tr><tr><td>하나라도(OR)</td><td>하나라도 충족</td><td>전부 불충족</td><td>그 외</td></tr>
+   <tr><td>제외(NONE_OF)</td><td>해당 사항 전부 없음</td><td>하나라도 해당</td><td>그 외</td></tr><tr><td>N개 이상</td><td>충족 ≥ N</td><td>충족+모름 &lt; N</td><td>그 외</td></tr></table>
+   <div class="muted">공고 판정: 자격 중 하나라도 불충족이거나 제외에 해당 → 신청 불가 / 모두 충족 → 신청 가능 / 모르는 것이 남음 → 확인 필요.<br>사용자가 상위 지역(경상북도)만 입력했는데 조건이 하위 지역(구미시)이면 '알 수 없음', 서로 다른 지역이면 '불충족'.</div></details>
+  <h3>판정할 프로필 ${assigned.length ? `<span class="muted">(배정표: ${assigned.map(esc).join(", ")})</span>` : '<span class="muted">(배정표가 없으면 직접 5개를 고르세요)</span>'}</h3>
+  <div class="row">${allIds.map(pid => `<label title="${esc(S.profiles[pid].summary || "")}"><input type="checkbox" data-act="bsel" data-pid="${esc(pid)}" ${n.bsel.includes(pid) ? "checked" : ""}> ${esc(pid)}${assigned.includes(pid) ? " ★" : ""}</label>`).join("")}${assigned.length ? `<button class="small" data-act="useassign">배정표대로 선택</button>` : ""}</div>
+  ${!allIds.length ? '<div class="warn">프로필이 없습니다. ① 시작하기에서 profiles.json을 불러오세요.</div>' : ""}
+  ${n.bsel.map(pid => { const j = jOf(pid) || { profile_id: pid, overall: null, conditions: [], reason_codes: [] }; const idx = (B.judgments || []).findIndex(x => x.profile_id === pid); const p = `B.judgments.${idx}`;
+    if (idx < 0) return "";
+    return `<div class="card req"><div class="row"><span class="badge">${esc(pid)}</span><span>${profileSummary(S.profiles[pid])}</span></div>
+      <div class="row"><label>① 전체 판정</label><select data-p="${p}.overall" data-t="str" data-act="relayout"><option value="">(선택)</option>${C.OVERALL.map(o => `<option value="${o}" ${j.overall === o ? "selected" : ""}>${esc(OVERALL_INFO[o][0])}</option>`).join("")}</select></div>
+      ${j.overall ? `<div class="muted">${esc(OVERALL_INFO[j.overall][1])}</div>` : ""}
+      <div class="row"><label>이유 코드</label>${C.REASONS.map(rc => `<label title="${esc(REASON_INFO[rc])}"><input type="checkbox" data-act="reason" data-pid="${esc(pid)}" data-rc="${rc}" ${(j.reason_codes || []).includes(rc) ? "checked" : ""}> ${rc}</label>`).join("")}</div>
+      ${j.overall === "NEEDS_CHECK" && !(j.reason_codes || []).length ? '<div class="warn">확인 필요일 때는 이유 코드를 하나 이상 골라 주세요(마우스를 올리면 설명이 보입니다).</div>' : ""}
+      <div class="row"><label>메모</label><input type="text" data-p="${p}.note" data-t="str" value="${esc(j.note || "")}" size="46" placeholder="판단 근거 한 줄(선택)"></div>
+      <details ${leaves.length ? "" : ""}><summary>② 조건별 판정 연결 (라벨 A를 다 쓴 뒤)</summary>
+        ${leaves.length ? leaves.map(l => { const ci = (j.conditions || []).findIndex(c => c.cond_ref === l.id); const c = ci >= 0 ? j.conditions[ci] : null;
+          return `<div class="row" style="margin-left:${l.ind * 14}px"><span class="badge">${esc(l.id)}</span><span style="min-width:200px">${esc(l.text)}</span>
+            <select data-act="cres" data-pid="${esc(pid)}" data-ref="${esc(l.id)}"><option value="">(미입력)</option>${C.RESULTS.map(r => `<option value="${r}" ${c && c.result === r ? "selected" : ""}>${RESULT_INFO[r]}</option>`).join("")}</select>
+            <input type="text" size="26" placeholder="이유(선택)" data-act="cwhy" data-pid="${esc(pid)}" data-ref="${esc(l.id)}" value="${esc(c ? c.why || "" : "")}"></div>`; }).join("") : '<div class="muted">라벨 A에 조건이 아직 없습니다.</div>'}
+      </details></div>`; }).join("")}
+  <h3>점검 결과</h3>${errs.length ? errs.map(m => `<div class="err">${esc(m)}</div>`).join("") : '<div class="ok">형식 오류가 없습니다.</div>'}</div>`;
+}
+
+/* ---------- 점검·내려받기 ---------- */
+const CHECKS = ["source_sentence가 원문과 글자 단위로 같다(드래그로 복사했다)", "기준일이 필요한 속성(업력·나이·매출·종업원)에 기준일을 골랐다", "'원문에 명시됨'은 원문에 '모두·하나 이상' 같은 표현이 있을 때만 골랐다", "'…등'으로 끝나는 목록은 열린 목록에 체크했다", "법령·제도 용어는 '정의 확인 필요'만 체크하고 뜻을 쓰지 않았다", "자격·제외 요건을 빠뜨리지 않았다", "확인 필요 판정에는 이유 코드를 골랐다", "다른 검수자 파일과 자동 추출 결과를 보지 않았다", "작업 시간을 적었다"];
+function minutesOf(n) { return n.A.time_minutes != null ? n.A.time_minutes : (n.secs ? Math.max(1, Math.round(n.secs / 60)) : null); }
+function exportObj(n, kind) {
+  const strip = o => JSON.parse(JSON.stringify(o, (k, v) => (k.startsWith("_") ? undefined : v)));
+  const src = kind === "A" ? n.A : n.B; const o = strip(src);
+  o.reviewer = S.reviewer; o.time_minutes = minutesOf(n); o.notice_id = n.id;
+  (o.requirements || []).forEach(r => { if (r.logic !== "AT_LEAST") r.min_count = null; });
+  if (kind === "B") o.judgments = (o.judgments || []).map(j => { j.conditions = (j.conditions || []).filter(c => c.result); return j; });
+  return o;
+}
+function renderExport() {
+  const ids = Object.keys(S.notices); const profs = S.profiles;
+  if (!ids.length) return `<div class="panel">공고가 없습니다.</div>`;
+  const rows = ids.map(id => { const n = S.notices[id]; const ea = C.validateA(n.A, n.packet || ""); const eb = C.validateB(n.B, n.A, profs);
+    return `<tr><td>${esc(id)}</td><td>${n.A.requirements.length}</td><td>${ea.length ? `<span style="color:var(--err)">${ea.length}건</span>` : "OK"}</td><td>${(n.B.judgments || []).length}</td><td>${eb.length ? `<span style="color:var(--err)">${eb.length}건</span>` : ((n.B.judgments || []).length ? "OK" : "-")}</td><td>${minutesOf(n) ?? "-"}</td><td><button class="small" data-act="goto" data-id="${esc(id)}">열기</button></td></tr>`; }).join("");
+  const n = N();
+  return `<div class="panel"><h2>점검과 내려받기</h2>
+  <table><tr><th>공고</th><th>요건 수</th><th>라벨 A</th><th>판정 수</th><th>라벨 B</th><th>분</th><th></th></tr>${rows}</table>
+  ${n ? `<h3>${esc(n.id)} 제출 전 체크리스트</h3>${CHECKS.map((c, i) => `<div><label><input type="checkbox" data-act="check" data-i="${i}" ${n.check[i] ? "checked" : ""}> ${esc(c)}</label></div>`).join("")}
+  <div class="row"><label>작업 시간(분)</label><input type="number" min="0" style="width:90px" id="mins" value="${esc(minutesOf(n) ?? "")}"><span class="muted">'시간 재기'를 쓰면 자동으로 채워집니다. 직접 고쳐도 됩니다.</span></div>` : ""}
+  <h3>내려받기</h3>
+  <div class="row"><button class="primary" id="zipBtn">전체를 ZIP으로 내려받기</button><button id="oneA">현재 공고 라벨 A(JSON)</button><button id="oneB">현재 공고 라벨 B(JSON)</button></div>
+  <div class="tip">ZIP을 풀면 <code>labels/${esc(S.reviewer || "이름")}/A/…json</code>, <code>…/B/…json</code> 구조입니다. 저장소의 <code>data/goldset/</code>에 풀어 넣고 <code>python tools/goldset_check.py validate</code>로 확인하세요. 다른 검수자와는 합의 전까지 파일을 공유하지 않습니다.</div>
+  ${!S.reviewer ? '<div class="warn">위쪽에 검수자 이름을 먼저 적어 주세요(폴더 이름이 됩니다).</div>' : ""}</div>`;
+}
+function download(name, data, type) { const b = new Blob([data], { type: type || "application/json" }); const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
+function zipAll() {
+  const enc = new TextEncoder(); const files = [];
+  Object.values(S.notices).forEach(n => {
+    if (n.id.indexOf("PRACTICE:") === 0) return; // 연습 공고는 내려받기에 넣지 않는다(validate가 오류를 내지 않게)
+    if (n.A.requirements.length || n.A.ambiguities.length) files.push({ name: `labels/${S.reviewer}/A/${fileId(n.id)}.json`, data: enc.encode(JSON.stringify(exportObj(n, "A"), null, 2)) });
+    if ((n.B.judgments || []).length) files.push({ name: `labels/${S.reviewer}/B/${fileId(n.id)}.json`, data: enc.encode(JSON.stringify(exportObj(n, "B"), null, 2)) });
+  });
+  if (!files.length) { alert("내려받을 라벨이 아직 없습니다."); return; }
+  download(`labels_${S.reviewer}.zip`, C.makeZip(files), "application/zip");
+}
+
+/* ---------- 도움말 ---------- */
+function renderHelp() {
+  return `<div class="panel"><h2>도움말</h2>
+  <details open><summary>표현 → 값 변환표</summary><table><tr><th>원문 표현</th><th>이렇게 씁니다</th></tr>
+  <tr><td>7년 <b>이내</b> / 7년 이하</td><td>업력 <b>LTE</b> 7 (이내·이하는 같은 'LTE')</td></tr><tr><td>7년 <b>미만</b></td><td>업력 <b>LT</b> 7 (이내와 다르게 씁니다)</td></tr>
+  <tr><td>만 18세 이상 ~ 만 40세 미만</td><td>대표자 나이 BETWEEN, 최소 18(포함), 최대 40(포함 해제)</td></tr><tr><td>10인 미만 / 종업원 5명 이하</td><td>종업원 LT 10 / LTE 5 (단위 명)</td></tr>
+  <tr><td>매출 3억 원 이하</td><td>매출 LTE, 금액 3 + 억원 → 300,000,000원</td></tr><tr><td>A, B, C 중 하나라도</td><td>값 목록 IN (A, B, C)</td></tr><tr><td>A이고 B (둘 다)</td><td>조건을 나누고 '모두 충족(AND)'</td></tr>
+  <tr><td>A이거나 B로 분기</td><td>요건 논리를 '하나라도 충족(OR)'. 분기 안에 여러 조건이면 '묶음'을 쓰고 그 묶음을 AND</td></tr>
+  <tr><td>구미 소재, 관내, 본사</td><td>지역 WITHIN + 원문 표기. 기준(소재·거주·본사)이 다르면 메모. 해석해 넓히지 않습니다</td></tr>
+  <tr><td>선정 후 60일 이내 이전 같은 의무</td><td>신청 자격이 아님 → 종류 '한도·의무'</td></tr>
+  <tr><td>"관심 있는 누구나"</td><td>조건을 만들지 않습니다</td></tr>
+  <tr><td>중소기업·소상공인·여성기업 같은 말</td><td>'정의 확인 필요'만 체크. 뜻을 쓰지 않습니다</td></tr></table></details>
+  <details><summary>자주 하는 실수</summary><ul><li>근거 문장을 요약하거나 직접 타이핑 → 드래그로 복사하세요.</li><li>"제한 없음"이라고 추측해 채움 → 원문에 없으면 비우고 '모호한 점'에 적습니다.</li><li>업력·나이에 기준일을 안 고름 → 모르면 '기타·불명확'+메모.</li><li>"…등"으로 끝나는 목록을 닫힌 목록으로 씀 → '열린 목록' 체크.</li><li>판정이 어렵다고 억지로 가능/불가 → '확인 필요'가 정답입니다.</li></ul></details>
+  <details><summary>용어</summary><table><tr><th>용어</th><th>뜻</th></tr><tr><td>요건</td><td>공고가 요구하는 하나의 묶음. 종류가 자격·제외·우대·서류·한도·평가 중 하나</td></tr><tr><td>조건</td><td>요건 안의 개별 기준(예: 업력 7년 이내)</td></tr><tr><td>묶음(그룹)</td><td>조건 여러 개를 AND/OR로 묶은 것. 3단까지</td></tr><tr><td>정의 확인 필요</td><td>법령이 뜻을 정하는 말. 뜻은 나중에 법령 원문으로 따로 확인</td></tr><tr><td>확인 필요(NEEDS_CHECK)</td><td>모르는 조건이 남아 판정을 확정할 수 없음. 정답 값입니다</td></tr></table></details>
+  <details><summary>이 도구가 하는 점검</summary>저장소의 <code>tools/goldset_check.py validate</code>와 같은 규칙(허용 값, 필수 항목, 기준일, 근거 문장이 원문에 있는지, 그룹 3단 제한, 판정의 조건 참조)을 브라우저에서 미리 확인합니다. 일치율과 규칙 평가는 이 도구가 아니라 점검 담당이 파이썬으로 합니다.</details></div>`;
+}
+
+/* ---------- 연습 예시 ---------- */
+function makePractice() {
+  const id = "PRACTICE:구미"; const n = ensureNotice(id);
+  n.title = "(연습) 구미시 스타트업 제작센터 — 작성 예시";
+  n.packet = "# PRACTICE:구미\n제목: (연습) 구미시 스타트업 제작센터\n\n## 지원대상(API)\n구미 소재 창업기업 중 업력 7년 이내 창업기업 (신청일 기준) / 구미(본사)로 이전 계획 기업 / 타 지역 창업기업의 경우 선정 후 60일 이내 구미 본사 이전 必\n";
+  const s1 = "구미 소재 창업기업 중 업력 7년 이내 창업기업 (신청일 기준) / 구미(본사)로 이전 계획 기업";
+  n.A = Object.assign(newA(id), { time_minutes: 5, read: ["(연습) 지원대상 문구"], requirements: [
+    { req_id: "R1", kind: "ELIGIBILITY", logic: "OR", logic_basis: "assumed", min_count: null, status: "parsed", open_ended: false, source_sentence: s1, source: "지원대상(API)", conditions: [
+      { cond_id: "G1", logic: "AND", children: [
+        { cond_id: "C1", attribute: "region", operator: "WITHIN", value: { label: "구미" }, ref_date_kind: "NONE", negate: false, concept: null, needs_definition: false, note: "본문 기준: 소재" },
+        { cond_id: "C2", attribute: "business_age", operator: "LTE", value: { value: 7, unit: "YEAR" }, ref_date_kind: "OTHER", negate: false, concept: null, needs_definition: false, note: "신청일 기준(공고일·마감일이 아님)" }] },
+      { cond_id: "C3", attribute: "other", operator: "EQ", value: { label: "구미(본사)로 이전 계획" }, ref_date_kind: "NONE", negate: false, concept: null, needs_definition: false, note: "판정에서 항상 UNKNOWN: 계획 여부는 프로필에 없음" }] },
+    { req_id: "R2", kind: "LIMIT", logic: "AND", logic_basis: "assumed", min_count: null, status: "parsed", open_ended: false, source_sentence: "타 지역 창업기업의 경우 선정 후 60일 이내 구미 본사 이전 必", source: "지원대상(API)", conditions: [] }],
+    ambiguities: ["'창업기업'의 법적 정의는 확인하지 않음(정의 확인 필요)", "R1의 '/' 구분이 OR인지 원문에 명시되지 않아 논리를 추측함"], source_conflicts: [] });
+  S.current = id; S.tab = "A"; save(); fillNoticeSel(); render();
+}
+
+/* ---------- 경로 기반 편집 ---------- */
+function getPath(root, path) { return path.split(".").reduce((o, k) => (o == null ? o : o[k]), root); }
+function setPath(root, path, val) { const ks = path.split("."); const last = ks.pop(); const o = ks.reduce((x, k) => x[k], root); o[last] = val; }
+const ROOT = () => ({ A: N().A, B: N().B });
+function conv(el) {
+  const t = el.dataset.t;
+  if (t === "bool") return el.checked;
+  if (t === "num") { return el.value === "" ? null : Number(el.value); }
+  if (t === "csv") return el.value.split(",").map(x => x.trim()).filter(Boolean);
+  return el.value;
+}
+function nextCondId(A, prefix) {
+  let max = 0; const walk = cs => (cs || []).forEach(c => { const m = String(c.cond_id).match(/^[CG](\d+)$/); if (m && String(c.cond_id)[0] === prefix) max = Math.max(max, Number(m[1])); walk(c.children); });
+  A.requirements.forEach(r => walk(r.conditions)); return prefix + (max + 1);
+}
+function defaultValue(c) {
+  const a = c.attribute, op = c.operator;
+  if (C.NEEDS_REF.includes(a)) { const u = UNIT_BY_ATTR[a]; return op === "BETWEEN" ? { min: null, max: null, min_inclusive: true, max_inclusive: false, unit: u } : { value: null, unit: u }; }
+  if (op === "IN") return { labels: [] };
+  return { label: "" };
+}
+function newCond(A, attr) { const c = { cond_id: nextCondId(A, "C"), attribute: attr || "business_age", operator: "LTE", value: null, ref_date_kind: "NONE", negate: false, concept: null, needs_definition: false, note: "" }; c.value = defaultValue(c); return c; }
+function fixOperator(c) { const a = c.attribute; const grp = C.NEEDS_REF.includes(a) ? "numeric" : (a === "region" || a === "zone") ? "place" : (["applicant_type", "company_size", "industry"].includes(a)) ? "kind" : (["certification", "registration", "prior_award"].includes(a)) ? "exists" : "other"; const ok = S.allOps ? C.OPS : OPS_BY_ATTR[grp]; if (!ok.includes(c.operator)) c.operator = ok[0]; c.value = defaultValue(c); if (C.NEEDS_REF.includes(a) && (c.ref_date_kind == null || c.ref_date_kind === "NONE")) c.ref_date_kind = "NONE"; if ((a === "company_size" || a === "applicant_type")) c.needs_definition = true; }
+function sectionBefore(text, sel) { const i = text.indexOf(sel); if (i < 0) return ""; const head = text.slice(0, i).match(/^##\s*(.+)$/gm); return head ? head[head.length - 1].replace(/^##\s*/, "").trim() : ""; }
+
+function onAction(el) {
+  const n = N(); const act = el.dataset.act; const R = n ? ROOT() : null; const p = el.dataset.p;
+  switch (act) {
+    case "addreq": { const A = n.A; const i = A.requirements.length + 1; A.requirements.push({ req_id: "R" + i, kind: "ELIGIBILITY", logic: "AND", logic_basis: "assumed", min_count: null, status: "parsed", open_ended: false, source_sentence: "", source: "", conditions: [] }); S.activeReq = A.requirements.length - 1; break; }
+    case "addtrack": n.A.tracks.push({ track_id: "T" + (n.A.tracks.length + 1), name: "" }); break;
+    case "addcond": getPath(R, p).push(newCond(n.A)); break;
+    case "addgrp": { getPath(R, p).push({ cond_id: nextCondId(n.A, "G"), logic: "OR", children: [newCond(n.A)], note: "" }); break; }
+    case "addstr": getPath(R, p).push(""); break;
+    case "del": { const ks = p.split("."); const idx = Number(ks.pop()); const arr = getPath(R, ks.join(".")); if (confirm("삭제할까요?")) arr.splice(idx, 1); break; }
+    case "activate": S.activeReq = Number(el.dataset.i); break;
+    case "delread": n.A.read.splice(Number(el.dataset.i), 1); break;
+    case "phrase": { const v = $("#ph-" + CSS.escape(p)).value; const r = C.parsePhrase(v); const c = getPath(R, p); if (!r) { alert('"7년 이내", "10인 미만"처럼 숫자와 이내·이하·미만·이상·초과가 들어 있어야 합니다.'); return; } c.operator = r.op; if (c.attribute === "revenue" && r.krw != null) { c.value.value = r.krw; } else c.value.value = r.num; break; }
+    case "goto": S.current = el.dataset.id; S.tab = "A"; fillNoticeSel(); break;
+    case "bsel": { const pid = el.dataset.pid; if (el.checked) { if (!n.bsel.includes(pid)) n.bsel.push(pid); if (!n.B.judgments.some(j => j.profile_id === pid)) n.B.judgments.push({ profile_id: pid, overall: null, conditions: [], reason_codes: [] }); } else { n.bsel = n.bsel.filter(x => x !== pid); n.B.judgments = n.B.judgments.filter(j => j.profile_id !== pid); } break; }
+    case "useassign": { const ids = (S.assignment[n.id] || []).filter(pid => S.profiles[pid]); n.bsel = ids.slice(); ids.forEach(pid => { if (!n.B.judgments.some(j => j.profile_id === pid)) n.B.judgments.push({ profile_id: pid, overall: null, conditions: [], reason_codes: [] }); }); n.B.judgments = n.B.judgments.filter(j => ids.includes(j.profile_id)); break; }
+    case "reason": { const j = n.B.judgments.find(x => x.profile_id === el.dataset.pid); const rc = el.dataset.rc; j.reason_codes = (j.reason_codes || []).filter(x => x !== rc); if (el.checked) j.reason_codes.push(rc); break; }
+    case "cres": case "cwhy": { const j = n.B.judgments.find(x => x.profile_id === el.dataset.pid); const ref = el.dataset.ref; let c = j.conditions.find(x => x.cond_ref === ref); if (!c) { c = { cond_ref: ref, result: null, why: "" }; j.conditions.push(c); } if (act === "cres") c.result = el.value || null; else c.why = el.value; if (!c.result && !c.why) j.conditions = j.conditions.filter(x => x !== c); break; }
+    case "check": n.check[el.dataset.i] = el.checked; break;
+    case "attr": { setPath(R, p, el.value); const c = getPath(R, p.replace(/\.attribute$/, "")); fixOperator(c); break; }
+    case "op": { setPath(R, p, el.value); const c = getPath(R, p.replace(/\.operator$/, "")); c.value = defaultValue(c); break; }
+    case "money": { const base = p.replace(/\._(amt|mul)$/, ""); setPath(R, p, conv(el)); const c = getPath(R, base); c.value = c.value || {}; c.value.value = c._amt != null ? Math.round(Number(c._amt) * Number(c._mul || 1)) : null; c.value.unit = "KRW"; break; }
+    case "relayout": setPath(R, p, conv(el)); break;
+    default: return false;
+  }
+  return true;
+}
+
+/* ---------- 렌더 ---------- */
+function render() {
+  renderTabs(); fillNoticeSel();
+  const ed = $("#editor"); const scroll = window.scrollY;
+  ed.innerHTML = S.tab === "start" ? renderStart() : S.tab === "A" ? renderA() : S.tab === "B" ? renderB() : S.tab === "export" ? renderExport() : renderHelp();
+  renderPacket(); updateTimer(); window.scrollTo(0, scroll); wireStatic();
+}
+function wireStatic() {
+  const d = $("#drop"); if (d) { d.ondragover = e => { e.preventDefault(); d.classList.add("hot"); }; d.ondragleave = () => d.classList.remove("hot"); d.ondrop = async e => { e.preventDefault(); d.classList.remove("hot"); const items = e.dataTransfer.items; const files = []; const walk = async entry => { if (entry.isFile) { await new Promise(res => entry.file(f => { Object.defineProperty(f, "webkitRelativePath", { value: entry.fullPath.slice(1) }); files.push(f); res(); })); } else if (entry.isDirectory) { const rd = entry.createReader(); let batch; do { batch = await new Promise(r => rd.readEntries(r)); for (const x of batch) await walk(x); } while (batch.length); } }; if (items && items.length && items[0].webkitGetAsEntry) { for (const it of items) { const en = it.webkitGetAsEntry(); if (en) await walk(en); } } else files.push(...e.dataTransfer.files); ingest(files); }; }
+  const od = $("#openDir"); if (od) od.onclick = () => $("#fileDir").click(); const of = $("#openFiles"); if (of) of.onclick = () => $("#fileAny").click();
+  const pb = $("#practiceBtn"); if (pb) pb.onclick = makePractice;
+  const z = $("#zipBtn"); if (z) z.onclick = () => { if (!S.reviewer) { alert("위쪽에 검수자 이름을 먼저 적어 주세요."); return; } zipAll(); };
+  const oa = $("#oneA"); if (oa) oa.onclick = () => { const n = N(); if (n) download(fileId(n.id) + ".label_A.json", JSON.stringify(exportObj(n, "A"), null, 2)); };
+  const ob = $("#oneB"); if (ob) ob.onclick = () => { const n = N(); if (n) download(fileId(n.id) + ".label_B.json", JSON.stringify(exportObj(n, "B"), null, 2)); };
+  const m = $("#mins"); if (m) m.onchange = () => { const n = N(); n.A.time_minutes = m.value === "" ? null : Number(m.value); n.B.time_minutes = n.A.time_minutes; saveSoon(); };
+  const rn = $("#readNew"); if (rn) rn.onkeydown = e => { if (e.key === "Enter" && rn.value.trim()) { N().A.read.push(rn.value.trim()); saveSoon(); render(); } };
+}
+function updateTimer() {
+  const n = N(); const b = $("#timerBtn"); if (!n) { $("#timerOut").textContent = ""; return; }
+  const secs = n.secs + (S.timerOn ? Math.round((Date.now() - S.timerAt) / 1000) : 0);
+  b.textContent = S.timerOn ? "■ 시간 멈추기" : "▶ 시간 재기"; $("#timerOut").textContent = `${Math.floor(secs / 60)}분 ${secs % 60}초`;
+}
+
+/* ---------- 이벤트 ---------- */
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-tab],[data-act]"); if (!t) return;
+  if (t.dataset.tab) { S.tab = t.dataset.tab; render(); return; }
+  if (t.tagName === "INPUT" && t.type === "checkbox") return; if (t.tagName === "SELECT" || t.tagName === "INPUT" && t.type !== "button") return;
+  if (onAction(t)) { saveSoon(); render(); }
+});
+document.addEventListener("change", e => {
+  const el = e.target; if (el.id === "fileAny" || el.id === "fileDir") { ingest([...el.files]); el.value = ""; return; }
+  if (el.id === "noticeSel") { stopTimer(); S.current = el.value; S.activeReq = 0; render(); save(); return; }
+  if (el.id === "reviewer") { S.reviewer = el.value.trim(); localStorage.setItem("labeler:last", S.reviewer); restore(); Object.values(S.notices).forEach(n => { n.A.reviewer = S.reviewer; n.B.reviewer = S.reviewer; }); save(); render(); return; }
+  if (!el.dataset) return;
+  if (el.dataset.act) { if (onAction(el)) { saveSoon(); render(); } return; }
+  if (el.dataset.p) { const n = N(); if (!n) return; setPath(ROOT(), el.dataset.p, conv(el)); saveSoon(); if (el.tagName === "SELECT" || el.type === "checkbox") render(); else refreshChecks(); }
+});
+document.addEventListener("input", e => {
+  const el = e.target;
+  if (el.id === "find") { S.find = el.value; renderPacket(); return; }
+  if (el.dataset && el.dataset.p && el.tagName !== "SELECT" && el.type !== "checkbox") { const n = N(); if (!n) return; setPath(ROOT(), el.dataset.p, conv(el)); saveSoon(); }
+});
+function refreshChecks() { if (S.tab === "A" || S.tab === "B") render(); }
+
+/* ---------- 원문에서 드래그 ---------- */
+$("#packet").addEventListener("mouseup", () => {
+  const s = window.getSelection(); const txt = s ? s.toString().trim() : ""; const tool = $("#seltool");
+  if (!txt || S.tab !== "A") { tool.style.display = "none"; return; }
+  const r = s.getRangeAt(0).getBoundingClientRect(); tool.style.display = "flex"; tool.style.left = Math.max(8, r.left) + "px"; tool.style.top = Math.max(8, r.top - 44) + "px"; tool.dataset.txt = txt;
+});
+document.addEventListener("mousedown", e => { if (!e.target.closest("#seltool") && !e.target.closest("#packet")) $("#seltool").style.display = "none"; });
+function useSel(extra) {
+  const n = N(); const tool = $("#seltool"); const txt = tool.dataset.txt; if (!n || !txt) return;
+  if (!n.A.requirements.length) { alert("먼저 [+ 요건 카드 추가]를 눌러 카드를 만들어 주세요."); return; }
+  const r = n.A.requirements[Math.min(S.activeReq, n.A.requirements.length - 1)];
+  if (extra) { r.source_extra = r.source_extra || []; r.source_extra.push(txt); } else { r.source_sentence = txt; const sec = sectionBefore(n.packet || "", txt); if (sec && !r.source) r.source = sec; }
+  tool.style.display = "none"; window.getSelection().removeAllRanges(); saveSoon(); render();
+}
+$("#useBasis").onclick = () => useSel(false); $("#useExtra").onclick = () => useSel(true);
+
+/* ---------- 시간 재기 ---------- */
+function stopTimer() { const n = N(); if (S.timerOn && n) { n.secs += Math.round((Date.now() - S.timerAt) / 1000); } S.timerOn = false; save(); }
+$("#timerBtn").onclick = () => { const n = N(); if (!n) return; if (S.timerOn) stopTimer(); else { S.timerOn = true; S.timerAt = Date.now(); } updateTimer(); };
+setInterval(updateTimer, 1000);
+
+/* ---------- 시작 ---------- */
+S.reviewer = (localStorage.getItem("labeler:last") || ""); $("#reviewer").value = S.reviewer;
+restore(); fillNoticeSel(); render();
+window.LabelerApp = { S, ingest, onAction, render, exportObj, makePractice, zipAll, setReviewer: v => { S.reviewer = v; $("#reviewer").value = v; } };
+})();
+</script>
+</body>
+</html>
