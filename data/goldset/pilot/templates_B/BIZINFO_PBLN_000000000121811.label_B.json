@@ -1,0 +1,20 @@
+{
+  "notice_id": "BIZINFO:PBLN_000000000121811",
+  "reviewer": null,
+  "time_minutes": null,
+  "judgments": [
+    {
+      "profile_id": null,
+      "overall": null,
+      "conditions": [
+        {
+          "cond_ref": null,
+          "result": null,
+          "why": ""
+        }
+      ],
+      "reason_codes": []
+    }
+  ],
+  "_instructions": "라벨 A를 열지 않고 공고 원문으로 판정한다. judgments에 배정된 프로필 5개를 쓴다. cond_ref는 자신이 쓴 라벨 A의 cond_id다(라벨 A 작성 뒤 채운다)."
+}
