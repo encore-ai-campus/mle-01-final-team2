@@ -1,10 +1,14 @@
 {
  "built": "2026-11-24",
  "nodes": {
-  "Concept": 321,
+  "Concept": 348,
   "Notice": 5116,
   "Requirement": 5900,
   "Condition": 17366,
+  "ExternalLaw": 26,
+  "LawArticle": 1286,
+  "LawAppendix": 40,
+  "Definition": 6,
   "Organization": 1399,
   "SupportCategory": 19
  },
@@ -17,7 +21,11 @@
   "IN_SUPPORT_CATEGORY": 5116,
   "HAS_REQUIREMENT": 5900,
   "HAS_CONDITION": 17366,
-  "ABOUT": 4786
+  "ABOUT": 19766,
+  "IS_A": 2,
+  "PART_OF": 1326,
+  "CITES_LAW": 6,
+  "DEFINED_BY": 4
  },
  "skipped": {
   "bizinfo_no_region_condition": 330

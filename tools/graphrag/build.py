@@ -20,6 +20,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from graphrag import concepts_laws  # noqa: E402
 from graphrag.condition_schema import PRE_FOUNDER, split_pre_founder, unify  # noqa: E402
 from graphrag.engine import Engine  # noqa: E402
 from graphrag.evaluator import BOUNDARY_YEARS, NOT_ELIGIBLE, Profile, evaluate_notice  # noqa: E402
@@ -37,6 +38,7 @@ def export(e: Engine) -> dict:
         key = name.strip()
         return orgs.setdefault(key, f"ORG:{hashlib.sha1(key.encode()).hexdigest()[:12]}")
 
+    c_nodes, c_edges, by_label = concepts_laws.concepts()
     for rid, n in e.rg.nodes.items():
         nodes.append({"label": "Concept", "concept_id": rid, "scheme": "REGION", **{k: v for k, v in n.items() if k != "region_id"}})
         for p, rel in e.rg.parents.get(rid, []):
@@ -87,6 +89,20 @@ def export(e: Engine) -> dict:
                     edges.append({"type": "HAS_CONDITION", "from": rq, "to": c["cond_id"], "evidence": c["evidence"], "source": c["source_field"]})
                     if attr == "region":
                         edges.append({"type": "ABOUT", "from": c["cond_id"], "to": val["concept_id"]})
+                    if attr == "applicant_type":  # K-Startup 신청 대상 옵션 -> 신청자 유형 개념. 개념이 없는 값은 about_unmapped에 남긴다
+                        mapped = [(lab, by_label[lab]) for lab in val["labels"] if lab in by_label]
+                        for lab, cid in mapped:
+                            edges.append({"type": "ABOUT", "from": c["cond_id"], "to": cid, "option": lab})
+                        missing = [lab for lab in val["labels"] if lab not in by_label]
+                        node["about_pending"] = bool(missing)
+                        if missing:
+                            node["about_unmapped"] = missing
+    l_nodes, l_edges, article_index, pending = concepts_laws.laws()
+    d_nodes, d_edges, def_notes = concepts_laws.definitions(by_label, article_index)
+    nodes += c_nodes + l_nodes + d_nodes
+    edges += c_edges + l_edges + d_edges
+    # 공고가 법령·조문을 인용한 연결. 요건 노드가 본문에서 만들어진 뒤에 Requirement-[:CITES]->조문으로 잇는다(지금은 보류 목록만 남긴다)
+    (OUT / "law_citations_pending.jsonl").write_text("\n".join(json.dumps(x, ensure_ascii=False) for x in pending) + "\n", encoding="utf-8")
     for k, v in orgs.items():
         nodes.append({"label": "Organization", "org_id": v, "name": k})
     for k, v in cats.items():
