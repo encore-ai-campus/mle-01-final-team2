@@ -55,7 +55,7 @@ K-Startup과 기업마당의 형식 차이를 출처 중립 스키마로 맞추�
 - BIZINFO 원본 API `refrncNm`은 기존 파서가 `contact_text`로 옮긴 값이고, K-Startup 원본 API의 `prch_cnpl_no`와 `biz_prch_dprt_nm`은 정제 필드 `contact_phone_raw`와 `operating_dept`로 연결된다.
 - 이번 입력의 분류 결과: 기관 연락처 보존 기업마당 2,198건, K-Startup 3,695건. 개인 연락처로 값을 가린 것은 1건, 검수 대기는 141건(기업마당 22, K-Startup 119)이다. 세부 수치는 보고서 `contact_processing_by_source`에 있다.
 - 분류는 `category.source_major/source_medium`에 원출처 값을 그대로 둔다. 통합 분류 체계는 확정하지 않는다.
-- `region.raw`, concept ID, basis, scope/tag hint를 분리한다. 소관기관 소재지를 신청 대상 지역으로 승격하지 않는다.
+- `region.raw`, concept ID, source(지역 값을 가져온 원천 필드), scope/tag hint를 분리한다. 이전 이름 `region.basis`는 설계서의 "지역 판단 기준(소재·본사·거주)"과 뜻이 달라 `region.source`로 바꿨다. 소관기관 소재지를 신청 대상 지역으로 승격하지 않는다.
 
 ### structured 및 첨부 메타데이터
 
@@ -88,3 +88,20 @@ K-Startup과 기업마당의 형식 차이를 출처 중립 스키마로 맞추�
 신규 정규화 출력은 기존 GraphRAG·검색·Neo4j·Supabase 코드에 아직 연결하지 않았다. 소비자별 필드 계약을 비교하는 별도 마이그레이션 작업이 필요하다. 입력 cleaned 파일에는 기존 개인정보 필드가 있으므로 신규 출력의 개인정보 기준을 입력 정책에 소급 적용한 것은 아니다. URL의 허용 호스트와 외부 신청 사이트 정책, 연락처 문맥 이름 탐지 범위, source별 상태값을 추가 데이터 출처를 붙이기 전에 검토해야 한다.
 
 논리 조건 스키마 단계는 이 공통 데이터 스키마 및 미검수 데이터 사용 정책을 바탕으로 별도 진행한다.
+
+## 적재 전 정리 (2026-11-25)
+
+Neo4j 적재 전에 정해야 ID와 간선을 다시 만들지 않는 항목을 코드와 산출물에 반영했다(설계서 보완안 O-01·02·03·04·05·07·11).
+
+| 항목 | 변경 | 결과 |
+|---|---|---|
+| 지역 코드표 | `tools/graphrag/regions.py`가 `data/사전/지역_코드표.csv`(318행)를 읽는다. 파일의 ID `KR:REGION:{코드}`는 `REGION:{코드}`로 바꿔 읽고, 시도의 상위는 전국이다. 폐지 33개는 이름 조회에 쓰지 않고 후계 후보(`successors`)로만 둔다 | 누락 시군구 12개(강북·광진·금천·연수·계양·부평·미추홀·제물포·영종·서해·증평·태안)를 찾는다. 값 정규화 층의 지역 조건이 2,451건에서 2,493건으로 늘었다(본문에 있었지만 빠지던 42건) |
+| 행정 계층과 묶음 | 행정 포함은 `WITHIN`(N:1), 묶음·권역 소속은 `MEMBER_OF`로 나눴다. 분할은 `SUCCEEDED_BY`(미검수 후보 35건) | 행정 `WITHIN` 상위가 둘인 노드 32개 -> 0 |
+| `region_basis` | 정리층·값 정규화 층·v1 정규화에서 `region_source`(v1은 `region.source`)로 이름만 바꿨다. 값은 같다(정리층 5,116행은 키 이름 외 바이트가 같다) | 설계서의 `region_basis`는 판단 기준만 뜻한다 |
+| `operator=NONE_OF` | 값 정규화 층의 제외 문장 후보(`{"text_only": true}`)의 연산자를 `TEXT_ONLY`로 바꿨다 | 3,347건. 요건 논리 `NONE_OF`와 이름이 겹치지 않는다. 원자 조건으로 다시 만드는 일은 검수 단계에서 한다 |
+| 발급형 지위 | 사회적기업·여성기업·장애인기업은 `company_size IS_A`가 아니라 `certification EXISTS`로 둔다 | 232건 이동(132·79·21) |
+| 그래프 Condition | 노드에 `operator`와 통일한 값 `{value, unit}`(업력 `LT`, 연령 `BETWEEN`, 지역 `WITHIN`, 유형 `IN`)을 넣고 옛 값은 `legacy_value`로 남긴다. 업력 옵션을 전부 고른 1,354건은 조건으로 쓰지 않고 `operator=null`(UNKNOWN)로 둔다. 예비창업자를 허용하는 업력은 `OR` 요건 1,114개로 분리했다 | 기준일은 구조화 필드에 없어 `ref_date_kind=UNSPECIFIED` |
+
+그래프 산출물(`data/graph/`)은 지금 정리층(5,116건) 기준으로 다시 만들었다. 노드 Concept 321(폐지 33 포함), Requirement 5,900, Condition 17,366이다. 평가기는 옛 옵션 목록 값을 그대로 읽으므로 바꾸지 않았고, 두 형식의 숫자가 같은지는 `tools/test_graphrag.py`가 확인한다.
+
+**하지 않은 것.** 조건·요건 층의 정의(`Definition`)와 법령 노드, `LawArticle` 분리, `ABOUT` 간선(신청자 유형·인증 개념이 아직 없어 `about_pending`으로 표시), 값 정규화 후보의 검수는 이 정리에 포함하지 않는다.

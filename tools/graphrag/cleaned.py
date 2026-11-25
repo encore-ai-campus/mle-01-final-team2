@@ -32,7 +32,7 @@ def load_cleaned(rg: RegionGraph | None = None) -> dict:
         conds = []
         if r["region_concept_ids"]:
             conds.append({"cond_id": f"{nid}#C-region", "attribute": "region", "strength": "soft", "value": {"concept_id": r["region_concept_ids"][0]},
-                          "source_field": r["region_basis"], "evidence": f"{r['region_basis']}={r.get('region_raw') or r['org_raw']}"})
+                          "source_field": r["region_source"], "evidence": f"{r['region_source']}={r.get('region_raw') or r['org_raw']}"})
         elif r["source_system"] == "KSTARTUP":
             skipped["kstartup_region_unmapped"] += 1
         else:

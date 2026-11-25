@@ -45,7 +45,7 @@ class SupportDataNormalizationTests(unittest.TestCase):
             "apply_methods": {"aply_mthd_onli_rcpt_istc": "온라인 신청 https://apply.example.org/"},
             "org_raw": "기관", "org_names": ["기관"], "org_role_titles": [], "org_flags": [],
             "category_major": "기술", "category_medium": None, "region_raw": "서울",
-            "region_concept_ids": ["R1"], "region_basis": "source_text", "region_scope_hint": None,
+            "region_concept_ids": ["R1"], "region_source": "source_text", "region_scope_hint": None,
             "region_tags_hint": [], "structured": {"business_age_raw": "3년 이내", "founder_age_raw": None,
                 "applicant_target_raw": "창업기업"}, "eligibility_text": "신청 대상 안내 담당자 홍길동 010-1234-5678 test@example.com",
             "exclusion_text": None, "preferred_text": None, "body_text": "본문", "support_text": None,

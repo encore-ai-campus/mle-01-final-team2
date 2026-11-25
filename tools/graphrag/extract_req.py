@@ -31,6 +31,7 @@ R_AGE = re.compile(r"만\s*(\d{1,2})\s*세\s*(이하|이상|미만|초과)")
 R_LAW = re.compile(r"[「｢『]([^」｣』\n]{2,40})[」｣』]\s*((?:제\s*\d+\s*조(?:의\s*\d+)?)(?:\s*제\s*\d+\s*항)?)?")
 R_EXCL = re.compile(r"제외|신청\s*불가|지원\s*불가|참여\s*제한|결격|불가능|제한\s*대상")
 R_CERT = re.compile(r"벤처기업|이노비즈|메인비즈|확인서|인증서?|등록증|소상공인\s*확인")
+CERTIFIED_STATUS = {"사회적기업", "여성기업", "장애인기업"}  # 설계서 4.3 분류 원칙(O-07)
 R_SIZE = re.compile(r"(중소기업|소상공인|중견기업|소기업|중기업|사회적기업|여성기업|장애인기업)")
 R_LOC_KW = re.compile(r"소재|관내|거주|본사|주소|사업장|소재지|이전")
 R_SENT_END = "에이가의은는을를로과와도내권시도구군,·/()[]\"'“”‘’ \n.:;"
@@ -112,13 +113,16 @@ def extract(text: str, notice_id: str, source: str, origin: str, section: str, k
             add("law_cite", "law_reference", "CITES", {"law": m.group(1).strip(), "article": (m.group(2) or "").replace(" ", "") or None}, None, False, evid(line, m), pos)
         if kind == "EXCLUSION" or (kind == "ELIGIBILITY" and R_EXCL.search(line)):
             if R_EXCL.search(line):
-                add("exclusion_text", "exclusion", "NONE_OF", {"text_only": True}, None, False, evid(line, R_EXCL.search(line)), pos)
+                add("exclusion_text", "exclusion", "TEXT_ONLY", {"text_only": True}, None, False, evid(line, R_EXCL.search(line)), pos)
         if R_CERT.search(line):
             m = R_CERT.search(line)
             add("certification", "certification", "EXISTS", {"label": m.group(0)}, None, False, evid(line, m), pos)
         m = R_SIZE.search(line)
         if m and kind == "ELIGIBILITY":
-            add("company_size", "company_size", "IS_A", {"label": m.group(1)}, None, False, evid(line, m), pos)
+            if m.group(1) in CERTIFIED_STATUS:  # 인증·확인서를 발급받아야 성립하는 지위는 규모가 아니라 certification(CERTIFICATION)이다
+                add("certification", "certification", "EXISTS", {"label": m.group(1)}, None, False, evid(line, m), pos)
+            else:
+                add("company_size", "company_size", "IS_A", {"label": m.group(1)}, None, False, evid(line, m), pos)
     return res
 
 

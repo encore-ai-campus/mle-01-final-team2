@@ -501,7 +501,7 @@ def normalize_notice(row: dict[str, Any], issues: list[dict[str, Any]]) -> tuple
             "operating_department": row.get("operating_dept"), "organization_kind": row.get("org_kind"),
         },
         "category": {"source_major": row.get("category_major"), "source_medium": row.get("category_medium")},
-        "region": {"raw": row.get("region_raw"), "concept_ids": row.get("region_concept_ids"), "basis": row.get("region_basis"),
+        "region": {"raw": row.get("region_raw"), "concept_ids": row.get("region_concept_ids"), "source": row.get("region_source"),
                    "scope_hint": row.get("region_scope_hint"), "tags_hint": row.get("region_tags_hint")},
         "structured": structured, "condition_texts": condition_texts, "content": content,
         "attachments": normalize_attachments(row, issues),

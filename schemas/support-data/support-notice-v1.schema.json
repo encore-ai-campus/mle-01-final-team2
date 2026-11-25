@@ -296,7 +296,7 @@
       "required": [
         "raw",
         "concept_ids",
-        "basis",
+        "source",
         "scope_hint",
         "tags_hint"
       ],
@@ -307,7 +307,7 @@
         "concept_ids": {
           "$ref": "#/$defs/nullableStringArray"
         },
-        "basis": {
+        "source": {
           "$ref": "#/$defs/nullableString"
         },
         "scope_hint": {

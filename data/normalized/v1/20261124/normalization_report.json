@@ -1,13 +1,13 @@
 {
   "normalizer_version": "1.0",
-  "run_at": "2026-11-25T14:43:12+09:00",
+  "run_at": "2026-11-25T15:37:08+09:00",
   "input_snapshot": "20261124",
   "input_paths": {
     "notices": "data/cleaned/20261124/notices.jsonl",
     "chunks": "data/cleaned/20261124/chunks.jsonl"
   },
   "input_sha256": {
-    "notices": "378315c501e6ee5fed8b23dae900a19a5d7e344e22483681b31e3218e10cc48c",
+    "notices": "03e33cbe827d7bbfcea1f0de28ef57ea9fe78d261735b3eb55910e3797e66e53",
     "chunks": "be20f101ddf14869478ebde7322fbc8e3edf4c7b9dfec44c98794707b3622fd2"
   },
   "input_counts": {
