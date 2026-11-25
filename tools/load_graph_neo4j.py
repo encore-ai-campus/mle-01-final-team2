@@ -4,7 +4,8 @@
 입력은 `python tools/graphrag/build.py export`가 만든 파일이다. 기존 `tools/load_neo4j.py`는 IBK 규정용이라 이 프로젝트와 무관하다.
 
 단계(--stage)
-  meta          메타·개념 층: Notice, Organization, SupportCategory, Concept와 ANNOUNCED_BY, EXECUTED_BY, IN_SUPPORT_CATEGORY, WITHIN, MEMBER_OF, SUCCEEDED_BY
+  meta          메타·개념 층: Notice, Organization, SupportCategory, Concept(지역·신청자 유형·인증)와 ANNOUNCED_BY, EXECUTED_BY, IN_SUPPORT_CATEGORY, WITHIN, MEMBER_OF, SUCCEEDED_BY, IS_A
+  laws          법령 층: ExternalLaw, LawArticle, LawAppendix, Definition과 PART_OF, DEFINED_BY, CITES_LAW (meta를 먼저 적재해야 DEFINED_BY가 이어진다)
   requirements  요건 층: Requirement, Condition과 HAS_REQUIREMENT, HAS_CONDITION, ABOUT (K-Startup 구조화 필드로 만든 `structured_only`만 있다)
   all           두 단계 모두
 
@@ -41,14 +42,17 @@ KEY = {"Notice": "notice_id", "Organization": "org_id", "SupportCategory": "cate
        "LawArticle": "article_id", "LawAppendix": "appendix_id", "Track": "track_id", "Program": "program_id", "Attachment": "attachment_id"}
 STAGES = {
     "meta": {"labels": ["Notice", "Organization", "SupportCategory", "Concept"],
-             "edges": ["ANNOUNCED_BY", "EXECUTED_BY", "IN_SUPPORT_CATEGORY", "WITHIN", "MEMBER_OF", "SUCCEEDED_BY"]},
+             "edges": ["ANNOUNCED_BY", "EXECUTED_BY", "IN_SUPPORT_CATEGORY", "WITHIN", "MEMBER_OF", "SUCCEEDED_BY", "IS_A"]},
+    "laws": {"labels": ["ExternalLaw", "LawArticle", "LawAppendix", "Definition"], "edges": ["PART_OF", "DEFINED_BY", "CITES_LAW"]},
     "requirements": {"labels": ["Requirement", "Condition"], "edges": ["HAS_REQUIREMENT", "HAS_CONDITION", "ABOUT"]},
 }
 # 관계 시그니처(설계서 5.2): 관계 -> (시작 레이블, 끝 레이블)
-SIGNATURE = {"ANNOUNCED_BY": ("Notice", "Organization"), "EXECUTED_BY": ("Notice", "Organization"),
-             "IN_SUPPORT_CATEGORY": ("Notice", "SupportCategory"), "WITHIN": ("Concept", "Concept"), "MEMBER_OF": ("Concept", "Concept"),
-             "SUCCEEDED_BY": ("Concept", "Concept"), "HAS_REQUIREMENT": ("Notice", "Requirement"),
-             "HAS_CONDITION": ("Requirement", "Condition"), "ABOUT": ("Condition", "Concept")}
+SIGNATURE = {"ANNOUNCED_BY": [("Notice", "Organization")], "EXECUTED_BY": [("Notice", "Organization")],
+             "IN_SUPPORT_CATEGORY": [("Notice", "SupportCategory")], "WITHIN": [("Concept", "Concept")], "MEMBER_OF": [("Concept", "Concept")],
+             "SUCCEEDED_BY": [("Concept", "Concept")], "IS_A": [("Concept", "Concept")], "HAS_REQUIREMENT": [("Notice", "Requirement")],
+             "HAS_CONDITION": [("Requirement", "Condition")], "ABOUT": [("Condition", "Concept")],
+             "PART_OF": [("LawArticle", "ExternalLaw"), ("LawAppendix", "ExternalLaw")], "DEFINED_BY": [("Concept", "Definition")],
+             "CITES_LAW": [("Definition", "LawArticle"), ("Definition", "LawAppendix")]}
 IDENT = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 
 
@@ -101,8 +105,8 @@ def validate(nodes: list[dict], edges: list[dict]) -> list[str]:
         a, b = by_id.get(e["from"]), by_id.get(e["to"])
         if a is None or b is None:
             errors.append(f"끝점이 없는 간선 {e['type']}: {e['from']} -> {e['to']}")
-        elif (a, b) != sig:
-            errors.append(f"시그니처 위반 {e['type']}: {a} -> {b} (허용 {sig[0]} -> {sig[1]})")
+        elif (a, b) not in sig:
+            errors.append(f"시그니처 위반 {e['type']}: {a} -> {b} (허용 {', '.join(f'{x} -> {y}' for x, y in sig)})")
     return errors[:50]
 
 
@@ -160,7 +164,7 @@ def constraints_for(labels: set[str]) -> list[str]:
 def plan(nodes: list[dict], edges: list[dict], stage: str) -> dict:
     sel_nodes, sel_edges = select(nodes, edges, stage)
     # 선택한 단계의 관계가 가리키는 노드가 선택 밖이면(예: requirements 단계의 ABOUT -> Concept) 이미 적재된 노드를 가리킨다고 본다.
-    ctx_nodes = nodes if stage != "meta" else sel_nodes
+    ctx_nodes = nodes  # 관계의 끝점 레이블을 찾는 데는 전체 노드를 쓴다(앞 단계에서 이미 적재된 노드를 가리킬 수 있다)
     n_stmts = node_statements(sel_nodes)
     e_stmts = edge_statements(ctx_nodes, sel_edges)
     labels = {n["label"] for n in sel_nodes}
@@ -242,7 +246,7 @@ def apply(driver, db, pl: dict) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--stage", choices=["meta", "requirements", "all"], default="meta")
+    ap.add_argument("--stage", choices=["meta", "laws", "requirements", "all"], default="meta")
     ap.add_argument("--graph-dir", type=Path, default=GRAPH)
     ap.add_argument("--check-db", action="store_true", help="DB를 읽기 전용으로 조회한다(dry-run에서도 사용 가능)")
     ap.add_argument("--apply", action="store_true", help="실제로 적재한다")

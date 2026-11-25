@@ -66,6 +66,18 @@ class TestLoader(unittest.TestCase):
         self.assertIn("MATCH (a:Condition {cond_id: row.from}) MATCH (b:Concept {concept_id: row.to})", about)
         self.assertIn("MERGE (a)-[r:ABOUT]->(b)", about)
 
+    def test_law_stage_edges_accept_both_article_and_appendix(self):
+        nodes = [{"label": "ExternalLaw", "law_id": "LAW:1", "name": "법"}, {"label": "LawArticle", "article_id": "LAW:1:A1", "law_id": "LAW:1"},
+                 {"label": "LawAppendix", "appendix_id": "LAW:1:T1", "law_id": "LAW:1"}, {"label": "Definition", "def_id": "DEF:x", "term": "x"},
+                 {"label": "Concept", "concept_id": "APPLICANT_TYPE:x", "scheme": "APPLICANT_TYPE", "name": "x"}]
+        edges = [{"type": "PART_OF", "from": "LAW:1:A1", "to": "LAW:1"}, {"type": "PART_OF", "from": "LAW:1:T1", "to": "LAW:1"},
+                 {"type": "CITES_LAW", "from": "DEF:x", "to": "LAW:1:A1"}, {"type": "DEFINED_BY", "from": "APPLICANT_TYPE:x", "to": "DEF:x"}]
+        self.assertEqual(L.validate(nodes, edges), [])
+        pl = L.plan(nodes, edges, "laws")
+        self.assertEqual(pl["counts"]["edge_types"], {"PART_OF": 2, "CITES_LAW": 1, "DEFINED_BY": 1})
+        self.assertTrue(any("MATCH (a:Concept {concept_id: row.from}) MATCH (b:Definition {def_id: row.to})" in c for _, c, _ in pl["edge_statements"]))
+        self.assertTrue(any(e for e in L.validate(nodes, [{"type": "PART_OF", "from": "DEF:x", "to": "LAW:1"}]) if "시그니처" in e))
+
     def test_constraints_only_for_stage_labels(self):
         meta = L.constraints_for({"Notice", "Concept"})
         self.assertEqual(len(meta), 2)

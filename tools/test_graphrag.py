@@ -100,6 +100,46 @@ class RegionTableTests(unittest.TestCase):
         self.assertEqual(len(RG.find_by_name("중구", "SIGUNGU")), len([r for r in RG.nodes.values() if r["name"] == "중구" and r["level"] == "SIGUNGU"]))
 
 
+class ConceptsAndLawsTests(unittest.TestCase):
+    """신청자 유형·인증 개념, 법령 노드, 정의 노드(설계서 4.1·4.2·4.3)."""
+
+    @classmethod
+    def setUpClass(cls):
+        from graphrag import concepts_laws as C
+        cls.C = C
+        cls.cnodes, cls.cedges, cls.by_label = C.concepts()
+        cls.lnodes, cls.ledges, cls.index, cls.pending = C.laws()
+        cls.dnodes, cls.dedges, cls.notes = C.definitions(cls.by_label, cls.index)
+
+    def test_certified_statuses_are_certification_not_applicant_type(self):
+        for name in ("벤처기업", "사회적기업", "여성기업", "장애인기업", "이노비즈", "메인비즈", "소상공인확인"):
+            self.assertEqual(self.by_label[name], f"CERTIFICATION:{name}")
+        self.assertEqual(self.by_label["소상공인"], "APPLICANT_TYPE:소상공인")  # 규모 개념은 신청자 유형에 남는다
+        self.assertNotIn("APPLICANT_TYPE:벤처기업", {n["concept_id"] for n in self.cnodes})
+
+    def test_only_law_grounded_is_a_edges(self):
+        self.assertEqual({(e["from"], e["to"]) for e in self.cedges},
+                         {("APPLICANT_TYPE:소기업", "APPLICANT_TYPE:중소기업"), ("APPLICANT_TYPE:중기업", "APPLICANT_TYPE:중소기업")})
+
+    def test_law_counts_match_collected_data(self):
+        from collections import Counter
+        c = Counter(n["label"] for n in self.lnodes)
+        self.assertEqual((c["ExternalLaw"], c["LawArticle"], c["LawAppendix"]), (26, 1286, 40))
+        self.assertEqual(len(self.ledges), 1326)  # 조문·별표마다 PART_OF 하나
+        ids = [n.get("article_id") or n.get("appendix_id") or n["law_id"] for n in self.lnodes]
+        self.assertEqual(len(ids), len(set(ids)))  # 같은 번호의 별표가 있어도 ID는 유일
+
+    def test_definitions_link_only_what_exists(self):
+        self.assertEqual(len(self.dnodes), 6)
+        self.assertEqual(sum(e["type"] == "CITES_LAW" for e in self.dedges), 6)
+        self.assertEqual(sum(e["type"] == "DEFINED_BY" for e in self.dedges), 4)  # 청년창업기업·중장년창업기업은 같은 이름의 개념이 없다
+        self.assertEqual(len(self.notes), 2)
+        self.assertTrue(all("rule_json" not in n for n in self.dnodes))  # 원문 확인 전에는 판정 기준을 만들지 않는다
+
+    def test_citation_backlog_keeps_every_citing_notice(self):
+        self.assertEqual(len(self.pending), 543)
+
+
 class ConditionSchemaTests(unittest.TestCase):
     """조건 값 스키마 통일(설계서 4.3). 옛 옵션 목록 값과 새 형식의 숫자가 같아야 한다."""
 
