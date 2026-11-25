@@ -114,6 +114,59 @@ class TestRules(unittest.TestCase):
         self.assertEqual(judge(a, dict(P1, company_size="소상공인")).conditions["C1"], "UNKNOWN")
 
 
+def grp(cid, logic, children, **kw):
+    d = {"cond_id": cid, "logic": logic, "children": children}
+    d.update(kw)
+    return d
+
+
+class TestGroups(unittest.TestCase):
+    def test_nested_or_of_and(self):
+        # 구미 건(T-07)의 구조: OR{ AND{지역 구미, 업력 7년 이내}, 본사 이전 계획 }
+        g = grp("G1", "AND", [cond("C1", "region", "WITHIN", {"label": "구미"}), cond("C2", "business_age", "LTE", {"value": 7})])
+        other = cond("C3", "other", "EQ", {"label": "본사 이전 계획"})
+        a = {"requirements": [req("R1", [g, other], logic="OR")], "tracks": []}
+        p_in = dict(P1, region="경북 구미시", business_age_years=5)
+        v = judge(a, p_in)
+        self.assertEqual((v.conditions["G1"], v.conditions["C3"], v.overall), ("SATISFIED", "UNKNOWN", ELIGIBLE))
+        p_old = dict(P1, region="경북 구미시", business_age_years=9)
+        v = judge(a, p_old)
+        self.assertEqual((v.conditions["G1"], v.overall), ("UNSATISFIED", NEEDS_CHECK))  # 이전 계획은 알 수 없어 확정 못 함
+        v = judge(a, P1)  # 서울: 지역 불충족 -> 그룹 불충족, 이전 계획 미확인
+        self.assertEqual((v.conditions["G1"], v.overall), ("UNSATISFIED", NEEDS_CHECK))
+
+    def test_group_depth_limit(self):
+        three = grp("G1", "AND", [grp("G2", "AND", [grp("G3", "AND", [cond("C1", "business_age", "LTE", {"value": 7})])])])
+        a = {"requirements": [req("R1", [three])], "tracks": []}
+        self.assertEqual(judge(a, P1).conditions["G3"], "SATISFIED")  # 그룹 3단까지 허용
+        four = grp("G1", "AND", [grp("G2", "AND", [grp("G3", "AND", [grp("G4", "AND", [cond("C1", "business_age", "LTE", {"value": 7})])])])])
+        a = {"requirements": [req("R1", [four])], "tracks": []}
+        self.assertEqual(judge(a, P1).conditions["G4"], "UNKNOWN")  # 4단째는 평가하지 않고 UNKNOWN
+        arec = {"notice_id": "N", "reviewer": "A", "ambiguities": [], "requirements": [req("R1", [four])]}
+        self.assertIn("3단을 넘음", " ".join(validate_a(arec, "")))
+
+    def test_preference_not_used_for_overall(self):
+        pref = req("R2", [cond("C2", "founder_age", "LTE", {"value": 30})], kind="PREFERENCE")
+        a = {"requirements": [req("R1", [cond("C1", "business_age", "LTE", {"value": 7})]), pref], "tracks": []}
+        v = judge(a, P1)  # 대표자 35세: 우대 불충족이어도 신청 가능
+        self.assertEqual((v.overall, v.preferences), (ELIGIBLE, {"R2": "UNSATISFIED"}))
+
+    def test_exclusion_none_of_group(self):
+        ex = req("R2", [cond("C2", "employees", "GTE", {"value": 10}), cond("C3", "revenue", "GTE", {"value": 1000})], logic="NONE_OF", kind="EXCLUSION")
+        a = {"requirements": [req("R1", [cond("C1", "business_age", "LTE", {"value": 7})]), ex], "tracks": []}
+        self.assertEqual(judge(a, dict(P1, revenue_krw=0)).overall, ELIGIBLE)
+        self.assertEqual(judge(a, dict(P1, employees=20, revenue_krw=0)).overall, NOT_ELIGIBLE)
+        self.assertEqual(judge(a, P1).overall, NEEDS_CHECK)  # 매출 미입력
+
+    def test_validate_group(self):
+        g = grp("G1", "XOR", [cond("C1", "business_age", "LTE", {"value": 7})])
+        a = {"notice_id": "N", "reviewer": "A", "ambiguities": [], "requirements": [req("R1", [g])]}
+        self.assertIn("그룹의 logic 값 오류", " ".join(validate_a(a, "")))
+        g = grp("G1", "OR", [cond("C1", "business_age", "LTE", {"value": 7}), cond("C2", "founder_age", "LTE", {"value": 39})])
+        a = {"notice_id": "N", "reviewer": "A", "ambiguities": [], "requirements": [req("R1", [g])]}
+        self.assertEqual(validate_a(a, ""), [])
+
+
 class TestCheck(unittest.TestCase):
     def test_validate_a_ok(self):
         a = {"notice_id": "N", "reviewer": "A", "ambiguities": [], "requirements": [req("R1", [cond("C1", "business_age", "LTE", {"value": 7})])]}

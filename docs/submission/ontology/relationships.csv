@@ -1,7 +1,7 @@
 ﻿관계 타입,시작→끝,의미,카디널리티/제약,층·상태,유효기간 기준
-ANNOUNCED_BY,Notice→Organization,공고 게시 기관,"N:1, 모든 공고","메타, 규칙 생성 가능",fetched_at
+ANNOUNCED_BY,Notice→Organization,공고 게시 기관,"대부분 N:1, 모든 공고. K-Startup 50건은 기관이 둘 이상이라 분리하면 N:M(정리층 multiple_orgs)","메타, 규칙 생성 가능",fetched_at
 EXECUTED_BY,Notice→Organization,수행·운영 기관,"N:1, 직접수행·기초자치단체는 관계 제외(제안)","메타, 규칙 생성 가능",fetched_at
-IN_SUPPORT_CATEGORY,Notice→SupportCategory,지원 분야,N:M,"메타, 규칙 생성 가능",fetched_at
+IN_SUPPORT_CATEGORY,Notice→SupportCategory,지원 분야,N:M 허용. 현재 데이터는 두 출처 모두 공고당 대분류 1개,"메타, 규칙 생성 가능",fetched_at
 HAS_ATTACHMENT,Notice→Attachment,첨부 메타,1:N,"메타, 기업마당만",fetched_at
 SUPERSEDES,Notice→Notice,새 버전이 이전을 대체,"1:1, 새→이전, 이전은 is_latest=false","메타. 재수집 후 content_hash 변화로 생성. K-Startup 제목의 ""연장""·""재공고""는 후보일 뿐 확정하지 않는다","새 버전 fetched_at부터(version, is_latest)"
 TARGETS_REGION,Notice→Concept(REGION),공고의 대상 지역(후보 필터),N:M,메타. K-Startup supt_regin만 근거로 쓴다,code_version
@@ -11,6 +11,7 @@ OF_PROGRAM,Notice→Program,공고가 속한 사업,N:1,"요건, 미구축",공�
 HAS_TRACK,Notice→Track,대상별 하위 구분,1:N,"요건, 미구축",공고 버전
 HAS_REQUIREMENT,Notice | Track→Requirement,요건,"1:N, evidence 필수","요건, 미구축",공고 버전(content_hash)과 접수기간
 HAS_CONDITION,Requirement→Condition,원자 조건,"1:N, evidence 필수","요건, 미구축",공고 버전
+HAS_CHILD,Condition→Condition,그룹 조건의 하위 조건(§4.6),"1:N, cond_type=GROUP에서만, 요건 아래 그룹 3단까지, evidence 필수","요건, 미구축",-
 ABOUT,Condition→Concept,조건이 가리키는 개념,"N:M, 정확·확정 별칭 일치만","요건, 미구축",code_version
 DEFINED_BY,Concept→Definition,개념의 판정 기준,1:N,"개념, 미구축(P1)",법령 시행일·text_hash
 CITES_LAW,Definition→ExternalLaw,정의의 근거 법령,"N:M, 명시된 인용만","개념, 미구축(P1)",법령 시행일·text_hash

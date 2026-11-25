@@ -166,33 +166,60 @@ def eval_condition(c: dict, prof: dict) -> tuple[str, list[str]]:
     return res, flags
 
 
+def combine(logic: str, vals: list[str], min_count: int | None = None) -> str:
+    """하위 결과(SATISFIED/UNSATISFIED/UNKNOWN)를 논리로 합친다."""
+    s, u, k = vals.count(SAT), vals.count(UNSAT), vals.count(UNK)
+    if not vals:
+        return UNK
+    if logic == "AND":
+        return UNSAT if u else (SAT if s == len(vals) else UNK)
+    if logic == "OR":
+        return SAT if s else (UNSAT if u == len(vals) else UNK)
+    if logic == "NONE_OF":  # 하나라도 해당하면 제외: 해당(SAT)이 있으면 불충족, 모두 해당 안 함이면 충족
+        return UNSAT if s else (SAT if u == len(vals) else UNK)
+    if logic == "AT_LEAST":
+        kmin = int(min_count or 1)
+        return SAT if s >= kmin else (UNSAT if s + k < kmin else UNK)
+    return UNK
+
+
+MAX_GROUP_DEPTH = 3  # 요건 아래 그룹 중첩 한도(설계서 4.5)
+
+
+def eval_node(c: dict, prof: dict, results: dict, flags: set, depth: int = 0) -> str:
+    """조건 트리의 노드 하나. `children`이 있으면 그룹(logic으로 합침), 없으면 원자 조건."""
+    if c.get("children"):
+        if depth >= MAX_GROUP_DEPTH:
+            flags.add("DEPTH_EXCEEDED")
+            res = UNK
+        else:
+            vals = [eval_node(ch, prof, results, flags, depth + 1) for ch in c["children"]]
+            res = combine(c.get("logic", "AND"), vals, c.get("min_count"))
+            if c.get("logic_basis") == "assumed" and len(vals) > 1:
+                flags.add("ASSUMED_LOGIC")
+    else:
+        res, fl = eval_condition(c, prof)
+        flags.update(fl)
+    results[c.get("cond_id")] = res
+    return res
+
+
 def eval_requirement(r: dict, prof: dict) -> dict:
     conds = r.get("conditions", [])
-    results, flags = {}, set()
-    for c in conds:
-        rs, fl = eval_condition(c, prof)
-        results[c.get("cond_id")] = rs
-        flags.update(fl)
+    results: dict = {}
+    flags: set = set()
+    tops = [eval_node(c, prof, results, flags) for c in conds]
     vals = list(results.values())
-    s, u, k = vals.count(SAT), vals.count(UNSAT), vals.count(UNK)
-    logic = r.get("logic", "AND")
     if r.get("status") == "unparsed" or not conds:
         out = UNK
-    elif logic == "AND":
-        out = UNSAT if u else (SAT if s == len(vals) else UNK)
-    elif logic == "OR":
-        out = SAT if s else (UNSAT if u == len(vals) else UNK)
-    elif logic == "NONE_OF":  # 하나라도 해당하면 제외: 해당(SAT)이 있으면 불충족, 모두 해당 안 함이면 충족
-        out = UNSAT if s else (SAT if u == len(vals) else UNK)
-    elif logic == "AT_LEAST":
-        kmin = int(r.get("min_count") or 1)
-        out = SAT if s >= kmin else (UNSAT if s + k < kmin else UNK)
     else:
-        out = UNK
+        out = combine(r.get("logic", "AND"), tops, r.get("min_count"))
     reasons = set()
     if r.get("status") == "unparsed":
         reasons.add("REQ_UNPARSED")
     if r.get("logic_basis") == "assumed" and len(conds) > 1:
+        reasons.add("ASSUMED_LOGIC")
+    if "ASSUMED_LOGIC" in flags:
         reasons.add("ASSUMED_LOGIC")
     if r.get("open_ended"):
         reasons.add("OPEN_ENDED")
@@ -211,6 +238,7 @@ class Verdict:
     reasons: list[str] = field(default_factory=list)
     conditions: dict = field(default_factory=dict)
     tracks: dict = field(default_factory=dict)
+    preferences: dict = field(default_factory=dict)  # 우대(PREFERENCE) 요건별 3값. 판정(overall)에는 쓰지 않는다
 
 
 def judge_track(reqs: list[dict]) -> tuple[str, list[str]]:
@@ -232,15 +260,16 @@ def judge_track(reqs: list[dict]) -> tuple[str, list[str]]:
 def judge(label_a: dict, prof: dict) -> Verdict:
     reqs = [eval_requirement(r, prof) for r in label_a.get("requirements", [])]
     cond_results = {k: v for r in reqs for k, v in r["conditions"].items()}
+    prefs = {r["req_id"]: r["result"] for r in reqs if r["kind"] == "PREFERENCE"}
     track_ids = [t.get("track_id") for t in label_a.get("tracks", []) if t.get("track_id")]
     common = [r for r in reqs if not r.get("track_id")]
     if not track_ids:
         overall, reasons = judge_track(common)
-        return Verdict(overall, reasons, cond_results)
+        return Verdict(overall, reasons, cond_results, {}, prefs)
     per = {}
     for t in track_ids:
         per[t] = judge_track(common + [r for r in reqs if r.get("track_id") == t])
     vals = [v[0] for v in per.values()]
     overall = ELIGIBLE if ELIGIBLE in vals else (NOT_ELIGIBLE if all(v == NOT_ELIGIBLE for v in vals) else NEEDS_CHECK)
     reasons = sorted({x for v in per.values() for x in v[1]} | {"TRACK_SPLIT"})
-    return Verdict(overall, reasons, cond_results, {t: v[0] for t, v in per.items()})
+    return Verdict(overall, reasons, cond_results, {t: v[0] for t, v in per.items()}, prefs)

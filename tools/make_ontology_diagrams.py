@@ -122,6 +122,84 @@ def instance(path: Path) -> None:
     plt.close(fig)
 
 
+def _node(ax, cx, cy, w, h, title, sub=None, fill="#e1f5ee", edge="#0f6e56", color="#085041", fs=10):
+    ax.add_patch(FancyBboxPatch((cx - w / 2, cy - h / 2), w, h, boxstyle="round,pad=0.2,rounding_size=1.0", fc=fill, ec=edge, lw=1.4))
+    ax.text(cx, cy + (1.1 if sub else 0), title, ha="center", va="center", fontsize=fs, weight="bold", color=color)
+    if sub:
+        ax.text(cx, cy - 1.6, sub, ha="center", va="center", fontsize=7.5, color=color)
+
+
+def _line(ax, p, q):
+    ax.annotate("", xy=q, xytext=p, arrowprops=dict(arrowstyle="-|>", color="#5f5e5a", lw=1.3, shrinkA=0, shrinkB=0))
+
+
+def condition_tree(path: Path) -> None:
+    """공고 한 건의 조건 트리(요건 → GROUP 게이트 → ATOM). 조건 이름은 구조를 보이기 위한 예시."""
+    fig, ax = plt.subplots(figsize=(11, 6.4))
+    ax.set_xlim(0, 100)
+    ax.set_ylim(0, 60)
+    ax.axis("off")
+    gray = dict(fill="#f1efe8", edge="#5f5e5a", color="#2c2c2a")
+    purple = dict(fill="#eeedfe", edge="#534ab7", color="#26215c")
+    teal = dict(fill="#e1f5ee", edge="#0f6e56", color="#04342c")
+    _node(ax, 50, 56, 22, 5.5, "공고 Notice", **gray)
+    for x in (27, 66, 90):
+        _line(ax, (50, 53.2), (x, 47.5))
+    _node(ax, 27, 44, 44, 7, "ELIGIBILITY 자격", "모두 통과해야 함", **gray)
+    _node(ax, 66, 44, 22, 7, "EXCLUSION 제외", "걸리면 탈락", **gray)
+    _node(ax, 90, 44, 16, 7, "PREFERENCE 우대", "점수·가점", **gray)
+    for x in (27, 66, 90):
+        _line(ax, (x, 40.3), (x, 36.5))
+    _node(ax, 27, 33, 44, 7, "GROUP: AND", "모두 충족해야 충족", **purple)
+    _node(ax, 66, 33, 22, 7, "GROUP: NONE_OF", "하나라도 해당=탈락", **purple)
+    _node(ax, 90, 33, 16, 7, "수출 기업", "판정 불변, 가점만", **teal)
+    for x in (11, 27, 44):
+        _line(ax, (27, 29.3), (x, 24.5))
+    for x in (62, 76):
+        _line(ax, (66, 29.3), (x, 24.5))
+    _node(ax, 11, 21, 12, 6, "지역", **teal)
+    _node(ax, 27, 21, 12, 6, "업력", **teal)
+    _node(ax, 44, 21, 20, 7, "GROUP: OR", "하나만 충족해도 충족", **purple)
+    _node(ax, 62, 21, 12, 6, "휴폐업", **teal)
+    _node(ax, 76, 21, 12, 6, "세금체납", **teal)
+    for x in (38, 50):
+        _line(ax, (44, 17.5), (x, 12.5))
+    _node(ax, 38, 9, 11, 6, "중소기업", **teal)
+    _node(ax, 51, 9, 11, 6, "소상공인", **teal)
+    ax.add_patch(FancyBboxPatch((3, 1.2), 2.2, 2.2, boxstyle="round,pad=0.1", fc=purple["fill"], ec=purple["edge"], lw=1.2))
+    ax.text(6.5, 2.3, "GROUP: 논리 게이트 (AND, OR, NONE_OF, AT_LEAST), 3단까지 중첩", va="center", fontsize=8.5, color="#333")
+    ax.add_patch(FancyBboxPatch((57, 1.2), 2.2, 2.2, boxstyle="round,pad=0.1", fc=teal["fill"], ec=teal["edge"], lw=1.2))
+    ax.text(60.5, 2.3, "ATOM: 값 하나를 비교하는 조건", va="center", fontsize=8.5, color="#333")
+    fig.savefig(path, dpi=160, bbox_inches="tight", facecolor="white")
+    plt.close(fig)
+
+
+def gate_rules(path: Path) -> None:
+    """게이트별 3값 합성 규칙표(tools/graphrag/label_eval.py의 combine과 같다)."""
+    rows = [("AND", "하위가 전부 충족", "하나라도 불충족", "그 외"),
+            ("OR", "하나라도 충족", "전부 불충족", "그 외"),
+            ("NONE_OF", "전부 해당 안 함(불충족)", "하나라도 해당(충족)", "그 외"),
+            ("AT_LEAST n", "충족 개수 ≥ n", "충족 + 모름 < n", "그 외")]
+    heads = ("게이트", "충족 SATISFIED", "불충족 UNSATISFIED", "모름 UNKNOWN")
+    cols = [("#f1efe8", "#2c2c2a"), ("#eaf3de", "#27500a"), ("#fcebeb", "#791f1f"), ("#faeeda", "#633806")]
+    xs, ws = (0, 14, 42, 71), (13, 27, 28, 27)
+    fig, ax = plt.subplots(figsize=(10.5, 3.6))
+    ax.set_xlim(0, 100)
+    ax.set_ylim(-4, 40)
+    ax.axis("off")
+    for x, w, h, (fc, tc) in zip(xs, ws, heads, cols):
+        ax.text(x + w / 2, 36, h, ha="center", va="center", fontsize=10, weight="bold", color="#444")
+    for i, r in enumerate(rows):
+        y = 28 - i * 7.5
+        for j, (x, w, t) in enumerate(zip(xs, ws, r)):
+            fc, tc = cols[j]
+            ax.add_patch(FancyBboxPatch((x, y - 2.6), w, 5.2, boxstyle="round,pad=0.1,rounding_size=0.8", fc=fc, ec="none"))
+            ax.text(x + w / 2, y, t, ha="center", va="center", fontsize=10, weight="bold" if j == 0 else "normal", color=tc)
+    ax.text(0, -2.5, "공고 판정: 자격 요건 중 하나라도 불충족이거나 제외에 걸리면 NOT_ELIGIBLE, 모두 충족이면 ELIGIBLE, 모르는 값이 남으면 NEEDS_CHECK", fontsize=8.5, color="#555")
+    fig.savefig(path, dpi=160, bbox_inches="tight", facecolor="white")
+    plt.close(fig)
+
+
 def main() -> None:
     d1 = REPO / "docs" / "diagrams"
     d2 = REPO / "docs" / "submission" / "ontology"
@@ -129,6 +207,8 @@ def main() -> None:
     d2.mkdir(parents=True, exist_ok=True)
     concept(d1 / "ontology_concept.png")
     instance(d1 / "ontology_instance.png")
+    condition_tree(d1 / "ontology_condition_tree.png")
+    gate_rules(d1 / "ontology_gate_rules.png")
     shutil.copy(d1 / "ontology_concept.png", d2 / "ontology_diagram.png")
     shutil.copy(d1 / "ontology_instance.png", d2 / "ontology_instance.png")
     print("saved:", d1, d2)

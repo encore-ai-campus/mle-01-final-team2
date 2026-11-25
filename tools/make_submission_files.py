@@ -85,19 +85,17 @@ def relationships() -> int:
 
 # ---------------------------------------------------------------- schema.cypher
 def schema() -> int:
-    m = re.search(r"```cypher" + NL + r"(.*?)" + NL + r"```", MD, re.S)
-    body = m.group(1)
+    blocks = re.findall(r"```cypher" + NL + r"(.*?)" + NL + r"```", MD, re.S)
+    blocks.sort(key=lambda b: 0 if "CREATE CONSTRAINT" in b else 1)  # 제약·스키마를 먼저, 점검·경로 쿼리는 뒤
+    body = (NL + NL).join(blocks)  # 8절 스키마·예시 + 5.4 점검 쿼리 + 7절 경로 쿼리
     head = ("// 도메인 온톨로지 설계서 v0.2 Neo4j 스키마 초안 (이 파일은 실행하지 않았다)" + NL +
-            "// 출처: 설계서 §8. 적재 대상 인스턴스(공용 Aura)가 정해지기 전에는 실행하지 않는다." + NL +
+            "// 출처: 설계서 §8(스키마·예시), §5.4(점검 쿼리), §7(경로 쿼리). 적재 대상 인스턴스(공용 Aura)가 정해지기 전에는 실행하지 않는다." + NL +
             "// 적재 입력: data/graph/nodes.jsonl, edges.jsonl (tools/graphrag/build.py export, 로컬 전용)" + NL + NL)
     extra = (NL + NL + "// 추가 인덱스(검색·필터용)" + NL +
              "CREATE INDEX notice_source IF NOT EXISTS FOR (n:Notice) ON (n.source_system);" + NL +
              "CREATE INDEX notice_open   IF NOT EXISTS FOR (n:Notice) ON (n.is_open);" + NL +
              "CREATE INDEX concept_scheme IF NOT EXISTS FOR (k:Concept) ON (k.scheme);" + NL +
-             "CREATE CONSTRAINT def_id   IF NOT EXISTS FOR (d:Definition)  REQUIRE d.def_id IS UNIQUE;" + NL +
-             "CREATE CONSTRAINT law_id   IF NOT EXISTS FOR (l:ExternalLaw) REQUIRE l.law_id IS UNIQUE;" + NL + NL +
-             "// 점검 쿼리 예: WITHIN은 하위→상위이며 순환이 없어야 한다" + NL +
-             "// MATCH p=(a:Concept)-[:WITHIN*1..6]->(a) RETURN count(p) AS cycles;" + NL)
+             "// 점검 쿼리는 위 5.4 블록(V1~V7)에 있다" + NL)
     (OUT / "schema.cypher").write_text(head + body + extra, encoding="utf-8")
     return len((head + body + extra).split(NL))
 
