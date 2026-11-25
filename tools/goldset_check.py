@@ -137,9 +137,23 @@ def validate_a(a: dict, packet: str) -> list[str]:
     return errs
 
 
+def all_cond_ids(a: dict | None) -> set:
+    """라벨 A의 모든 조건 ID. 그룹 안에 중첩된 원자 조건과 그룹 자신의 ID도 포함한다(라벨 B의 cond_ref가 가리킬 수 있다)."""
+    out: set = set()
+
+    def walk(conds):
+        for c in conds:
+            out.add(c.get("cond_id"))
+            walk(c.get("children") or [])
+
+    for r in (a or {}).get("requirements", []):
+        walk(r.get("conditions", []))
+    return out
+
+
 def validate_b(b: dict, a: dict | None, profs: dict) -> list[str]:
     errs = []
-    cond_ids = {c.get("cond_id") for r in (a or {}).get("requirements", []) for c in r.get("conditions", [])}
+    cond_ids = all_cond_ids(a)
     js = judgments_of(b)
     if not js:
         errs.append("판정이 없음")

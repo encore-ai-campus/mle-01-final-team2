@@ -209,6 +209,19 @@ class TestExceptionDirections(unittest.TestCase):
         self.assertEqual(judge(a, dict(P1, employees=12)).overall, NOT_ELIGIBLE)
 
 
+class TestLabelBReferences(unittest.TestCase):
+    def test_cond_ref_may_point_to_a_condition_nested_in_a_group(self):
+        from goldset_check import validate_b
+        g = grp("G1", "AND", [cond("C1", "business_age", "LTE", {"value": 7}), cond("C2", "founder_age", "LTE", {"value": 39})])
+        a = {"notice_id": "N", "reviewer": "A", "ambiguities": [], "requirements": [req("R1", [g, cond("C3", "other", "EQ", {"label": "x"})])]}
+        b = {"notice_id": "N", "reviewer": "A", "judgments": [{"profile_id": "P1", "overall": "ELIGIBLE", "reason_codes": [],
+             "conditions": [{"cond_ref": r, "result": "SATISFIED"} for r in ("G1", "C1", "C2", "C3")]}]}
+        profs = {"P1": {}}
+        self.assertEqual(validate_b(b, a, profs), [])
+        b["judgments"][0]["conditions"].append({"cond_ref": "C9", "result": "SATISFIED"})
+        self.assertEqual(validate_b(b, a, profs), ["P1: cond_ref C9가 라벨 A에 없음"])
+
+
 class TestCheck(unittest.TestCase):
     def test_validate_a_ok(self):
         a = {"notice_id": "N", "reviewer": "A", "ambiguities": [], "requirements": [req("R1", [cond("C1", "business_age", "LTE", {"value": 7})])]}
