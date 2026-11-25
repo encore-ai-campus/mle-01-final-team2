@@ -1,0 +1,640 @@
+﻿alias,alias_type,target_id,target_name,target_level,granularity,status,g2b_rows,kstartup_rows,bizinfo_rows,note
+강남구,bare,KR:REGION:1168000000,서울특별시 강남구,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (서울특별시 강남구)
+강릉시,bare,KR:REGION:5115000000,강원특별자치도 강릉시,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (강원특별자치도 강릉시)
+강원,short,KR:REGION:5100000000,강원특별자치도,SIDO,exact,OK,0,48,427,
+강원도,short,KR:REGION:5100000000,강원특별자치도,SIDO,exact,OK,0,0,0,
+강원특별자치도,official,KR:REGION:5100000000,강원특별자치도,SIDO,exact,OK,2693,0,75,
+강원특별자치도 강릉시,path,KR:REGION:5115000000,강원특별자치도 강릉시,SIGUNGU,exact,OK,357,0,0,
+강원특별자치도 고성군,path,KR:REGION:5182000000,강원특별자치도 고성군,SIGUNGU,exact,OK,103,0,0,
+강원특별자치도 동해시,path,KR:REGION:5117000000,강원특별자치도 동해시,SIGUNGU,exact,OK,167,0,0,
+강원특별자치도 삼척시,path,KR:REGION:5123000000,강원특별자치도 삼척시,SIGUNGU,exact,OK,159,0,0,
+강원특별자치도 삼척시 도계읍 고사리,path,KR:REGION:5123000000,강원특별자치도 삼척시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 삼척시 도계읍 구사리,path,KR:REGION:5123000000,강원특별자치도 삼척시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 삼척시 도계읍 늑구리,path,KR:REGION:5123000000,강원특별자치도 삼척시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 삼척시 도계읍 도계리,path,KR:REGION:5123000000,강원특별자치도 삼척시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 삼척시 도계읍 마교리,path,KR:REGION:5123000000,강원특별자치도 삼척시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 삼척시 도계읍 무건리,path,KR:REGION:5123000000,강원특별자치도 삼척시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 삼척시 도계읍 발이리,path,KR:REGION:5123000000,강원특별자치도 삼척시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 삼척시 도계읍 산기리,path,KR:REGION:5123000000,강원특별자치도 삼척시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 삼척시 도계읍 상덕리,path,KR:REGION:5123000000,강원특별자치도 삼척시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 삼척시 도계읍 신리,path,KR:REGION:5123000000,강원특별자치도 삼척시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 삼척시 도계읍 심포리,path,KR:REGION:5123000000,강원특별자치도 삼척시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 삼척시 도계읍 전두리,path,KR:REGION:5123000000,강원특별자치도 삼척시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 삼척시 도계읍 점리,path,KR:REGION:5123000000,강원특별자치도 삼척시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 삼척시 도계읍 차구리,path,KR:REGION:5123000000,강원특별자치도 삼척시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 삼척시 도계읍 황조리,path,KR:REGION:5123000000,강원특별자치도 삼척시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 삼척시 도계읍 흥전리,path,KR:REGION:5123000000,강원특별자치도 삼척시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 속초시,path,KR:REGION:5121000000,강원특별자치도 속초시,SIGUNGU,exact,OK,151,0,0,
+강원특별자치도 양구군,path,KR:REGION:5180000000,강원특별자치도 양구군,SIGUNGU,exact,OK,78,0,0,
+강원특별자치도 양양군,path,KR:REGION:5183000000,강원특별자치도 양양군,SIGUNGU,exact,OK,159,0,0,
+강원특별자치도 영월군,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,exact,OK,173,0,0,
+강원특별자치도 영월군 김삿갓면 각동리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 김삿갓면 내리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 김삿갓면 대야리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 김삿갓면 예밀리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 김삿갓면 옥동리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 김삿갓면 와석리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 김삿갓면 외룡리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 김삿갓면 주문리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 김삿갓면 진별리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 남면 북쌍리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 남면 연당리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 북면 마차리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 북면 문곡리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 산솔면 녹전리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 산솔면 석항리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 산솔면 연상리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 산솔면 이목리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 산솔면 직동리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 산솔면 화원리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 상동읍 구래리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 상동읍 내덕리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 상동읍 덕구리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 상동읍 천평리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 영월읍 거운리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 영월읍 덕포리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 영월읍 방절리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 영월읍 삼옥리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 영월읍 영흥리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 영월읍 정양리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 영월읍 팔괴리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 영월읍 하송리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 한반도면 광전리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 한반도면 신천리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 영월군 한반도면 옹정리,path,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 원주시,path,KR:REGION:5113000000,강원특별자치도 원주시,SIGUNGU,exact,OK,355,0,0,
+강원특별자치도 인제군,path,KR:REGION:5181000000,강원특별자치도 인제군,SIGUNGU,exact,OK,137,0,0,
+강원특별자치도 정선군,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,exact,OK,127,0,0,
+강원특별자치도 정선군 고한읍 고한리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 남면 무릉리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 남면 문곡리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 남면 유평리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 북평면 나전리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 북평면 북평리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 북평면 숙암리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 북평면 장열리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 사북읍 사북리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 사북읍 직전리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 신동읍 가사리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 신동읍 방제리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 신동읍 예미리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 신동읍 조동리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 여량면 구절리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 여량면 여량리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 정선읍 광하리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 정선읍 덕송리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 정선읍 덕우리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 정선읍 봉양리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 정선읍 북실리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 정선읍 신월리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 정선읍 애산리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 정선읍 여탄리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 정선읍 용탄리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 정선읍 회동리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 화암면 몰운리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 정선군 화암면 화암리,path,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 철원군,path,KR:REGION:5178000000,강원특별자치도 철원군,SIGUNGU,exact,OK,101,0,0,
+강원특별자치도 춘천시,path,KR:REGION:5111000000,강원특별자치도 춘천시,SIGUNGU,exact,OK,384,0,0,
+강원특별자치도 태백시,path,KR:REGION:5119000000,강원특별자치도 태백시,SIGUNGU,exact,OK,94,0,0,
+강원특별자치도 태백시 금천동,path,KR:REGION:5119000000,강원특별자치도 태백시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 태백시 동점동,path,KR:REGION:5119000000,강원특별자치도 태백시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 태백시 문곡동,path,KR:REGION:5119000000,강원특별자치도 태백시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 태백시 백산동,path,KR:REGION:5119000000,강원특별자치도 태백시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 태백시 소도동,path,KR:REGION:5119000000,강원특별자치도 태백시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 태백시 장성동,path,KR:REGION:5119000000,강원특별자치도 태백시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 태백시 적각동,path,KR:REGION:5119000000,강원특별자치도 태백시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 태백시 철암동,path,KR:REGION:5119000000,강원특별자치도 태백시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 태백시 통동,path,KR:REGION:5119000000,강원특별자치도 태백시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 태백시 화전동,path,KR:REGION:5119000000,강원특별자치도 태백시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 태백시 황지동,path,KR:REGION:5119000000,강원특별자치도 태백시,SIGUNGU,finer,OK,22,0,0,읍면동 단위 표기. 시군구까지만 연결되며 사용자 주소가 시군구 단위면 판정은 UNKNOWN
+강원특별자치도 평창군,path,KR:REGION:5176000000,강원특별자치도 평창군,SIGUNGU,exact,OK,126,0,0,
+강원특별자치도 홍천군,path,KR:REGION:5172000000,강원특별자치도 홍천군,SIGUNGU,exact,OK,257,0,0,
+강원특별자치도 화천군,path,KR:REGION:5179000000,강원특별자치도 화천군,SIGUNGU,exact,OK,127,0,0,
+강원특별자치도 횡성군,path,KR:REGION:5173000000,강원특별자치도 횡성군,SIGUNGU,exact,OK,154,0,0,
+강진군,bare,KR:REGION:1278000000,전남광주통합특별시 강진군,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (전남광주통합특별시 강진군)
+강화군,bare,KR:REGION:2871000000,인천광역시 강화군,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (인천광역시 강화군)
+거제시,bare,KR:REGION:4831000000,경상남도 거제시,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (경상남도 거제시)
+거창군,bare,KR:REGION:4888000000,경상남도 거창군,SIGUNGU,exact,OK,0,0,3,시도 없이 쓴 이름. 전국에 하나뿐 (경상남도 거창군)
+검단구,bare,KR:REGION:2829000000,인천광역시 검단구,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (인천광역시 검단구)
+경기,short,KR:REGION:4100000000,경기도,SIDO,exact,OK,0,336,478,
+경기도,official,KR:REGION:4100000000,경기도,SIDO,exact,OK,9220,0,127,
+경기도 가평군,path,KR:REGION:4182000000,경기도 가평군,SIGUNGU,exact,OK,142,0,0,
+경기도 고양시,path,KR:REGION:4128000000,경기도 고양시,SIGUNGU,exact,OK,471,0,0,
+경기도 고양시 덕양구,path,KR:REGION:4128100000,경기도 고양시 덕양구,GU,exact,OK,15,0,0,일반구로 연결 (상위 시: 고양시)
+경기도 고양시 일산동구,path,KR:REGION:4128500000,경기도 고양시 일산동구,GU,exact,OK,15,0,0,일반구로 연결 (상위 시: 고양시)
+경기도 고양시 일산서구,path,KR:REGION:4128700000,경기도 고양시 일산서구,GU,exact,OK,15,0,0,일반구로 연결 (상위 시: 고양시)
+경기도 과천시,path,KR:REGION:4129000000,경기도 과천시,SIGUNGU,exact,OK,159,0,0,
+경기도 광명시,path,KR:REGION:4121000000,경기도 광명시,SIGUNGU,exact,OK,240,0,0,
+경기도 광주시,path,KR:REGION:4161000000,경기도 광주시,SIGUNGU,exact,OK,217,0,0,
+경기도 구리시,path,KR:REGION:4131000000,경기도 구리시,SIGUNGU,exact,OK,73,0,0,
+경기도 군포시,path,KR:REGION:4141000000,경기도 군포시,SIGUNGU,exact,OK,180,0,0,
+경기도 김포시,path,KR:REGION:4157000000,경기도 김포시,SIGUNGU,exact,OK,171,0,0,
+경기도 남양주시,path,KR:REGION:4136000000,경기도 남양주시,SIGUNGU,exact,OK,385,0,0,
+경기도 동두천시,path,KR:REGION:4125000000,경기도 동두천시,SIGUNGU,exact,OK,124,0,0,
+경기도 부천시,path,KR:REGION:4119000000,경기도 부천시,SIGUNGU,exact,OK,238,0,0,
+경기도 부천시 소사구,path,KR:REGION:4119400000,경기도 부천시 소사구 ,GU,exact,OK,12,0,0,일반구로 연결 (상위 시: 부천시)
+경기도 부천시 오정구,path,KR:REGION:4119600000,경기도 부천시 오정구 ,GU,exact,OK,12,0,0,일반구로 연결 (상위 시: 부천시)
+경기도 부천시 원미구,path,KR:REGION:4119200000,경기도 부천시 원미구 ,GU,exact,OK,12,0,0,일반구로 연결 (상위 시: 부천시)
+경기도 성남시,path,KR:REGION:4113000000,경기도 성남시,SIGUNGU,exact,OK,384,0,0,
+경기도 성남시 분당구,path,KR:REGION:4113500000,경기도 성남시 분당구,GU,exact,OK,12,0,0,일반구로 연결 (상위 시: 성남시)
+경기도 성남시 수정구,path,KR:REGION:4113100000,경기도 성남시 수정구,GU,exact,OK,12,0,0,일반구로 연결 (상위 시: 성남시)
+경기도 성남시 중원구,path,KR:REGION:4113300000,경기도 성남시 중원구,GU,exact,OK,12,0,0,일반구로 연결 (상위 시: 성남시)
+경기도 수원시,path,KR:REGION:4111000000,경기도 수원시,SIGUNGU,exact,OK,544,0,0,
+경기도 수원시 권선구,path,KR:REGION:4111300000,경기도 수원시 권선구,GU,exact,OK,12,0,0,일반구로 연결 (상위 시: 수원시)
+경기도 수원시 영통구,path,KR:REGION:4111700000,경기도 수원시 영통구,GU,exact,OK,13,0,0,일반구로 연결 (상위 시: 수원시)
+경기도 수원시 장안구,path,KR:REGION:4111100000,경기도 수원시 장안구,GU,exact,OK,13,0,0,일반구로 연결 (상위 시: 수원시)
+경기도 수원시 팔달구,path,KR:REGION:4111500000,경기도 수원시 팔달구,GU,exact,OK,12,0,0,일반구로 연결 (상위 시: 수원시)
+경기도 시흥시,path,KR:REGION:4139000000,경기도 시흥시,SIGUNGU,exact,OK,296,0,0,
+경기도 안산시,path,KR:REGION:4127000000,경기도 안산시,SIGUNGU,exact,OK,380,0,0,
+경기도 안산시 단원구,path,KR:REGION:4127300000,경기도 안산시 단원구,GU,exact,OK,17,0,0,일반구로 연결 (상위 시: 안산시)
+경기도 안산시 상록구,path,KR:REGION:4127100000,경기도 안산시 상록구,GU,exact,OK,17,0,0,일반구로 연결 (상위 시: 안산시)
+경기도 안성시,path,KR:REGION:4155000000,경기도 안성시,SIGUNGU,exact,OK,152,0,0,
+경기도 안양시,path,KR:REGION:4117000000,경기도 안양시,SIGUNGU,exact,OK,311,0,0,
+경기도 안양시 동안구,path,KR:REGION:4117300000,경기도 안양시 동안구,GU,exact,OK,12,0,0,일반구로 연결 (상위 시: 안양시)
+경기도 안양시 만안구,path,KR:REGION:4117100000,경기도 안양시 만안구,GU,exact,OK,12,0,0,일반구로 연결 (상위 시: 안양시)
+경기도 양주시,path,KR:REGION:4163000000,경기도 양주시,SIGUNGU,exact,OK,275,0,0,
+경기도 양평군,path,KR:REGION:4183000000,경기도 양평군,SIGUNGU,exact,OK,126,0,0,
+경기도 여주시,path,KR:REGION:4167000000,경기도 여주시,SIGUNGU,exact,OK,231,0,0,
+경기도 연천군,path,KR:REGION:4180000000,경기도 연천군,SIGUNGU,exact,OK,146,0,0,
+경기도 오산시,path,KR:REGION:4137000000,경기도 오산시,SIGUNGU,exact,OK,153,0,0,
+경기도 용인시,path,KR:REGION:4146000000,경기도 용인시,SIGUNGU,exact,OK,582,0,0,
+경기도 용인시 기흥구,path,KR:REGION:4146300000,경기도 용인시 기흥구,GU,exact,OK,12,0,0,일반구로 연결 (상위 시: 용인시)
+경기도 용인시 수지구,path,KR:REGION:4146500000,경기도 용인시 수지구,GU,exact,OK,12,0,0,일반구로 연결 (상위 시: 용인시)
+경기도 용인시 처인구,path,KR:REGION:4146100000,경기도 용인시 처인구,GU,exact,OK,12,0,0,일반구로 연결 (상위 시: 용인시)
+경기도 의왕시,path,KR:REGION:4143000000,경기도 의왕시,SIGUNGU,exact,OK,250,0,0,
+경기도 의정부시,path,KR:REGION:4115000000,경기도 의정부시,SIGUNGU,exact,OK,226,0,0,
+경기도 이천시,path,KR:REGION:4150000000,경기도 이천시,SIGUNGU,exact,OK,177,0,0,
+경기도 파주시,path,KR:REGION:4148000000,경기도 파주시,SIGUNGU,exact,OK,311,0,0,
+경기도 평택시,path,KR:REGION:4122000000,경기도 평택시,SIGUNGU,exact,OK,302,0,0,
+경기도 포천시,path,KR:REGION:4165000000,경기도 포천시,SIGUNGU,exact,OK,307,0,0,
+경기도 하남시,path,KR:REGION:4145000000,경기도 하남시,SIGUNGU,exact,OK,134,0,0,
+경기도 화성시,path,KR:REGION:4159000000,경기도 화성시,SIGUNGU,exact,OK,501,0,0,
+경기도 화성시 동탄구,path,KR:REGION:4159700000,경기도 화성시 동탄구,GU,exact,OK,12,0,0,일반구로 연결 (상위 시: 화성시)
+경기도 화성시 만세구,path,KR:REGION:4159100000,경기도 화성시 만세구,GU,exact,OK,14,0,0,일반구로 연결 (상위 시: 화성시)
+경기도 화성시 병점구,path,KR:REGION:4159500000,경기도 화성시 병점구,GU,exact,OK,13,0,0,일반구로 연결 (상위 시: 화성시)
+경기도 화성시 효행구,path,KR:REGION:4159300000,경기도 화성시 효행구,GU,exact,OK,12,0,0,일반구로 연결 (상위 시: 화성시)
+경남,short,KR:REGION:4800000000,경상남도,SIDO,exact,OK,0,55,457,
+경북,short,KR:REGION:4700000000,경상북도,SIDO,exact,OK,0,49,450,
+경북 칠곡군,path,KR:REGION:4785000000,경상북도 칠곡군,SIGUNGU,exact,OK,0,0,1,
+경산,variant,KR:REGION:4729000000,경상북도 경산시,SIGUNGU,exact,OK,0,0,2,변형 표기(줄임·오타·붙여쓰기 등). '경산시'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 경산시)
+경산시,bare,KR:REGION:4729000000,경상북도 경산시,SIGUNGU,exact,OK,0,0,3,시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 경산시)
+경상남,short,KR:REGION:4800000000,경상남도,SIDO,exact,OK,0,0,0,
+경상남도,official,KR:REGION:4800000000,경상남도,SIDO,exact,OK,4310,0,109,
+경상남도 거제시,path,KR:REGION:4831000000,경상남도 거제시,SIGUNGU,exact,OK,157,0,0,
+경상남도 거창군,path,KR:REGION:4888000000,경상남도 거창군,SIGUNGU,exact,OK,126,0,0,
+경상남도 고성군,path,KR:REGION:4882000000,경상남도 고성군,SIGUNGU,exact,OK,154,0,0,
+경상남도 김해시,path,KR:REGION:4825000000,경상남도 김해시,SIGUNGU,exact,OK,477,0,0,
+경상남도 남해군,path,KR:REGION:4884000000,경상남도 남해군,SIGUNGU,exact,OK,110,0,0,
+경상남도 밀양시,path,KR:REGION:4827000000,경상남도 밀양시,SIGUNGU,exact,OK,299,0,0,
+경상남도 사천시,path,KR:REGION:4824000000,경상남도 사천시,SIGUNGU,exact,OK,194,0,0,
+경상남도 산청군,path,KR:REGION:4886000000,경상남도 산청군,SIGUNGU,exact,OK,105,0,0,
+경상남도 양산시,path,KR:REGION:4833000000,경상남도 양산시,SIGUNGU,exact,OK,387,0,0,
+경상남도 의령군,path,KR:REGION:4872000000,경상남도 의령군,SIGUNGU,exact,OK,144,0,0,
+경상남도 진주시,path,KR:REGION:4817000000,경상남도 진주시,SIGUNGU,exact,OK,365,0,0,
+경상남도 창녕군,path,KR:REGION:4874000000,경상남도 창녕군,SIGUNGU,exact,OK,152,0,0,
+경상남도 창원시,path,KR:REGION:4812000000,경상남도 창원시,SIGUNGU,exact,OK,1058,0,0,
+경상남도 창원시 마산합포구,path,KR:REGION:4812500000,경상남도 창원시 마산합포구,GU,exact,OK,11,0,0,일반구로 연결 (상위 시: 창원시)
+경상남도 창원시 마산회원구,path,KR:REGION:4812700000,경상남도 창원시 마산회원구,GU,exact,OK,11,0,0,일반구로 연결 (상위 시: 창원시)
+경상남도 창원시 성산구,path,KR:REGION:4812300000,경상남도 창원시 성산구,GU,exact,OK,14,0,0,일반구로 연결 (상위 시: 창원시)
+경상남도 창원시 의창구,path,KR:REGION:4812100000,경상남도 창원시 의창구,GU,exact,OK,11,0,0,일반구로 연결 (상위 시: 창원시)
+경상남도 창원시 진해구,path,KR:REGION:4812900000,경상남도 창원시 진해구,GU,exact,OK,11,0,0,일반구로 연결 (상위 시: 창원시)
+경상남도 통영시,path,KR:REGION:4822000000,경상남도 통영시,SIGUNGU,exact,OK,153,0,0,
+경상남도 하동군,path,KR:REGION:4885000000,경상남도 하동군,SIGUNGU,exact,OK,210,0,0,
+경상남도 함안군,path,KR:REGION:4873000000,경상남도 함안군,SIGUNGU,exact,OK,180,0,0,
+경상남도 함양군,path,KR:REGION:4887000000,경상남도 함양군,SIGUNGU,exact,OK,129,0,0,
+경상남도 합천군,path,KR:REGION:4889000000,경상남도 합천군,SIGUNGU,exact,OK,136,0,0,
+경상북,short,KR:REGION:4700000000,경상북도,SIDO,exact,OK,0,0,0,
+경상북도,official,KR:REGION:4700000000,경상북도,SIDO,exact,OK,3938,0,107,
+경상북도 경산시,path,KR:REGION:4729000000,경상북도 경산시,SIGUNGU,exact,OK,172,0,0,
+경상북도 경주시,path,KR:REGION:4713000000,경상북도 경주시,SIGUNGU,exact,OK,363,0,0,
+경상북도 고령군,path,KR:REGION:4783000000,경상북도 고령군,SIGUNGU,exact,OK,133,0,0,
+경상북도 구미시,path,KR:REGION:4719000000,경상북도 구미시,SIGUNGU,exact,OK,410,0,0,
+경상북도 김천시,path,KR:REGION:4715000000,경상북도 김천시,SIGUNGU,exact,OK,208,0,0,
+경상북도 문경시,path,KR:REGION:4728000000,경상북도 문경시,SIGUNGU,exact,OK,145,0,0,
+경상북도 봉화군,path,KR:REGION:4792000000,경상북도 봉화군,SIGUNGU,exact,OK,139,0,0,
+경상북도 상주시,path,KR:REGION:4725000000,경상북도 상주시,SIGUNGU,exact,OK,207,0,0,
+경상북도 성주군,path,KR:REGION:4784000000,경상북도 성주군,SIGUNGU,exact,OK,87,0,0,
+경상북도 안동시,path,KR:REGION:4717000000,경상북도 안동시,SIGUNGU,exact,OK,336,0,0,
+경상북도 영덕군,path,KR:REGION:4777000000,경상북도 영덕군,SIGUNGU,exact,OK,55,0,0,
+경상북도 영양군,path,KR:REGION:4776000000,경상북도 영양군,SIGUNGU,exact,OK,87,0,0,
+경상북도 영주시,path,KR:REGION:4721000000,경상북도 영주시,SIGUNGU,exact,OK,245,0,0,
+경상북도 영천시,path,KR:REGION:4723000000,경상북도 영천시,SIGUNGU,exact,OK,212,0,0,
+경상북도 예천군,path,KR:REGION:4790000000,경상북도 예천군,SIGUNGU,exact,OK,136,0,0,
+경상북도 울릉군,path,KR:REGION:4794000000,경상북도 울릉군,SIGUNGU,exact,OK,20,0,0,
+경상북도 울진군,path,KR:REGION:4793000000,경상북도 울진군,SIGUNGU,exact,OK,76,0,0,
+경상북도 의성군,path,KR:REGION:4773000000,경상북도 의성군,SIGUNGU,exact,OK,73,0,0,
+경상북도 청도군,path,KR:REGION:4782000000,경상북도 청도군,SIGUNGU,exact,OK,122,0,0,
+경상북도 청송군,path,KR:REGION:4775000000,경상북도 청송군,SIGUNGU,exact,OK,47,0,0,
+경상북도 칠곡군,path,KR:REGION:4785000000,경상북도 칠곡군,SIGUNGU,exact,OK,170,0,0,
+경상북도 포항시,path,KR:REGION:4711000000,경상북도 포항시,SIGUNGU,exact,OK,467,0,0,
+경상북도 포항시 남구,path,KR:REGION:4711100000,경상북도 포항시 남구,GU,exact,OK,6,0,0,일반구로 연결 (상위 시: 포항시)
+경상북도 포항시 북구,path,KR:REGION:4711300000,경상북도 포항시 북구,GU,exact,OK,5,0,0,일반구로 연결 (상위 시: 포항시)
+경주시,bare,KR:REGION:4713000000,경상북도 경주시,SIGUNGU,exact,OK,0,0,7,시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 경주시)
+계룡시,bare,KR:REGION:4425000000,충청남도 계룡시,SIGUNGU,exact,OK,0,0,3,시도 없이 쓴 이름. 전국에 하나뿐 (충청남도 계룡시)
+고령,variant,KR:REGION:4783000000,경상북도 고령군,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '고령군'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 고령군)
+고령군,bare,KR:REGION:4783000000,경상북도 고령군,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 고령군)
+고성군,bare,,,,,AMBIGUOUS,0,0,7,"같은 이름 2곳: 강원특별자치도 고성군, 경상남도 고성군. 같은 공고의 시도 태그·기관명으로 정해야 함"
+고창군,bare,KR:REGION:5279000000,전북특별자치도 고창군,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (전북특별자치도 고창군)
+고흥군,bare,KR:REGION:1274000000,전남광주통합특별시 고흥군,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (전남광주통합특별시 고흥군)
+공주시,bare,KR:REGION:4415000000,충청남도 공주시,SIGUNGU,exact,OK,0,0,5,시도 없이 쓴 이름. 전국에 하나뿐 (충청남도 공주시)
+과천시,bare,KR:REGION:4129000000,경기도 과천시,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (경기도 과천시)
+관악구,bare,KR:REGION:1162000000,서울특별시 관악구,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (서울특별시 관악구)
+광명시,bare,KR:REGION:4121000000,경기도 광명시,SIGUNGU,exact,OK,0,0,3,시도 없이 쓴 이름. 전국에 하나뿐 (경기도 광명시)
+광양시,bare,KR:REGION:1219000000,전남광주통합특별시 광양시,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (전남광주통합특별시 광양시)
+광주,legacy,LEGACY:광주광역시,광주광역시(2026-07 이전),BUNDLE,exact,BUNDLE,0,39,225,2026-07 통합 전 명칭. 옛 광주광역시 5개 구로 연결
+광주광역시,legacy,LEGACY:광주광역시,광주광역시(2026-07 이전),BUNDLE,exact,BUNDLE,1506,0,31,2026-07 통합 전 명칭. 옛 광주광역시 5개 구로 연결
+광주시,bare,KR:REGION:4161000000,경기도 광주시,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (경기도 광주시)
+괴산,variant,KR:REGION:4376000000,충청북도 괴산군,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '괴산군'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (충청북도 괴산군)
+괴산군,bare,KR:REGION:4376000000,충청북도 괴산군,SIGUNGU,exact,OK,0,0,6,시도 없이 쓴 이름. 전국에 하나뿐 (충청북도 괴산군)
+구례군,bare,KR:REGION:1273000000,전남광주통합특별시 구례군,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (전남광주통합특별시 구례군)
+구리시,bare,KR:REGION:4131000000,경기도 구리시,SIGUNGU,exact,OK,0,0,3,시도 없이 쓴 이름. 전국에 하나뿐 (경기도 구리시)
+구미,variant,KR:REGION:4719000000,경상북도 구미시,SIGUNGU,exact,OK,0,0,3,변형 표기(줄임·오타·붙여쓰기 등). '구미시'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 구미시)
+구미시,bare,KR:REGION:4719000000,경상북도 구미시,SIGUNGU,exact,OK,0,0,6,시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 구미시)
+군산시,bare,KR:REGION:5213000000,전북특별자치도 군산시,SIGUNGU,exact,OK,0,0,6,시도 없이 쓴 이름. 전국에 하나뿐 (전북특별자치도 군산시)
+군포시,bare,KR:REGION:4141000000,경기도 군포시,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (경기도 군포시)
+금산군,bare,KR:REGION:4471000000,충청남도 금산군,SIGUNGU,exact,OK,0,0,4,시도 없이 쓴 이름. 전국에 하나뿐 (충청남도 금산군)
+김제시,bare,KR:REGION:5221000000,전북특별자치도 김제시,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (전북특별자치도 김제시)
+김천,variant,KR:REGION:4715000000,경상북도 김천시,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '김천시'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 김천시)
+김천시,bare,KR:REGION:4715000000,경상북도 김천시,SIGUNGU,exact,OK,0,0,4,시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 김천시)
+김포시,bare,KR:REGION:4157000000,경기도 김포시,SIGUNGU,exact,OK,0,0,4,시도 없이 쓴 이름. 전국에 하나뿐 (경기도 김포시)
+김해시,bare,KR:REGION:4825000000,경상남도 김해시,SIGUNGU,exact,OK,0,0,9,시도 없이 쓴 이름. 전국에 하나뿐 (경상남도 김해시)
+남구,bare,,,,,AMBIGUOUS,0,0,3,"같은 이름 5곳: 경상북도 포항시 남구, 대구광역시 남구, 부산광역시 남구, 울산광역시 남구, 전남광주통합특별시 남구. 같은 공고의 시도 태그·기관명으로 정해야 함"
+남동구,bare,KR:REGION:2820000000,인천광역시 남동구,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (인천광역시 남동구)
+남양주시,bare,KR:REGION:4136000000,경기도 남양주시,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (경기도 남양주시)
+남원시,bare,KR:REGION:5219000000,전북특별자치도 남원시,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (전북특별자치도 남원시)
+남해군,bare,KR:REGION:4884000000,경상남도 남해군,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (경상남도 남해군)
+논산시,bare,KR:REGION:4423000000,충청남도 논산시,SIGUNGU,exact,OK,0,0,3,시도 없이 쓴 이름. 전국에 하나뿐 (충청남도 논산시)
+단양,variant,KR:REGION:4380000000,충청북도 단양군,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '단양군'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (충청북도 단양군)
+단양군,bare,KR:REGION:4380000000,충청북도 단양군,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (충청북도 단양군)
+달서구,bare,KR:REGION:2729000000,대구광역시 달서구,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (대구광역시 달서구)
+달성군,bare,KR:REGION:2771000000,대구광역시 달성군,SIGUNGU,exact,OK,0,0,3,시도 없이 쓴 이름. 전국에 하나뿐 (대구광역시 달성군)
+담양군,bare,KR:REGION:1271000000,전남광주통합특별시 담양군,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (전남광주통합특별시 담양군)
+당진시,bare,KR:REGION:4427000000,충청남도 당진시,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (충청남도 당진시)
+대구,short,KR:REGION:2700000000,대구광역시,SIDO,exact,OK,0,81,386,
+대구광역시,official,KR:REGION:2700000000,대구광역시,SIDO,exact,OK,3001,0,37,
+대구광역시 군위군,path,KR:REGION:2772000000,대구광역시 군위군,SIGUNGU,exact,OK,15,0,0,
+대구광역시 남구,path,KR:REGION:2720000000,대구광역시 남구,SIGUNGU,exact,OK,14,0,0,
+대구광역시 달서구,path,KR:REGION:2729000000,대구광역시 달서구,SIGUNGU,exact,OK,14,0,0,
+대구광역시 달성군,path,KR:REGION:2771000000,대구광역시 달성군,SIGUNGU,exact,OK,14,0,0,
+대구광역시 동구,path,KR:REGION:2714000000,대구광역시 동구,SIGUNGU,exact,OK,14,0,0,
+대구광역시 북구,path,KR:REGION:2723000000,대구광역시 북구,SIGUNGU,exact,OK,14,0,0,
+대구광역시 서구,path,KR:REGION:2717000000,대구광역시 서구,SIGUNGU,exact,OK,13,0,0,
+대구광역시 수성구,path,KR:REGION:2726000000,대구광역시 수성구,SIGUNGU,exact,OK,16,0,0,
+대구광역시 중구,path,KR:REGION:2711000000,대구광역시 중구,SIGUNGU,exact,OK,13,0,0,
+대전,short,KR:REGION:3000000000,대전광역시,SIDO,exact,OK,0,96,378,
+대전광역시,official,KR:REGION:3000000000,대전광역시,SIDO,exact,OK,2155,0,28,
+대전광역시 대덕구,path,KR:REGION:3023000000,대전광역시 대덕구,SIGUNGU,exact,OK,1,0,0,
+대전광역시 동구,path,KR:REGION:3011000000,대전광역시 동구,SIGUNGU,exact,OK,1,0,0,
+대전광역시 서구,path,KR:REGION:3017000000,대전광역시 서구,SIGUNGU,exact,OK,1,0,0,
+대전광역시 유성구,path,KR:REGION:3020000000,대전광역시 유성구,SIGUNGU,exact,OK,3,0,0,
+대전광역시 중구,path,KR:REGION:3014000000,대전광역시 중구,SIGUNGU,exact,OK,1,0,0,
+동구,bare,,,,,AMBIGUOUS,0,0,2,"같은 이름 5곳: 대구광역시 동구, 대전광역시 동구, 부산광역시 동구, 울산광역시 동구, 전남광주통합특별시 동구. 같은 공고의 시도 태그·기관명으로 정해야 함"
+동대문구,bare,KR:REGION:1123000000,서울특별시 동대문구,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (서울특별시 동대문구)
+동래구,bare,KR:REGION:2626000000,부산광역시 동래구,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (부산광역시 동래구)
+동해,variant,KR:REGION:5117000000,강원특별자치도 동해시,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '동해시'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (강원특별자치도 동해시)
+동해시,bare,KR:REGION:5117000000,강원특별자치도 동해시,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (강원특별자치도 동해시)
+마포구,bare,KR:REGION:1144000000,서울특별시 마포구,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (서울특별시 마포구)
+목포시,bare,KR:REGION:1211000000,전남광주통합특별시 목포시,SIGUNGU,exact,OK,0,0,5,시도 없이 쓴 이름. 전국에 하나뿐 (전남광주통합특별시 목포시)
+무안군,bare,KR:REGION:1281000000,전남광주통합특별시 무안군,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (전남광주통합특별시 무안군)
+무주군,bare,KR:REGION:5273000000,전북특별자치도 무주군,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (전북특별자치도 무주군)
+문경,variant,KR:REGION:4728000000,경상북도 문경시,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '문경시'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 문경시)
+문경시,bare,KR:REGION:4728000000,경상북도 문경시,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 문경시)
+보령시,bare,KR:REGION:4418000000,충청남도 보령시,SIGUNGU,exact,OK,0,0,4,시도 없이 쓴 이름. 전국에 하나뿐 (충청남도 보령시)
+보성군,bare,KR:REGION:1275000000,전남광주통합특별시 보성군,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (전남광주통합특별시 보성군)
+보은,variant,KR:REGION:4372000000,충청북도 보은군,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '보은군'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (충청북도 보은군)
+보은군,bare,KR:REGION:4372000000,충청북도 보은군,SIGUNGU,exact,OK,0,0,4,시도 없이 쓴 이름. 전국에 하나뿐 (충청북도 보은군)
+봉화,variant,KR:REGION:4792000000,경상북도 봉화군,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '봉화군'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 봉화군)
+봉화군,bare,KR:REGION:4792000000,경상북도 봉화군,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 봉화군)
+부산,short,KR:REGION:2600000000,부산광역시,SIDO,exact,OK,0,106,414,
+부산광역시,official,KR:REGION:2600000000,부산광역시,SIDO,exact,OK,4956,0,58,
+부산광역시 강서구,path,KR:REGION:2644000000,부산광역시 강서구,SIGUNGU,exact,OK,17,0,0,
+부산광역시 금정구,path,KR:REGION:2641000000,부산광역시 금정구,SIGUNGU,exact,OK,17,0,0,
+부산광역시 기장군,path,KR:REGION:2671000000,부산광역시 기장군,SIGUNGU,exact,OK,16,0,0,
+부산광역시 남구,path,KR:REGION:2629000000,부산광역시 남구,SIGUNGU,exact,OK,19,0,0,
+부산광역시 동구,path,KR:REGION:2617000000,부산광역시 동구,SIGUNGU,exact,OK,17,0,0,
+부산광역시 동래구,path,KR:REGION:2626000000,부산광역시 동래구,SIGUNGU,exact,OK,17,0,0,
+부산광역시 부산진구,path,KR:REGION:2623000000,부산광역시 부산진구,SIGUNGU,exact,OK,17,0,0,
+부산광역시 북구,path,KR:REGION:2632000000,부산광역시 북구,SIGUNGU,exact,OK,17,0,0,
+부산광역시 사상구,path,KR:REGION:2653000000,부산광역시 사상구,SIGUNGU,exact,OK,17,0,0,
+부산광역시 사하구,path,KR:REGION:2638000000,부산광역시 사하구,SIGUNGU,exact,OK,19,0,0,
+부산광역시 서구,path,KR:REGION:2614000000,부산광역시 서구,SIGUNGU,exact,OK,17,0,0,
+부산광역시 수영구,path,KR:REGION:2650000000,부산광역시 수영구,SIGUNGU,exact,OK,17,0,0,
+부산광역시 연제구,path,KR:REGION:2647000000,부산광역시 연제구,SIGUNGU,exact,OK,17,0,0,
+부산광역시 영도구,path,KR:REGION:2620000000,부산광역시 영도구,SIGUNGU,exact,OK,17,0,0,
+부산광역시 중구,path,KR:REGION:2611000000,부산광역시 중구,SIGUNGU,exact,OK,17,0,0,
+부산광역시 해운대구,path,KR:REGION:2635000000,부산광역시 해운대구,SIGUNGU,exact,OK,17,0,0,
+부안군,bare,KR:REGION:5280000000,전북특별자치도 부안군,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (전북특별자치도 부안군)
+부여군,bare,KR:REGION:4476000000,충청남도 부여군,SIGUNGU,exact,OK,0,0,6,시도 없이 쓴 이름. 전국에 하나뿐 (충청남도 부여군)
+부천시,bare,KR:REGION:4119000000,경기도 부천시,SIGUNGU,exact,OK,0,0,7,시도 없이 쓴 이름. 전국에 하나뿐 (경기도 부천시)
+부평구,bare,KR:REGION:2823700000,인천광역시 부평구,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (인천광역시 부평구)
+북구,bare,,,,,AMBIGUOUS,0,0,4,"같은 이름 5곳: 경상북도 포항시 북구, 대구광역시 북구, 부산광역시 북구, 울산광역시 북구, 전남광주통합특별시 북구. 같은 공고의 시도 태그·기관명으로 정해야 함"
+비수도권,group,GROUP:비수도권,비수도권,BUNDLE,exact,BUNDLE,0,0,2,권역 표기. 구성 시도로 연결
+사상구,bare,KR:REGION:2653000000,부산광역시 사상구,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (부산광역시 사상구)
+사천시,bare,KR:REGION:4824000000,경상남도 사천시,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (경상남도 사천시)
+사하구,bare,KR:REGION:2638000000,부산광역시 사하구,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (부산광역시 사하구)
+산청군,bare,KR:REGION:4886000000,경상남도 산청군,SIGUNGU,exact,OK,0,0,4,시도 없이 쓴 이름. 전국에 하나뿐 (경상남도 산청군)
+삼척,variant,KR:REGION:5123000000,강원특별자치도 삼척시,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '삼척시'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (강원특별자치도 삼척시)
+삼척시,bare,KR:REGION:5123000000,강원특별자치도 삼척시,SIGUNGU,exact,OK,0,0,3,시도 없이 쓴 이름. 전국에 하나뿐 (강원특별자치도 삼척시)
+상주,variant,KR:REGION:4725000000,경상북도 상주시,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '상주시'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 상주시)
+상주시,bare,KR:REGION:4725000000,경상북도 상주시,SIGUNGU,exact,OK,0,0,3,시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 상주시)
+서구,bare,,,,,AMBIGUOUS,0,0,8,"같은 이름 4곳: 대구광역시 서구, 대전광역시 서구, 부산광역시 서구, 전남광주통합특별시 서구. 같은 공고의 시도 태그·기관명으로 정해야 함"
+서귀포시,bare,KR:REGION:5013000000,제주특별자치도 서귀포시,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (제주특별자치도 서귀포시)
+서대문구,bare,KR:REGION:1141000000,서울특별시 서대문구,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (서울특별시 서대문구)
+서산시,bare,KR:REGION:4421000000,충청남도 서산시,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (충청남도 서산시)
+서울,short,KR:REGION:1100000000,서울특별시,SIDO,exact,OK,0,519,388,
+서울특별시,official,KR:REGION:1100000000,서울특별시,SIDO,exact,OK,7347,0,37,
+서울특별시 강남구,path,KR:REGION:1168000000,서울특별시 강남구,SIGUNGU,exact,OK,34,0,0,
+서울특별시 강동구,path,KR:REGION:1174000000,서울특별시 강동구,SIGUNGU,exact,OK,31,0,0,
+서울특별시 강북구,path,KR:REGION:1130500000,서울특별시 강북구,SIGUNGU,exact,OK,34,0,0,
+서울특별시 강서구,path,KR:REGION:1150000000,서울특별시 강서구,SIGUNGU,exact,OK,31,0,0,
+서울특별시 관악구,path,KR:REGION:1162000000,서울특별시 관악구,SIGUNGU,exact,OK,30,0,0,
+서울특별시 광진구,path,KR:REGION:1121500000,서울특별시 광진구,SIGUNGU,exact,OK,31,0,0,
+서울특별시 구로구,path,KR:REGION:1153000000,서울특별시 구로구,SIGUNGU,exact,OK,31,0,0,
+서울특별시 금천구,path,KR:REGION:1154500000,서울특별시 금천구,SIGUNGU,exact,OK,30,0,0,
+서울특별시 노원구,path,KR:REGION:1135000000,서울특별시 노원구,SIGUNGU,exact,OK,32,0,0,
+서울특별시 도봉구,path,KR:REGION:1132000000,서울특별시 도봉구,SIGUNGU,exact,OK,34,0,0,
+서울특별시 동대문구,path,KR:REGION:1123000000,서울특별시 동대문구,SIGUNGU,exact,OK,30,0,0,
+서울특별시 동작구,path,KR:REGION:1159000000,서울특별시 동작구,SIGUNGU,exact,OK,30,0,0,
+서울특별시 마포구,path,KR:REGION:1144000000,서울특별시 마포구,SIGUNGU,exact,OK,30,0,0,
+서울특별시 서대문구,path,KR:REGION:1141000000,서울특별시 서대문구,SIGUNGU,exact,OK,30,0,0,
+서울특별시 서초구,path,KR:REGION:1165000000,서울특별시 서초구,SIGUNGU,exact,OK,37,0,0,
+서울특별시 성동구,path,KR:REGION:1120000000,서울특별시 성동구,SIGUNGU,exact,OK,30,0,0,
+서울특별시 성북구,path,KR:REGION:1129000000,서울특별시 성북구,SIGUNGU,exact,OK,34,0,0,
+서울특별시 송파구,path,KR:REGION:1171000000,서울특별시 송파구,SIGUNGU,exact,OK,32,0,0,
+서울특별시 양천구,path,KR:REGION:1147000000,서울특별시 양천구,SIGUNGU,exact,OK,30,0,0,
+서울특별시 영등포구,path,KR:REGION:1156000000,서울특별시 영등포구,SIGUNGU,exact,OK,32,0,0,
+서울특별시 용산구,path,KR:REGION:1117000000,서울특별시 용산구,SIGUNGU,exact,OK,30,0,0,
+서울특별시 은평구,path,KR:REGION:1138000000,서울특별시 은평구,SIGUNGU,exact,OK,30,0,0,
+서울특별시 종로구,path,KR:REGION:1111000000,서울특별시 종로구,SIGUNGU,exact,OK,30,0,0,
+서울특별시 중구,path,KR:REGION:1114000000,서울특별시 중구,SIGUNGU,exact,OK,30,0,0,
+서울특별시 중랑구,path,KR:REGION:1126000000,서울특별시 중랑구,SIGUNGU,exact,OK,30,0,0,
+서천군,bare,KR:REGION:4477000000,충청남도 서천군,SIGUNGU,exact,OK,0,0,5,시도 없이 쓴 이름. 전국에 하나뿐 (충청남도 서천군)
+서초구,bare,KR:REGION:1165000000,서울특별시 서초구,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (서울특별시 서초구)
+성남시,bare,KR:REGION:4113000000,경기도 성남시,SIGUNGU,exact,OK,0,0,5,시도 없이 쓴 이름. 전국에 하나뿐 (경기도 성남시)
+성주,variant,KR:REGION:4784000000,경상북도 성주군,SIGUNGU,exact,OK,0,0,2,변형 표기(줄임·오타·붙여쓰기 등). '성주군'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 성주군)
+성주군,bare,KR:REGION:4784000000,경상북도 성주군,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 성주군)
+세종,short,KR:REGION:3600000000,세종특별자치시,SIDO,exact,OK,0,14,364,
+세종시,variant,KR:REGION:3600000000,세종특별자치시,SIDO,exact,OK,0,0,2,변형 표기(줄임·오타·붙여쓰기 등). '세종특별자치시'(으)로 읽음. 
+세종특별자치시,official,KR:REGION:3600000000,세종특별자치시,SIDO,exact,OK,1019,0,14,
+속초시,bare,KR:REGION:5121000000,강원특별자치도 속초시,SIGUNGU,exact,OK,0,0,4,시도 없이 쓴 이름. 전국에 하나뿐 (강원특별자치도 속초시)
+수도권,group,GROUP:수도권,수도권,BUNDLE,exact,BUNDLE,0,0,1,권역 표기. 구성 시도로 연결
+수성구,bare,KR:REGION:2726000000,대구광역시 수성구,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (대구광역시 수성구)
+수원시,bare,KR:REGION:4111000000,경기도 수원시,SIGUNGU,exact,OK,0,0,6,시도 없이 쓴 이름. 전국에 하나뿐 (경기도 수원시)
+순창군,bare,KR:REGION:5277000000,전북특별자치도 순창군,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (전북특별자치도 순창군)
+순천시,bare,KR:REGION:1215000000,전남광주통합특별시 순천시,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (전남광주통합특별시 순천시)
+시흥,variant,KR:REGION:4139000000,경기도 시흥시,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '시흥시'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (경기도 시흥시)
+시흥시,bare,KR:REGION:4139000000,경기도 시흥시,SIGUNGU,exact,OK,0,0,7,시도 없이 쓴 이름. 전국에 하나뿐 (경기도 시흥시)
+아산시,bare,KR:REGION:4420000000,충청남도 아산시,SIGUNGU,exact,OK,0,0,4,시도 없이 쓴 이름. 전국에 하나뿐 (충청남도 아산시)
+안동,variant,KR:REGION:4717000000,경상북도 안동시,SIGUNGU,exact,OK,0,0,4,변형 표기(줄임·오타·붙여쓰기 등). '안동시'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 안동시)
+안동시,bare,KR:REGION:4717000000,경상북도 안동시,SIGUNGU,exact,OK,0,0,3,시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 안동시)
+안산,variant,KR:REGION:4127000000,경기도 안산시,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '안산시'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (경기도 안산시)
+안산시,bare,KR:REGION:4127000000,경기도 안산시,SIGUNGU,exact,OK,0,0,5,시도 없이 쓴 이름. 전국에 하나뿐 (경기도 안산시)
+안성시,bare,KR:REGION:4155000000,경기도 안성시,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (경기도 안성시)
+안양시,bare,KR:REGION:4117000000,경기도 안양시,SIGUNGU,exact,OK,0,0,4,시도 없이 쓴 이름. 전국에 하나뿐 (경기도 안양시)
+양구,variant,KR:REGION:5180000000,강원특별자치도 양구군,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '양구군'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (강원특별자치도 양구군)
+양구군,bare,KR:REGION:5180000000,강원특별자치도 양구군,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (강원특별자치도 양구군)
+양산시,bare,KR:REGION:4833000000,경상남도 양산시,SIGUNGU,exact,OK,0,0,4,시도 없이 쓴 이름. 전국에 하나뿐 (경상남도 양산시)
+양양,variant,KR:REGION:5183000000,강원특별자치도 양양군,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '양양군'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (강원특별자치도 양양군)
+양양군,bare,KR:REGION:5183000000,강원특별자치도 양양군,SIGUNGU,exact,OK,0,0,4,시도 없이 쓴 이름. 전국에 하나뿐 (강원특별자치도 양양군)
+양주시,bare,KR:REGION:4163000000,경기도 양주시,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (경기도 양주시)
+양평군,bare,KR:REGION:4183000000,경기도 양평군,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (경기도 양평군)
+여수,variant,KR:REGION:1213000000,전남광주통합특별시 여수시,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '여수시'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (전남광주통합특별시 여수시)
+여수시,bare,KR:REGION:1213000000,전남광주통합특별시 여수시,SIGUNGU,exact,OK,0,0,11,시도 없이 쓴 이름. 전국에 하나뿐 (전남광주통합특별시 여수시)
+여주시,bare,KR:REGION:4167000000,경기도 여주시,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (경기도 여주시)
+연천군,bare,KR:REGION:4180000000,경기도 연천군,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (경기도 연천군)
+영광군,bare,KR:REGION:1283000000,전남광주통합특별시 영광군,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (전남광주통합특별시 영광군)
+영덕,variant,KR:REGION:4777000000,경상북도 영덕군,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '영덕군'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 영덕군)
+영덕군,bare,KR:REGION:4777000000,경상북도 영덕군,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 영덕군)
+영도구,bare,KR:REGION:2620000000,부산광역시 영도구,SIGUNGU,exact,OK,0,0,3,시도 없이 쓴 이름. 전국에 하나뿐 (부산광역시 영도구)
+영동,variant,KR:REGION:4374000000,충청북도 영동군,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '영동군'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (충청북도 영동군)
+영동군,bare,KR:REGION:4374000000,충청북도 영동군,SIGUNGU,exact,OK,0,0,3,시도 없이 쓴 이름. 전국에 하나뿐 (충청북도 영동군)
+영양,variant,KR:REGION:4776000000,경상북도 영양군,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '영양군'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 영양군)
+영양군,bare,KR:REGION:4776000000,경상북도 영양군,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 영양군)
+영월군,bare,KR:REGION:5175000000,강원특별자치도 영월군,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (강원특별자치도 영월군)
+영종구,bare,KR:REGION:2815500000,인천광역시 영종구,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (인천광역시 영종구)
+영주,variant,KR:REGION:4721000000,경상북도 영주시,SIGUNGU,exact,OK,0,0,2,변형 표기(줄임·오타·붙여쓰기 등). '영주시'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 영주시)
+영주시,bare,KR:REGION:4721000000,경상북도 영주시,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 영주시)
+영천,variant,KR:REGION:4723000000,경상북도 영천시,SIGUNGU,exact,OK,0,0,2,변형 표기(줄임·오타·붙여쓰기 등). '영천시'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 영천시)
+영천시,bare,KR:REGION:4723000000,경상북도 영천시,SIGUNGU,exact,OK,0,0,3,시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 영천시)
+예산군,bare,KR:REGION:4481000000,충청남도 예산군,SIGUNGU,exact,OK,0,0,4,시도 없이 쓴 이름. 전국에 하나뿐 (충청남도 예산군)
+예천,variant,KR:REGION:4790000000,경상북도 예천군,SIGUNGU,exact,OK,0,0,3,변형 표기(줄임·오타·붙여쓰기 등). '예천군'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 예천군)
+예천군,bare,KR:REGION:4790000000,경상북도 예천군,SIGUNGU,exact,OK,0,0,3,시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 예천군)
+옥천,variant,KR:REGION:4373000000,충청북도 옥천군,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '옥천군'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (충청북도 옥천군)
+옥천군,bare,KR:REGION:4373000000,충청북도 옥천군,SIGUNGU,exact,OK,0,0,3,시도 없이 쓴 이름. 전국에 하나뿐 (충청북도 옥천군)
+완도군,bare,KR:REGION:1285000000,전남광주통합특별시 완도군,SIGUNGU,exact,OK,0,0,3,시도 없이 쓴 이름. 전국에 하나뿐 (전남광주통합특별시 완도군)
+완주군,bare,KR:REGION:5271000000,전북특별자치도 완주군,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (전북특별자치도 완주군)
+용산구,bare,KR:REGION:1117000000,서울특별시 용산구,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (서울특별시 용산구)
+용인시,bare,KR:REGION:4146000000,경기도 용인시,SIGUNGU,exact,OK,0,0,6,시도 없이 쓴 이름. 전국에 하나뿐 (경기도 용인시)
+용인특례시,variant,KR:REGION:4146000000,경기도 용인시,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '용인시'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (경기도 용인시)
+울릉,variant,KR:REGION:4794000000,경상북도 울릉군,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '울릉군'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 울릉군)
+울산,short,KR:REGION:3100000000,울산광역시,SIDO,exact,OK,0,19,397,
+울산광역시,official,KR:REGION:3100000000,울산광역시,SIDO,exact,OK,2457,0,44,
+울산광역시 남구,path,KR:REGION:3114000000,울산광역시 남구,SIGUNGU,exact,OK,15,0,0,
+울산광역시 동구,path,KR:REGION:3117000000,울산광역시 동구,SIGUNGU,exact,OK,15,0,0,
+울산광역시 북구,path,KR:REGION:3120000000,울산광역시 북구,SIGUNGU,exact,OK,15,0,0,
+울산광역시 울주군,path,KR:REGION:3171000000,울산광역시 울주군,SIGUNGU,exact,OK,15,0,0,
+울산광역시 중구,path,KR:REGION:3111000000,울산광역시 중구,SIGUNGU,exact,OK,15,0,0,
+울주군,bare,KR:REGION:3171000000,울산광역시 울주군,SIGUNGU,exact,OK,0,0,5,시도 없이 쓴 이름. 전국에 하나뿐 (울산광역시 울주군)
+울진,variant,KR:REGION:4793000000,경상북도 울진군,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '울진군'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 울진군)
+울진군,bare,KR:REGION:4793000000,경상북도 울진군,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 울진군)
+원주,variant,KR:REGION:5113000000,강원특별자치도 원주시,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '원주시'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (강원특별자치도 원주시)
+원주시,bare,KR:REGION:5113000000,강원특별자치도 원주시,SIGUNGU,exact,OK,0,0,5,시도 없이 쓴 이름. 전국에 하나뿐 (강원특별자치도 원주시)
+유성구,bare,KR:REGION:3020000000,대전광역시 유성구,SIGUNGU,exact,OK,0,0,3,시도 없이 쓴 이름. 전국에 하나뿐 (대전광역시 유성구)
+은평구,bare,KR:REGION:1138000000,서울특별시 은평구,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (서울특별시 은평구)
+음성군,bare,KR:REGION:4377000000,충청북도 음성군,SIGUNGU,exact,OK,0,0,4,시도 없이 쓴 이름. 전국에 하나뿐 (충청북도 음성군)
+의성,variant,KR:REGION:4773000000,경상북도 의성군,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '의성군'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 의성군)
+의성군,bare,KR:REGION:4773000000,경상북도 의성군,SIGUNGU,exact,OK,0,0,4,시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 의성군)
+의정부시,bare,KR:REGION:4115000000,경기도 의정부시,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (경기도 의정부시)
+이천시,bare,KR:REGION:4150000000,경기도 이천시,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (경기도 이천시)
+익산시,bare,KR:REGION:5214000000,전북특별자치도 익산시,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (전북특별자치도 익산시)
+인제군,bare,KR:REGION:5181000000,강원특별자치도 인제군,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (강원특별자치도 인제군)
+인천,short,KR:REGION:2800000000,인천광역시,SIDO,exact,OK,0,51,401,
+인천광역시,official,KR:REGION:2800000000,인천광역시,SIDO,exact,OK,4510,0,56,
+인천광역시 강화군,path,KR:REGION:2871000000,인천광역시 강화군,SIGUNGU,exact,OK,35,0,0,
+인천광역시 검단구,path,KR:REGION:2829000000,인천광역시 검단구,SIGUNGU,exact,OK,12,0,0,
+인천광역시 계양구,path,KR:REGION:2824500000,인천광역시 계양구,SIGUNGU,exact,OK,21,0,0,
+인천광역시 남동구,path,KR:REGION:2820000000,인천광역시 남동구,SIGUNGU,exact,OK,19,0,0,
+인천광역시 동구,legacy_path,KR:REGION:2800000000,인천광역시,SIDO,coarser,NEEDS_REVIEW,9,0,0,2026-07 인천 개편 전 구 명칭(폐지). 이어지는 구 후보: 제물포구. 일부 지역만 넘어가 인천광역시로만 연결
+인천광역시 미추홀구,path,KR:REGION:2817700000,인천광역시 미추홀구,SIGUNGU,exact,OK,19,0,0,
+인천광역시 부평구,path,KR:REGION:2823700000,인천광역시 부평구,SIGUNGU,exact,OK,19,0,0,
+인천광역시 서구,legacy_path,KR:REGION:2800000000,인천광역시,SIDO,coarser,NEEDS_REVIEW,8,0,0,"2026-07 인천 개편 전 구 명칭(폐지). 이어지는 구 후보: 서해구, 검단구. 일부 지역만 넘어가 인천광역시로만 연결"
+인천광역시 서해구,path,KR:REGION:2827500000,인천광역시 서해구,SIGUNGU,exact,OK,12,0,0,
+인천광역시 연수구,path,KR:REGION:2818500000,인천광역시 연수구,SIGUNGU,exact,OK,21,0,0,
+인천광역시 영종구,path,KR:REGION:2815500000,인천광역시 영종구,SIGUNGU,exact,OK,12,0,0,
+인천광역시 옹진군,path,KR:REGION:2872000000,인천광역시 옹진군,SIGUNGU,exact,OK,14,0,0,
+인천광역시 제물포구,path,KR:REGION:2812500000,인천광역시 제물포구,SIGUNGU,exact,OK,12,0,0,
+인천광역시 중구,legacy_path,KR:REGION:2800000000,인천광역시,SIDO,coarser,NEEDS_REVIEW,12,0,0,"2026-07 인천 개편 전 구 명칭(폐지). 이어지는 구 후보: 제물포구, 영종구. 일부 지역만 넘어가 인천광역시로만 연결"
+인천남동구,variant,KR:REGION:2820000000,인천광역시 남동구,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '인천 남동구'(으)로 읽음. 
+인천서구,variant,KR:REGION:2800000000,인천광역시,SIDO,coarser,NEEDS_REVIEW,0,0,1,"변형 표기(줄임·오타·붙여쓰기 등). '인천 서구'(으)로 읽음. 2026-07 인천 개편 전 구 명칭(폐지). 이어지는 구 후보: 서해구, 검단구. 일부 지역만 넘어가 인천광역시로만 연결"
+임실군,bare,KR:REGION:5275000000,전북특별자치도 임실군,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (전북특별자치도 임실군)
+장성군,bare,KR:REGION:1284000000,전남광주통합특별시 장성군,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (전남광주통합특별시 장성군)
+장수군,bare,KR:REGION:5274000000,전북특별자치도 장수군,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (전북특별자치도 장수군)
+장흥군,bare,KR:REGION:1277000000,전남광주통합특별시 장흥군,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (전남광주통합특별시 장흥군)
+전국,official,KR:NATIONWIDE,전국,NATIONWIDE,exact,OK,0,2189,2,
+전남,legacy,LEGACY:전라남도,전라남도(2026-07 이전),BUNDLE,exact,BUNDLE,0,9,217,2026-07 통합 전 명칭. 옛 전라남도 시군로 연결
+전남광주,short,KR:REGION:1200000000,전남광주통합특별시,SIDO,exact,OK,0,20,260,
+전남광주통합특별시,official,KR:REGION:1200000000,전남광주통합특별시,SIDO,exact,OK,428,0,117,
+전남광주통합특별시 강진군,path,KR:REGION:1278000000,전남광주통합특별시 강진군,SIGUNGU,exact,OK,540,0,0,
+전남광주통합특별시 고흥군,path,KR:REGION:1274000000,전남광주통합특별시 고흥군,SIGUNGU,exact,OK,546,0,0,
+전남광주통합특별시 곡성군,path,KR:REGION:1272000000,전남광주통합특별시 곡성군,SIGUNGU,exact,OK,546,0,0,
+전남광주통합특별시 광산구,path,KR:REGION:1233000000,전남광주통합특별시 광산구,SIGUNGU,exact,OK,445,0,0,
+전남광주통합특별시 광양시,path,KR:REGION:1219000000,전남광주통합특별시 광양시,SIGUNGU,exact,OK,565,0,0,
+전남광주통합특별시 구례군,path,KR:REGION:1273000000,전남광주통합특별시 구례군,SIGUNGU,exact,OK,536,0,0,
+전남광주통합특별시 나주시,path,KR:REGION:1217000000,전남광주통합특별시 나주시,SIGUNGU,exact,OK,563,0,0,
+전남광주통합특별시 남구,path,KR:REGION:1227000000,전남광주통합특별시 남구,SIGUNGU,exact,OK,445,0,0,
+전남광주통합특별시 담양군,path,KR:REGION:1271000000,전남광주통합특별시 담양군,SIGUNGU,exact,OK,552,0,0,
+전남광주통합특별시 동구,path,KR:REGION:1221000000,전남광주통합특별시 동구,SIGUNGU,exact,OK,445,0,0,
+전남광주통합특별시 목포시,path,KR:REGION:1211000000,전남광주통합특별시 목포시,SIGUNGU,exact,OK,552,0,0,
+전남광주통합특별시 무안군,path,KR:REGION:1281000000,전남광주통합특별시 무안군,SIGUNGU,exact,OK,558,0,0,
+전남광주통합특별시 보성군,path,KR:REGION:1275000000,전남광주통합특별시 보성군,SIGUNGU,exact,OK,542,0,0,
+전남광주통합특별시 북구,path,KR:REGION:1230000000,전남광주통합특별시 북구,SIGUNGU,exact,OK,445,0,0,
+전남광주통합특별시 서구,path,KR:REGION:1224000000,전남광주통합특별시 서구,SIGUNGU,exact,OK,445,0,0,
+전남광주통합특별시 순천시,path,KR:REGION:1215000000,전남광주통합특별시 순천시,SIGUNGU,exact,OK,587,0,0,
+전남광주통합특별시 신안군,path,KR:REGION:1287000000,전남광주통합특별시 신안군,SIGUNGU,exact,OK,533,0,0,
+전남광주통합특별시 여수시,path,KR:REGION:1213000000,전남광주통합특별시 여수시,SIGUNGU,exact,OK,629,0,0,
+전남광주통합특별시 영광군,path,KR:REGION:1283000000,전남광주통합특별시 영광군,SIGUNGU,exact,OK,546,0,0,
+전남광주통합특별시 영암군,path,KR:REGION:1280000000,전남광주통합특별시 영암군,SIGUNGU,exact,OK,574,0,0,
+전남광주통합특별시 완도군,path,KR:REGION:1285000000,전남광주통합특별시 완도군,SIGUNGU,exact,OK,572,0,0,
+전남광주통합특별시 장성군,path,KR:REGION:1284000000,전남광주통합특별시 장성군,SIGUNGU,exact,OK,558,0,0,
+전남광주통합특별시 장흥군,path,KR:REGION:1277000000,전남광주통합특별시 장흥군,SIGUNGU,exact,OK,562,0,0,
+전남광주통합특별시 진도군,path,KR:REGION:1286000000,전남광주통합특별시 진도군,SIGUNGU,exact,OK,556,0,0,
+전남광주통합특별시 함평군,path,KR:REGION:1282000000,전남광주통합특별시 함평군,SIGUNGU,exact,OK,549,0,0,
+전남광주통합특별시 해남군,path,KR:REGION:1279000000,전남광주통합특별시 해남군,SIGUNGU,exact,OK,560,0,0,
+전남광주통합특별시 화순군,path,KR:REGION:1276000000,전남광주통합특별시 화순군,SIGUNGU,exact,OK,541,0,0,
+전라남도,legacy,LEGACY:전라남도,전라남도(2026-07 이전),BUNDLE,exact,BUNDLE,2779,0,24,2026-07 통합 전 명칭. 옛 전라남도 시군로 연결
+전라남도 강진군,legacy_path,KR:REGION:1278000000,전남광주통합특별시 강진군,SIGUNGU,exact,OK,78,0,0,옛 시도명 경로를 통합시 아래 시군구로 연결
+전라남도 고흥군,legacy_path,KR:REGION:1274000000,전남광주통합특별시 고흥군,SIGUNGU,exact,OK,78,0,0,옛 시도명 경로를 통합시 아래 시군구로 연결
+전라남도 곡성군,legacy_path,KR:REGION:1272000000,전남광주통합특별시 곡성군,SIGUNGU,exact,OK,66,0,0,옛 시도명 경로를 통합시 아래 시군구로 연결
+전라남도 광양시,legacy_path,KR:REGION:1219000000,전남광주통합특별시 광양시,SIGUNGU,exact,OK,234,0,0,옛 시도명 경로를 통합시 아래 시군구로 연결
+전라남도 구례군,legacy_path,KR:REGION:1273000000,전남광주통합특별시 구례군,SIGUNGU,exact,OK,58,0,0,옛 시도명 경로를 통합시 아래 시군구로 연결
+전라남도 나주시,legacy_path,KR:REGION:1217000000,전남광주통합특별시 나주시,SIGUNGU,exact,OK,122,0,0,옛 시도명 경로를 통합시 아래 시군구로 연결
+전라남도 담양군,legacy_path,KR:REGION:1271000000,전남광주통합특별시 담양군,SIGUNGU,exact,OK,78,0,0,옛 시도명 경로를 통합시 아래 시군구로 연결
+전라남도 목포시,legacy_path,KR:REGION:1211000000,전남광주통합특별시 목포시,SIGUNGU,exact,OK,113,0,0,옛 시도명 경로를 통합시 아래 시군구로 연결
+전라남도 무안군,legacy_path,KR:REGION:1281000000,전남광주통합특별시 무안군,SIGUNGU,exact,OK,103,0,0,옛 시도명 경로를 통합시 아래 시군구로 연결
+전라남도 보성군,legacy_path,KR:REGION:1275000000,전남광주통합특별시 보성군,SIGUNGU,exact,OK,67,0,0,옛 시도명 경로를 통합시 아래 시군구로 연결
+전라남도 순천시,legacy_path,KR:REGION:1215000000,전남광주통합특별시 순천시,SIGUNGU,exact,OK,250,0,0,옛 시도명 경로를 통합시 아래 시군구로 연결
+전라남도 신안군,legacy_path,KR:REGION:1287000000,전남광주통합특별시 신안군,SIGUNGU,exact,OK,22,0,0,옛 시도명 경로를 통합시 아래 시군구로 연결
+전라남도 여수시,legacy_path,KR:REGION:1213000000,전남광주통합특별시 여수시,SIGUNGU,exact,OK,253,0,0,옛 시도명 경로를 통합시 아래 시군구로 연결
+전라남도 영광군,legacy_path,KR:REGION:1283000000,전남광주통합특별시 영광군,SIGUNGU,exact,OK,48,0,0,옛 시도명 경로를 통합시 아래 시군구로 연결
+전라남도 영암군,legacy_path,KR:REGION:1280000000,전남광주통합특별시 영암군,SIGUNGU,exact,OK,103,0,0,옛 시도명 경로를 통합시 아래 시군구로 연결
+전라남도 완도군,legacy_path,KR:REGION:1285000000,전남광주통합특별시 완도군,SIGUNGU,exact,OK,111,0,0,옛 시도명 경로를 통합시 아래 시군구로 연결
+전라남도 장성군,legacy_path,KR:REGION:1284000000,전남광주통합특별시 장성군,SIGUNGU,exact,OK,86,0,0,옛 시도명 경로를 통합시 아래 시군구로 연결
+전라남도 장흥군,legacy_path,KR:REGION:1277000000,전남광주통합특별시 장흥군,SIGUNGU,exact,OK,105,0,0,옛 시도명 경로를 통합시 아래 시군구로 연결
+전라남도 진도군,legacy_path,KR:REGION:1286000000,전남광주통합특별시 진도군,SIGUNGU,exact,OK,49,0,0,옛 시도명 경로를 통합시 아래 시군구로 연결
+전라남도 함평군,legacy_path,KR:REGION:1282000000,전남광주통합특별시 함평군,SIGUNGU,exact,OK,80,0,0,옛 시도명 경로를 통합시 아래 시군구로 연결
+전라남도 해남군,legacy_path,KR:REGION:1279000000,전남광주통합특별시 해남군,SIGUNGU,exact,OK,137,0,0,옛 시도명 경로를 통합시 아래 시군구로 연결
+전라남도 화순군,legacy_path,KR:REGION:1276000000,전남광주통합특별시 화순군,SIGUNGU,exact,OK,61,0,0,옛 시도명 경로를 통합시 아래 시군구로 연결
+전라북도,short,KR:REGION:5200000000,전북특별자치도,SIDO,exact,OK,0,0,0,
+전북,short,KR:REGION:5200000000,전북특별자치도,SIDO,exact,OK,0,45,409,
+전북특별자치도,official,KR:REGION:5200000000,전북특별자치도,SIDO,exact,OK,3175,0,54,
+전북특별자치도 고창군,path,KR:REGION:5279000000,전북특별자치도 고창군,SIGUNGU,exact,OK,76,0,0,
+전북특별자치도 군산시,path,KR:REGION:5213000000,전북특별자치도 군산시,SIGUNGU,exact,OK,192,0,0,
+전북특별자치도 김제시,path,KR:REGION:5221000000,전북특별자치도 김제시,SIGUNGU,exact,OK,131,0,0,
+전북특별자치도 남원시,path,KR:REGION:5219000000,전북특별자치도 남원시,SIGUNGU,exact,OK,156,0,0,
+전북특별자치도 무주군,path,KR:REGION:5273000000,전북특별자치도 무주군,SIGUNGU,exact,OK,89,0,0,
+전북특별자치도 부안군,path,KR:REGION:5280000000,전북특별자치도 부안군,SIGUNGU,exact,OK,37,0,0,
+전북특별자치도 순창군,path,KR:REGION:5277000000,전북특별자치도 순창군,SIGUNGU,exact,OK,67,0,0,
+전북특별자치도 완주군,path,KR:REGION:5271000000,전북특별자치도 완주군,SIGUNGU,exact,OK,122,0,0,
+전북특별자치도 익산시,path,KR:REGION:5214000000,전북특별자치도 익산시,SIGUNGU,exact,OK,215,0,0,
+전북특별자치도 임실군,path,KR:REGION:5275000000,전북특별자치도 임실군,SIGUNGU,exact,OK,50,0,0,
+전북특별자치도 장수군,path,KR:REGION:5274000000,전북특별자치도 장수군,SIGUNGU,exact,OK,79,0,0,
+전북특별자치도 전주시,path,KR:REGION:5211000000,전북특별자치도 전주시,SIGUNGU,exact,OK,228,0,0,
+전북특별자치도 전주시 덕진구,path,KR:REGION:5211300000,전북특별자치도 전주시 덕진구,GU,exact,OK,6,0,0,일반구로 연결 (상위 시: 전주시)
+전북특별자치도 전주시 완산구,path,KR:REGION:5211100000,전북특별자치도 전주시 완산구,GU,exact,OK,6,0,0,일반구로 연결 (상위 시: 전주시)
+전북특별자치도 정읍시,path,KR:REGION:5218000000,전북특별자치도 정읍시,SIGUNGU,exact,OK,163,0,0,
+전북특별자치도 진안군,path,KR:REGION:5272000000,전북특별자치도 진안군,SIGUNGU,exact,OK,66,0,0,
+전주시,bare,KR:REGION:5211000000,전북특별자치도 전주시,SIGUNGU,exact,OK,0,0,3,시도 없이 쓴 이름. 전국에 하나뿐 (전북특별자치도 전주시)
+정선군,bare,KR:REGION:5177000000,강원특별자치도 정선군,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (강원특별자치도 정선군)
+제물포구,bare,KR:REGION:2812500000,인천광역시 제물포구,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (인천광역시 제물포구)
+제주,short,KR:REGION:5000000000,제주특별자치도,SIDO,exact,OK,0,17,380,
+제주도,short,KR:REGION:5000000000,제주특별자치도,SIDO,exact,OK,0,0,0,
+제주시,bare,KR:REGION:5011000000,제주특별자치도 제주시,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (제주특별자치도 제주시)
+제주특별자치도,official,KR:REGION:5000000000,제주특별자치도,SIDO,exact,OK,1488,0,32,
+제주특별자치도 서귀포시,path,KR:REGION:5013000000,제주특별자치도 서귀포시,SIGUNGU,exact,OK,14,0,0,
+제주특별자치도 제주시,path,KR:REGION:5011000000,제주특별자치도 제주시,SIGUNGU,exact,OK,21,0,0,
+제천,variant,KR:REGION:4315000000,충청북도 제천시,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '제천시'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (충청북도 제천시)
+제천시,bare,KR:REGION:4315000000,충청북도 제천시,SIGUNGU,exact,OK,0,0,3,시도 없이 쓴 이름. 전국에 하나뿐 (충청북도 제천시)
+종로구,bare,KR:REGION:1111000000,서울특별시 종로구,SIGUNGU,exact,OK,0,0,3,시도 없이 쓴 이름. 전국에 하나뿐 (서울특별시 종로구)
+중구,bare,,,,,AMBIGUOUS,0,0,5,"같은 이름 5곳: 대구광역시 중구, 대전광역시 중구, 부산광역시 중구, 서울특별시 중구, 울산광역시 중구. 같은 공고의 시도 태그·기관명으로 정해야 함"
+중랑구,bare,KR:REGION:1126000000,서울특별시 중랑구,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (서울특별시 중랑구)
+증평군,bare,KR:REGION:4374500000,충청북도 증평군,SIGUNGU,exact,OK,0,0,6,시도 없이 쓴 이름. 전국에 하나뿐 (충청북도 증평군)
+진도군,bare,KR:REGION:1286000000,전남광주통합특별시 진도군,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (전남광주통합특별시 진도군)
+진안군,bare,KR:REGION:5272000000,전북특별자치도 진안군,SIGUNGU,exact,OK,0,0,3,시도 없이 쓴 이름. 전국에 하나뿐 (전북특별자치도 진안군)
+진주시,bare,KR:REGION:4817000000,경상남도 진주시,SIGUNGU,exact,OK,0,0,17,시도 없이 쓴 이름. 전국에 하나뿐 (경상남도 진주시)
+진천군,bare,KR:REGION:4375000000,충청북도 진천군,SIGUNGU,exact,OK,0,0,5,시도 없이 쓴 이름. 전국에 하나뿐 (충청북도 진천군)
+창녕군,bare,KR:REGION:4874000000,경상남도 창녕군,SIGUNGU,exact,OK,0,0,5,시도 없이 쓴 이름. 전국에 하나뿐 (경상남도 창녕군)
+창원시,bare,KR:REGION:4812000000,경상남도 창원시,SIGUNGU,exact,OK,0,0,7,시도 없이 쓴 이름. 전국에 하나뿐 (경상남도 창원시)
+천안시,bare,KR:REGION:4413000000,충청남도 천안시,SIGUNGU,exact,OK,0,0,4,시도 없이 쓴 이름. 전국에 하나뿐 (충청남도 천안시)
+철원군,bare,KR:REGION:5178000000,강원특별자치도 철원군,SIGUNGU,exact,OK,0,0,3,시도 없이 쓴 이름. 전국에 하나뿐 (강원특별자치도 철원군)
+청도군,bare,KR:REGION:4782000000,경상북도 청도군,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 청도군)
+청송군,bare,KR:REGION:4775000000,경상북도 청송군,SIGUNGU,exact,OK,0,0,4,시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 청송군)
+청양군,bare,KR:REGION:4479000000,충청남도 청양군,SIGUNGU,exact,OK,0,0,3,시도 없이 쓴 이름. 전국에 하나뿐 (충청남도 청양군)
+청주시,bare,KR:REGION:4311000000,충청북도 청주시,SIGUNGU,exact,OK,0,0,8,시도 없이 쓴 이름. 전국에 하나뿐 (충청북도 청주시)
+춘천시,bare,KR:REGION:5111000000,강원특별자치도 춘천시,SIGUNGU,exact,OK,0,0,7,시도 없이 쓴 이름. 전국에 하나뿐 (강원특별자치도 춘천시)
+충남,short,KR:REGION:4400000000,충청남도,SIDO,exact,OK,0,87,397,
+충북,short,KR:REGION:4300000000,충청북도,SIDO,exact,OK,0,39,405,
+충주시,bare,KR:REGION:4313000000,충청북도 충주시,SIGUNGU,exact,OK,0,0,10,시도 없이 쓴 이름. 전국에 하나뿐 (충청북도 충주시)
+충청남,short,KR:REGION:4400000000,충청남도,SIDO,exact,OK,0,0,0,
+충청남도,official,KR:REGION:4400000000,충청남도,SIDO,exact,OK,3337,0,50,
+충청남도 계룡시,path,KR:REGION:4425000000,충청남도 계룡시,SIGUNGU,exact,OK,86,0,0,
+충청남도 공주시,path,KR:REGION:4415000000,충청남도 공주시,SIGUNGU,exact,OK,295,0,0,
+충청남도 금산군,path,KR:REGION:4471000000,충청남도 금산군,SIGUNGU,exact,OK,95,0,0,
+충청남도 논산시,path,KR:REGION:4423000000,충청남도 논산시,SIGUNGU,exact,OK,215,0,0,
+충청남도 당진시,path,KR:REGION:4427000000,충청남도 당진시,SIGUNGU,exact,OK,229,0,0,
+충청남도 보령시,path,KR:REGION:4418000000,충청남도 보령시,SIGUNGU,exact,OK,237,0,0,
+충청남도 부여군,path,KR:REGION:4476000000,충청남도 부여군,SIGUNGU,exact,OK,175,0,0,
+충청남도 서산시,path,KR:REGION:4421000000,충청남도 서산시,SIGUNGU,exact,OK,290,0,0,
+충청남도 서천군,path,KR:REGION:4477000000,충청남도 서천군,SIGUNGU,exact,OK,140,0,0,
+충청남도 아산시,path,KR:REGION:4420000000,충청남도 아산시,SIGUNGU,exact,OK,432,0,0,
+충청남도 예산군,path,KR:REGION:4481000000,충청남도 예산군,SIGUNGU,exact,OK,183,0,0,
+충청남도 천안시,path,KR:REGION:4413000000,충청남도 천안시,SIGUNGU,exact,OK,451,0,0,
+충청남도 천안시 동남구,path,KR:REGION:4413100000,충청남도 천안시 동남구,GU,exact,OK,14,0,0,일반구로 연결 (상위 시: 천안시)
+충청남도 천안시 서북구,path,KR:REGION:4413300000,충청남도 천안시 서북구,GU,exact,OK,18,0,0,일반구로 연결 (상위 시: 천안시)
+충청남도 청양군,path,KR:REGION:4479000000,충청남도 청양군,SIGUNGU,exact,OK,110,0,0,
+충청남도 태안군,path,KR:REGION:4482500000,충청남도 태안군,SIGUNGU,exact,OK,173,0,0,
+충청남도 홍성군,path,KR:REGION:4480000000,충청남도 홍성군,SIGUNGU,exact,OK,179,0,0,
+충청북,short,KR:REGION:4300000000,충청북도,SIDO,exact,OK,0,0,0,
+충청북도,official,KR:REGION:4300000000,충청북도,SIDO,exact,OK,2579,0,54,
+충청북도 괴산군,path,KR:REGION:4376000000,충청북도 괴산군,SIGUNGU,exact,OK,194,0,0,
+충청북도 단양군,path,KR:REGION:4380000000,충청북도 단양군,SIGUNGU,exact,OK,188,0,0,
+충청북도 보은군,path,KR:REGION:4372000000,충청북도 보은군,SIGUNGU,exact,OK,165,0,0,
+충청북도 영동군,path,KR:REGION:4374000000,충청북도 영동군,SIGUNGU,exact,OK,179,0,0,
+충청북도 옥천군,path,KR:REGION:4373000000,충청북도 옥천군,SIGUNGU,exact,OK,213,0,0,
+충청북도 음성군,path,KR:REGION:4377000000,충청북도 음성군,SIGUNGU,exact,OK,210,0,0,
+충청북도 제천시,path,KR:REGION:4315000000,충청북도 제천시,SIGUNGU,exact,OK,271,0,0,
+충청북도 증평군,path,KR:REGION:4374500000,충청북도 증평군,SIGUNGU,exact,OK,107,0,0,
+충청북도 진천군,path,KR:REGION:4375000000,충청북도 진천군,SIGUNGU,exact,OK,189,0,0,
+충청북도 청주시,path,KR:REGION:4311000000,충청북도 청주시,SIGUNGU,exact,OK,750,0,0,
+충청북도 청주시 상당구,path,KR:REGION:4311100000,충청북도 청주시 상당구,GU,exact,OK,7,0,0,일반구로 연결 (상위 시: 청주시)
+충청북도 청주시 서원구,path,KR:REGION:4311200000,충청북도 청주시 서원구,GU,exact,OK,7,0,0,일반구로 연결 (상위 시: 청주시)
+충청북도 청주시 청원구,path,KR:REGION:4311400000,충청북도 청주시 청원구,GU,exact,OK,7,0,0,일반구로 연결 (상위 시: 청주시)
+충청북도 청주시 흥덕구,path,KR:REGION:4311300000,충청북도 청주시 흥덕구,GU,exact,OK,7,0,0,일반구로 연결 (상위 시: 청주시)
+충청북도 충주시,path,KR:REGION:4313000000,충청북도 충주시,SIGUNGU,exact,OK,256,0,0,
+충추시,variant,KR:REGION:4313000000,충청북도 충주시,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '충주시'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (충청북도 충주시)
+칠곡,variant,KR:REGION:4785000000,경상북도 칠곡군,SIGUNGU,exact,OK,0,0,2,변형 표기(줄임·오타·붙여쓰기 등). '칠곡군'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 칠곡군)
+칠곡군,bare,KR:REGION:4785000000,경상북도 칠곡군,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 칠곡군)
+태백시,bare,KR:REGION:5119000000,강원특별자치도 태백시,SIGUNGU,exact,OK,0,0,5,시도 없이 쓴 이름. 전국에 하나뿐 (강원특별자치도 태백시)
+태안군,bare,KR:REGION:4482500000,충청남도 태안군,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (충청남도 태안군)
+통영시,bare,KR:REGION:4822000000,경상남도 통영시,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (경상남도 통영시)
+파주시,bare,KR:REGION:4148000000,경기도 파주시,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (경기도 파주시)
+평창군,bare,KR:REGION:5176000000,강원특별자치도 평창군,SIGUNGU,exact,OK,0,0,4,시도 없이 쓴 이름. 전국에 하나뿐 (강원특별자치도 평창군)
+평택,variant,KR:REGION:4122000000,경기도 평택시,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '평택시'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (경기도 평택시)
+평택시,bare,KR:REGION:4122000000,경기도 평택시,SIGUNGU,exact,OK,0,0,4,시도 없이 쓴 이름. 전국에 하나뿐 (경기도 평택시)
+포천시,bare,KR:REGION:4165000000,경기도 포천시,SIGUNGU,exact,OK,0,0,6,시도 없이 쓴 이름. 전국에 하나뿐 (경기도 포천시)
+포항시,bare,KR:REGION:4711000000,경상북도 포항시,SIGUNGU,exact,OK,0,0,9,시도 없이 쓴 이름. 전국에 하나뿐 (경상북도 포항시)
+하남시,bare,KR:REGION:4145000000,경기도 하남시,SIGUNGU,exact,OK,0,0,5,시도 없이 쓴 이름. 전국에 하나뿐 (경기도 하남시)
+하동군,bare,KR:REGION:4885000000,경상남도 하동군,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (경상남도 하동군)
+함안군,bare,KR:REGION:4873000000,경상남도 함안군,SIGUNGU,exact,OK,0,0,5,시도 없이 쓴 이름. 전국에 하나뿐 (경상남도 함안군)
+함양군,bare,KR:REGION:4887000000,경상남도 함양군,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (경상남도 함양군)
+함평군,bare,KR:REGION:1282000000,전남광주통합특별시 함평군,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (전남광주통합특별시 함평군)
+합천군,bare,KR:REGION:4889000000,경상남도 합천군,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (경상남도 합천군)
+해남군,bare,KR:REGION:1279000000,전남광주통합특별시 해남군,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (전남광주통합특별시 해남군)
+해운대구,bare,KR:REGION:2635000000,부산광역시 해운대구,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (부산광역시 해운대구)
+호남권,group,GROUP:호남권,호남권,BUNDLE,exact,BUNDLE,0,0,2,권역 표기. 구성 시도로 연결
+홍천,variant,KR:REGION:5172000000,강원특별자치도 홍천군,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '홍천군'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (강원특별자치도 홍천군)
+홍천군,bare,KR:REGION:5172000000,강원특별자치도 홍천군,SIGUNGU,exact,OK,0,0,1,시도 없이 쓴 이름. 전국에 하나뿐 (강원특별자치도 홍천군)
+화성시,bare,KR:REGION:4159000000,경기도 화성시,SIGUNGU,exact,OK,0,0,10,시도 없이 쓴 이름. 전국에 하나뿐 (경기도 화성시)
+화순군,bare,KR:REGION:1276000000,전남광주통합특별시 화순군,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (전남광주통합특별시 화순군)
+화천군,bare,KR:REGION:5179000000,강원특별자치도 화천군,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (강원특별자치도 화천군)
+횡성,variant,KR:REGION:5173000000,강원특별자치도 횡성군,SIGUNGU,exact,OK,0,0,1,변형 표기(줄임·오타·붙여쓰기 등). '횡성군'(으)로 읽음. 시도 없이 쓴 이름. 전국에 하나뿐 (강원특별자치도 횡성군)
+횡성군,bare,KR:REGION:5173000000,강원특별자치도 횡성군,SIGUNGU,exact,OK,0,0,2,시도 없이 쓴 이름. 전국에 하나뿐 (강원특별자치도 횡성군)
