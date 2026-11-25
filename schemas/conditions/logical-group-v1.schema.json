@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:mle-team2:support-conditions:v1:logical-expression",
+  "title": "Recursive logical expression v1",
+  "$ref": "urn:mle-team2:support-conditions:v1:common#/$defs/logicalExpression"
+}

@@ -64,3 +64,15 @@ KSTARTUP,chunks.section=title_body,string,chunk.section=NOTICE_BODY,string,prese
 KSTARTUP,chunks.section=eligibility_api/exclusion_api/preferred_api,string,chunk.section=ELIGIBILITY_API/EXCLUSION_API/PREFERENCE_API,string,preserve,Do not merge section content
 NORMALIZED_FACTS,facts[].attribute/operator/value,object,future condition layer,not transformed by notice normalizer,Existing value-normalized facts are retained in their current path for the later condition stage
 NEO4J_SUPABASE,api_samples/normalized/neo4j_import.json + supabase_public_notice_chunks.json,sample JSON,independent loader payloads,not transformed by notice normalizer,Loaders target a 90-record API sample and use separate privacy and review gates
+G2B,notice_id/bid_notice_no/bid_notice_ord,string,string,string,namespace with G2B prefix; preserve raw notice_id as source.source_id,Prevent collisions with support-program identifiers
+G2B,title,string,title/title_raw,string/null,preserve and sanitize,Procurement notice title; notice_type=PROCUREMENT_BID
+G2B,notice_at,datetime string,timestamps.published_at,timestamp object,ISO 8601 parse preserving supplied precision and timezone,Source notice timestamp; not fetched_at
+G2B,close_at,datetime string,application_period.deadline,timestamp object,ISO 8601 parse preserving supplied precision and timezone,Procurement deadline; does not populate support application start/end
+G2B,detail_url,string,urls.notice_url,string|null,HTTPS and g2b.go.kr allowlist,Official notice detail URL; never inferred as application URL
+G2B,notice_org/demand_org,string|null,organization.names/roles,array,retain organization names as organization metadata,Notice and demand organizations have distinct roles
+G2B,category/service_division,string|null,category.source_major/source_medium,string|null,preserve source taxonomy,Do not crosswalk to support-program taxonomies
+G2B,licenses/regions/industry_limit_yn/participation_limit_yn,object arrays and Y/N,source_metadata.source_specific.G2B,source-native object,retain source values without interpreting as verified conditions,Structured bid fields are candidates only; natural-language condition text is not present in shared input
+G2B,documents[].name/source/url,array of objects,source_metadata.source_specific.G2B.documents,array,retain metadata; HTTPS g2b.go.kr URLs only; no fetch or extraction,Attachment names/count are metadata only; extracted text is NOT_COLLECTED
+G2B,contact_name/executor_name,string|null,omitted,not emitted,omit personal names,No contact-person names copied to service output
+G2B,contact_phone/contact_email/demand_contact_email,string|null,contacts[],array,retain only explicitly classified official business values; ambiguous values withheld for review,No classification from number format or domain alone
+G2B,is_cancelled/is_negotiated,boolean|null,source_metadata.source_specific.G2B,boolean|null,preserve source value,Do not treat canceled records as absent; downstream filtering remains explicit

@@ -1,0 +1,277 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:mle-team2:support-conditions:v1:common",
+  "title": "Shared structural definitions for support condition schemas v1",
+  "$defs": {
+    "nonEmptyString": {"type": "string", "minLength": 1},
+    "nullableString": {"type": ["string", "null"]},
+    "sourceReference": {
+      "type": "object",
+      "required": ["source_system", "source_kind", "source_field", "normalized_path", "evidence_id", "chunk_ids", "location", "observed_value_status", "evidence_text"],
+      "properties": {
+        "source_system": {"$ref": "#/$defs/nonEmptyString"},
+        "source_kind": {"$ref": "urn:mle-team2:support-conditions:v1:vocab#/$defs/sourceKind"},
+        "source_field": {"$ref": "#/$defs/nullableString"},
+        "normalized_path": {"$ref": "#/$defs/nullableString"},
+        "evidence_id": {"$ref": "#/$defs/nullableString"},
+        "chunk_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/nonEmptyString"}},
+        "location": {
+          "type": ["object", "null"],
+          "required": ["start_char", "end_char"],
+          "properties": {
+            "start_char": {"type": ["integer", "null"], "minimum": 0},
+            "end_char": {"type": ["integer", "null"], "minimum": 0}
+          },
+          "additionalProperties": false
+        },
+        "observed_value_status": {"oneOf": [{"$ref": "urn:mle-team2:support-conditions:v1:vocab#/$defs/availabilityStatus"}, {"type": "null"}]},
+        "evidence_text": {"$ref": "#/$defs/nullableString"}
+      },
+      "allOf": [{
+        "if": {"properties": {"source_kind": {"const": "CHUNK"}}, "required": ["source_kind"]},
+        "then": {"properties": {"chunk_ids": {"minItems": 1}}}
+      }],
+      "additionalProperties": false
+    },
+    "referenceDate": {
+      "type": "object",
+      "required": ["value", "date_type", "precision", "basis", "source_field"],
+      "properties": {
+        "value": {"type": ["string", "null"]},
+        "date_type": {"$ref": "urn:mle-team2:support-conditions:v1:vocab#/$defs/referenceDateType"},
+        "precision": {"$ref": "urn:mle-team2:support-conditions:v1:vocab#/$defs/referenceDatePrecision"},
+        "basis": {"$ref": "#/$defs/nullableString"},
+        "source_field": {"$ref": "#/$defs/nullableString"}
+      },
+      "allOf": [{
+        "if": {"properties": {"precision": {"const": "DATE"}}, "required": ["precision"]},
+        "then": {"properties": {"value": {"type": "string", "format": "date"}}}
+      }],
+      "additionalProperties": false
+    },
+    "rangeBound": {
+      "type": "object",
+      "required": ["value", "inclusive"],
+      "properties": {
+        "value": {"type": ["string", "number"]},
+        "inclusive": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "rangeValue": {
+      "type": "object",
+      "required": ["lower", "upper"],
+      "properties": {"lower": {"$ref": "#/$defs/rangeBound"}, "upper": {"$ref": "#/$defs/rangeBound"}},
+      "additionalProperties": false
+    },
+    "qualifier": {
+      "type": "object",
+      "required": ["qualifier_type", "raw_text", "applies_to_condition_ids", "linkage_status", "review_status", "source"],
+      "properties": {
+        "qualifier_type": {"$ref": "urn:mle-team2:support-conditions:v1:vocab#/$defs/qualifierType"},
+        "raw_text": {"$ref": "#/$defs/nonEmptyString"},
+        "applies_to_condition_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/nonEmptyString"}},
+        "linkage_status": {"$ref": "urn:mle-team2:support-conditions:v1:vocab#/$defs/linkageStatus"},
+        "review_status": {"$ref": "urn:mle-team2:support-conditions:v1:vocab#/$defs/reviewStatus"},
+        "source": {"$ref": "#/$defs/sourceReference"}
+      },
+      "allOf": [{
+        "if": {"properties": {"linkage_status": {"const": "LINKED"}}, "required": ["linkage_status"]},
+        "then": {"properties": {"applies_to_condition_ids": {"minItems": 1}}}
+      }],
+      "additionalProperties": false
+    },
+    "benefit": {
+      "type": "object",
+      "required": ["benefit_type", "value", "unit", "applies_when_condition_ids", "stackable", "maximum_value", "raw_text", "review_status", "source"],
+      "properties": {
+        "benefit_type": {"$ref": "urn:mle-team2:support-conditions:v1:vocab#/$defs/benefitType"},
+        "value": {"type": ["number", "string", "null"]},
+        "unit": {"$ref": "#/$defs/nullableString"},
+        "applies_when_condition_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/nonEmptyString"}},
+        "stackable": {"type": ["boolean", "null"]},
+        "maximum_value": {"type": ["number", "string", "null"]},
+        "raw_text": {"$ref": "#/$defs/nonEmptyString"},
+        "review_status": {"$ref": "urn:mle-team2:support-conditions:v1:vocab#/$defs/reviewStatus"},
+        "source": {"$ref": "#/$defs/sourceReference"}
+      },
+      "additionalProperties": false
+    },
+    "condition": {
+      "type": "object",
+      "required": ["schema_version", "condition_id", "notice_id", "condition_type", "category_id", "field", "operator", "value", "value_type", "unit", "reference_date", "raw_text", "source", "availability_status", "completeness_status", "review_status", "confidence", "search_eligible", "search_reason", "decision_eligible", "logic_relation_status", "qualifiers", "benefit"],
+      "properties": {
+        "schema_version": {"const": "1.0"},
+        "condition_id": {"$ref": "#/$defs/nonEmptyString"},
+        "notice_id": {"$ref": "#/$defs/nonEmptyString"},
+        "condition_type": {"$ref": "urn:mle-team2:support-conditions:v1:vocab#/$defs/conditionType"},
+        "category_id": {"$ref": "urn:mle-team2:support-conditions:v1:vocab#/$defs/categoryId"},
+        "field": {"$ref": "#/$defs/nullableString"},
+        "operator": {"oneOf": [{"$ref": "urn:mle-team2:support-conditions:v1:vocab#/$defs/comparisonOperator"}, {"type": "null"}]},
+        "value": {"type": ["string", "number", "boolean", "array", "object", "null"]},
+        "value_type": {"$ref": "urn:mle-team2:support-conditions:v1:vocab#/$defs/valueType"},
+        "unit": {"$ref": "#/$defs/nullableString"},
+        "reference_date": {"$ref": "#/$defs/referenceDate"},
+        "raw_text": {"$ref": "#/$defs/nonEmptyString"},
+        "source": {"$ref": "#/$defs/sourceReference"},
+        "availability_status": {"$ref": "urn:mle-team2:support-conditions:v1:vocab#/$defs/availabilityStatus"},
+        "completeness_status": {"$ref": "urn:mle-team2:support-conditions:v1:vocab#/$defs/completenessStatus"},
+        "review_status": {"$ref": "urn:mle-team2:support-conditions:v1:vocab#/$defs/reviewStatus"},
+        "confidence": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "search_eligible": {"type": "boolean"},
+        "search_reason": {"$ref": "urn:mle-team2:support-conditions:v1:vocab#/$defs/searchReason"},
+        "decision_eligible": {"type": "boolean"},
+        "logic_relation_status": {"$ref": "urn:mle-team2:support-conditions:v1:vocab#/$defs/logicStatus"},
+        "qualifiers": {"type": "array", "items": {"$ref": "#/$defs/qualifier"}},
+        "benefit": {"oneOf": [{"$ref": "#/$defs/benefit"}, {"type": "null"}]}
+      },
+      "allOf": [
+        {"if": {"properties": {"value_type": {"const": "STRING"}}, "required": ["value_type"]}, "then": {"properties": {"value": {"type": "string"}}}},
+        {"if": {"properties": {"value_type": {"const": "NUMBER"}}, "required": ["value_type"]}, "then": {"properties": {"value": {"type": "number"}}}},
+        {"if": {"properties": {"value_type": {"const": "DATE"}}, "required": ["value_type"]}, "then": {"properties": {"value": {"type": "string", "format": "date"}}}},
+        {"if": {"properties": {"value_type": {"const": "BOOLEAN"}}, "required": ["value_type"]}, "then": {"properties": {"value": {"type": "boolean"}}}},
+        {"if": {"properties": {"value_type": {"const": "ARRAY"}}, "required": ["value_type"]}, "then": {"properties": {"value": {"type": "array"}}}},
+        {"if": {"properties": {"value_type": {"const": "OBJECT"}}, "required": ["value_type"]}, "then": {"properties": {"value": {"type": "object"}}}},
+        {"if": {"properties": {"value_type": {"const": "RANGE"}}, "required": ["value_type"]}, "then": {"properties": {"value": {"$ref": "#/$defs/rangeValue"}}}},
+        {"if": {"properties": {"value_type": {"const": "NULL"}}, "required": ["value_type"]}, "then": {"properties": {"value": {"type": "null"}}}},
+        {"if": {"properties": {"value_type": {"const": "UNKNOWN"}}, "required": ["value_type"]}, "then": {"properties": {"value": {"type": "null"}}}},
+        {"if": {"properties": {"operator": {"enum": ["IN", "NOT_IN"]}}, "required": ["operator"]}, "then": {"properties": {"value_type": {"const": "ARRAY"}, "value": {"type": "array", "minItems": 1}}}},
+        {"if": {"properties": {"operator": {"const": "BETWEEN"}}, "required": ["operator"]}, "then": {"properties": {"value_type": {"const": "RANGE"}, "value": {"$ref": "#/$defs/rangeValue"}}}},
+        {"if": {"properties": {"operator": {"enum": ["EXISTS", "NOT_EXISTS"]}}, "required": ["operator"]}, "then": {"properties": {"value_type": {"const": "UNKNOWN"}, "value": {"type": "null"}}}},
+        {"if": {"properties": {"decision_eligible": {"const": true}}, "required": ["decision_eligible"]}, "then": {"properties": {"condition_type": {"not": {"const": "UNCLASSIFIED"}}, "category_id": {"not": {"const": "UNCLASSIFIED"}}, "operator": {"type": "string"}, "availability_status": {"const": "AVAILABLE"}, "completeness_status": {"const": "COMPLETE"}, "review_status": {"const": "VERIFIED"}, "raw_text": {"$ref": "#/$defs/nonEmptyString"}}}},
+        {"if": {"properties": {"condition_type": {"const": "UNCLASSIFIED"}}, "required": ["condition_type"]}, "then": {"properties": {"review_status": {"enum": ["UNREVIEWED", "NEEDS_REVIEW"]}, "decision_eligible": {"const": false}}}},
+        {
+          "if": {
+            "properties": {
+              "source": {"properties": {"source_kind": {"enum": ["ATTACHMENT", "ATTACHMENT_OCR", "ATTACHMENT_PREVIEW"]}}},
+              "review_status": {"not": {"const": "VERIFIED"}}
+            },
+            "required": ["source", "review_status"]
+          },
+          "then": {"properties": {"search_eligible": {"const": false}}}
+        },
+        {
+          "if": {"properties": {"search_eligible": {"const": true}}, "required": ["search_eligible"]},
+          "then": {"properties": {
+            "source": {"properties": {"source_kind": {"const": "CHUNK"}, "chunk_ids": {"minItems": 1}}},
+            "search_reason": {"const": "SOURCE_CHUNK_AVAILABLE"}
+          }}
+        },
+        {
+          "if": {"properties": {"source": {"properties": {"source_kind": {"const": "SYNTHETIC_TEST"}}}}, "required": ["source"]},
+          "then": {"properties": {"search_eligible": {"const": false}}}
+        }
+      ],
+      "additionalProperties": false
+    },
+    "conditionReference": {
+      "type": "object",
+      "required": ["node_type", "condition_id"],
+      "properties": {"node_type": {"const": "CONDITION_REF"}, "condition_id": {"$ref": "#/$defs/nonEmptyString"}},
+      "additionalProperties": false
+    },
+    "logicalGroup": {
+      "type": "object",
+      "required": ["node_type", "group_id", "operator", "children", "review_status", "evidence"],
+      "properties": {
+        "node_type": {"const": "LOGICAL_GROUP"},
+        "group_id": {"$ref": "#/$defs/nonEmptyString"},
+        "operator": {"$ref": "urn:mle-team2:support-conditions:v1:vocab#/$defs/logicalOperator"},
+        "children": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/logicalExpression"}},
+        "review_status": {"$ref": "urn:mle-team2:support-conditions:v1:vocab#/$defs/reviewStatus"},
+        "evidence": {"oneOf": [{"$ref": "#/$defs/sourceReference"}, {"type": "null"}]}
+      },
+      "allOf": [
+        {"if": {"properties": {"operator": {"const": "NOT"}}, "required": ["operator"]}, "then": {"properties": {"children": {"minItems": 1, "maxItems": 1}}}},
+        {"if": {"properties": {"operator": {"enum": ["AND", "OR"]}}, "required": ["operator"]}, "then": {"properties": {"children": {"minItems": 2}}}},
+        {"if": {"properties": {"operator": {"enum": ["AND", "OR", "NOT"]}}, "required": ["operator"]}, "then": {"properties": {"review_status": {"enum": ["VERIFIED", "NEEDS_REVIEW", "UNREVIEWED"]}}}}
+      ],
+      "additionalProperties": false
+    },
+    "logicalExpression": {"oneOf": [{"$ref": "#/$defs/conditionReference"}, {"$ref": "#/$defs/logicalGroup"}]},
+    "conditionCollection": {
+      "type": "object",
+      "required": ["condition_type", "availability_status", "completeness_status", "review_status", "structure_status", "logic_status", "conditions", "logical_roots", "source_evidence", "decision_eligible", "insufficient_reasons"],
+      "properties": {
+        "condition_type": {"$ref": "urn:mle-team2:support-conditions:v1:vocab#/$defs/conditionType"},
+        "availability_status": {"$ref": "urn:mle-team2:support-conditions:v1:vocab#/$defs/availabilityStatus"},
+        "completeness_status": {"$ref": "urn:mle-team2:support-conditions:v1:vocab#/$defs/completenessStatus"},
+        "review_status": {"$ref": "urn:mle-team2:support-conditions:v1:vocab#/$defs/reviewStatus"},
+        "structure_status": {"$ref": "urn:mle-team2:support-conditions:v1:vocab#/$defs/structureStatus"},
+        "logic_status": {"$ref": "urn:mle-team2:support-conditions:v1:vocab#/$defs/logicStatus"},
+        "conditions": {"type": "array", "items": {"$ref": "#/$defs/condition"}},
+        "logical_roots": {"type": "array", "items": {"$ref": "#/$defs/logicalExpression"}},
+        "source_evidence": {"type": "array", "items": {"$ref": "#/$defs/sourceReference"}},
+        "decision_eligible": {"type": "boolean"},
+        "insufficient_reasons": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/nonEmptyString"}}
+      },
+      "allOf": [
+        {"if": {"properties": {"availability_status": {"const": "AVAILABLE"}}, "required": ["availability_status"]}, "then": {"properties": {"conditions": {"minItems": 1}, "source_evidence": {"minItems": 1}}}},
+        {"if": {"properties": {"availability_status": {"const": "NO_CONDITION_CONFIRMED"}}, "required": ["availability_status"]}, "then": {"properties": {"conditions": {"maxItems": 0}, "logical_roots": {"maxItems": 0}, "completeness_status": {"const": "COMPLETE"}, "review_status": {"const": "VERIFIED"}, "source_evidence": {"minItems": 1}, "decision_eligible": {"const": true}}}},
+        {"if": {"properties": {"availability_status": {"const": "NO_CONDITION_CONFIRMED"}}, "required": ["availability_status"]}, "then": {"properties": {"source_evidence": {"contains": {"type": "object", "required": ["observed_value_status", "evidence_text"], "properties": {"observed_value_status": {"const": "AVAILABLE"}, "evidence_text": {"type": "string", "minLength": 1}}}}}}},
+        {"if": {"properties": {"availability_status": {"enum": ["NOT_COLLECTED", "EMPTY", "NOT_EXTRACTED", "UNKNOWN"]}}, "required": ["availability_status"]}, "then": {"properties": {"conditions": {"maxItems": 0}, "decision_eligible": {"const": false}}}},
+        {"if": {"properties": {"availability_status": {"const": "NOT_EXTRACTED"}}, "required": ["availability_status"]}, "then": {"properties": {"source_evidence": {"minItems": 1}}}},
+        {"if": {"properties": {"decision_eligible": {"const": true}}, "required": ["decision_eligible"]}, "then": {"properties": {"availability_status": {"enum": ["AVAILABLE", "NO_CONDITION_CONFIRMED"]}, "completeness_status": {"const": "COMPLETE"}, "review_status": {"const": "VERIFIED"}, "conditions": {"items": {"properties": {"decision_eligible": {"const": true}}}}}}}
+      ],
+      "additionalProperties": false
+    },
+    "contextReference": {
+      "type": "object",
+      "required": ["role", "source", "raw_value", "used_as_condition"],
+      "properties": {
+        "role": {"type": "string", "enum": ["REGION_CONTEXT_ONLY", "BUSINESS_AGE_CONTEXT_ONLY", "REPRESENTATIVE_AGE_CONTEXT_ONLY", "OTHER_CONTEXT_ONLY"]},
+        "source": {"$ref": "#/$defs/sourceReference"},
+        "raw_value": {"type": ["string", "number", "boolean", "array", "object", "null"]},
+        "used_as_condition": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "noticeConditionSet": {
+      "type": "object",
+      "required": ["schema_version", "record_type", "notice_id", "source_system", "source_snapshot", "condition_sets", "decision_readiness"],
+      "properties": {
+        "schema_version": {"const": "1.0"},
+        "record_type": {"const": "notice_condition_set"},
+        "notice_id": {"$ref": "#/$defs/nonEmptyString"},
+        "source_system": {"$ref": "#/$defs/nonEmptyString"},
+        "source_snapshot": {"$ref": "#/$defs/nullableString"},
+        "condition_sets": {
+          "type": "object",
+          "required": ["eligibility", "exclusion", "preference"],
+          "properties": {
+            "eligibility": {"$ref": "#/$defs/conditionCollection"},
+            "exclusion": {"$ref": "#/$defs/conditionCollection"},
+            "preference": {"$ref": "#/$defs/conditionCollection"}
+          },
+          "additionalProperties": false
+        },
+        "decision_readiness": {
+          "type": "object",
+          "required": ["eligibility_decision_eligible", "preference_assessment_eligible", "limiting_reasons"],
+          "properties": {
+            "eligibility_decision_eligible": {"type": "boolean"},
+            "preference_assessment_eligible": {"type": "boolean"},
+            "limiting_reasons": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/nonEmptyString"}}
+          },
+          "additionalProperties": false
+        },
+        "context_references": {"type": "array", "items": {"$ref": "#/$defs/contextReference"}},
+        "sample_metadata": {
+          "type": "object",
+          "required": ["kind", "label"],
+          "properties": {
+            "kind": {"type": "string", "enum": ["ACTUAL_SOURCE", "SYNTHETIC_TEST"]},
+            "label": {"$ref": "#/$defs/nonEmptyString"}
+          },
+          "additionalProperties": false
+        }
+      },
+      "allOf": [
+        {"if": {"properties": {"decision_readiness": {"properties": {"eligibility_decision_eligible": {"const": true}}, "required": ["eligibility_decision_eligible"]}}, "required": ["decision_readiness"]}, "then": {"properties": {"condition_sets": {"properties": {"eligibility": {"properties": {"decision_eligible": {"const": true}}}, "exclusion": {"properties": {"decision_eligible": {"const": true}}}}}}}},
+        {"if": {"properties": {"decision_readiness": {"properties": {"preference_assessment_eligible": {"const": true}}, "required": ["preference_assessment_eligible"]}}, "required": ["decision_readiness"]}, "then": {"properties": {"condition_sets": {"properties": {"preference": {"properties": {"decision_eligible": {"const": true}}}}}}}}
+      ],
+      "additionalProperties": false
+    }
+  },
+  "type": "object"
+}

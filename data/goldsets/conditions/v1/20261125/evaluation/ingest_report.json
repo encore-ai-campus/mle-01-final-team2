@@ -1,0 +1,11 @@
+{
+  "split": "EVALUATION",
+  "condition_review_rows": 20,
+  "logic_review_rows": 20,
+  "reviewed_condition_records": 0,
+  "reviewed_logic_records": 0,
+  "unreviewed_records": 20,
+  "evaluation_candidate_data_present": false,
+  "all_rows_schema_valid": true,
+  "human_review_claimed_by_tool": false
+}

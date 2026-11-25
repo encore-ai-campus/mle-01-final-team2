@@ -36,6 +36,10 @@
       "type": "string",
       "minLength": 1
     },
+    "notice_type": {
+      "enum": ["SUPPORT_PROGRAM", "PROCUREMENT_BID", null],
+      "description": "Optional broad notice type. Legacy normalized support snapshots may omit it."
+    },
     "source": {
       "$ref": "#/$defs/source"
     },
@@ -569,9 +573,67 @@
         "guide_url_flags": {
           "$ref": "#/$defs/nullableStringArray"
         },
+        "source_specific": {
+          "type": "object",
+          "properties": {
+            "G2B": {"$ref": "#/$defs/g2bSourceMetadata"}
+          },
+          "additionalProperties": {"type": "object"},
+          "description": "Namespaced source-native fields retained when no common field has the same meaning."
+        }
+      },
+      "additionalProperties": false
+    },
+    "normalizer_version": {
+      "const": "1.0"
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "required": [
+        "source_system",
+        "source_id"
+      ],
+      "properties": {
+        "source_system": {
+          "type": "string",
+          "minLength": 1
+        },
         "source_id": {
           "$ref": "#/$defs/nullableString"
         }
+      },
+      "additionalProperties": false
+    },
+    "g2bSourceMetadata": {
+      "type": "object",
+      "required": ["bid_notice_no", "bid_notice_ord", "category", "notice_kind", "service_division", "procurement_large", "procurement_mid", "procurement_detail", "industry_limit_yn", "participation_limit_yn", "license_status", "licenses", "region_status", "regions", "region_basis", "notice_at", "close_at", "open_at", "contract_method", "award_method", "estimated_price", "is_negotiated", "is_cancelled", "documents"],
+      "properties": {
+        "bid_notice_no": {"$ref": "#/$defs/nullableString"},
+        "bid_notice_ord": {"$ref": "#/$defs/nullableString"},
+        "category": {"$ref": "#/$defs/nullableString"},
+        "notice_kind": {"$ref": "#/$defs/nullableString"},
+        "service_division": {"$ref": "#/$defs/nullableString"},
+        "procurement_large": {"$ref": "#/$defs/nullableString"},
+        "procurement_mid": {"$ref": "#/$defs/nullableString"},
+        "procurement_detail": {"$ref": "#/$defs/nullableString"},
+        "industry_limit_yn": {"enum": ["Y", "N", null]},
+        "participation_limit_yn": {"enum": ["Y", "N", null]},
+        "license_status": {"$ref": "#/$defs/nullableString"},
+        "licenses": {"type": "array", "items": {"type": "object", "required": ["group", "name", "permitted_industries"], "properties": {"group": {"$ref": "#/$defs/nullableString"}, "name": {"$ref": "#/$defs/nullableString"}, "permitted_industries": {"$ref": "#/$defs/nullableString"}}, "additionalProperties": false}},
+        "region_status": {"$ref": "#/$defs/nullableString"},
+        "regions": {"type": "array", "items": {"$ref": "#/$defs/nullableString"}},
+        "region_basis": {"$ref": "#/$defs/nullableString"},
+        "notice_at": {"$ref": "#/$defs/nullableString"},
+        "close_at": {"$ref": "#/$defs/nullableString"},
+        "open_at": {"$ref": "#/$defs/nullableString"},
+        "contract_method": {"$ref": "#/$defs/nullableString"},
+        "award_method": {"$ref": "#/$defs/nullableString"},
+        "estimated_price": {"$ref": "#/$defs/nullableString"},
+        "is_negotiated": {"type": ["boolean", "null"]},
+        "is_cancelled": {"type": ["boolean", "null"]},
+        "documents": {"type": "array", "items": {"type": "object", "required": ["name", "source", "url", "url_status"], "properties": {"name": {"$ref": "#/$defs/nullableString"}, "source": {"$ref": "#/$defs/nullableString"}, "url": {"$ref": "#/$defs/nullableString"}, "url_status": {"enum": ["VALID", "INVALID", "EMPTY"]}}, "additionalProperties": false}}
       },
       "additionalProperties": false
     },

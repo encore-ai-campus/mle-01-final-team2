@@ -1,0 +1,252 @@
+{
+  "evaluation_status": "BLOCKED",
+  "score_status": "NOT_COMPUTED",
+  "preflight": {
+    "split": "DEVELOPMENT",
+    "score_status": "BLOCKED",
+    "blocking_reasons": [
+      {
+        "code": "NO_VERIFIED_COMPLETE_GOLDSET"
+      }
+    ],
+    "reviewed_gold_conditions": 0,
+    "reviewed_gold_logic_notices": 0,
+    "excluded_by_status": {},
+    "baseline_hashes_valid": true,
+    "status_counts": {
+      "adjudication": {
+        "PENDING": 30
+      },
+      "review": {
+        "UNREVIEWED": 30
+      }
+    }
+  },
+  "notice_count": 0,
+  "condition_metrics": null,
+  "logic_metrics": null,
+  "excluded_notices": [],
+  "not_evaluated_notices": [
+    {
+      "notice_id": "BIZINFO:PBLN_000000000117546",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000118891",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000118927",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000123494",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000123696",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000124501",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000125345",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000126490",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000127205",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000127492",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000119490",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000121247",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000128056",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "KSTARTUP:176813",
+      "source_system": "KSTARTUP",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "KSTARTUP:178507",
+      "source_system": "KSTARTUP",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000117168",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000118182",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000117324",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000117340",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000117526",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000118336",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000120117",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000120481",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000120821",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000122551",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000122876",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000124589",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000124917",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000125094",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000125974",
+      "source_system": "BIZINFO",
+      "adjudication_status": "PENDING",
+      "review_status": "UNREVIEWED",
+      "reason": null
+    }
+  ],
+  "run_metadata": {
+    "evaluator_version": "1.0.0",
+    "code_sha256": {
+      "tools/extract_condition_candidates.py": "13cb692eb495cc440e94102bb9e6a7377657c75815e824300ba2a03457f17bef",
+      "tools/build_condition_logic.py": "65d2e4f54ab77627c26a4443e3450a0cca0f178d66dc6c1e2e8b5291e7f30fd2",
+      "tools/evaluate_condition_pipeline.py": "cfdd5a4c3e5322c55a3bd1ee041973f445c6062b94aa354bc15632d892677480"
+    },
+    "prediction_files": {},
+    "baseline_manifest_sha256": "b3c8edd738a73992d7469cf8ca18a6f33d941ae90da2f705450dda1d44983781"
+  },
+  "reason": "No accuracy value is assigned when verified complete gold is unavailable."
+}

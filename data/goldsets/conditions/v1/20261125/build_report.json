@@ -1,0 +1,13 @@
+{
+  "development_notices": 30,
+  "evaluation_notices": 20,
+  "development_logic_notices": 30,
+  "evaluation_logic_notices": 20,
+  "development_evaluation_overlap": 0,
+  "evaluation_contains_model_outputs": false,
+  "human_reviews_completed": 0,
+  "development_records_unreviewed": 30,
+  "evaluation_records_unreviewed": 20,
+  "baseline_frozen": true,
+  "reviewed_gold_conditions": 0
+}
