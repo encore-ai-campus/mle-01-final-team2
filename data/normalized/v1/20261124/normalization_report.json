@@ -1,6 +1,6 @@
 {
   "normalizer_version": "1.0",
-  "run_at": "2026-11-25T12:48:53+09:00",
+  "run_at": "2026-11-25T14:43:12+09:00",
   "input_snapshot": "20261124",
   "input_paths": {
     "notices": "data/cleaned/20261124/notices.jsonl",
@@ -17,7 +17,7 @@
   "output_counts": {
     "notices": 5116,
     "chunks": 32947,
-    "issues": 7344
+    "issues": 6859
   },
   "output_counts_by_source": {
     "BIZINFO": {
@@ -128,18 +128,18 @@
     "KSTARTUP:urls.apply_methods:PRESENT": 3822
   },
   "privacy_redactions": {
-    "emails": 6155,
-    "phones": 2215,
+    "emails": 40,
+    "phones": 49,
     "url_tokens": 0,
     "contextual_names": 585,
-    "ambiguous_contexts": 47
+    "ambiguous_contexts": 0
   },
   "contact_processing_by_source": {
     "BIZINFO": {
       "contact_candidates_found": 2221,
-      "official_business_contacts_preserved": 219,
-      "personal_identifiers_redacted": 2,
-      "unclassified_contacts_queued": 2000,
+      "official_business_contacts_preserved": 2198,
+      "personal_identifiers_redacted": 1,
+      "unclassified_contacts_queued": 22,
       "contact_person_name_occurrences_redacted": 2
     },
     "KSTARTUP": {
@@ -154,6 +154,32 @@
     "BIZINFO": 1.0,
     "KSTARTUP": 1.0
   },
+  "contact_text_policy": {
+    "official_contacts_masked_in_text": false,
+    "personal_name_context_removed": true,
+    "kept_in_text": {
+      "emails_kept_in_text": 6117,
+      "phones_kept_in_text": 3477,
+      "mobile_numbers_kept_in_text": 53
+    }
+  },
+  "url_status_by_source": {
+    "BIZINFO:apply_url:EMPTY": 737,
+    "BIZINFO:apply_url:INSECURE_HTTP": 12,
+    "BIZINFO:apply_url:SCHEME_MISSING": 1,
+    "BIZINFO:apply_url:VALID": 544,
+    "BIZINFO:guide_url:EMPTY": 1294,
+    "BIZINFO:notice_url:VALID": 1294,
+    "KSTARTUP:apply_url:EMPTY": 3822,
+    "KSTARTUP:guide_url:EMPTY": 677,
+    "KSTARTUP:guide_url:INSECURE_HTTP": 45,
+    "KSTARTUP:guide_url:INVALID": 2,
+    "KSTARTUP:guide_url:NOT_A_URL": 6,
+    "KSTARTUP:guide_url:SCHEME_MISSING": 2592,
+    "KSTARTUP:guide_url:VALID": 500,
+    "KSTARTUP:notice_url:VALID": 3822
+  },
+  "review_queue_items": 141,
   "search_eligible_chunks": 20642,
   "attachment_chunks_quarantined": 12305,
   "schema_validation_errors": 0,
