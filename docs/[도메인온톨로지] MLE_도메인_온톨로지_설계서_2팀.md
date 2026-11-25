@@ -2,13 +2,13 @@
 
 정부지원사업 공고의 요건을 계층 온톨로지로 정규화하고, Multi-hop 추론으로 신청 자격을 판정하는 지식 그래프 서비스의 도메인 온톨로지
 
-※ 수치는 2026-11-24에 수집한 **기업마당 공고 1,294건**(공식 API 응답과 우리가 정리한 `notices.jsonl`)과 **K-Startup 공고**(API 전체 30,632건 중 접수 시작일 2025-11-24 이후 3,819건, 동료가 정리한 `kstartup_cleaned.jsonl`)를 직접 읽어 센 값입니다. 정규식으로 센 값은 **근사치**(중복·오탐 포함)이며 정확도 지표가 아닙니다. 요건·조건 정규화 예시는 본문을 손으로 읽은 **검수 전 가설**이고, 법령 기준은 원문을 확인하지 않았습니다. 가상의 사용자 입력은 "가상"으로 표시했습니다. 이전 판(v0.1, 공고 90건 표본 기준)은 `docs/old/[도메인온톨로지]_설계서_v0.1_20261123.md`에 보관했습니다.
+※ 수치는 2026-11-24에 수집한 **기업마당 공고 1,294건**(공식 API 응답과 우리가 정리한 `notices.jsonl`)과 **K-Startup 공고**(API 전체 30,632건 중 접수 시작일 2025-11-24 이후 3,819건 + 모집 중 3건, 우리가 원본에서 다시 정리한 정리층 `data/cleaned/20261124/notices.jsonl`)를 직접 읽어 센 값입니다. 정규식으로 센 값은 **근사치**(중복·오탐 포함)이며 정확도 지표가 아닙니다. 요건·조건 정규화 예시는 본문을 손으로 읽은 **검수 전 가설**이고, 법령 기준은 원문을 확인하지 않았습니다. 가상의 사용자 입력은 "가상"으로 표시했습니다. 이전 판(v0.1, 공고 90건 표본 기준)은 `docs/old/[도메인온톨로지]_설계서_v0.1_20261123.md`에 보관했습니다.
 
 | 관리 항목 | 팀 작성 내용 |
 |---|---|
 | 프로젝트/팀 | 지원각(정부지원사업 신청 자격 판정 서비스) / 근거 it(2팀) |
 | 작성자·검토자 | [팀원] / [강사·멘토] |
-| 작성일·버전 | 2026-11-24 / v0.2 |
+| 작성일·버전 | 2026-11-25 / v0.2 |
 | 연계 일정 | 2주차 (2026.11.23.~11.27.) |
 | 저장소·증빙 | https://github.com/encore-ai-campus/mle-01-final-team2 / docs/submission/ontology/(제출 파일 7종), docs/MLE_2팀_기초 설계.md §4(상세 설계), docs/DATA_SPEC_기업마당_v0.1.md, docs/GUIDE_첨부_공고문_추출_가이드_v0.1.md, docs/GOLDSET_라벨링_가이드_v0.1.md, docs/REVIEW_kstartup_cleaned_점검결과.md |
 | 문서 상태 | ■ 초안 □ 검토 □ 보완 □ 승인 |
@@ -23,7 +23,7 @@
 | 대상 사용자 | 창업자·소상공인·중소기업(조건을 입력하는 신청 희망자), 관리자(요건 추출 검수) | 기초 설계서 §1 |
 | 포함 범위 | 공고 메타(기관·분야·지역·첨부·버전), 요건·조건 정규화(자격·제외·우대·서류·한도·평가), 개념 계층(지역·업종·신청자 유형 등), 트랙, 용어 정의→법령 연결(P1), 정정·재공고 관계 | 메타 층은 두 출처 전체, 요건 층은 정답셋 후보부터 시작 |
 | 제외 범위 | 사업계획서 작성, 신청 대행, 선정 가능성 예측, 법적·세무 자문, 개인 식별 정보 기반 판정, **나라장터 입찰 공고(이번 판의 범위 밖, D-5)**, K-Startup 첨부 수집(사이트 `robots.txt`가 금지, D-9) | 나라장터는 동료가 별도 명세서(DS-10)를 만들었지만 구조화 자격 필드가 비어 있고 자격이 첨부에 있어 이번 요건 층에서 뺀다 |
-| 핵심 데이터 | 기업마당 1,294건(모집 중 스냅샷), K-Startup 3,819건(최근 1년) 외 API 전체 30,632건, 행정구역 코드표(행정안전부 `jscode20260701`), 기업마당 본문출력파일 텍스트 1,292건 | §3 |
+| 핵심 데이터 | 기업마당 1,294건(모집 중 스냅샷), K-Startup 3,822건(최근 1년 3,819 + 모집 중 3) 외 API 전체 30,632건, 행정구역 코드표(행정안전부 `jscode20260701`), 기업마당 본문출력파일 텍스트 1,292건 | §3 |
 | 운영 제약 | 모든 결과에 공고 출처·수집 시각·원문 링크·참고용 면책 표시(MR-N1, N2), 개인 식별 정보 비저장(공공기관 담당자 연락처는 개인정보로 취급하지 않기로 결정), 첨부 원본·추출 텍스트는 로컬 전용 | 기초 설계서 §9 |
 
 **두 층 구조.** 이 온톨로지는 두 층으로 나뉜다.
@@ -143,12 +143,12 @@ flowchart TB
 
 ### 4.1 클래스
 
-"현재 데이터" 열은 2026-11-24 기준 정리 파일(`parsed`·`kstartup_cleaned`)에서 해당 값을 만들 수 있는지를 뜻하며, **Neo4j에는 이번 데이터가 적재되지 않았다.**
+"현재 데이터" 열은 2026-11-24 기준 정리층(`data/cleaned/20261124/`)과 정규화 층(`data/normalized/20261124/`)에서 해당 값을 만들 수 있는지를 뜻하며, **Neo4j에는 이번 데이터가 적재되지 않았다.**
 
 | 클래스 | 식별자(예) | 핵심 속성 | 현재 데이터·예시 |
 |---|---|---|---|
-| Notice | notice_id | source_system, source_id, notice_kind, title, summary, deadline_at, deadline_raw, apply_status_kind, version, is_latest, fetched_at, content_hash, raw_hash, detail_url | 기업마당 1,294건은 위 속성이 모두 있음(`BIZINFO:PBLN_000000000128083`). K-Startup은 `KSTARTUP:{pbanc_sn}` 규칙을 요청했지만 정리본에는 아직 없음(`announcement_id`만 있음) |
-| Organization | org_id | name, normalized_name, source_org_code, role_title, org_kind | 기업마당 소관 36곳·수행 기관 320곳(`직접수행` 52건·`기초자치단체` 295건은 범주값이라 기관 노드가 아님). K-Startup은 직함이 붙은 기관명 정리 필요(정규식 근사 약 190건), 주관 유형(`sprv_inst`) 공공기관 1,792·민간 1,327·교육기관 509·지자체 191 |
+| Notice | notice_id | source_system, source_id, notice_kind, title, summary, deadline_at, deadline_raw, apply_status_kind, version, is_latest, fetched_at, content_hash, raw_hash, detail_url | 기업마당 1,294건은 위 속성이 모두 있음(`BIZINFO:PBLN_000000000128083`). K-Startup 3,822건도 정리층에 `notice_id`(`KSTARTUP:{pbanc_sn}`)·`version`·`content_hash`·`raw_hash`가 있음. 단 `fetched_at`은 날짜만, `published_at`은 API가 주지 않아 비어 있음 |
+| Organization | org_id | name, normalized_name, source_org_code, role_title, org_kind | 기업마당 소관 36곳·수행 기관 320곳(`직접수행` 52건·`기초자치단체` 295건은 범주값이라 기관 노드가 아님). K-Startup은 정리층에서 직함을 `role_title`로 분리함(직함 109건·공고 106건, 기관이 둘 이상인 공고 50건은 `multiple_orgs` 플래그), 주관 유형(`sprv_inst`) 공공기관 1,794·민간 1,327·교육기관 510·지자체 191 |
 | SupportCategory | category_id | name, level(major/medium/source_label) | 기업마당 대 8·중 37, K-Startup 11. 통합 매핑표 필요 |
 | Attachment | attachment_id | file_name, file_extension, role, source_url, text_status, usable | 기업마당 2,654개(본문출력 1,294 + 일반 1,360). K-Startup은 정보 없음 |
 | Tag | tag_id | name | 기업마당 해시태그. 지역 이름은 `Concept`로 연결하고 태그로 두지 않음(§5.3) |
@@ -156,7 +156,7 @@ flowchart TB
 | Program | program_id | name, level | 미구축 |
 | Track | track_id | name, benefit_summary, benefit_limit | 미구축. K-Startup 통합공고 854건이 후보 |
 | Requirement | req_id | kind, logic(AND/OR/NONE_OF/AT_LEAST), min_count, logic_basis, source_sentence, status, extraction_run_id | 미구축. 입력은 기업마당 첨부 자격·제외 구간과 두 출처의 자격 문구 |
-| Condition | cond_id | attribute, operator, value(JSON), unit, ref_date_kind, negate, source_conflict, open_ended, confidence, reviewed | 미구축. K-Startup 동료 정리본에 후보 46,176건(`needs_review` 27,945·`not_found` 18,231·확정 0) |
+| Condition | cond_id | cond_type(ATOM·GROUP), attribute, operator, value(JSON), unit, ref_date_kind, negate, source_conflict, open_ended, confidence, reviewed. GROUP은 attribute 대신 logic(AND·OR·NONE_OF·AT_LEAST), min_count를 가짐(§4.6) | 미구축. 정규화 층에 값 후보 17,211건(업력·연령·지역·기업 규모·인증·법령 인용·제외 등, 전부 `unreviewed`, 근거 문장 포함). 확정 0 |
 | Concept | concept_id | scheme, code, label, aliases, code_version | 지역만 코드표로 가능 |
 | Definition | def_id | term, rule_json, basis_note | 미구축(P1) |
 | ExternalLaw | law_id | name, article_no, text_hash, source_url | 미구축(P1) |
@@ -187,7 +187,7 @@ flowchart TB
 
 | scheme | 구조 | 계층 관계 | 현재 데이터 | 이 데이터에서 본 문제 |
 |---|---|---|---|---|
-| `REGION` | 트리(전국 > 시도 > 시군구) + **중간 묶음 노드 허용** | `WITHIN` | 코드표 시도 16·시군구 217·전국 1. 공고 값은 시도 약칭(K-Startup 19종, 기업마당 태그 34종) | **약칭→코드 사전 필요**(`전남광주` 20건은 아직 비어 있음). **행정개편**: 광주·전남이 `전남광주통합특별시`로 통합돼 "광주광역시 관내" 같은 과거 표기에 맞는 노드가 없다. `광주(구)` 같은 구 단위 묶음이 필요(§7). "경상권" 같은 **권역**도 같은 방식 |
+| `REGION` | 트리(전국 > 시도 > 시군구) + **중간 묶음 노드 허용** | `WITHIN` | 코드표 시도 16·시군구 217·전국 1. 공고 값은 시도 약칭(K-Startup 19종, 기업마당 지역 태그 18종) | **약칭→코드 사전 필요**(`전남광주` 20건은 아직 비어 있음). **행정개편**: 광주·전남이 `전남광주통합특별시`로 통합돼 "광주광역시 관내" 같은 과거 표기에 맞는 노드가 없다. `광주(구)` 같은 구 단위 묶음이 필요(§7). "경상권" 같은 **권역**도 같은 방식 |
 | `INDUSTRY` | 표준 분류는 트리, 공고용 묶음은 DAG | `IS_A` | 없음. 동료 후보 분석에서 업종 표현은 K-Startup 15건(0.4%) | 업종 제한이 드물어 우선순위가 낮다. 공고의 "제조·가공업"은 표준 분류와 1:1이 아님 |
 | `APPLICANT_TYPE` | DAG | `IS_A` | K-Startup 신청 대상 7종(청소년·대학생·일반인·대학·연구기관·일반기업·1인 창조기업), 기업마당 `trgetNm` 7종 | 기업마당 `trgetNm`에는 `제조업`처럼 **업종이 섞여** 있고(4건) 거칠어 판정에 쓰지 않는다. 판정용 값은 본문에서 추출. 표준 사전 24개 유형 중 소기업·중기업→중소기업만 법령 원문이 근거이고 나머지 계층은 가설(§4.4) |
 | `SUPPORT_FIELD` | 1~2단 | `IS_A` | 기업마당 대 8·중 37, K-Startup 11 | 두 포털 분류를 통일하는 매핑표 필요. K-Startup 분류명에 HTML 엔티티(`R&amp;D` 51건) |
@@ -198,11 +198,13 @@ flowchart TB
 
 | 옵션 개수 | 공고 수 | 해석(규칙 후보) |
 |---:|---:|---|
-| 7개 전부(예비창업자 + 1·2·3·5·7·10년 미만) | 1,352 (35%) | 업력 제한 없음 |
-| 6개 | 999 | 일부 구간(예: 예비창업자 제외 또는 10년 제외). 허용 구간의 합집합 |
+| 7개 전부(예비창업자 + 1·2·3·5·7·10년 미만) | 1,354 (35%) | **필터가 정보를 주지 않음.** 제한 없음으로 확정하지 않고 본문을 우선한다(아래 점검) |
+| 6개 | 1,000 | 일부 구간(예: 예비창업자 제외 또는 10년 제외). 허용 구간의 합집합 |
 | 1~5개 | 1,468 | 허용 구간의 합집합 |
 
-옵션 간 관계(AND/OR)와 기준일은 동료 정리본에서 `unknown_and_or`(3,230건)로 남아 있으며 위 규칙을 적용해 확정하는 것은 정규화 단계의 일이다.
+옵션은 검색 필터의 체크박스라 **선택한 구간의 합집합**으로 읽는다(정규화 층 `structured_normalized`에 상한·예비창업자 허용·`all_options`를 기록). 기준일은 구조화 필드에 없고 본문에서만 알 수 있다.
+
+**EDA로 점검한 해석의 타당성.** "전부 선택 = 제한 없음"은 대부분 맞지만 항상 맞지는 않다. 업력 옵션을 전부 고른 1,354건 중 **본문에 업력 상한이 있는 공고가 131건(9.7%)** 이라, 전부 선택을 제한 없음으로 확정하면 이 공고들을 잘못 통과시킨다. 대표자 연령은 전부 선택 2,602건 중 본문에 연령 조건이 있는 공고가 23건(0.9%)이다. 업력 필터가 정보를 주는 1,269건에서는 본문 상한과 필터 상한이 일치 1,169, 본문이 더 좁음 78, 더 넓음 22다. 그래서 규칙은 "전부 선택이면 `all_options`로 표시하고 판정에 쓰지 않으며, 본문 조건이 있으면 본문을 우선(`source_conflict` 기록)"이다(CQ-18, VAL-13).
 
 계층 규칙(기초 설계서 §4.1 H1~H10 요약): 간선은 하위→상위, 상속은 위로만 최대 3 hop, 사용자 값이 조건보다 상위면 `UNKNOWN`(서로 다른 가지면 `UNSATISFIED`), scheme 사이 간선 금지(예외 `ZONE`→`REGION`), DAG는 순환 금지, 개념 매칭은 코드·정규화 이름·확정 별칭만(부분 일치 금지), 코드표에 버전·기준일을 붙인다. **점검에서 추가한 규칙 후보:** (H11) 행정구역 개편으로 사라진 명칭(광주광역시 등)은 별칭이 아니라 **구 단위 묶음 개념**으로 두고 `code_version`을 기록한다. (H12) 공고가 본문에서 직접 정의한 권역(경상권 등)은 공고별이 아니라 **공유 사전의 묶음 개념**으로 두고 구성 시도·근거 공고를 기록한다.
 
@@ -236,6 +238,124 @@ flowchart TB
 
 `Condition`에는 위에 맞춰 `ref_start_kind`(업력), `region_basis`(지역), `business_form`(개인사업자·법인)을 값(JSON)에 기록한다.
 
+### 4.5 클래스 계층과 속성 제약
+
+Neo4j는 속성 그래프라 하위 클래스를 별도 레이블로 늘리지 않고 **한 레이블 + 구분 속성**(`kind`, `scheme`, `cond_type`, `org_kind`)으로 나눈다. 레이블이 늘면 제약·질의가 레이블마다 복제되기 때문이다. 예외로 지역은 `Concept`의 보조 레이블 `Region`을 둔다(D-2).
+
+```text
+Thing
+├─ Notice (공고)                 source_system: BIZINFO | KSTARTUP
+├─ Organization (기관)           org_kind: 공공기관 | 민간 | 교육기관 | 지자체
+├─ SupportCategory (지원 분야)   level: major | medium | source_label
+├─ Attachment (첨부)             role: PRINT_BODY | ATTACHMENT
+├─ Program ─ Track (사업 ─ 대상별 트랙)
+├─ Requirement (요건)            kind: ELIGIBILITY | EXCLUSION | PREFERENCE | DOCUMENT | LIMIT | CRITERION
+│   └─ Condition (조건)          cond_type: ATOM(원자) | GROUP(하위 조건을 묶음, 3단까지)
+├─ Concept (개념)                scheme: REGION | INDUSTRY | APPLICANT_TYPE | SUPPORT_FIELD | SPECIAL_GROUP | ZONE
+│                                 REGION 안에서 level: NATION > SIDO > SIGUNGU, 중간 묶음 GROUP
+├─ Definition (정의)             → 개념의 판정 기준(rule_json)
+└─ ExternalLaw (법령)            → 정의의 근거 조문(text_hash)
+```
+
+**속성 제약.** 아래 값 목록은 평가기와 점검 도구(`tools/graphrag/label_eval.py`, `tools/goldset_check.py`)가 쓰는 값과 같다.
+
+| 클래스 | 필수 속성 | 값 제약 | 고유·참조 제약 |
+|---|---|---|---|
+| Notice | notice_id, source_system, title, version, is_latest | notice_id는 `BIZINFO:PBLN_` + 15자리 숫자 또는 `KSTARTUP:` + 숫자. source_system은 2종. version은 1 이상 정수 | notice_id 유일. `is_latest=true`는 같은 사업 묶음에서 1개 |
+| Requirement | req_id, kind, logic, logic_basis, status | kind 6종, logic 4종, logic_basis는 explicit 또는 assumed, status는 parsed 또는 unparsed. **AT_LEAST이면 min_count(1 이상, 하위 조건 수 이하) 필수.** 자격·제외 요건은 source_sentence 필수 | req_id 유일. 공고 또는 트랙에 속함(고아 금지) |
+| Condition(ATOM) | cond_id, attribute, operator, value | attribute 13종(+제안 5종), operator 10종, **attribute와 operator 조합은 아래 표를 따름.** 업력·연령·매출·고용은 ref_date_kind 필수 | cond_id 유일. 요건 또는 그룹에 속함 |
+| Condition(GROUP) | cond_id, logic | logic 4종, 하위 조건 1개 이상, 그룹 중첩 3단 이하 | 하위 조건은 `HAS_CHILD`로만 연결 |
+| Concept | concept_id, scheme, label | scheme 6종. concept_id는 `{scheme}:{코드}` 또는 묶음 `{scheme}_GROUP:{이름}` | concept_id 유일. scheme이 다른 개념 사이 간선 금지(예외 ZONE→REGION), 순환 금지 |
+| Definition | def_id, term, rule_json | rule_json은 법령 원문을 확인한 뒤에만 채움 | CITES_LAW 대상이 없으면 `CHAIN_BROKEN` |
+| ExternalLaw | law_id, name, text_hash | article_no는 조문 단위 | law_id 유일. 원문 해시가 없으면 정의가 유효하지 않음 |
+
+**attribute와 operator의 허용 조합.** 이 조합 밖이면 조건을 만들지 않고 `other`로 두며 판정에서 `UNKNOWN`으로 처리한다.
+
+| attribute | 허용 operator | value 형태 | 기준일 | 비고 |
+|---|---|---|---|---|
+| business_age, founder_age, revenue, employees | LT, LTE, GT, GTE, EQ, BETWEEN | `{"value":7,"unit":"YEAR"}` 또는 `{"min":,"max":,"min_inclusive":,"max_inclusive":}` | **필수** | "이내·이하"는 LTE, "미만"은 LT(§4.4) |
+| region, zone | WITHIN, EQ, IN | `{"label":"구미","concept_id":"REGION:…"}` | 아니오 | `region_basis`(소재·본사·거주 등) 권장 |
+| applicant_type, company_size, industry | IS_A, EQ, IN | `{"label":…}` 또는 `{"labels":[…]}` | 아니오 | 법령·제도 용어는 `needs_definition=true`, 정의는 쓰지 않음 |
+| certification, registration, prior_award | EXISTS | `{"label":"벤처기업 확인서"}` | 아니오 | 목록이 "등"으로 열려 있으면 요건에 `open_ended=true` |
+| other | EQ | `{"label":…}`, note 필수 | 아니오 | 판정에서 항상 `UNKNOWN` |
+
+**구현 상태.** 점검 도구는 허용 값, `min_count`, 기준일, `cond_id` 중복, 그룹 논리·깊이, 근거 문장 일치를 검사한다(단위 시험 포함). attribute와 operator의 허용 조합 검사는 아직 도구에 없고 이 표가 설계 규칙이다. Neo4j의 속성 존재·값 목록 제약은 인스턴스 종류에 따라 걸 수 없을 수 있어(확인 필요) 유일성 제약만 `schema.cypher`에 두고, 나머지는 적재 후 점검 쿼리(§5.4)로 확인한다.
+
+### 4.6 자격·제외·우대의 복합 조건 트리
+
+한 공고의 요건은 평평한 목록이 아니라 **트리**다. "A이고 B이거나 C", "업종에 따라 종업원 기준이 다름", "대상별 트랙" 같은 구조를 담으려고 조건에 그룹을 둔다.
+
+```text
+Notice (루트)
+├─ Track* (선택: 대상별 하위 구분, 하나라도 ELIGIBLE이면 공고가 ELIGIBLE)
+│   └─ Requirement  kind = ELIGIBILITY | EXCLUSION | PREFERENCE | DOCUMENT | LIMIT | CRITERION
+│        └─ Condition  logic(요건) = AND | OR | NONE_OF | AT_LEAST(k)
+│             ├─ ATOM   attribute·operator·value, 기준일, 근거 문장
+│             └─ GROUP  logic = AND | OR | NONE_OF | AT_LEAST(k)  ── 하위 Condition(ATOM 또는 GROUP), 3단까지
+└─ Requirement (트랙이 없으면 공고에 바로 붙음)
+```
+
+![조건 트리 도식: 공고 아래 자격·제외·우대 요건, 논리 게이트 GROUP, 값 비교 ATOM (조건 이름은 구조를 보이기 위한 예시)](diagrams/ontology_condition_tree.png)
+
+**세 종류 요건의 역할.** 판정에 쓰는 것은 자격과 제외뿐이다.
+
+| kind | 정규화 방법 | 판정에서의 역할 |
+|---|---|---|
+| ELIGIBILITY(자격) | 요건 logic으로 조건을 묶음. 서로 다른 자격 요건끼리는 AND | **모두 충족해야 함.** 하나라도 확정 불충족이면 `NOT_ELIGIBLE` |
+| EXCLUSION(제외) | logic을 `NONE_OF`로 정규화: 조건 중 하나라도 **해당하면 불충족** | 요건이 충족(해당 사항 없음)이어야 통과. 해당이 확인되면 `NOT_ELIGIBLE`, 해당 여부를 알 수 없으면 `UNKNOWN` |
+| PREFERENCE(우대) | 자격과 같은 방식으로 조건을 만들되 판정에서 분리 | **판정(overall)을 바꾸지 않는다.** 결과 화면에 "우대 해당 여부"를 3값으로 따로 보여 줌 |
+| DOCUMENT·LIMIT·CRITERION | 표시용 | 판정에 쓰지 않음(서류·선정 후 의무·평가 기준) |
+
+**평가 순서.** ① 트랙이 있으면 트랙별로 따로 평가한다. ② 트랙 안에서 말단 조건(ATOM)을 3값으로 평가한다(§7 규칙표). ③ 그룹을 아래에서 위로 합친다(그룹 logic). ④ 요건을 합친다: 자격 요건은 AND, 제외 요건은 `NONE_OF`가 이미 반영된 결과를 AND로 합친다. ⑤ 강등 규칙(`assumed` 논리, `open_ended`, `unparsed`, `needs_definition`이 있는 정의 용어)을 적용해 `ELIGIBLE`을 `NEEDS_CHECK`로 낮춘다. ⑥ 트랙이 둘 이상이면 하나라도 `ELIGIBLE`이면 `ELIGIBLE`, 전부 `NOT_ELIGIBLE`이면 `NOT_ELIGIBLE`, 그 외 `NEEDS_CHECK`. ⑦ 우대 요건은 따로 평가해 참고로만 붙인다.
+
+**예시 1. 구미 스타트업 제작센터(`BIZINFO:PBLN_000000000120707`, T-07).** 자격 요건 R1이 `OR`이고 첫 가지가 지역과 업력을 `AND`로 묶는 그룹이다. 정규화는 본문을 읽은 **검수 전 가설**이다.
+
+```text
+R1 ELIGIBILITY  logic=OR
+├─ G1 GROUP  logic=AND
+│   ├─ C1 region        WITHIN  구미
+│   └─ C2 business_age  LTE     7년 (기준일: 신청일, ref_date_kind=OTHER)
+└─ C3 other            EQ      "구미(본사)로 이전 계획"   ← 판정에서 항상 UNKNOWN
+R2 LIMIT   "선정 후 60일 이내 구미 본사 이전"            ← 판정에 쓰지 않음
+```
+
+평가기(`tools/graphrag/label_eval.py`)로 계산한 결과다(가상 프로필).
+
+| 가상 프로필 | C1 | C2 | G1 | C3 | 공고 판정 | 설명 |
+|---|---|---|---|---|---|---|
+| 경북 구미시, 업력 5년 | 충족 | 충족 | 충족 | 미확인 | `ELIGIBLE` | OR는 한 가지만 충족해도 충족. 이전 계획을 몰라도 확정 |
+| 경북 구미시, 업력 8년 | 충족 | 불충족 | 불충족 | 미확인 | `NEEDS_CHECK` | 첫 가지는 불충족이지만 이전 계획 여부를 모르므로 불충족으로 확정하지 않음 |
+| 서울 성동구, 업력 2년 | 불충족 | 충족 | 불충족 | 미확인 | `NEEDS_CHECK` | 타 지역은 이전 계획이 있으면 신청할 수 있어 사용자에게 물어야 함 |
+| 경북(시도만 입력), 업력 5년 | 미확인 | 충족 | 미확인 | 미확인 | `NEEDS_CHECK` | 입력 지역이 조건 지역보다 상위이면 `UNKNOWN`(H3) |
+
+**예시 2. 김해시 소상공인 육성자금(`BIZINFO:PBLN_000000000126517`).** 업종에 따라 종업원 기준이 달라지는 조건부 구조를 그룹으로 표현한다. 정규화는 가설이다. R3 우대는 **예시를 위해 추가한 가상 요건**이다(실제 공고의 우대 요건이 아님).
+
+```text
+R1 ELIGIBILITY  logic=AND
+├─ C1 region        WITHIN  김해시 (사업장)
+├─ C2 company_size  IS_A    소상공인   needs_definition
+└─ G1 GROUP  logic=OR                              ← 업종별 종업원 기준
+    ├─ G2 GROUP  logic=AND
+    │   ├─ C3 industry   IN   {광업, 제조업, 건설업, 운수업}
+    │   └─ C4 employees  LT   10
+    └─ G3 GROUP  logic=AND
+        ├─ C5 industry   IN   {광업, 제조업, 건설업, 운수업}   negate  ← 그 외 업종
+        └─ C6 employees  LT   5
+R2 EXCLUSION    logic=NONE_OF  { C7 휴·폐업, C8 지방세 체납 }
+R3 PREFERENCE   (가상) C9 founder_age LTE 39
+```
+
+| 가상 프로필 | R1 | R2(제외) | R3(우대) | 공고 판정 | 설명 |
+|---|---|---|---|---|---|
+| 경남 김해시, 제조업, 직원 8명, 소상공인, 만 39세 | 충족 | 미확인 | 충족 | `NEEDS_CHECK` | 휴·폐업·체납을 입력하지 않았고 "소상공인"은 정의 확인이 필요(`NEEDS_DEFINITION`) |
+| 서울 성동구, 제조업, 직원 8명 | 불충족 | 미확인 | 불충족 | `NOT_ELIGIBLE` | 지역 하나만 불충족이어도 확정 |
+| 경남 김해시, 제조업, 직원 12명 | 불충족 | 미확인 | 미확인 | `NOT_ELIGIBLE` | 제조업은 10인 미만이어야 함. 그룹 G1이 불충족 |
+| 경남 김해시, 도소매업, 직원 3명 | 미확인 | 미확인 | 불충족 | `NEEDS_CHECK` | 업종 사전이 없어 "그 외 업종"을 확정하지 못함(아래 한계) |
+
+두 번째 행의 우대 불충족, 첫 행의 우대 충족은 공고 판정을 바꾸지 않았다. 이 표는 평가기가 계산한 값이며 평가기 단위 시험(28건)에 같은 구조의 시험이 들어 있다.
+
+**한계와 결정.** ① 그룹 중첩은 3단까지만 허용한다. 공고 문장의 논리가 깊어질수록 사람이 일치시키기 어려워(정답셋 일치율 문제) 얕게 제한하고, 넘으면 `UNKNOWN`과 점검 오류로 처리한다. ② 업종은 포함 관계 사전이 없어 일치하면 충족, 불일치는 `UNKNOWN`이다. 업종 계층은 미구축(§4.2). ③ 자연어에서 AND/OR가 분명하지 않으면 `logic_basis=assumed`로 표시하고 그 요건이 `ELIGIBLE`을 만들면 `NEEDS_CHECK`로 낮춘다. ④ 우대를 판정에서 분리한 것은 설계 결정이다(팀 확인 필요, D-12). ⑤ 그룹(`GROUP`)과 `HAS_CHILD`는 이 개정에서 새로 넣은 구조로 Neo4j에 적재해 보지 않았다.
+
 ## 5. 관계 정의 및 카디널리티
 
 ### 5.1 이름과 방향의 규칙
@@ -252,15 +372,15 @@ flowchart TB
 | 동일 기관 후보 | `SAME_AS_CANDIDATE` | (없음) | 기관용으로 설계서에 추가 |
 | 노드 레이블 | `PublicNotice`, `Region` | `Notice`, `Concept{scheme:REGION}` | `Notice`로 통일, `Region`은 `Concept`의 보조 레이블(D-2) |
 | 개념 ID | `KR:REGION:{코드}` | `{scheme}:{code}` | `REGION:{코드}`로 통일(D-2) |
-| 공고 ID | `BIZINFO:PBLN_…`, `KSTARTUP:{번호}` | 같음 | 기업마당 정리본은 일치. K-Startup 정리본에 `notice_id`(`KSTARTUP:{pbanc_sn}`)·`fetched_at`·`version`·`content_hash`·`raw_hash` 추가 필요 |
+| 공고 ID | `BIZINFO:PBLN_…`, `KSTARTUP:{번호}` | 같음 | 정리층에서 두 출처 모두 일치(`notice_id`, `version`, `content_hash`, `raw_hash`). `fetched_at` 형식은 기업마당 일시·K-Startup 날짜로 다름 |
 
 ### 5.2 관계 정의
 
 | 관계 타입 | 시작→끝 | 의미 | 카디널리티/제약 | 층·상태 |
 |---|---|---|---|---|
-| ANNOUNCED_BY | Notice→Organization | 공고 게시 기관 | N:1, 모든 공고 | 메타, 규칙 생성 가능 |
+| ANNOUNCED_BY | Notice→Organization | 공고 게시 기관 | 대부분 N:1, 모든 공고. **K-Startup 50건은 기관이 둘 이상이라 분리하면 N:M**(정리층 `multiple_orgs`) | 메타, 규칙 생성 가능 |
 | EXECUTED_BY | Notice→Organization | 수행·운영 기관 | N:1, `직접수행`·`기초자치단체`는 관계 제외(제안) | 메타, 규칙 생성 가능 |
-| IN_SUPPORT_CATEGORY | Notice→SupportCategory | 지원 분야 | N:M | 메타, 규칙 생성 가능 |
+| IN_SUPPORT_CATEGORY | Notice→SupportCategory | 지원 분야 | N:M 허용. 현재 데이터는 두 출처 모두 공고당 대분류 1개 | 메타, 규칙 생성 가능 |
 | HAS_ATTACHMENT | Notice→Attachment | 첨부 메타 | 1:N | 메타, 기업마당만 |
 | SUPERSEDES | Notice→Notice | 새 버전이 이전을 대체 | 1:1, 새→이전, 이전은 `is_latest=false` | 메타. 재수집 후 `content_hash` 변화로 생성. K-Startup 제목의 "연장"·"재공고"는 **후보**일 뿐 확정하지 않는다 |
 | TARGETS_REGION | Notice→Concept(REGION) | 공고의 대상 지역(후보 필터) | N:M | 메타. K-Startup `supt_regin`만 근거로 쓴다 |
@@ -270,6 +390,7 @@ flowchart TB
 | HAS_TRACK | Notice→Track | 대상별 하위 구분 | 1:N | 요건, 미구축 |
 | HAS_REQUIREMENT | Notice \| Track→Requirement | 요건 | 1:N, `evidence` 필수 | 요건, 미구축 |
 | HAS_CONDITION | Requirement→Condition | 원자 조건 | 1:N, `evidence` 필수 | 요건, 미구축 |
+| HAS_CHILD | Condition→Condition | 그룹 조건의 하위 조건(§4.6) | 1:N, `cond_type=GROUP`에서만, 요건 아래 그룹 3단까지, `evidence` 필수 | 요건, 미구축 |
 | ABOUT | Condition→Concept | 조건이 가리키는 개념 | N:M, 정확·확정 별칭 일치만 | 요건, 미구축 |
 | DEFINED_BY | Concept→Definition | 개념의 판정 기준 | 1:N | 개념, 미구축(P1) |
 | CITES_LAW | Definition→ExternalLaw | 정의의 근거 법령 | N:M, 명시된 인용만 | 개념, 미구축(P1) |
@@ -299,9 +420,43 @@ flowchart TB
 | 기업마당 지역 태그 | 전 시도가 달린 공고가 347건(27%)이므로 **지역 근거로 쓰지 않고** `region_scope_hint` 힌트로만 남긴다. 지역은 본문·첨부 추출 조건으로 정한다 |
 | 자격 값(`60세`, `창업7년이내`) | 태그가 아니라 요건 층 `Condition`의 후보로만 쓴다 |
 | 범주값(`기초자치단체`, `직접수행`) | 노드를 만들지 않고 `org_kind`(수행기관 종류) 속성으로 둔다. 기업마당 295건·52건 |
-| 기관 직함 | 이름에서 제거하고 `role_title` 속성에 보존(K-Startup 191건) |
+| 기관 직함 | 이름에서 제거하고 `role_title` 속성에 보존(K-Startup 109건, 공고 106건) |
 | 복수 기관 | 기관별 노드로 분리, 오타는 원문 보존 + `normalized_name`에서 보정 |
 | 연락처 | 공공기관 담당자 연락처는 마스킹하지 않는다(팀 결정). 문서·청크에 `[REDACTED_…]` 같은 대체 문자열이 남지 않게 한다 |
+
+### 5.4 관계 시그니처와 금지 관계
+
+관계마다 허용되는 (시작, 끝) 쌍은 5.2의 표가 정한다. 아래는 **금지 관계**와 적재 후에 0이어야 하는 점검 쿼리다(VAL-03·05·10·16). 아직 적재하지 않았으므로 실행하지 않았다.
+
+| ID | 금지 사항 | 이유 | 기대 결과 |
+|---|---|---|---|
+| V1 | scheme이 다른 개념 사이의 `IS_A`·`WITHIN`(예외 ZONE→REGION) | 지역과 업종이 섞이면 3 hop 상속이 엉뚱한 개념에 닿는다 | 0 |
+| V2 | `IS_A`·`WITHIN`의 순환 | 상속이 끝나지 않는다 | 0 |
+| V3 | `HAS_SUBREGION` 같은 상위→하위 방향 관계 | `WITHIN`(하위→상위)과 함께 두면 중복 간선(D-1) | 0 |
+| V4 | 요건·그룹에 속하지 않은 조건(고아) | 어떤 판정에도 쓰이지 않고 근거가 끊김 | 0 |
+| V5 | `evidence`가 없는 `HAS_REQUIREMENT`·`HAS_CONDITION`·`HAS_CHILD` | 근거 없는 요건은 서비스하지 않는다 | 0 |
+| V6 | 그룹 중첩 3단 초과 | 평가기·검수 일치율 한계(§4.6) | 0 |
+| V7 | `SUPERSEDES`가 자기 자신이거나 구→신 방향 | 최신 버전만 판정에 쓴다 | 0 |
+
+```cypher
+// 점검 쿼리: 모두 0이어야 한다 (적재 후 실행)
+// V1 scheme 사이 간선
+MATCH (a:Concept)-[r:IS_A|WITHIN]->(b:Concept)
+WHERE a.scheme <> b.scheme AND NOT (a.scheme = 'ZONE' AND b.scheme = 'REGION')
+RETURN count(r) AS cross_scheme;
+// V2 순환
+MATCH p = (a:Concept)-[:IS_A|WITHIN*1..6]->(a) RETURN count(p) AS cycles;
+// V3 금지된 방향
+MATCH ()-[r:HAS_SUBREGION]->() RETURN count(r) AS banned_direction;
+// V4 고아 조건
+MATCH (c:Condition) WHERE NOT ( ()-[:HAS_CONDITION]->(c) OR ()-[:HAS_CHILD]->(c) ) RETURN count(c) AS orphan_conditions;
+// V5 근거 없는 간선
+MATCH ()-[r:HAS_REQUIREMENT|HAS_CONDITION|HAS_CHILD]->() WHERE r.evidence IS NULL RETURN count(r) AS no_evidence;
+// V6 그룹 중첩 3단 초과 (요건 아래 HAS_CHILD 사슬이 4 이상)
+MATCH p = (:Requirement)-[:HAS_CONDITION]->(:Condition)-[:HAS_CHILD*4..]->(:Condition) RETURN count(p) AS too_deep;
+// V7 SUPERSEDES 방향(새 버전이 이전 버전을 대체: 새.version > 이전.version)
+MATCH (n:Notice)-[:SUPERSEDES]->(o:Notice) WHERE n = o OR n.version <= o.version RETURN count(*) AS bad_supersedes;
+```
 
 ## 6. S-P-O 트리플과 출처 문장 매핑
 
@@ -325,7 +480,74 @@ flowchart TB
 
 ## 7. Multi-hop 추론 시나리오
 
-모든 사용자 값은 **가상 입력**이며 평가는 손으로 계산했다.
+모든 사용자 값은 **가상 입력**이다. 아래 시나리오의 평가는 손으로 계산했고, 4.6의 조건 트리 예시와 이 절의 규칙표는 평가기(`tools/graphrag/label_eval.py`)로 계산한 값이다(단위 시험 28건 통과, 정답 라벨과의 비교는 아직 없음).
+
+### 판정 규칙 (3값)
+
+판정값은 조건·요건 단위로 `SATISFIED`(충족) / `UNSATISFIED`(불충족) / `UNKNOWN`(알 수 없음), 공고 단위로 `ELIGIBLE`(신청 가능) / `NOT_ELIGIBLE`(신청 불가) / `NEEDS_CHECK`(확인 필요)다. **`UNKNOWN`과 `NEEDS_CHECK`는 오류가 아니라 정답**이며, 모르는 것을 충족이나 불충족으로 채우지 않는다.
+
+![논리 게이트별 3값 합성 규칙: AND, OR, NONE_OF, AT_LEAST](diagrams/ontology_gate_rules.png)
+
+**(1) 조건 단위.**
+
+| 조건 | 규칙 | 예 |
+|---|---|---|
+| 필요한 프로필 값이 입력되지 않음 | `UNKNOWN` | 업력을 입력하지 않으면 업력 조건은 모두 `UNKNOWN` |
+| 숫자 비교(업력·연령·매출·고용) | 값을 그대로 비교한다. 경계에서 `LT`와 `LTE`가 갈린다 | 업력 정확히 3년: "3년 미만" 불충족, "3년 이내" 충족 |
+| 기준일이 불명확한 임계값 근처 | 서비스 평가기는 기준일(공고일·마감일·신청일)을 모르면 임계값 ±0.5년을 `UNKNOWN`으로 둔다 | 업력 7년 이내 조건에 6.8년이면 마감 시점에 넘을 수 있음 |
+| 예비창업자의 업력 조건 | `UNKNOWN`(사업자등록 전이라 업력이 없음) | 예비창업자에게 "업력 7년 이내"는 판정하지 않음 |
+| 지역: 같은 가지·하위 | `SATISFIED` | 남구 → 광주(구) → 전남광주통합특별시 |
+| 지역: 서로 다른 가지 | `UNSATISFIED` | 성동구 입력, 조건 구미 |
+| 지역: 입력이 조건보다 상위 | `UNKNOWN`(H3) | 경북만 입력, 조건 구미시 |
+| 기업 규모·유형 | 소기업·중기업은 중소기업에 속함(중소기업기본법 제2조 제2항 원문). 중견과 중소는 서로 다름. **소상공인과 소기업 같은 관계는 원문이 없어 `UNKNOWN`** | 소기업 입력, 조건 중소기업 → `SATISFIED` |
+| 정의가 필요한 용어(`needs_definition`) | 충족이어도 요건에 `NEEDS_DEFINITION` 표시 → 강등 규칙으로 이어짐 | "소상공인" |
+| 인증·등록 | 입력한 인증 목록에 있으면 `SATISFIED`, 목록이 입력됐는데 없으면 `UNSATISFIED`, 목록 미입력이면 `UNKNOWN` | 벤처기업 확인서 보유 |
+| 업종 | 일치하면 `SATISFIED`. 불일치는 포함 관계 사전이 없어 `UNKNOWN` | 도소매업 입력, 조건 제조업 |
+| `other`·해석 불가 | `UNKNOWN` | "본사 이전 계획" |
+| 부정(`negate`) | `SATISFIED`↔`UNSATISFIED`를 뒤집고 `UNKNOWN`은 그대로 | "그 외 업종" |
+
+**(2) 요건 단위(하위 결과를 합침).** S는 충족, U는 불충족, K는 미확인의 개수다.
+
+| logic | 충족 | 불충족 | 그 외 |
+|---|---|---|---|
+| AND | 전부 충족 | U가 하나라도 있음 | `UNKNOWN` |
+| OR | S가 하나라도 있음 | 전부 불충족 | `UNKNOWN` |
+| NONE_OF(제외) | 전부 불충족(해당 사항 없음) | S가 하나라도 있음(해당) | `UNKNOWN` |
+| AT_LEAST(k) | S가 k 이상 | S + K가 k 미만 | `UNKNOWN` |
+
+**(3) 공고 단위(요건과 트랙을 합침).**
+
+| 규칙 | 내용 |
+|---|---|
+| 자격·제외 요건만 판정에 쓴다 | 우대·서류·한도·평가는 표시용 |
+| 확정 불충족이 우선 | 자격 요건이나 제외 요건 중 하나라도 `UNSATISFIED`이면 `NOT_ELIGIBLE` |
+| 전부 충족이면 `ELIGIBLE` | 단, 아래 강등 사유가 있으면 `NEEDS_CHECK` |
+| 강등 사유 | `logic_basis=assumed`(논리가 문장에 명시되지 않음), `status=unparsed`(자격 요건을 읽지 못함), `open_ended`(목록이 "등"으로 열려 있음), `NEEDS_DEFINITION`(정의 확인이 필요한 용어). 강등은 `ELIGIBLE`만 `NEEDS_CHECK`로 낮추고 `NOT_ELIGIBLE`은 바꾸지 않는다. 단 `open_ended` 요건의 불충족은 목록 밖 항목을 확인하지 못했으므로 `UNKNOWN`으로 바꾼다 |
+| 그 외 | `NEEDS_CHECK` |
+| 트랙 | 트랙별로 위 규칙을 적용한 뒤 하나라도 `ELIGIBLE`이면 `ELIGIBLE`, 전부 `NOT_ELIGIBLE`이면 `NOT_ELIGIBLE`, 그 외 `NEEDS_CHECK` |
+
+모든 판정은 사유 코드(`ASSUMED_LOGIC`, `REQ_UNPARSED`, `OPEN_ENDED`, `PROFILE_MISSING_ATTR`, `NEEDS_DEFINITION`, `SOURCE_CONFLICT`, `BOUNDARY_UNCLEAR`, `TRACK_SPLIT`)와 공고 원문 문장·링크를 함께 낸다. 규칙은 코드(평가기)가 적용하고 모델은 요건 추출과 설명만 맡는다.
+
+### Multi-hop 경로 카탈로그
+
+경로마다 hop 한도와 판정에 미치는 영향, 근거 출력을 정한다. 한도를 넘거나 근거가 끊기면 확정하지 않고 `UNKNOWN`·`NEEDS_CHECK`로 둔다.
+
+| 경로 | 패턴 | hop 한도 | 판정 영향·중단 규칙 | 시나리오·CQ | SQL로 풀 때 |
+|---|---|---|---|---|---|
+| P-1 지역 포함 | (사용자 지역)-[WITHIN*0..3]→(조건 지역) | 3(시군구→시도→권역·전국) | 닿으면 충족, 서로 다른 가지면 불충족, 사용자 값이 상위면 `UNKNOWN` | 시나리오 1·4, CQ-01·04·17 | 재귀 쿼리 또는 폐쇄 테이블 1회 조인. 구현·실측함(A2) |
+| P-2 종류 포함 | (사용자 유형)-[IS_A*0..3]→(조건 유형) | 3 | 확정 계층은 소기업·중기업→중소기업뿐. 나머지는 `UNKNOWN` | CQ-03 | 폐쇄 테이블 |
+| P-3 정의→법령 | (조건)-[ABOUT]→(개념)-[DEFINED_BY]→(정의)-[CITES_LAW]→(법령) | 3 | 법령 원문이 없으면 `CHAIN_BROKEN` → `NEEDS_CHECK`. 숫자 기준은 원문 확인 전에 쓰지 않음 | 시나리오 3, CQ-05·06 | 4개 테이블 조인. 데이터가 없어 시험 못 함 |
+| P-4 요건 트리 | (공고)-[HAS_TRACK*0..1]→(트랙)-[HAS_REQUIREMENT]→(요건)-[HAS_CONDITION]→(조건)-[HAS_CHILD*0..2]→(하위 조건) | 최대 5 | 아래에서 위로 합성(4.6). 그룹 3단 초과는 `UNKNOWN` | 시나리오 2·4, CQ-02·03·07·10 | 인접 목록 + 재귀. 가능 |
+| P-5 공고 대체 | (새 공고)-[SUPERSEDES*1..5]→(이전 공고) | 5 | 최신 버전만 판정. 이전 버전은 이력 | CQ-08 | 자기 조인 |
+| P-6 영향 전파 | (법령)←[CITES_LAW]←(정의)←[DEFINED_BY]←(개념)←[ABOUT]←(조건)←…←(공고) | 5~7 | 조문 `text_hash`가 바뀌면 영향받는 공고를 재평가 대상으로 표시 | CQ-15 | 조인 5개 이상. 재현이 어려운 쪽 |
+
+```cypher
+// P-4 요건 트리 한 번에 읽기: 공고 → (트랙) → 요건 → 조건 → 하위 조건
+MATCH (n:Notice {notice_id: $id})-[:HAS_TRACK*0..1]->(x)-[:HAS_REQUIREMENT]->(r:Requirement)-[:HAS_CONDITION]->(c:Condition)
+OPTIONAL MATCH (c)-[:HAS_CHILD*1..3]->(d:Condition)
+RETURN x, r, c, collect(d) AS children;
+```
+
 
 ### 시나리오 1. 행정개편을 넘는 지역 계층 (CQ-04)
 
@@ -378,6 +600,46 @@ flowchart TB
 
 검증 기준: 권역 묶음 사전에 구성 시도·근거 공고·검수자가 기록돼 있고, 구조화 필드와 본문이 충돌하면 본문을 우선하고 `source_conflict`를 남기며, 트랙별 평가 뒤 트랙 합성 규칙을 적용하고, 학생 신분처럼 확인할 수 없는 조건은 `UNKNOWN`으로 둔다.
 
+### SQL 대비 온톨로지 활용의 필요성과 차별성
+
+**먼저 결론.** 현재까지의 근거로는 **"그래프 DB가 SQL보다 필요하다"고 말할 수 없다.** 구조 조건에서 SQL(폐쇄 테이블)이 그래프 평가기와 같은 결과를 냈다. 이 문서가 주장하는 것은 아래 표의 두 가지뿐이며, 둘 다 측정으로 확인하기 전이다.
+
+**근거 1. 질문(CQ) 18개를 SQL로 풀 수 있는지 분류했다.**
+
+| 분류 | CQ | 개수 | 의미 |
+|---|---|---|---|
+| SQL과 동일 | 02, 06, 08, 09, 10, 11, 12, 13, 14 | 9 | 메타·요건 필드 조회. 온톨로지가 필요한 이유가 없음 |
+| 계층 사전이 있으면 SQL도 가능 | 01, 04, 17 | 3 | 재귀 쿼리나 폐쇄 테이블로 풀림. 핵심은 **사전(행정개편·권역)** 이지 그래프가 아님 |
+| 정의·법령 데이터가 있어야 가능 | 05, 15 | 2 | 데이터가 없어 지금은 어느 쪽도 못 풂. 경로가 길어 SQL은 조인이 늘어남 |
+| 평가기가 필요 | 03, 07, 16, 18 | 4 | 저장소와 무관하게 규칙 평가기가 해야 하는 일 |
+
+**근거 2. 구조 판정을 실제로 비교했다**(가상 프로필 300개 × 모집 중 공고 1,452건).
+
+| 항목 | 결과 | 읽는 법 |
+|---|---|---|
+| 판정 일치 | 지역 조건 3값 불일치 0 / 336,600, `NOT_ELIGIBLE` 집합 불일치 0 | 구조 조건에서는 SQL(A2)이 그래프 평가기(C)와 같은 결과를 냄. **그래프의 우위 근거가 아님** |
+| 평가 시간 | C 약 7.7초, A2(SQL) 약 0.75초 | 이 규모에서는 SQL이 빠름. C에는 경로 계산이 포함됨 |
+
+**그러면 온톨로지는 무엇을 위한 것인가.** 아래는 주장 목록이며 상태를 함께 적는다.
+
+| 주장 | 근거 | 상태 |
+|---|---|---|
+| 그래프 DB가 SQL보다 빠르거나 정확하다 | 위 실측은 반대 | **주장하지 않음** |
+| 개념 계층(지역·권역·행정개편, 신청자 유형)을 **하나의 모델**로 관리한다 | 같은 `WITHIN`·`IS_A` 규칙을 지역·권역·구역·신청자 유형에 재사용. 행정개편(광주→전남광주통합특별시)과 권역(경상권)은 공고마다 새로 만들지 않고 공유 사전(H11·H12)으로 둠 | 모델링 이점은 설명 가능. **SQL로도 구현 가능**하므로 질의 이점은 N-04로 측정 |
+| 용어 정의 → 법령 → 영향 공고까지 **끊김 없이 추적** | 첨부 자격·제외 구간 1,142건 중 법령 인용 36%, 중소기업기본법 115건 | 데이터 미구축. 시험 대상(P1) |
+| 모든 판정에 경로와 원문 문장을 붙인다(설명) | 요건 층 간선에 `evidence` 필수 | 설계 규칙. SQL 컬럼으로도 가능해 **차별성은 아님** |
+| 판정은 저장소가 아니라 **평가기**가 한다 | 3값 규칙을 코드로 구현·시험(28건) | 그래프·SQL 어느 쪽을 써도 필요 |
+
+**검증 방법과 결과를 보기 전에 정해 둘 해석.** 비교 대상은 A(SQL 필터), A2(SQL+폐쇄 테이블), B(벡터 RAG + LLM 판정, 미구현), C(그래프 + 평가기)이며 질문 유형별로 따로 본다(KPI N-07, 측정 방법은 `docs/BASELINE_SQL_벡터RAG_측정방법_KPI산정근거_v0.1.md`).
+
+| 결과 | 해석 | 설계에 미치는 영향 |
+|---|---|---|
+| 계층·정의 유형에서 C가 A2보다 낫다 | 그 유형에 한해 그래프 활용을 정당화 | 해당 경로(P-1, P-3)를 그래프로 유지 |
+| C와 A2가 모든 유형에서 같다 | "차이 없음"으로 보고한다. 온톨로지는 **모델링·합의 도구**로 남고 저장소는 SQL로도 충분 | 그래프 DB 적재 범위를 줄이고 개념 사전·조건 트리 모델은 유지 |
+| C가 A2보다 낮다 | 그래프 구현의 문제인지 데이터 문제인지 분해 | 원인 확인 전에는 우위·열세를 주장하지 않음 |
+
+합격선과 목표값은 결과를 보기 전에 팀이 정한다(우위 목표는 두지 않음). 정답셋 라벨이 아직 없어 정확도 비교는 하지 못했다.
+
 ## 8. Neo4j 물리 모델 매핑 예시
 
 개념 온톨로지와 Neo4j 속성 그래프는 같은 표현이 아니다. 아래는 구현 매핑 초안이며 **실행해 검증하지 않았다.** 현재 저장소의 `tools/load_neo4j.py`는 이 프로젝트의 공고 그래프가 아니라 별도의 IBK 내부 규정 데이터를 적재하는 코드로 보이므로(`data/old/ibk_converted`), 이 매핑과는 관련이 없다(확인 필요).
@@ -389,6 +651,11 @@ CREATE CONSTRAINT org_id      IF NOT EXISTS FOR (o:Organization) REQUIRE o.org_i
 CREATE CONSTRAINT concept_id  IF NOT EXISTS FOR (k:Concept)      REQUIRE k.concept_id IS UNIQUE;
 CREATE CONSTRAINT req_id      IF NOT EXISTS FOR (r:Requirement)  REQUIRE r.req_id IS UNIQUE;
 CREATE CONSTRAINT cond_id     IF NOT EXISTS FOR (c:Condition)    REQUIRE c.cond_id IS UNIQUE;
+CREATE CONSTRAINT def_id      IF NOT EXISTS FOR (d:Definition)   REQUIRE d.def_id IS UNIQUE;
+CREATE CONSTRAINT law_id      IF NOT EXISTS FOR (l:ExternalLaw)  REQUIRE l.law_id IS UNIQUE;
+CREATE CONSTRAINT track_id    IF NOT EXISTS FOR (t:Track)        REQUIRE t.track_id IS UNIQUE;
+CREATE CONSTRAINT attach_id   IF NOT EXISTS FOR (a:Attachment)   REQUIRE a.attachment_id IS UNIQUE;
+// 속성 존재·값 목록 제약(예: Requirement.kind IN [...])은 인스턴스 종류에 따라 걸 수 없을 수 있어 §5.4 점검 쿼리로 대신한다
 
 // 개념 층: 시군구 → 시도 (하위→상위)
 MERGE (sido:Concept:Region {concept_id:'REGION:1100000000'})
@@ -420,6 +687,19 @@ MERGE (c:Condition {cond_id:r.req_id + '#C1'})
       c.ref_date_kind='NOTICE_DATE', c.evidence_source='API', c.reviewed=false;
 MERGE (r)-[:HAS_CONDITION {evidence:r.source_sentence, source:'bsnsSumryCn'}]->(c);
 
+// 그룹 조건 예시(§4.6 예시 1, 검수 전 가설): R1 = OR{ G1 = AND{지역, 업력}, 본사 이전 계획 }
+MERGE (nk:Notice {notice_id:'BIZINFO:PBLN_000000000120707'})
+  SET nk.source_system='BIZINFO', nk.is_latest=true, nk.version=1;
+MERGE (rk:Requirement {req_id:'BIZINFO:PBLN_000000000120707@v1#R1'})
+  SET rk.kind='ELIGIBILITY', rk.logic='OR', rk.logic_basis='explicit', rk.status='parsed';
+MERGE (nk)-[:HAS_REQUIREMENT {evidence:'구미 소재 창업기업 중 업력 7년 이내 창업기업 (신청일 기준) / 구미(본사)로 이전 계획 기업', source:'bsnsSumryCn'}]->(rk);
+MERGE (g1:Condition {cond_id:rk.req_id + '#G1'}) SET g1.cond_type='GROUP', g1.logic='AND';
+MERGE (rk)-[:HAS_CONDITION {evidence:'구미 소재 창업기업 중 업력 7년 이내 창업기업 (신청일 기준)', source:'bsnsSumryCn'}]->(g1);
+MERGE (c1:Condition {cond_id:rk.req_id + '#C1'}) SET c1.cond_type='ATOM', c1.attribute='region', c1.operator='WITHIN', c1.value='{"label":"구미"}';
+MERGE (g1)-[:HAS_CHILD {evidence:'구미 소재', source:'bsnsSumryCn'}]->(c1);
+MERGE (c2:Condition {cond_id:rk.req_id + '#C2'}) SET c2.cond_type='ATOM', c2.attribute='business_age', c2.operator='LTE', c2.value='{"value":7,"unit":"YEAR"}', c2.ref_date_kind='OTHER';
+MERGE (g1)-[:HAS_CHILD {evidence:'업력 7년 이내 창업기업 (신청일 기준)', source:'bsnsSumryCn'}]->(c2);
+
 // 질의 예시: 사용자 개념에서 조건 개념까지 최대 3 hop
 MATCH p = (u:Concept {concept_id:$user_concept})-[:IS_A|WITHIN*0..3]->(t:Concept {concept_id:$target})
 RETURN [x IN nodes(p) | x.label] AS route, length(p) AS hops ORDER BY hops LIMIT 1;
@@ -433,7 +713,7 @@ Neo4j 속성은 맵을 직접 담지 못해 `Condition.value`는 JSON 문자열�
 
 | 검증 ID | 검증 내용 | 인수 조건 | 현재 값·증빙 |
 |---|---|---|---|
-| VAL-01 | 필수 ID 누락·중복 | `notice_id` 등 NULL 0, 중복 0 | 기업마당 1,294건 중복 0. K-Startup 3,819건 중복 0이나 `notice_id` 규칙 필드가 정리본에 없음 |
+| VAL-01 | 필수 ID 누락·중복 | `notice_id` 등 NULL 0, 중복 0 | 정리층 5,116건(기업마당 1,294 + K-Startup 3,822) `notice_id` 중복 0, 청크 ID 중복 0, 고아 청크 0 |
 | VAL-02 | 고아 노드·잘못된 참조 | 없는 대상을 가리키는 관계 0 | `[적재 후 기록]` |
 | VAL-03 | 금지 관계/방향 | 시그니처 위반 0. `WITHIN`은 하위→상위 | `[적재 후 기록]`. 이전 표본 적재는 `HAS_SUBREGION`(상위→하위)으로 **미충족**이었으므로 적재 전 통일(D-1) |
 | VAL-04 | 중복 엔터티·범주값 노드 | 범주값을 기관 노드로 만들지 않음 | 기업마당 `기초자치단체` 295건·`직접수행` 52건이 범주값. 노드로 만들지 않기로 함(적재 전) |
@@ -446,8 +726,10 @@ Neo4j 속성은 맵을 직접 담지 못해 `Condition.value`는 JSON 문자열�
 | VAL-11 | 정답 세트 일치율 | 두 검수자의 요건·조건 일치율 측정 | `[ ]` (후보 50건 선정 완료, 라벨 0건) |
 | VAL-12 | 첨부 텍스트 확보율 | 첨부가 있는 공고의 텍스트 확보 | 기업마당 본문출력파일 1,292/1,294건(99.8%, OCR 126건 포함). K-Startup 해당 없음 |
 | VAL-13 | 출처별 `NEEDS_CHECK` 비율 | 출처별로 따로 측정·보고 | `[적재 후 기록]`. K-Startup은 첨부가 없어 더 높을 것이라는 **가설** |
-| VAL-14 | 원문 보존 | 정리·마스킹이 원문 값(URL·텍스트)을 바꾸지 않음 | 기업마당 정리본은 원본과 URL·제목이 같음(제목 공백 정리 11건). K-Startup 정리본은 연락처 마스킹과 URL 변형이 있음(수정 요청 중) |
+| VAL-14 | 원문 보존 | 정리·마스킹이 원문 값(URL·텍스트)을 바꾸지 않음 | 정리층은 되돌릴 수 있는 정리만 하고 `title_raw`를 보존(제목 공백 정리 기업마당 20건·K-Startup 382건). K-Startup 원문 대조 30,576개 필드 중 불일치 0 |
 | VAL-15 | 지역 정확성 | 지역이 본문·소관 기관과 일치 | 기업마당 태그는 전 시도 347건(27%)이라 **근거로 쓰지 못함**. K-Startup 지역은 약칭 19종, `전남광주` 20건 코드 미연결 |
+| VAL-16 | 조건 트리·판정 규칙 일관성 | §5.4 점검 쿼리 V4~V6이 0, 그룹 3단 이하, AT_LEAST의 `min_count` 필수 | 점검 도구와 평가기 단위 시험 28건 통과(`tools/test_goldset_check.py`). 쿼리는 `[적재 후 기록]` |
+| VAL-17 | 규칙 평가기와 사람 판정 일치 | 파일럿 라벨 B와 평가기의 공고·조건 단위 일치를 측정하고 어긋난 곳을 규칙 버그·가이드 모호·라벨 오류로 분류 | `[ ]` (라벨 0건) |
 
 품질 지표 예시: 요건·조건 추출 Precision/Recall, 개념 연결(`ABOUT`) 정확도, 판정 정확도(질문 유형별), 근거 추적률, CQ 충족률, SQL 베이스라인 대비 성능(KPI N-07). 목표값은 샘플 적재 후 팀이 정하며 **합격선은 결과를 보기 전에 정한다.**
 
@@ -461,7 +743,7 @@ Neo4j 속성은 맵을 직접 담지 못해 `Condition.value`는 JSON 문자열�
 - □ 동의어·상하위·예외·개인정보 처리 (별칭 사전·권역 사전·개편 처리 방침은 정했으나 사전은 미구축)
 - ■ S-P-O 5개 이상과 출처 문장 매핑(9건, 검수 전)
 - ■ Multi-hop 추론 사례 및 근거 추적(4건)
-- □ 금지 관계·논리 일관성·필수 속성 검증 (적재 후)
+- □ 금지 관계·논리 일관성·필수 속성 검증 (금지 관계·점검 쿼리·조건 트리 규칙은 설계함, 적재 후 실행)
 - □ Neo4j 매핑·제약조건 및 다음 산출물 연계 (초안과 `schema.cypher`만, 실행 전)
 - □ 온톨로지 버전·검토자·변경 이력·승인
 
@@ -471,6 +753,7 @@ Neo4j 속성은 맵을 직접 담지 못해 `Condition.value`는 JSON 문자열�
 |---|---|---|---|---|---|
 | 2026-11-23 | v0.1 | [ ] | [ ] | 초안 작성(공고 90건 점검 결과와 기초 설계서 §4를 양식에 맞춰 정리) | □ |
 | 2026-11-24 | v0.2 | [ ] | [ ] | (오후) EDA·용어 표준화 문서 연결, §4.4 용어 표준화 요약 추가, K-Startup 자격 문구 수치를 정리 층 기준(104자, 340건)으로 갱신. 기업마당 1,294건·K-Startup 3,819건(API 30,632건 중) 전수 데이터로 재작성. 나라장터를 범위에서 제외, 요건 입력 비율 표·인용 법령 빈도·원천 필드 대응표·K-Startup 옵션 목록 분포 추가, CQ-17·18, 시나리오 4, H12(권역), `evidence_source`, VAL-12~14, D-9~11 추가. v0.1은 `docs/old/`에 보관 | □ |
+| 2026-11-25 | v0.2 | 강사 가이드(2026-11-25) | ② 클래스 계층·속성·제약조건·관계 방향 점검, ③ 자격·제외·우대의 복합 조건 트리 설계, ④ 3값 판정 규칙과 Multi-hop 경로 구체화, ⑤ SQL 대비 필요성·차별성 점검 | §4.5(클래스 계층·속성 제약·허용 조합), §4.6(조건 트리, 그룹 `GROUP`·`HAS_CHILD` 신설, 예시 2건을 평가기로 계산), §5.4(금지 관계와 점검 쿼리), §7(3값 규칙표, 경로 카탈로그 P-1~P-6, SQL 대비 필요성·차별성), VAL-16·17, D-12 추가. 평가기에 중첩 그룹·우대 분리를 구현하고 단위 시험 28건. K-Startup 입력을 정리층으로 변경 | □ |
 | [ ] | v0.3 | [ ] | [ ] | [ ] | □ |
 
 제출 파일: `ontology_design.docx`, `ontology_diagram.png`, `ontology_instance.png`, `entities.csv`, `relationships.csv`, `cq_tests.xlsx`, `schema.cypher`, `evidence_manifest.csv` (저장소 `docs/submission/ontology/`).
@@ -489,7 +772,8 @@ Neo4j 속성은 맵을 직접 담지 못해 `Condition.value`는 JSON 문자열�
 | D-8 | 법령 수집 범위(P1) | 신청자 유형을 정의하는 법령부터 / 인용 전체(545종) | 중소기업기본법·소상공인기본법 등 정의 법령부터. 이용 조건 확인 후 |
 | D-9 | K-Startup 첨부 수집 | 수집하지 않음 / 사람이 직접 소량 확인 / 운영기관 문의 | 수집하지 않음(`robots.txt` 금지). 비교 시트 10건 결과를 보고 필요성을 판단 |
 | D-10 | 기업마당 일반 첨부 1,360개 다운로드 | 정답셋 후보만 / 전체 / 안 받음 | 정답셋 후보 공고의 일반 첨부만(원본 고정 후 라벨링) |
-| D-11 | K-Startup 정리본 수정 | 수정 요청 반영 후 사용 / 현 상태 사용 | 연락처 마스킹 해제·원문 URL 복원·모집 중 3건 추가·규칙 필드 추가를 요청한 뒤 사용 |
+| D-11 | K-Startup 정리본 | 동료 정리본 수정 후 사용 / 우리가 원본에서 다시 정리 | **결정됨(2026-11-25):** 전체 API 원본에서 정리층을 다시 만들어 사용. 동료 `kstartup_*` 산출물은 비교용 |
+| D-12 | 우대 요건의 판정 반영 | 판정에서 분리(표시만) / 가점으로 점수화 / 제외 | 판정에서 분리하고 3값 결과만 따로 표시(§4.6). 점수화는 선정 가능성 예측이라 제외 범위 |
 
 ## 부록 B. 한계
 
