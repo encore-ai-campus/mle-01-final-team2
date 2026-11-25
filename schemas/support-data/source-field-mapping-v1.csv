@@ -18,8 +18,8 @@ BIZINFO,period_status,string,application_period.period_status,string|null,preser
 BIZINFO,category_major,string,category.source_major,string|null,preserve source taxonomy,Do not map to K-Startup categories
 BIZINFO,category_medium,string,category.source_medium,string|null,preserve source taxonomy,Do not map to K-Startup categories
 BIZINFO,region_raw,null,region.raw,string|null,EMPTY,Do not replace missing target-region text with administering-organization location
-BIZINFO,region_concept_ids,array,region.concept_ids,array|null,preserve,Keep region_basis to explain provenance
-BIZINFO,region_basis,string|null,region.basis,string|null,preserve,Often jurisdiction_org_sido; this does not prove applicant geography
+BIZINFO,region_concept_ids,array,region.concept_ids,array|null,preserve,Keep region_source to explain provenance (the field the region was taken from)
+BIZINFO,region_source,string|null,region.source,string|null,preserve,Often jurisdiction_org_sido; this does not prove applicant geography
 BIZINFO,structured.target_group_text,string,structured.target_group_text,string|null,preserve,Do not equate automatically with K-Startup applicant_target_raw
 BIZINFO,eligibility_text,string,condition_texts.eligibility,text/status object,preserve source text,In current preprocessing this is derived from the first ☞ block of bsnsSumryCn; completeness is unverified
 BIZINFO,exclusion_text/not collected,not collected,condition_texts.exclusion,text/status object,NOT_COLLECTED in cleaned notice record,Attachment chunks may contain exclusion sections independently
@@ -51,7 +51,7 @@ KSTARTUP,fetched_at/date,string,timestamps.fetched_at,timestamp object,ISO date 
 KSTARTUP,supt_biz_clsfc,string,category.source_major,string|null,preserve source taxonomy,Keep separate from BIZINFO categories
 KSTARTUP,category_medium,null,category.source_medium,string|null,EMPTY,No medium category in this projection
 KSTARTUP,supt_regin,string,region.raw,string|null,preserve,Keep source region separate from resolved concept IDs
-KSTARTUP,region_concept_ids/region_basis,array/string,region.concept_ids/basis,array|null/string|null,preserve source basis,Do not promote unresolved abbreviations to confirmed geography
+KSTARTUP,region_concept_ids/region_source,array/string,region.concept_ids/source,array|null/string|null,preserve source field,Do not promote unresolved abbreviations to confirmed geography
 KSTARTUP,structured.business_age_raw,string|null,structured.business_age_raw,string|null,preserve raw value,No normalization to thresholds in this stage
 KSTARTUP,structured.founder_age_raw,string|null,structured.founder_age_raw,string|null,preserve raw value,Do not merge with business age
 KSTARTUP,structured.applicant_target_raw,string|null,structured.applicant_target_raw,string|null,preserve raw value,Keep separate from BIZINFO target_group_text

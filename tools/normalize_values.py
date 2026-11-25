@@ -164,8 +164,8 @@ def run(cleaned: Path) -> dict:
             tg = st.get("target_group_text")
             if tg:
                 structured["target_group_text"] = tg
-        region = {"concept_ids": n.get("region_concept_ids", []), "basis": n.get("region_basis"), "raw": n.get("region_raw"), "scope_hint": n.get("region_scope_hint"),
-                  "scope_confirmed": False if n.get("region_basis") else None}
+        region = {"concept_ids": n.get("region_concept_ids", []), "source": n.get("region_source"), "raw": n.get("region_raw"), "scope_hint": n.get("region_scope_hint"),
+                  "scope_confirmed": False if n.get("region_source") else None}
         if not region["concept_ids"]:
             cnt[f"region_missing.{src}"] += 1
         for f in facts:

@@ -20,6 +20,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from graphrag.condition_schema import PRE_FOUNDER, split_pre_founder, unify  # noqa: E402
 from graphrag.engine import Engine  # noqa: E402
 from graphrag.evaluator import BOUNDARY_YEARS, NOT_ELIGIBLE, Profile, evaluate_notice  # noqa: E402
 
@@ -38,8 +39,12 @@ def export(e: Engine) -> dict:
 
     for rid, n in e.rg.nodes.items():
         nodes.append({"label": "Concept", "concept_id": rid, "scheme": "REGION", **{k: v for k, v in n.items() if k != "region_id"}})
-        for p, basis in e.rg.parents.get(rid, []):
-            edges.append({"type": "WITHIN", "from": rid, "to": p, "basis": basis})
+        for p, rel in e.rg.parents.get(rid, []):
+            edges.append({"type": rel, "from": rid, "to": p, "basis": e.rg.edge_basis[(rid, p, rel)]})
+    for rid, n in e.rg.retired.items():  # 폐지 지역(행정 분할·통합 전 명칭). 후계 관계는 코드표의 후보 대응이라 미검수
+        nodes.append({"label": "Concept", "concept_id": rid, "scheme": "REGION", **{k: v for k, v in n.items() if k not in ("region_id", "successor_ids")}})
+        for succ in e.rg.successors.get(rid, []):
+            edges.append({"type": "SUCCEEDED_BY", "from": rid, "to": succ, "partial": True, "reviewed": False})
     for n in e.notices:
         nid = n["notice_id"]
         nodes.append({"label": "Notice", "notice_id": nid, "source_system": n["source"], "title": n["title"], "detail_url": n["detail_url"],
@@ -53,16 +58,35 @@ def export(e: Engine) -> dict:
             cid = cats.setdefault(f"{n['source']}|{n['category']}", f"CAT:{n['source']}:{hashlib.sha1(n['category'].encode()).hexdigest()[:10]}")
             edges.append({"type": "IN_SUPPORT_CATEGORY", "from": nid, "to": cid})
         if n["conditions"]:
-            rq = f"{nid}#R1"
-            nodes.append({"label": "Requirement", "req_id": rq, "kind": "ELIGIBILITY", "logic": "AND", "logic_basis": "assumed",
-                          "status": "structured_only", "extraction_method": "rule"})
-            edges.append({"type": "HAS_REQUIREMENT", "from": nid, "to": rq, "evidence": "구조화 API 필드", "source": "api_structured"})
-            for c in n["conditions"]:
-                nodes.append({"label": "Condition", "cond_id": c["cond_id"], "attribute": c["attribute"], "strength": c["strength"],
-                              "value": json.dumps(c["value"], ensure_ascii=False), "evidence_source": "API", "reviewed": False})
-                edges.append({"type": "HAS_CONDITION", "from": rq, "to": c["cond_id"], "evidence": c["evidence"], "source": c["source_field"]})
-                if c["attribute"] == "region":
-                    edges.append({"type": "ABOUT", "from": c["cond_id"], "to": c["value"]["concept_id"]})
+            rest, age = split_pre_founder(n["conditions"])
+            groups = []  # (req_id, logic, logic_basis, [조건 dict])
+            if rest:
+                groups.append((f"{nid}#R1", "AND", "assumed", rest))
+            if age:  # 예비창업자 허용 업력은 OR 요건으로 따로 둔다(설계서 4.3)
+                pre = {"cond_id": f"{nid}#C-pre_founder", "attribute": "applicant_type", "strength": age["strength"],
+                       "value": {"labels": [PRE_FOUNDER]}, "legacy": None, "source_field": age["source_field"], "evidence": age["evidence"],
+                       "unified": ("applicant_type", "IN", {"labels": [PRE_FOUNDER]})}
+                groups.append((f"{nid}#R2", "OR", "explicit", [age, pre]))
+            for rq, logic, basis, conds in groups:
+                nodes.append({"label": "Requirement", "req_id": rq, "kind": "ELIGIBILITY", "logic": logic, "logic_basis": basis,
+                              "status": "structured_only", "extraction_method": "rule"})
+                edges.append({"type": "HAS_REQUIREMENT", "from": nid, "to": rq, "evidence": "구조화 API 필드", "source": "api_structured"})
+                for c in conds:
+                    attr, op, val = c.get("unified") or unify(c["attribute"], c["value"])
+                    node = {"label": "Condition", "cond_id": c["cond_id"], "cond_type": "ATOM", "attribute": attr, "operator": op,
+                            "strength": c["strength"], "value": json.dumps(val, ensure_ascii=False), "evidence_source": "API", "reviewed": False}
+                    if c.get("value") is not None and c.get("legacy", 1) is not None:
+                        node["legacy_value"] = json.dumps(c["value"], ensure_ascii=False)
+                    if attr in ("business_age", "founder_age"):  # 구조화 필드에는 기준일이 없다(설계서 4.3 기준일)
+                        node.update({"ref_date_kind": "UNSPECIFIED", "ref_start_kind": "UNSPECIFIED"})
+                    if op is None:
+                        node["unknown_reason"] = "all_options"
+                    if attr in ("applicant_type", "certification", "industry", "company_size"):
+                        node["about_pending"] = True  # 개념(APPLICANT_TYPE 등)이 아직 없어 ABOUT 간선을 만들 수 없다
+                    nodes.append(node)
+                    edges.append({"type": "HAS_CONDITION", "from": rq, "to": c["cond_id"], "evidence": c["evidence"], "source": c["source_field"]})
+                    if attr == "region":
+                        edges.append({"type": "ABOUT", "from": c["cond_id"], "to": val["concept_id"]})
     for k, v in orgs.items():
         nodes.append({"label": "Organization", "org_id": v, "name": k})
     for k, v in cats.items():
