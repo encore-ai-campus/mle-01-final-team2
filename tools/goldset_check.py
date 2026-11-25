@@ -81,6 +81,23 @@ def packet_text(notice_id: str) -> str:
 
 
 # ------------------------------------------------------------------ validate
+def leaves(conds: list[dict], rid: str, errs: list[str], depth: int = 0):
+    """조건 트리를 훑어 원자 조건만 내보낸다. 그룹(children)은 논리·깊이를 검사한다(설계서 4.5: 요건 아래 그룹 중첩 3단까지)."""
+    for c in conds:
+        if c.get("children"):
+            cid = c.get("cond_id", "?")
+            if c.get("logic") not in LOGICS:
+                errs.append(f"{rid}/{cid}: 그룹의 logic 값 오류 {c.get('logic')}")
+            if c.get("logic") == "AT_LEAST" and not c.get("min_count"):
+                errs.append(f"{rid}/{cid}: 그룹이 AT_LEAST인데 min_count 없음")
+            if depth >= 3:
+                errs.append(f"{rid}/{cid}: 그룹 중첩이 3단을 넘음")
+                continue
+            yield from leaves(c["children"], rid, errs, depth + 1)
+        else:
+            yield c
+
+
 def validate_a(a: dict, packet: str) -> list[str]:
     errs = []
     for k in ("notice_id", "reviewer", "requirements", "ambiguities"):
@@ -100,7 +117,7 @@ def validate_a(a: dict, packet: str) -> list[str]:
             errs.append(f"{rid}: source_sentence 없음(근거 필수)")
         elif ptxt and norm(r["source_sentence"]) not in ptxt:
             errs.append(f"{rid}: source_sentence가 자료 패킷에 그대로 없음(원문 복사 여부 확인, 첨부 원문에서 온 문장이면 패킷에 없을 수 있음)")
-        for c in r.get("conditions", []):
+        for c in leaves(r.get("conditions", []), rid, errs):
             cid = c.get("cond_id", "?")
             if cid in seen:
                 errs.append(f"{rid}/{cid}: cond_id 중복")
@@ -120,9 +137,23 @@ def validate_a(a: dict, packet: str) -> list[str]:
     return errs
 
 
+def all_cond_ids(a: dict | None) -> set:
+    """라벨 A의 모든 조건 ID. 그룹 안에 중첩된 원자 조건과 그룹 자신의 ID도 포함한다(라벨 B의 cond_ref가 가리킬 수 있다)."""
+    out: set = set()
+
+    def walk(conds):
+        for c in conds:
+            out.add(c.get("cond_id"))
+            walk(c.get("children") or [])
+
+    for r in (a or {}).get("requirements", []):
+        walk(r.get("conditions", []))
+    return out
+
+
 def validate_b(b: dict, a: dict | None, profs: dict) -> list[str]:
     errs = []
-    cond_ids = {c.get("cond_id") for r in (a or {}).get("requirements", []) for c in r.get("conditions", [])}
+    cond_ids = all_cond_ids(a)
     js = judgments_of(b)
     if not js:
         errs.append("판정이 없음")

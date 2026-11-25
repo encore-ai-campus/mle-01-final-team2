@@ -1,0 +1,147 @@
+{
+  "snapshot": {
+    "graph_nodes": 31506,
+    "graph_edges": 55903,
+    "notices_with_region_condition_open": 1122,
+    "profiles": 300,
+    "seed": 20261124,
+    "repeats": 3,
+    "warmup_profiles": 5,
+    "neo4j_host": "4fcaaade.databases.neo4j.io"
+  },
+  "hierarchy": {
+    "pairs_checked_per_arm": 336600,
+    "mismatch_vs_C": {
+      "A": 24759,
+      "A2": 0,
+      "A3": 0,
+      "G": 0
+    },
+    "mismatch_status_pairs": {
+      "A": {
+        "SATISFIED->UNSATISFIED": 24759
+      },
+      "A2": {},
+      "A3": {},
+      "G": {}
+    },
+    "profiles_with_any_mismatch_by_region_level": {
+      "SIGUNGU": {
+        "profiles": 225,
+        "A": 225,
+        "A2": 0,
+        "A3": 0,
+        "G": 0
+      },
+      "GU": {
+        "profiles": 59,
+        "A": 59,
+        "A2": 0,
+        "A3": 0,
+        "G": 0
+      },
+      "SIDO": {
+        "profiles": 16,
+        "A": 0,
+        "A2": 0,
+        "A3": 0,
+        "G": 0
+      }
+    },
+    "mismatch_examples": {
+      "A": [
+        {
+          "profile_region": "REGION:2824500000",
+          "notice": "BIZINFO:PBLN_000000000117081",
+          "reference": "SATISFIED",
+          "A": "UNSATISFIED"
+        },
+        {
+          "profile_region": "REGION:1111000000",
+          "notice": "BIZINFO:PBLN_000000000117528",
+          "reference": "SATISFIED",
+          "A": "UNSATISFIED"
+        },
+        {
+          "profile_region": "REGION:1165000000",
+          "notice": "BIZINFO:PBLN_000000000117528",
+          "reference": "SATISFIED",
+          "A": "UNSATISFIED"
+        }
+      ],
+      "A2": [],
+      "A3": [],
+      "G": []
+    },
+    "hierarchy_pairs_A_could_not_match": {
+      "pairs_needing_hierarchy": 24759,
+      "A_found_sat": 0,
+      "A_recall": 0.0
+    }
+  },
+  "latency_per_profile_query": {
+    "A": {
+      "n": 900,
+      "p50_ms": 0.22,
+      "p95_ms": 0.32,
+      "mean_ms": 0.23
+    },
+    "A2": {
+      "n": 900,
+      "p50_ms": 0.37,
+      "p95_ms": 0.57,
+      "mean_ms": 0.39
+    },
+    "A3": {
+      "n": 900,
+      "p50_ms": 0.44,
+      "p95_ms": 0.67,
+      "mean_ms": 0.45
+    },
+    "C": {
+      "n": 900,
+      "p50_ms": 4.61,
+      "p95_ms": 5.2,
+      "mean_ms": 4.69
+    },
+    "G": {
+      "n": 900,
+      "p50_ms": 171.42,
+      "p95_ms": 241.02,
+      "mean_ms": 180.37
+    }
+  },
+  "neo4j_server_ms_per_profile": {
+    "n": 900,
+    "p50_ms": 9.0,
+    "p95_ms": 13.0,
+    "mean_ms": 9.13
+  },
+  "definition_path": {
+    "rows_sql": 4,
+    "rows_cypher": 4,
+    "same_result": true,
+    "sql_ms": 3.56,
+    "cypher_roundtrip_ms": 107.75,
+    "cypher_server_ms": 31,
+    "sql_joins": 5,
+    "cypher_hops": 3,
+    "examples": [
+      [
+        "예비창업자",
+        "2",
+        "중소기업창업 지원법"
+      ],
+      [
+        "중소기업",
+        "2",
+        "중소기업기본법"
+      ],
+      [
+        "창업기업",
+        "2",
+        "중소기업창업 지원법"
+      ]
+    ]
+  }
+}

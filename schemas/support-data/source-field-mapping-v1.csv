@@ -18,8 +18,8 @@ BIZINFO,period_status,string,application_period.period_status,string|null,preser
 BIZINFO,category_major,string,category.source_major,string|null,preserve source taxonomy,Do not map to K-Startup categories
 BIZINFO,category_medium,string,category.source_medium,string|null,preserve source taxonomy,Do not map to K-Startup categories
 BIZINFO,region_raw,null,region.raw,string|null,EMPTY,Do not replace missing target-region text with administering-organization location
-BIZINFO,region_concept_ids,array,region.concept_ids,array|null,preserve,Keep region_basis to explain provenance
-BIZINFO,region_basis,string|null,region.basis,string|null,preserve,Often jurisdiction_org_sido; this does not prove applicant geography
+BIZINFO,region_concept_ids,array,region.concept_ids,array|null,preserve,Keep region_source to explain provenance (the field the region was taken from)
+BIZINFO,region_source,string|null,region.source,string|null,preserve,Often jurisdiction_org_sido; this does not prove applicant geography
 BIZINFO,structured.target_group_text,string,structured.target_group_text,string|null,preserve,Do not equate automatically with K-Startup applicant_target_raw
 BIZINFO,eligibility_text,string,condition_texts.eligibility,text/status object,preserve source text,In current preprocessing this is derived from the first ☞ block of bsnsSumryCn; completeness is unverified
 BIZINFO,exclusion_text/not collected,not collected,condition_texts.exclusion,text/status object,NOT_COLLECTED in cleaned notice record,Attachment chunks may contain exclusion sections independently
@@ -28,7 +28,7 @@ BIZINFO,body_text/string,string,content.body_text,text/status object,preserve,Co
 BIZINFO,support_text/evaluation_text,nullable,content.support_text/content.evaluation_text,text/status object,preserve or EMPTY,Availability status separates missing from empty
 BIZINFO,apply_method_text,string|null,urls.apply_method_text,string|null,preserve plus sanitized literal URLs,No method type or URL purpose is inferred
 BIZINFO,apply_methods/not collected,not collected,urls.apply_methods,array|null,NOT_COLLECTED,Raw methods remain in apply_method_text
-BIZINFO,contact_text,string,contacts[],array,Classify explicit official-work context; personal values withheld; ambiguous candidates queued,Keep official business contacts in notice metadata only; omit contact values from chunks; classification needs context; KStartup contact number is paired with source contact department
+BIZINFO,contact_text,string,contacts[],array,Public-agency contacts kept (basis: explicit context / source department pair / contact field); personal-labelled values withheld; fields without a number queued for review,Contacts stay in the text too (agency phone and email are not masked); only a personal-name context and the contact right after it are removed; organization is the label printed before the number
 BIZINFO,attachments.count/integer,count/number,attachments.count,integer|null,preserve,Null and zero remain distinct
 BIZINFO,attachments.text_extracted/integer,count/number,attachments.text_extracted,integer|null,preserve,Count of extracted text items; not a verification status
 BIZINFO,attachments.preview_only/integer,count/number,attachments.preview_only,integer|null,preserve,Count of preview-only items
@@ -39,7 +39,7 @@ KSTARTUP,source_id,string,source.source_id,string,preserve,API announcement numb
 KSTARTUP,title/title_raw,string,title/title_raw,string,preserve,Whitespace-cleaned and original title remain separate
 KSTARTUP,detail_url,string,urls.notice_url,string|null,preserve,Official announcement/detail URL; distinct from guide_url and apply_url
 KSTARTUP,biz_aply_url,string|null,urls.apply_url,string|null,preserve,Explicit application URL; current cleaned snapshot contains null for every row
-KSTARTUP,biz_gdnc_url,string|null,urls.guide_url,string|null,preserve without repair,Two records carry guide_url_malformed; preserve and flag rather than reconstruct
+KSTARTUP,biz_gdnc_url,string|null,urls.guide_url,string|null,preserve without repair; classify VALID/SCHEME_MISSING/INSECURE_HTTP/NOT_A_URL/INVALID,External organization pages are allowed (no domain limit); scheme-less values such as event-us.kr/.. are flagged not repaired; two records carry guide_url_malformed
 KSTARTUP,aply_mthd_* fields,object,urls.apply_methods,array|null,Map known API field labels; preserve raw text and every literal URL,No URL is created or assigned an inferred purpose
 KSTARTUP,apply_method_text,string,urls.apply_method_text,string|null,preserve and sanitize,One readable summary of the raw methods; source method objects remain available
 KSTARTUP,pbanc_rcpt_bgng_dt/date,ISO date,application_period.start,timestamp object,ISO date precision,Do not add a time or timezone
@@ -51,14 +51,14 @@ KSTARTUP,fetched_at/date,string,timestamps.fetched_at,timestamp object,ISO date 
 KSTARTUP,supt_biz_clsfc,string,category.source_major,string|null,preserve source taxonomy,Keep separate from BIZINFO categories
 KSTARTUP,category_medium,null,category.source_medium,string|null,EMPTY,No medium category in this projection
 KSTARTUP,supt_regin,string,region.raw,string|null,preserve,Keep source region separate from resolved concept IDs
-KSTARTUP,region_concept_ids/region_basis,array/string,region.concept_ids/basis,array|null/string|null,preserve source basis,Do not promote unresolved abbreviations to confirmed geography
+KSTARTUP,region_concept_ids/region_source,array/string,region.concept_ids/source,array|null/string|null,preserve source field,Do not promote unresolved abbreviations to confirmed geography
 KSTARTUP,structured.business_age_raw,string|null,structured.business_age_raw,string|null,preserve raw value,No normalization to thresholds in this stage
 KSTARTUP,structured.founder_age_raw,string|null,structured.founder_age_raw,string|null,preserve raw value,Do not merge with business age
 KSTARTUP,structured.applicant_target_raw,string|null,structured.applicant_target_raw,string|null,preserve raw value,Keep separate from BIZINFO target_group_text
 KSTARTUP,eligibility_text/string,string,condition_texts.eligibility,text/status object,preserve and sanitize,Original API text remains
 KSTARTUP,exclusion_text/preferred_text,null in snapshot,condition_texts.exclusion/preference,text/status object,EMPTY or NOT_COLLECTED by field presence,Do not claim the source announcement lacks such conditions
 KSTARTUP,body_text/support_text/evaluation_text,string|null,content.body_text/support_text/evaluation_text,text/status object,preserve and sanitize,Fields have different roles and remain separate
-KSTARTUP,contact_phone_raw/contact_text,contact fields,contacts[],array,Classify explicit official-work context; personal values withheld; ambiguous candidates queued,Keep official business contacts in notice metadata only; omit contact values from chunks; classification needs context; KStartup contact number is paired with source contact department
+KSTARTUP,contact_phone_raw/contact_text,contact fields,contacts[],array,Public-agency contacts kept (basis: explicit context / source department pair / contact field); personal-labelled values withheld; fields without a number queued for review,Contacts stay in the text too (agency phone and email are not masked); only a personal-name context and the contact right after it are removed; organization is the label printed before the number
 KSTARTUP,attachments.count=null,text_extracted=0,attachments,object,NOT_COLLECTED plus NOT_ATTEMPTED,Do not turn null count into zero
 KSTARTUP,chunks.section=title_body,string,chunk.section=NOTICE_BODY,string,preserve original in section_original,Text contains title plus announcement body; distinct from BIZINFO summary
 KSTARTUP,chunks.section=eligibility_api/exclusion_api/preferred_api,string,chunk.section=ELIGIBILITY_API/EXCLUSION_API/PREFERENCE_API,string,preserve,Do not merge section content

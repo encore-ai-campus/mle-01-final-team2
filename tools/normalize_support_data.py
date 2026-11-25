@@ -42,6 +42,13 @@ CONTACT_EMAIL_RE = re.compile(r"(?i)\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b")
 OFFICIAL_CONTACT_CONTEXT_RE = re.compile(r"\uB300\uD45C\s*\uC804\uD654|\uB300\uD45C\s*\uBC88\uD638|\uC0AC\uC5C5\s*\uBB38\uC758|\uC2E0\uCCAD\s*\uBB38\uC758|\uC811\uC218\s*\uBB38\uC758|\uBB38\uC758\s*\uCC98|\uB2F4\uB2F9\s*\uBD80\uC11C|\uBD80\uC11C\s*\uC804\uD654|\uAE30\uAD00\s*\uC804\uD654|\uACF5\uC2DD\s*\uBB38\uC758")
 PERSONAL_CONTACT_CONTEXT_RE = re.compile(r"\uD734\uB300\s*\uC804\uD654|\uD734\uB300\uD3F0|\uAC1C\uC778\s*(?:\uC804\uD654|\uC774\uBA54\uC77C)|\uC131\uBA85|\uC9C1\uC811\s*\uC5F0\uB77D")
 
+MOBILE_RE = re.compile(r"(?<!\d)01[016789][- .]?\d{3,4}[- .]?\d{4}(?!\d)")
+# 담당자 이름 문맥 바로 뒤(같은 줄 40자 안)에 붙은 전화·이메일은 개인 연락처로 보고 지운다. 기관 대표 연락처는 지우지 않는다.
+NAME_TAIL_CONTACT_RE = re.compile(r"(?P<label>문의\s*담당자|사업\s*담당자|연락\s*담당자|담당자(?:명|\s*이름)?|성명)\s*[:：]?\s*[가-힣]{2,4}(?P<tail>[^\n/;|]{0,40})")
+PERSON_KEYS = {"담당자", "담당자명", "contact_name", "manager_name", "person_name", "문의자"}
+URL_STATUS_VALUES = ("VALID", "INVALID", "EMPTY", "NOT_COLLECTED", "SCHEME_MISSING", "INSECURE_HTTP", "NOT_A_URL")
+HOSTLIKE_RE = re.compile(r"^[\w.-]+\.[a-z]{2,}(?::\d+)?(?:[/?#]|$)", re.IGNORECASE)
+
 METHOD_FIELD_CODES = {
     "aply_mthd_onli_rcpt_istc": "ONLINE",
     "aply_mthd_eml_rcpt_istc": "EMAIL",
@@ -162,23 +169,72 @@ def normalize_deadline(row: dict[str, Any]) -> dict[str, Any]:
 
 
 def scrubbed_url(value: Any, *, allowed_domain: str | None = None) -> tuple[str | None, str]:
+    """URL을 원문 그대로(비밀값만 가림) 보존하고 상태를 분류한다. 고치거나 만들어 내지 않는다.
+
+    VALID: https + 호스트(+ allowed_domain이 있으면 그 도메인). 외부 기관 URL도 https면 VALID이며 호스트를 검증했다는 뜻은 아니다.
+    SCHEME_MISSING: `event-us.kr/..`처럼 도메인으로 보이지만 스킴이 없음. INSECURE_HTTP: http. NOT_A_URL: URL이 아닌 문자열(제목 등).
+    INVALID: 자격 정보가 들어 있거나 파싱 불가, 허용 도메인 밖(allowed_domain 지정 시), 공백 포함.
+    """
     if value is None or value == "":
         return None, "EMPTY"
     if not isinstance(value, str):
         return str(value), "INVALID"
     text = SENSITIVE_QUERY_RE.sub(r"\1[REDACTED]", value.strip())
+    scheme_match = re.match(r"^([a-zA-Z][a-zA-Z0-9+.-]*)://", text)
+    if not scheme_match:
+        return text, ("SCHEME_MISSING" if HOSTLIKE_RE.match(text) and not any(c.isspace() for c in text) else "NOT_A_URL")
     try:
         parsed = urlparse(text)
         host = (parsed.hostname or "").casefold().rstrip(".")
         _ = parsed.port
     except ValueError:
         return None, "INVALID"
-    domain_allowed = allowed_domain is None or host == allowed_domain or host.endswith("." + allowed_domain)
-    valid = parsed.scheme.casefold() == "https" and bool(host) and domain_allowed and not parsed.username and not parsed.password and not any(c.isspace() for c in text) and "[REDACTED]" not in text
     if parsed.username is not None or parsed.password is not None:
         return None, "INVALID"
-    # Preserve the URL exactly except for secrets; malformed values are flagged, never repaired.
-    return text, "VALID" if valid else "INVALID"
+    if not host or any(c.isspace() for c in text) or "[REDACTED]" in text:
+        return text, "INVALID"
+    if allowed_domain is not None and not (host == allowed_domain or host.endswith("." + allowed_domain)):
+        return text, "INVALID"
+    scheme = parsed.scheme.casefold()
+    if scheme == "http":
+        return text, "INSECURE_HTTP"
+    return text, "VALID" if scheme == "https" else "INVALID"
+
+
+def scrub_text_public(value: str, report: PrivacyReport | None = None) -> str:
+    """공개 공고용 정리. 기관 연락처(전화·이메일)는 그대로 두고, 개인 이름 문맥과 그 뒤에 붙은 연락처, URL 토큰만 지운다."""
+    report = report or PrivacyReport()
+
+    def drop_tail(match: re.Match[str]) -> str:
+        tail = match.group("tail")
+        n_phone, n_mail = len(PII_PHONE.findall(tail)), len(PII_EMAIL.findall(tail))
+        report.phone_count += n_phone
+        report.email_count += n_mail
+        tail = PII_EMAIL.sub("[개인정보 마스킹]", PII_PHONE.sub("[개인정보 마스킹]", tail))
+        report.contextual_name_count += 1
+        return f"{match.group('label')} [이름 삭제]" + tail
+
+    value = NAME_TAIL_CONTACT_RE.sub(drop_tail, value)
+    return SENSITIVE_QUERY_RE.sub(r"\1[REDACTED]", value)
+
+
+def sanitize_tree_public(value: Any, report: PrivacyReport | None = None, *, key: str = "") -> Any:
+    """sanitize_tree의 공개 공고용 대체. 이름 키는 통째로 가리고, 문자열은 scrub_text_public만 적용한다."""
+    report = report or PrivacyReport()
+    if isinstance(value, dict):
+        out = {}
+        for child_key, child in value.items():
+            if str(child_key).casefold() in PERSON_KEYS and child:
+                report.contextual_name_count += 1
+                out[child_key] = "[이름 마스킹]"
+            else:
+                out[child_key] = sanitize_tree_public(child, report, key=str(child_key))
+        return out
+    if isinstance(value, list):
+        return [sanitize_tree_public(item, report, key=key) for item in value]
+    if isinstance(value, str):
+        return value if key.casefold().endswith("_hash") else scrub_text_public(value, report)
+    return value
 
 
 def scrub_record_text(value: Any, report: PrivacyReport | None = None) -> Any:
@@ -240,10 +296,12 @@ def normalize_contacts(row: dict[str, Any]) -> list[dict[str, Any]]:
         matches = [("PHONE", match) for match in CONTACT_PHONE_RE.finditer(text)]
         matches.extend(("EMAIL", match) for match in CONTACT_EMAIL_RE.finditer(text))
         matches.sort(key=lambda item: item[1].start())
+        last_end, last_org = 0, None
         for contact_type, match in matches:
             value = match.group(0).strip()
-            left_separators = [text.rfind(separator, 0, match.start()) for separator in ("\n", ";", "|")]
-            right_separators = [position for separator in ("\n", ";", "|")
+            window_separators = ("\n", ";", "|", "/")
+            left_separators = [text.rfind(separator, 0, match.start()) for separator in window_separators]
+            right_separators = [position for separator in window_separators
                                 if (position := text.find(separator, match.end())) >= 0]
             left = max(left_separators) + 1
             right = min(right_separators) if right_separators else len(text)
@@ -254,11 +312,22 @@ def normalize_contacts(row: dict[str, Any]) -> list[dict[str, Any]]:
             source_department_pair = (str(row.get("source_system") or "").upper() == "KSTARTUP"
                                       and source_field == "contact_phone_raw"
                                       and isinstance(source_department, str) and bool(source_department.strip()))
-            classification = ("PERSONAL" if has_personal_context else
-                              "OFFICIAL_BUSINESS" if has_official_context or source_department_pair else "UNCLASSIFIED")
+            # 공공기관 공고의 연락처 필드(contact_text/contact_phone_raw)에 적힌 전화·이메일은 개인 맥락 표지가 없으면 기관 연락처로 본다.
+            classification = ("PERSONAL" if has_personal_context else "OFFICIAL_BUSINESS")
             basis = ("PERSONAL_LABEL_OR_NAME" if has_personal_context else
                      "SOURCE_CONTACT_DEPARTMENT_PAIR" if source_department_pair else
-                     "EXPLICIT_OFFICIAL_CONTEXT" if has_official_context else "INSUFFICIENT_CONTEXT")
+                     "EXPLICIT_OFFICIAL_CONTEXT" if has_official_context else "SOURCE_PUBLIC_AGENCY_CONTACT_FIELD")
+            # 기관명은 연락처 바로 앞 문구를 그대로 쓴다(추정 아님). 앞 문구가 없으면 같은 구획의 앞 연락처 기관을 이어 쓴다.
+            segment_start = max(left, last_end)
+            prefix = text[segment_start:match.start()].strip(" ,:-·()[]")
+            prefix = re.sub(r"(?:대표\s*)?(?:전화번호|전화|연락처|문의|TEL|Tel|tel)\s*$", "", prefix).strip(" ,:-·()[]")
+            if prefix and re.search(r"[가-힣]", prefix) and not re.search(r"\d", prefix) and 2 <= len(prefix) <= 40:
+                organization = prefix
+            elif left <= last_end and last_org:
+                organization = last_org
+            else:
+                organization = None
+            last_end, last_org = match.end(), organization
             key = (contact_type, value)
             item = candidates.setdefault(key, {"type": contact_type, "value": value,
                 "classification": classification, "classification_basis": basis,
@@ -268,8 +337,15 @@ def normalize_contacts(row: dict[str, Any]) -> list[dict[str, Any]]:
             if priority[classification] > priority[item["classification"]]:
                 item["classification"] = classification
                 item["classification_basis"] = basis
+            if classification == "OFFICIAL_BUSINESS" and item["organization"] is None:
+                if organization:
+                    item["organization"] = scrub_record_text(sanitize_tree_public(organization))
+                elif source_department_pair:
+                    names = row.get("org_names")
+                    first = names[0] if isinstance(names, list) and names else row.get("org_raw")
+                    item["organization"] = first if isinstance(first, str) and first.strip() else None
             if source_department_pair and classification == "OFFICIAL_BUSINESS":
-                item["department"] = scrub_record_text(sanitize_tree(source_department))
+                item["department"] = scrub_record_text(sanitize_tree_public(source_department))
             if source_field not in item["source_fields"]:
                 item["source_fields"].append(source_field)
         if not matches:
@@ -363,6 +439,8 @@ def normalize_notice(row: dict[str, Any], issues: list[dict[str, Any]]) -> tuple
     apply_url, apply_url_status = scrubbed_url(row.get("apply_url"))
     official_domain = {"KSTARTUP": "k-startup.go.kr", "BIZINFO": "bizinfo.go.kr", "G2B": "g2b.go.kr"}.get(str(source_system).upper())
     guide_url, guide_url_status = scrubbed_url(row.get("guide_url"), allowed_domain="k-startup.go.kr" if source_system == "KSTARTUP" else official_domain)
+    official_domain = {"KSTARTUP": "k-startup.go.kr", "BIZINFO": "bizinfo.go.kr"}.get(str(source_system).upper())
+    guide_url, guide_url_status = scrubbed_url(row.get("guide_url"))  # 안내 URL은 외부 기관 페이지일 수 있어 도메인을 제한하지 않는다
     notice_url, notice_url_status = scrubbed_url(row.get("detail_url"), allowed_domain=official_domain)
     flags = row.get("guide_url_flags") or []
     if "guide_url_malformed" in flags:
@@ -427,7 +505,7 @@ def normalize_notice(row: dict[str, Any], issues: list[dict[str, Any]]) -> tuple
             "operating_department": row.get("operating_dept"), "organization_kind": row.get("org_kind"),
         },
         "category": {"source_major": row.get("category_major"), "source_medium": row.get("category_medium")},
-        "region": {"raw": row.get("region_raw"), "concept_ids": row.get("region_concept_ids"), "basis": row.get("region_basis"),
+        "region": {"raw": row.get("region_raw"), "concept_ids": row.get("region_concept_ids"), "source": row.get("region_source"),
                    "scope_hint": row.get("region_scope_hint"), "tags_hint": row.get("region_tags_hint")},
         "structured": structured, "condition_texts": condition_texts, "content": content,
         "attachments": normalize_attachments(row, issues),
@@ -443,12 +521,16 @@ def normalize_notice(row: dict[str, Any], issues: list[dict[str, Any]]) -> tuple
         "normalizer_version": NORMALIZER_VERSION,
     }
     report = PrivacyReport()
-    safe_record = scrub_record_text(sanitize_tree(record, report), report)
+    safe_record = scrub_record_text(sanitize_tree_public(record, report), report)
     safe_record["contacts"] = contacts
     if not safe_record.get("notice_id"):
         issues.append({"notice_id": None, "issue": "MISSING_NOTICE_ID"})
-    if guide_url_status == "INVALID" and guide_url:
-        issues.append({"notice_id": row.get("notice_id"), "field": "urls.guide_url", "issue": "INVALID_OR_MALFORMED_URL", "value": safe_record["urls"]["guide_url"]})
+    for url_field, status in (("guide_url", guide_url_status), ("apply_url", apply_url_status), ("notice_url", notice_url_status)):
+        shown = safe_record["urls"][url_field]
+        code = {"INVALID": "INVALID_OR_MALFORMED_URL", "SCHEME_MISSING": "URL_SCHEME_MISSING",
+                "INSECURE_HTTP": "URL_INSECURE_HTTP", "NOT_A_URL": "URL_FIELD_NOT_A_URL"}.get(status)
+        if code and shown:
+            issues.append({"notice_id": row.get("notice_id"), "field": f"urls.{url_field}", "issue": code, "value": shown})
     deadline = safe_record["application_period"]["deadline"]
     if deadline["status"] == "DERIVED_FROM_END_DATE":
         issues.append({"notice_id": row.get("notice_id"), "field": "application_period.deadline", "issue": "LEGACY_END_OF_DAY_TIMESTAMP_DERIVED_FROM_DATE", "raw_value": deadline["raw_value"]})
@@ -478,7 +560,7 @@ def normalize_chunk(row: dict[str, Any], privacy_report: PrivacyReport) -> dict[
         "privacy_status": "CLEARED", "search_eligible": not is_attachment,
         "content_review_status": "UNREVIEWED", "normalizer_version": NORMALIZER_VERSION,
     }
-    safe_record = scrub_record_text(sanitize_tree(record, privacy_report), privacy_report)
+    safe_record = scrub_record_text(sanitize_tree_public(record, privacy_report), privacy_report)
     if (pii_findings(safe_record) or privacy_report.ambiguous_context_count
             or row.get("privacy_status") == "REVIEW_REQUIRED"):
         safe_record["privacy_status"] = "REVIEW_REQUIRED"
@@ -515,8 +597,12 @@ def pii_findings(value: Any, path: str = "", *, allow_official_contact: bool = F
             findings.extend(pii_findings(child, f"{path}[{index}]", allow_official_contact=allow_official_contact))
     elif isinstance(value, str):
         if path.rsplit(".", 1)[-1] not in {"raw_hash", "content_hash", "source_content_hash"}:
-            if not allow_official_contact and PII_EMAIL.search(value): findings.append(f"{path}: email")
-            if not allow_official_contact and CONTACT_PHONE_RE.search(value): findings.append(f"{path}: phone")
+            # 기관 연락처는 본문에 남기는 것이 정책이다. 담당자 이름 문맥 바로 뒤에 붙은 전화·이메일만 개인 정보로 본다.
+            if not allow_official_contact:
+                for named in NAME_TAIL_CONTACT_RE.finditer(value):
+                    if PII_EMAIL.search(named.group("tail")) or PII_PHONE.search(named.group("tail")):
+                        findings.append(f"{path}: contact next to personal name")
+                        break
             if any(match.group(1) != "[REDACTED]" for match in TOKEN_QUERY.finditer(value)): findings.append(f"{path}: URL token")
             if CONTACT_NAME_RE.search(value): findings.append(f"{path}: personal name context")
     return findings
@@ -577,6 +663,8 @@ def normalize_snapshot(input_dir: Path, output_dir: Path, *, schema_dir: Path | 
                            "url_tokens": privacy_report.url_token_count, "contextual_names": privacy_report.contextual_name_count,
                            "ambiguous_contexts": privacy_report.ambiguous_context_count})
 
+    url_counts = Counter((row["source"]["source_system"], field, status)
+                         for row in notices for field, status in row["urls"]["url_status"].items())
     notice_ids = [row.get("notice_id") for row in notices]
     notice_id_set = set(notice_ids)
     counts = Counter()
@@ -631,6 +719,24 @@ def normalize_snapshot(input_dir: Path, output_dir: Path, *, schema_dir: Path | 
     for source in sorted(contacts_by_source):
         contact_queue_coverage[source] = queued[source] / totals[source] if totals[source] else 1.0
 
+    # 검수 대기열: 값 없이 사유만 적는다. 검수 담당과 절차는 docs/SUPPORT_DATA_NORMALIZATION_V1.md의 "검수 대기열" 절을 따른다.
+    review_queue = []
+    for notice in notices:
+        for contact in notice["contacts"]:
+            if contact["review_status"] == "NEEDS_REVIEW":
+                review_queue.append({"kind": "CONTACT", "notice_id": notice["notice_id"], "reason": contact["classification_basis"],
+                                     "type": contact["type"], "source_fields": contact["source_fields"]})
+    for chunk in chunks:
+        if chunk["privacy_status"] == "REVIEW_REQUIRED":
+            review_queue.append({"kind": "CHUNK", "chunk_id": chunk["chunk_id"], "notice_id": chunk["notice_id"],
+                                 "reason": "PRIVACY_REVIEW_REQUIRED"})
+    text_contacts = Counter()
+    for row in [*notices, *chunks]:
+        blob = json.dumps({k: v for k, v in row.items() if k != "contacts"}, ensure_ascii=False)
+        text_contacts["emails_kept_in_text"] += len(PII_EMAIL.findall(blob))
+        text_contacts["phones_kept_in_text"] += len(CONTACT_PHONE_RE.findall(blob))
+        text_contacts["mobile_numbers_kept_in_text"] += len(MOBILE_RE.findall(blob))
+
     output_dir.mkdir(parents=True, exist_ok=True)
     notice_path, chunk_path = output_dir / "notices.jsonl", output_dir / "chunks.jsonl"
     blocking = {"SCHEMA_VALIDATION", "PII_REMAINS_AFTER_SCRUB", "DUPLICATE_NOTICE_IDS",
@@ -640,6 +746,7 @@ def normalize_snapshot(input_dir: Path, output_dir: Path, *, schema_dir: Path | 
         write_jsonl(notice_path, notices)
         write_jsonl(chunk_path, chunks)
     write_jsonl(output_dir / "normalization_issues.jsonl", issues)
+    write_jsonl(output_dir / "review_queue.jsonl", review_queue)
 
     report = {
         "normalizer_version": NORMALIZER_VERSION,
@@ -658,6 +765,10 @@ def normalize_snapshot(input_dir: Path, output_dir: Path, *, schema_dir: Path | 
         "privacy_redactions": dict(redactions),
         "contact_processing_by_source": {source: dict(contact_counts) for source, contact_counts in sorted(contacts_by_source.items())},
         "unclassified_contact_review_coverage": contact_queue_coverage,
+        "contact_text_policy": {"official_contacts_masked_in_text": False, "personal_name_context_removed": True,
+                                "kept_in_text": dict(text_contacts)},
+        "url_status_by_source": {f"{src}:{field}:{status}": n for (src, field, status), n in sorted(url_counts.items())},
+        "review_queue_items": len(review_queue),
         "search_eligible_chunks": sum(bool(c["search_eligible"]) for c in chunks),
         "attachment_chunks_quarantined": sum(c["origin"] in ATTACHMENT_ORIGINS and not c["search_eligible"] for c in chunks),
         "schema_validation_errors": sum(i.get("issue") == "SCHEMA_VALIDATION" for i in issues),
