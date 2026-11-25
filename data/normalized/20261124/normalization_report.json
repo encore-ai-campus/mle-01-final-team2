@@ -1,0 +1,53 @@
+{
+ "cleaned_dir": "data\\cleaned\\20261124",
+ "notices": 5116,
+ "facts": 17211,
+ "evidence_not_found_dropped": 0,
+ "ambiguous_region_facts": 43,
+ "facts_by_source_kind": {
+  "TEXT_RULE": 17144,
+  "OCR_TEXT": 67
+ },
+ "counters": {
+  "business_age_text_vs_structured.consistent": 1169,
+  "business_age_text_vs_structured.text_narrower": 78,
+  "business_age_text_vs_structured.text_wider": 22,
+  "fact.BIZINFO.business_age": 238,
+  "fact.BIZINFO.certification": 2136,
+  "fact.BIZINFO.company_size": 3024,
+  "fact.BIZINFO.exclusion": 3154,
+  "fact.BIZINFO.founder_age": 188,
+  "fact.BIZINFO.law_reference": 2249,
+  "fact.BIZINFO.region": 1323,
+  "fact.KSTARTUP.business_age": 1619,
+  "fact.KSTARTUP.certification": 558,
+  "fact.KSTARTUP.company_size": 868,
+  "fact.KSTARTUP.exclusion": 193,
+  "fact.KSTARTUP.founder_age": 210,
+  "fact.KSTARTUP.law_reference": 323,
+  "fact.KSTARTUP.region": 1128,
+  "notice_total.BIZINFO": 1294,
+  "notice_total.KSTARTUP": 3822,
+  "notice_with_fact.BIZINFO": 1167,
+  "notice_with_fact.KSTARTUP": 2452,
+  "notice_with_term.BIZINFO": 919,
+  "notice_with_term.KSTARTUP": 2757,
+  "region_missing.BIZINFO": 330,
+  "structured.applicant_target.OK": 3822,
+  "structured.applicant_target.all_options": 1380,
+  "structured.business_age.OK": 3822,
+  "structured.business_age.all_options": 1354,
+  "structured.founder_age.OK": 3822,
+  "structured.founder_age.all_options": 2602
+ },
+ "note": "모든 값은 검수 전 후보다. K-Startup 선택형 필드는 필터 체크박스일 수 있어 all_options면 판정에 쓰지 않는다.",
+ "ocr_review": {
+  "ocr_files": 126,
+  "need_human_check": 16,
+  "median_conf": 84.9,
+  "thresholds": {
+   "low_conf": 75.0,
+   "short_chars": 200
+  }
+ }
+}
