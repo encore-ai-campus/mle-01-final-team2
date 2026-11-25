@@ -15,11 +15,6 @@ data/graph/requirement_candidates.jsonl
 # K-Startup 원본 수집분(로컬 전용)
 data/kstartup/raw/
 
-# 정리 층(로컬 전용)
-data/cleaned/
 
 # 정답셋 파일럿 자료 패킷(공고 원문, 로컬 전용)
 data/goldset/pilot/packets/
-
-# 값 정규화 층(첨부 원문 근거 포함, 로컬 전용)
-data/normalized/
