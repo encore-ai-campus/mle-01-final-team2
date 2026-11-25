@@ -1,5 +1,7 @@
 # 도메인 온톨로지 설계서
 
+> 2026-11-25 보완: 팀 검토 의견(온톨로지 보완안 O-01~O-16)을 저장소 파일로 확인한 뒤 반영했다. 수치는 §9 끝의 집계 기준표에 입력 파일과 기준 시점을 적었다. 반영 항목은 §11 이력과 부록 A의 D-13~D-20에 있다.
+
 정부지원사업 공고의 요건을 계층 온톨로지로 정규화하고, Multi-hop 추론으로 신청 자격을 판정하는 지식 그래프 서비스의 도메인 온톨로지
 
 ※ 수치는 2026-11-24에 수집한 **기업마당 공고 1,294건**(공식 API 응답과 우리가 정리한 `notices.jsonl`)과 **K-Startup 공고**(API 전체 30,632건 중 접수 시작일 2025-11-24 이후 3,819건 + 모집 중 3건, 우리가 원본에서 다시 정리한 정리층 `data/cleaned/20261124/notices.jsonl`)를 직접 읽어 센 값입니다. 정규식으로 센 값은 **근사치**(중복·오탐 포함)이며 정확도 지표가 아닙니다. 요건·조건 정규화 예시는 본문을 손으로 읽은 **검수 전 가설**이고, 법령 기준은 원문을 확인하지 않았습니다. 가상의 사용자 입력은 "가상"으로 표시했습니다. 이전 판(v0.1, 공고 90건 표본 기준)은 `docs/old/[도메인온톨로지]_설계서_v0.1_20261123.md`에 보관했습니다.
@@ -22,7 +24,7 @@
 | 도메인 | 공개 API로 얻는 정부·지자체·공공기관 지원사업 공고의 신청 자격 판정 | 교육 프로젝트이며 실제 신청·접수 시스템이 아님. 판정은 참고용 |
 | 대상 사용자 | 창업자·소상공인·중소기업(조건을 입력하는 신청 희망자), 관리자(요건 추출 검수) | 기초 설계서 §1 |
 | 포함 범위 | 공고 메타(기관·분야·지역·첨부·버전), 요건·조건 정규화(자격·제외·우대·서류·한도·평가), 개념 계층(지역·업종·신청자 유형 등), 트랙, 용어 정의→법령 연결(P1), 정정·재공고 관계 | 메타 층은 두 출처 전체, 요건 층은 정답셋 후보부터 시작 |
-| 제외 범위 | 사업계획서 작성, 신청 대행, 선정 가능성 예측, 법적·세무 자문, 개인 식별 정보 기반 판정, **나라장터 입찰 공고(이번 판의 범위 밖, D-5)**, K-Startup 첨부 수집(사이트 `robots.txt`가 금지, D-9) | 나라장터는 동료가 별도 명세서(DS-10)를 만들었지만 구조화 자격 필드가 비어 있고 자격이 첨부에 있어 이번 요건 층에서 뺀다 |
+| 제외 범위 | 신청 대행·대리 제출(공식 양식 기반 신청 문서 초안은 기획서 v0.3에서 P1로 추가, 이 온톨로지의 판정 범위 밖), 선정 가능성 예측, 법적·세무 자문, 개인 식별 정보 기반 판정, **나라장터 입찰 공고(이번 요건 층의 범위 밖, D-5. 서비스에는 입찰공고 탭 FR-N22가 P1로 제안되어 있음)**, K-Startup 첨부 수집(사이트 `robots.txt`가 금지, D-9) | 나라장터는 동료가 별도 명세서(DS-10)를 만들었지만 구조화 자격 필드가 비어 있고 자격이 첨부에 있어 이번 요건 층에서 뺀다 |
 | 핵심 데이터 | 기업마당 1,294건(모집 중 스냅샷), K-Startup 3,822건(최근 1년 3,819 + 모집 중 3) 외 API 전체 30,632건, 행정구역 코드표(행정안전부 `jscode20260701`), 기업마당 본문출력파일 텍스트 1,292건 | §3 |
 | 운영 제약 | 모든 결과에 공고 출처·수집 시각·원문 링크·참고용 면책 표시(MR-N1, N2), 개인 식별 정보 비저장(공공기관 담당자 연락처는 개인정보로 취급하지 않기로 결정), 첨부 원본·추출 텍스트는 로컬 전용 | 기초 설계서 §9 |
 
@@ -43,10 +45,10 @@
 
 | CQ ID | 업무 질문 예시 | 유형 | 필요 경로/검증 | SQL 대비 |
 |---|---|---|---|---|
-| CQ-01 | 서울 성동구 사업장이 신청할 수 있는 지역 요건 공고 후보는? | A | (Concept 성동구)-[:WITHIN*1..3]→(Concept)←ABOUT←Condition←…←Notice | 재귀 쿼리로 가능 |
+| CQ-01 | 서울 성동구 사업장이 신청할 수 있는 지역 요건 공고 후보는? | A | (Concept 성동구)-[:WITHIN\|MEMBER_OF*1..3]→(Concept)←ABOUT←Condition←…←Notice | 재귀 쿼리로 가능 |
 | CQ-02 | 이 공고의 자격·제외·우대 요건과 원문 문장은? | A | Notice→HAS_REQUIREMENT→Requirement{kind, source_sentence} | 동일 |
 | CQ-03 | (업력 2년, 대표 만 35세, 구미시 소재) 프로필이 이 공고에 신청 가능한가? | B | Notice→(Track)→Requirement→Condition, 3값 평가·합성 | 규칙 평가기 필요, 질의만으로는 불가 |
-| CQ-04 | "광주광역시 관내" 요건에 광주 남구 사업장이 충족되는가? | C | (남구)-[:WITHIN]→(광주(구))-[:WITHIN]→(전남광주통합특별시) | 계층 데이터가 있으면 가능. 행정개편 처리가 핵심(§7) |
+| CQ-04 | "광주광역시 관내" 요건에 광주 남구 사업장이 충족되는가? | C | (남구)-[:MEMBER_OF]→(광주(구))-[:MEMBER_OF]→(전남광주통합특별시) | 계층 데이터가 있으면 가능. 행정개편 처리가 핵심(§7) |
 | CQ-05 | 이 공고의 "중소기업"은 어떤 법령 기준이며 사용자는 해당하는가? | C | Concept→DEFINED_BY→Definition→CITES_LAW→ExternalLaw | 정의·법령 데이터가 있어야 가능(미구축) |
 | CQ-06 | 정의→법령 연결이 끊긴(`CHAIN_BROKEN`) 요건이 있는 공고는? | C | Definition, ExternalLaw.text_hash | 동일 |
 | CQ-07 | 이 공고는 왜 신청이 안 되는가? 어떤 조건이 부족한가? | D | 평가 결과의 `UNSATISFIED`·`UNKNOWN` 조건 추적 | 평가기 필요 |
@@ -57,9 +59,9 @@
 | CQ-12 | N개 중 k개 충족(`AT_LEAST`)이거나 목록이 "등"으로 열려 있는(`open_ended`) 요건의 공고는? | A | Requirement.logic, open_ended | 동일 |
 | CQ-13 | 구조화 필드와 본문이 충돌하는(`source_conflict`) 공고는? | A | Condition.source_conflict | 동일 |
 | CQ-14 | 기준일이 서로 다른 조건(공고일·마감일·전년도)을 가진 공고는? | A | Condition.ref_date_kind | 동일 |
-| CQ-15 | 특정 법령 조항의 원문이 바뀌면 영향받는 공고는? (P1) | C | ExternalLaw.text_hash←CITES_LAW←Definition←DEFINED_BY←Concept←ABOUT←Condition | 정의·법령 데이터가 있어야 가능. 경로 길이 7로 SQL은 조인 증가 |
+| CQ-15 | 특정 법령 조항의 원문이 바뀌면 영향받는 공고는? (P1) | C | LawArticle.text_hash←[CITES]←Requirement←…←Notice(직접 인용 2~3 hop). 정의를 거치면 ←CITES_LAW←Definition←DEFINED_BY←Concept←ABOUT←Condition | 직접 인용 경로는 조인 2~3개라 SQL로도 가능. 정의 경유 경로는 길이 7로 조인이 늘어난다 |
 | CQ-16 | 사용자가 입력하지 않아 `UNKNOWN`이 되는 속성 중 무엇을 물으면 후보가 가장 줄어드나? (P1) | D | Condition.attribute 집계, 평가 결과 | 평가기 필요 |
-| CQ-17 | "경상권 소재"처럼 **권역** 요건에 대구 달서구 사업장이 충족되는가? | C | (달서구)-[:WITHIN]→(대구)-[:WITHIN]→(경상권 묶음) | 권역 사전이 있으면 재귀 쿼리로 가능. 사전 구축이 핵심(§7 시나리오 4) |
+| CQ-17 | "경상권 소재"처럼 **권역** 요건에 대구 달서구 사업장이 충족되는가? | C | (달서구)-[:WITHIN]→(대구)-[:MEMBER_OF]→(경상권 묶음) | 권역 사전이 있으면 재귀 쿼리로 가능. 사전 구축이 핵심(§7 시나리오 4) |
 | CQ-18 | 업력 옵션 목록이 "예비창업자·1·2·3·5·7·10년 미만" 전체이면 제한 없음인가, 일부면 어떻게 해석하나? | A | Condition.value(옵션 목록), 규칙 평가기 | 규칙 평가기 필요 |
 
 표의 "동일"로 표시한 CQ가 18개 중 9개(CQ-02, 06, 08~14)다. 그래프가 필요하다는 주장이 가능한 곳은 계층 확장(CQ-01, 04, 17)과 정의→법령 경로(CQ-05, 15)이며, 이 부분이 §9의 SQL 베이스라인 비교 대상이다.
@@ -71,8 +73,8 @@
 | SRC-01 | 기업마당 지원사업정보 API. 수집 2026-11-24 09:16, 13쪽, 완전성 확인(받은 행 = `totCnt` = 고유 ID = 1,294, 중복 0) | **공고 1,294건**(모집 중 스냅샷, 마감 공고는 API가 제공하지 않음). 신청 기간: 날짜 범위 379건(29.3%), 예산 소진 시까지 646, 상시 143, 선착순 35, 인원 충족 시까지 54, 별도 공지·미정 35, 해석 불가 2. 지원 대상(`trgetNm`) 7종(중소기업 1,000·소상공인 177·창업벤처 78·사회적기업 25·장애인기업 7·제조업 4·여성기업 3), 지원 분야 대분류 8·중분류 37, 소관 기관 36곳(전남광주통합특별시 113건 포함). **해시태그에 전 시도가 달린 공고가 347건(27%)이라 지역 확정에 쓰지 못한다** | 이용 조건 확인(교육·비상업), 첨부는 로컬 전용 |
 | SRC-02 | K-Startup 조회 서비스 API (`getAnnouncementInformation01`). 전체 `totalCount` 30,632건, 날짜 필터가 동작하지 않아 페이지로 받아 직접 센다 | 접수 시작일 기준 최근 1년(2025-11-24~) **3,819건**(동료 정리본, 모집 중 155·종료 3,664, 통합공고 854). 구조화 필드: 업력 `biz_enyy`(옵션 목록, 3,819건 모두), 연령 `biz_trgt_age`(3구간), 지역 `supt_regin`(고유 19종, `전국` 2,189건 57%), 신청 대상 `aply_trgt`(7종 조합), 지원 분야 11종. **제외 대상 `aply_excl_trgt_ctnt`는 3,819건 모두 비어 있음.** 자격 문구는 평균 104자, 20자 미만 340건. **첨부 정보가 API에 없다.** 동료 정리본에는 모집 중 공고 3건 누락과 연락처 마스킹 등 수정 요청 사항이 있다(REVIEW_kstartup_cleaned) | 이용허락범위 제한 없음(명세). 공고 페이지·첨부 경로(`/afile*/`)는 `robots.txt`가 금지해 **자동 수집하지 않는다** |
 | SRC-03 | 기업마당 본문출력파일(공고문 첨부) 원본·추출 텍스트 | 1,294개 모두 내려받음(성공 1,294). 텍스트 추출 1,292건(OK 1,166 + OCR 126), 배포용 HWP 2건은 읽지 못함. 추출 글자 수 평균 6,205자(API 요약 평균 285자의 약 22배). 일반 첨부 1,360개는 내려받지 않음 | 로컬 전용, Git 제외 |
-| SRC-04 | 행정구역 코드표 `jscode20260701`(행정안전부 행정표준코드) | 시도 16, 시군구 217, 전국 1 = `Region` 234개. 2026-07 개편 반영: 광주·전남이 `전남광주통합특별시`(코드 1200000000)로 통합 | 공공 데이터 |
-| SRC-05 | 법령 원문(중소기업기본법 등) | **미수집.** 정의→법령 연결은 P1이며 수집 범위는 §3 아래 인용 빈도를 근거로 정함 | 법제처 API 이용 조건 확인 전 |
+| SRC-04 | 행정구역 코드표 `jscode20260701`(행정안전부 행정표준코드)와 법정동코드 전체자료 | 팀 코드표 `Region` 234개(시도 16·시군구 217·전국 1)에서 **시군구 12개가 빠져 있었다**(서울 강북·광진·금천, 인천 연수·계양·부평·미추홀·제물포·영종·서해, 충북 증평, 충남 태안). 정리 본문에 금천구 17건, 강북구 10건, 태안군 6건, 증평군 4건이 나오는데 지금은 지역 값으로 잡히지 않고 빠진다. 보완 코드표 `data/사전/지역_코드표.csv` 318행 = 팀 234 + 누락 12 + 일반구 39 + 폐지 33(ID는 `REGION:{코드}`). 2026-07 개편 반영: 광주·전남이 `전남광주통합특별시`(코드 1200000000)로 통합, 인천 중구·서구는 분할. 세종 코드는 원본 `3611000000`, 팀 `3600000000`이라 팀 값을 유지하고 원본 코드를 속성으로 둔다(D-13) | 공공 데이터 |
+| SRC-05 | 법령 원문(`data/지원사업_법령/`, 2026-11-25 수집) | 법령 26종(법률 13·시행령 13), 조문 1,286개, 별표 40개. 공고가 조문을 직접 인용하는 연결 543건(공고 466건, `조문.jsonl`의 `cited_by`). 값 정규화 층 법령 이름 709종 중 수집한 법령과 이름이 같은 것은 16종(659건, 조문까지 451건)이고 `오픈이노베이션 사업`처럼 법령이 아닌 값도 섞여 있다. 정의→법령 연결과 직접 인용은 P1(Neo4j 미적재) | 법제처 API 이용 조건 확인 전 |
 | SRC-06 | 수집 메타(`raw/…/manifest.json`, `parse_report.json`, `selection_report.json`) | 호출 조건·시드·건수 기록. 정답셋 후보 50건(기업마당 25, K-Startup 25, 우선·예비 포함) | 내부 파일 |
 
 **요건 층 입력의 크기.** 아래 비율은 정규식으로 센 **근사치**다(공고별로 한 번이라도 나오면 1건으로 센다). 분모가 서로 다르다는 점에 주의한다.
@@ -129,9 +131,11 @@ flowchart TB
     R -->|HAS_CONDITION| C["Condition"]
   end
   subgraph CON["개념 층 (코드표·사전)"]
-    K["Concept (scheme)"] -->|IS_A / WITHIN| K
-    D["Definition"] -->|CITES_LAW| L["ExternalLaw"]
+    K["Concept (scheme)"] -->|IS_A / WITHIN / MEMBER_OF| K
+    D["Definition"] -->|CITES_LAW| LA["LawArticle / LawAppendix"]
+    LA -->|PART_OF| L["ExternalLaw"]
   end
+  R -->|CITES| LA
   N -->|TARGETS_REGION| K
   C -->|ABOUT| K
   K -->|DEFINED_BY| D
@@ -147,19 +151,21 @@ flowchart TB
 
 | 클래스 | 식별자(예) | 핵심 속성 | 현재 데이터·예시 |
 |---|---|---|---|
-| Notice | notice_id | source_system, source_id, notice_kind, title, summary, deadline_at, deadline_raw, apply_status_kind, version, is_latest, fetched_at, content_hash, raw_hash, detail_url | 기업마당 1,294건은 위 속성이 모두 있음(`BIZINFO:PBLN_000000000128083`). K-Startup 3,822건도 정리층에 `notice_id`(`KSTARTUP:{pbanc_sn}`)·`version`·`content_hash`·`raw_hash`가 있음. 단 `fetched_at`은 날짜만, `published_at`은 API가 주지 않아 비어 있음 |
+| Notice | notice_id | source_system, source_id, title, body_text, is_open, period_status, published_at, application_start, application_end, deadline_at, apply_status_kind, version, is_latest, fetched_at, content_hash, raw_hash, detail_url (정리층 필드명 기준. `notice_kind`는 정리층에 없어 뺐고, `deadline_raw`는 `apply_status_kind`와 원문 문구로 대신한다) | 기업마당 1,294건은 위 속성이 모두 있음(`BIZINFO:PBLN_000000000128083`). K-Startup 3,822건도 정리층에 `notice_id`(`KSTARTUP:{pbanc_sn}`)·`version`·`content_hash`·`raw_hash`가 있음. 단 `fetched_at`은 날짜만, `published_at`은 API가 주지 않아 비어 있음 |
 | Organization | org_id | name, normalized_name, source_org_code, role_title, org_kind | 기업마당 소관 36곳·수행 기관 320곳(`직접수행` 52건·`기초자치단체` 295건은 범주값이라 기관 노드가 아님). K-Startup은 정리층에서 직함을 `role_title`로 분리함(직함 109건·공고 106건, 기관이 둘 이상인 공고 50건은 `multiple_orgs` 플래그), 주관 유형(`sprv_inst`) 공공기관 1,794·민간 1,327·교육기관 510·지자체 191 |
-| SupportCategory | category_id | name, level(major/medium/source_label) | 기업마당 대 8·중 37, K-Startup 11. 통합 매핑표 필요 |
+| SupportCategory | category_id | name, level(major/medium/source_label) | 기업마당 대 8·중 37, K-Startup 11. 통합 매핑표 필요. 그래프 생성 코드(`build.py`)는 출처별 한 단계 19개(`CAT:{출처}:…`)만 만들어 대·중분류 노드와 `IS_A`가 아직 없다 |
 | Attachment | attachment_id | file_name, file_extension, role, source_url, text_status, usable | 기업마당 2,654개(본문출력 1,294 + 일반 1,360). K-Startup은 정보 없음 |
 | Tag | tag_id | name | 기업마당 해시태그. 지역 이름은 `Concept`로 연결하고 태그로 두지 않음(§5.3) |
-| Region → Concept(scheme=REGION) | region_id | name, level, region_code, parent_region_id, code_source, code_version | 코드표 234개. 두 출처 모두 지역 값을 **시도 단위 약칭**으로 주므로(K-Startup 19종) 시군구 계층은 본문 추출 조건에서만 쓰인다 |
+| Region → Concept(scheme=REGION) | region_id | name, level(SIDO·SIGUNGU·GU·GROUP), region_code, parent_region_id, code_source, code_version, status(존재·폐지), valid_from·valid_to(개편일 2026-07-01), source_region_code(세종처럼 원본 코드가 다른 경우) | 보완 코드표 318행(SRC-04). 두 출처 모두 지역 값을 **시도 단위 약칭**으로 주므로(K-Startup 19종) 시군구 계층은 본문 추출 조건에서만 쓰인다. 일반구(`GU`)는 `(일반구)-[:WITHIN]->(시)`로 둔다 |
 | Program | program_id | name, level | 미구축 |
 | Track | track_id | name, benefit_summary, benefit_limit | 미구축. K-Startup 통합공고 854건이 후보 |
-| Requirement | req_id | kind, logic(AND/OR/NONE_OF/AT_LEAST), min_count, logic_basis, source_sentence, status, extraction_run_id | 미구축. 입력은 기업마당 첨부 자격·제외 구간과 두 출처의 자격 문구 |
-| Condition | cond_id | cond_type(ATOM·GROUP), attribute, operator, value(JSON), unit, ref_date_kind, negate, source_conflict, open_ended, confidence, reviewed. GROUP은 attribute 대신 logic(AND·OR·NONE_OF·AT_LEAST), min_count를 가짐(§4.6) | 미구축. 정규화 층에 값 후보 17,211건(업력·연령·지역·기업 규모·인증·법령 인용·제외 등, 전부 `unreviewed`, 근거 문장 포함). 확정 0 |
-| Concept | concept_id | scheme, code, label, aliases, code_version | 지역만 코드표로 가능 |
+| Requirement | req_id | kind, logic(AND/OR/NONE_OF/AT_LEAST), min_count, logic_basis, source_sentence, status(parsed·unparsed·structured_only), exception_kind(§4.7), extraction_run_id | 미구축. 입력은 기업마당 첨부 자격·제외 구간과 두 출처의 자격 문구. 그래프 생성 코드가 구조화 필드만으로 만든 Requirement 4,783개는 모두 `logic=AND`, `logic_basis=assumed`이므로 `status=structured_only`로 구분한다 |
+| Condition | cond_id | cond_type(ATOM·GROUP), attribute, operator, value(JSON), unit, ref_date_kind, negate, source_conflict, open_ended, confidence, reviewed. GROUP은 attribute 대신 logic(AND·OR·NONE_OF·AT_LEAST), min_count를 가짐(§4.6) | 미구축. 정규화 층에 값 후보 17,211건(업력·연령·지역·기업 규모·인증·법령 인용·제외 등, 전부 `unreviewed`, 근거 문장 포함). 확정 0. 그래프 생성 코드의 Condition 노드에는 `operator`가 없고(`strength`가 있음) 값 형식도 정규화 층과 달라 §4.3의 값 스키마로 통일해야 한다 |
+| Concept | concept_id | scheme, code, label, code_version, level, status, valid_from, valid_to | 지역만 코드표로 가능. 별칭(`aliases`)은 노드 속성이 아니라 그래프 밖 사전 `data/사전/지역_별칭사전.csv`(639개, 상태 OK·BUNDLE·AMBIGUOUS·NEEDS_REVIEW)에 둔다. `서구`처럼 대상이 여럿인 별칭은 그것만으로 개념을 확정하지 못하므로 후보가 여럿이면 검수 큐로 보낸다 |
 | Definition | def_id | term, rule_json, basis_note | 미구축(P1) |
-| ExternalLaw | law_id | name, article_no, text_hash, source_url | 미구축(P1) |
+| ExternalLaw | law_id | name, doc_kind(법률·시행령), effective_date, source_url | 법령 단위. 수집 26종, Neo4j 미적재(P1) |
+| LawArticle | article_id | law_id, article_no, article_title, text_hash, deleted | 조문 단위. 수집 1,286개. 공고 직접 인용 543건이 이 단위로 연결된다 |
+| LawAppendix | appendix_id | law_id, table_no, table_kind, title, text_hash | 별표 단위(중소기업 업종별 매출 기준 등 판정 숫자 기준). 수집 40개. 정의(`Definition`)는 정의가 있는 조문이나 기준이 있는 별표를 가리킨다 |
 
 `ApplicantProfile`(사용자 입력)은 세션 한정이며 그래프에 저장하지 않는다. 미해소 값은 Supabase `review_queue`에 둔다.
 
@@ -187,9 +193,10 @@ flowchart TB
 
 | scheme | 구조 | 계층 관계 | 현재 데이터 | 이 데이터에서 본 문제 |
 |---|---|---|---|---|
-| `REGION` | 트리(전국 > 시도 > 시군구) + **중간 묶음 노드 허용** | `WITHIN` | 코드표 시도 16·시군구 217·전국 1. 공고 값은 시도 약칭(K-Startup 19종, 기업마당 지역 태그 18종) | **약칭→코드 사전 필요**(`전남광주` 20건은 아직 비어 있음). **행정개편**: 광주·전남이 `전남광주통합특별시`로 통합돼 "광주광역시 관내" 같은 과거 표기에 맞는 노드가 없다. `광주(구)` 같은 구 단위 묶음이 필요(§7). "경상권" 같은 **권역**도 같은 방식 |
+| `REGION` | 트리(전국 > 시도 > 시군구 > 일반구) + **중간 묶음 노드 허용** | 행정 계층은 `WITHIN`, 묶음·권역 소속은 `MEMBER_OF`, 개편 분할은 `SUCCEEDED_BY` | 보완 코드표 318행(SRC-04). 이전 값: 시도 16·시군구 217·전국 1. 공고 값은 시도 약칭(K-Startup 19종, 기업마당 지역 태그 18종) | **약칭→코드 사전 필요**(`전남광주` 20건은 아직 비어 있음). **행정개편**: 광주·전남이 `전남광주통합특별시`로 통합돼 "광주광역시 관내" 같은 과거 표기에 맞는 노드가 없다. `광주(구)` 같은 구 단위 묶음이 필요(§7). "경상권" 같은 **권역**도 같은 방식 |
 | `INDUSTRY` | 표준 분류는 트리, 공고용 묶음은 DAG | `IS_A` | 없음. 동료 후보 분석에서 업종 표현은 K-Startup 15건(0.4%) | 업종 제한이 드물어 우선순위가 낮다. 공고의 "제조·가공업"은 표준 분류와 1:1이 아님 |
-| `APPLICANT_TYPE` | DAG | `IS_A` | K-Startup 신청 대상 7종(청소년·대학생·일반인·대학·연구기관·일반기업·1인 창조기업), 기업마당 `trgetNm` 7종 | 기업마당 `trgetNm`에는 `제조업`처럼 **업종이 섞여** 있고(4건) 거칠어 판정에 쓰지 않는다. 판정용 값은 본문에서 추출. 표준 사전 24개 유형 중 소기업·중기업→중소기업만 법령 원문이 근거이고 나머지 계층은 가설(§4.4) |
+| `CERTIFICATION` | 평면 목록(필요하면 별칭) | 없음 | 정규화 층 인증 후보 2,694건이 모두 `concept_id`가 비어 있다. 구체 인증은 벤처기업 523·이노비즈 23·메인비즈 7 정도이고 `등록증` 846·`인증` 739·`확인서` 454 같은 일반 단어가 많다 | 기관이 **인증·확인서를 발급해야 성립하는 지위**(벤처기업·이노비즈·메인비즈·사회적기업·여성기업·장애인기업 확인 등)만 둔다. 일반 단어는 개념에 연결하지 않고 `other`로 둔다(§4.3 분류 원칙) |
+| `APPLICANT_TYPE` | DAG | `IS_A` | K-Startup 신청 대상 7종(청소년·대학생·일반인·대학·연구기관·일반기업·1인 창조기업), 기업마당 `trgetNm` 7종 | 기업마당 `trgetNm`에는 `제조업`처럼 **업종이 섞여** 있고(4건) 거칠어 판정에 쓰지 않는다. 판정용 값은 본문에서 추출. 사회적기업·여성기업·장애인기업처럼 **발급형 지위는 `CERTIFICATION`으로 옮기고** 여기에는 규모(소기업·중기업·중소기업·중견기업·소상공인), 창업 단계(예비창업자·창업기업·초기창업기업), 사업 형태(개인사업자·법인), 개인 구분(대학생·청소년·일반인)만 남긴다. 표준 사전 24개 유형 중 소기업·중기업→중소기업만 법령 원문이 근거이고 나머지 계층은 가설(§4.4) |
 | `SUPPORT_FIELD` | 1~2단 | `IS_A` | 기업마당 대 8·중 37, K-Startup 11 | 두 포털 분류를 통일하는 매핑표 필요. K-Startup 분류명에 HTML 엔티티(`R&amp;D` 51건) |
 | `SPECIAL_GROUP` | DAG | `IS_A` | 없음 | 청년·여성·시니어 등. 연령 기준은 개념이 아니라 `Condition`·`Definition`에 둔다 |
 | `ZONE` | DAG | `WITHIN`(→`REGION`) | 없음 | 구역 데이터를 확보하기 전에는 `UNKNOWN` 고정 |
@@ -206,7 +213,7 @@ flowchart TB
 
 **EDA로 점검한 해석의 타당성.** "전부 선택 = 제한 없음"은 대부분 맞지만 항상 맞지는 않다. 업력 옵션을 전부 고른 1,354건 중 **본문에 업력 상한이 있는 공고가 131건(9.7%)** 이라, 전부 선택을 제한 없음으로 확정하면 이 공고들을 잘못 통과시킨다. 대표자 연령은 전부 선택 2,602건 중 본문에 연령 조건이 있는 공고가 23건(0.9%)이다. 업력 필터가 정보를 주는 1,269건에서는 본문 상한과 필터 상한이 일치 1,169, 본문이 더 좁음 78, 더 넓음 22다. 그래서 규칙은 "전부 선택이면 `all_options`로 표시하고 판정에 쓰지 않으며, 본문 조건이 있으면 본문을 우선(`source_conflict` 기록)"이다(CQ-18, VAL-13).
 
-계층 규칙(기초 설계서 §4.1 H1~H10 요약): 간선은 하위→상위, 상속은 위로만 최대 3 hop, 사용자 값이 조건보다 상위면 `UNKNOWN`(서로 다른 가지면 `UNSATISFIED`), scheme 사이 간선 금지(예외 `ZONE`→`REGION`), DAG는 순환 금지, 개념 매칭은 코드·정규화 이름·확정 별칭만(부분 일치 금지), 코드표에 버전·기준일을 붙인다. **점검에서 추가한 규칙 후보:** (H11) 행정구역 개편으로 사라진 명칭(광주광역시 등)은 별칭이 아니라 **구 단위 묶음 개념**으로 두고 `code_version`을 기록한다. (H12) 공고가 본문에서 직접 정의한 권역(경상권 등)은 공고별이 아니라 **공유 사전의 묶음 개념**으로 두고 구성 시도·근거 공고를 기록한다.
+계층 규칙(기초 설계서 §4.1 H1~H10 요약): 간선은 하위→상위, 상속은 위로만 최대 3 hop, 사용자 값이 조건보다 상위면 `UNKNOWN`(서로 다른 가지면 `UNSATISFIED`), scheme 사이 간선 금지(예외 `ZONE`→`REGION`), DAG는 순환 금지, 개념 매칭은 코드·정규화 이름·확정 별칭만(부분 일치 금지), 코드표에 버전·기준일을 붙인다. **점검에서 추가한 규칙 후보:** (H11) 행정구역 개편으로 사라진 명칭(광주광역시 등)은 별칭이 아니라 **구 단위 묶음 개념**으로 두고 `code_version`을 기록한다. (H12) 공고가 본문에서 직접 정의한 권역(경상권 등)은 공고별이 아니라 **공유 사전의 묶음 개념**으로 두고 구성 시도·근거 공고를 기록한다. (H13) **행정 계층과 묶음 소속을 다른 관계로 둔다.** 현재 그래프 생성 코드(`tools/graphrag/regions.py`)는 코드표 상위·묶음 소속·묶음의 상위를 모두 `WITHIN`으로 만들고 `basis`(`MOIS_KIKcd_B`·`GROUP_MEMBER`·`GROUP_PARENT`)로만 구분해 **상위가 둘인 노드가 32개**다(예: 부산광역시 → 전국, 부산광역시 → 경상권. 시나리오 1의 남구도 두 곳). `WITHIN`은 N:1(하위→행정 상위)만, 묶음·권역 소속은 `MEMBER_OF`(N:M, 구성 지역→묶음)로 나눈다(D-14). 계층 질의는 `[:WITHIN|MEMBER_OF*0..3]`이다. 일반구를 넣으면 `장안구 → 수원시 → 경기도 → 수도권`이 3 hop이라 한도(H2, 3)에 닿으며, 4 hop 이상은 확정하지 않고 `UNKNOWN`이다. (H14) **행정구역 분할**(2026-07 인천 중구 → 제물포구·영종구, 서구 → 서해구·검단구)은 폐지 지역을 `status=폐지`인 Region으로 두고 `(옛 구)-[:SUCCEEDED_BY {partial:true}]->(새 구)`(N:M)로 잇는다. 나라장터에 옛 이름이 29건, 기업마당 해시태그·본문에 7건 나온다. 판정에서는 옛 이름 조건을 상위(인천광역시)까지만 확인하고 `NEEDS_CHECK`로 둔다(후보 대응은 코드표의 `successor_ids`, 미검수)(D-15). 광주·전남 통합은 포함이라 `MEMBER_OF`로 풀리고 분할은 그렇지 않다.
 
 ### 4.3 판정에 쓰는 속성·연산자·논리
 
@@ -215,8 +222,34 @@ flowchart TB
 | `Condition.attribute` | region, zone, industry, applicant_type, business_age, founder_age, company_size, revenue, employees, certification, prior_award, registration, other + **제안:** tenure_years, career_years, capital, funding_stage, membership | 제안 5종은 팀 결정(D-4, SAMPLE D1). 이번 데이터에서 매출·고용(`revenue`, `employees`)은 K-Startup 후보 2%·0.5%, 기업마당 첨부 28% |
 | `Condition.operator` | EQ, LT, LTE, GT, GTE, BETWEEN, IN, WITHIN, IS_A, EXISTS | |
 | `Requirement.kind` | ELIGIBILITY, EXCLUSION, PREFERENCE, DOCUMENT, LIMIT, CRITERION | 판정은 ELIGIBILITY·EXCLUSION만 사용. 입주 후 의무는 LIMIT로 통합(제안) |
-| `Requirement.logic` | AND, OR, NONE_OF, AT_LEAST(`min_count`) | 명시가 없으면 `logic_basis=assumed`이며 이 요건이 `ELIGIBLE`을 만들면 `NEEDS_CHECK`로 낮춘다 |
+| `Requirement.logic` | AND, OR, NONE_OF, AT_LEAST(`min_count`) | 명시가 없으면 `logic_basis=assumed`이며 이 요건이 `ELIGIBLE`을 만들면 `NEEDS_CHECK`로 낮춘다. **`NONE_OF`는 요건·그룹 논리에만 쓴다**(아래 부정 표현 규칙) |
+| `Requirement.exception_kind` | RELAXES_ELIGIBILITY, NARROWS_ELIGIBILITY, LIFTS_EXCLUSION | 예외 문장에서 만든 요건에만. §4.7 |
 | `Condition.evidence_source` | API, ATTACHMENT, API+ATTACHMENT | **신설.** 출처별 근거 수준을 구분해 `NEEDS_CHECK` 비율을 출처별로 측정한다 |
+
+**부정 표현은 한 곳에서만 쓴다(O-05).** 지금은 세 가지(제외 요건 `EXCLUSION`, `NONE_OF`, 조건의 `negate`)가 겹쳐 이중 부정이 생길 수 있다. 정규화 층에서도 `operator=NONE_OF`가 `exclusion` 1,881건·`eligibility` 1,466건 등 3,347건(전부 값이 `{"text_only": true}`, 원자 조건으로 풀지 못한 문장 후보)으로 나오는데, 이 값은 요건 논리 `NONE_OF`와 이름만 같고 뜻이 다르다. 정리하면 다음과 같다(D-17).
+
+1. `EXCLUSION` 요건의 조건은 **제외 대상의 상태를 그대로** 쓴다(예: `tax_delinquent EXISTS`). 부정을 조건 안에 다시 넣지 않는다.
+2. 요건 **안의 논리는 보존하고 먼저 계산**한 뒤 요건 결과를 뒤집어 판정에 쓴다(`NONE_OF` = 하위 결과 중 하나라도 SATISFIED이면 UNSATISFIED). "다음 중 하나에 해당하면 제외"는 `NONE_OF{A, B}`이고, "A이면서 B인 기업 제외"는 **`NONE_OF{GROUP AND(A, B)}`**다. 두 문장은 결과가 다르므로 AND를 OR로 바꾸지 않는다.
+3. `NONE_OF`는 `Requirement.logic`·`GROUP.logic`에서만 쓰고 원자 조건의 연산자로는 쓰지 않는다. 정규화 층의 `operator=NONE_OF` 후보는 **`TEXT_ONLY`로 이름을 바꾸고**(`evidence_text` 보존) 일괄 치환하지 않는다. 원문 문장을 확인해 원자 조건과 요건 논리로 다시 구성하고, 해석하지 못한 후보는 조건 결과를 `UNKNOWN`으로 두고 `REQ_UNPARSED`로 표시해 검수 큐로 보낸다. `ELIGIBILITY` + `NONE_OF`(1,466건)에도 같은 규칙을 적용한다.
+4. `negate`는 두 곳에만 쓴다: ELIGIBILITY 안의 "~이 아닌 자" 한 문장, 그리고 예외 해제 조건의 "정상 이행 중이 아닌" 같은 단일 조건(§4.7 LIFTS_EXCLUSION). 제외 대상의 상태 자체에는 쓰지 않는다.
+5. 문장에 AND/OR가 드러나지 않으면 `logic_basis=assumed`로 두고 그 요건이 판정을 바꾸면 `NEEDS_CHECK`로 낮춘다.
+
+**개념형 속성의 연산자와 개념(scheme) 대응(O-06).** 조건이 가리키는 개념 종류에 맞는 연산자만 허용한다. 대응은 §4.5의 attribute와 operator 표에 있다. `applicant_type IS_A 대학(원)생`처럼 개념을 `EQ`로 비교하면 계층 확장을 못 하므로 `IS_A`·`IN`을 쓴다. 정규화 층은 소상공인 1,072·사회적기업 132·여성기업 79·장애인기업 21을 `company_size IS_A`로 넣어 두었는데, 분류 원칙에 따라 소상공인은 `company_size`(APPLICANT_TYPE), 사회적기업·여성기업·장애인기업은 `certification`(CERTIFICATION)으로 옮긴다. **분류 원칙:** 기관이 인증·확인서를 발급해야 성립하는 지위는 `CERTIFICATION` 하나로만 둔다(`certification EXISTS CERTIFICATION:사회적기업`). 소상공인은 "소상공인 확인서"가 있지만 소상공인기본법으로 판정하는 규모 개념이라 `company_size`에 두고, 공고가 확인서를 요구할 때만 `certification EXISTS CERTIFICATION:소상공인확인`을 따로 쓴다. 사회적기업·협동조합이 "조건부로 중소기업에 포함"되는 것은 `IS_A`가 아니라 `Definition.rule_json`의 조건으로 쓴다.
+
+**기준일(O-08).** 업력·연령 조건(정규화 층 2,255건)에 `ref_date_kind`(언제 기준인가)와 `ref_start_kind`(언제부터 세는가)를 필드로 둔다. 지금 정규화 층 값에는 이 키가 없다(값 키는 `label`·`text_only`·`law`·`article`·`value`·`unit`뿐). 문장에 기준일 표현이 없으면 `UNSPECIFIED`로 두고, 판정에서 `UNSPECIFIED`는 경계값에서 `NEEDS_CHECK`로 낮춘다.
+
+**조건 값 형식을 세 단계에서 같게 한다(O-11).** 같은 조건을 단계마다 다른 모양으로 담으면 평가기가 기대하는 값과 어긋난다.
+
+| 속성 | 값 정규화 층 | 그래프 생성·평가기(`cleaned.py`) | 통일할 형식 |
+|---|---|---|---|
+| 업력 | `LT`, `{"value":10,"unit":"YEAR"}` | operator 없음, `{"max_years":10,"pre_founder_allowed":true,"all_options":false,"options":[…]}` | `operator`+`{"value":N,"unit":"YEAR"}` |
+| 대표자 연령 | `LTE`, `{"value":39,"unit":"YEAR"}` | `{"ranges":[[20,40],…]}` | 같음(구간은 `BETWEEN`) |
+| 신청자 유형 | `company_size IS_A {"label":"중소기업"}` | `applicant_type`, `{"options":[…]}` | `IS_A`·`IN`과 `ABOUT` 간선 |
+| 지역 | `WITHIN {"label":"대전"}`(개념 ID 별도) | `{"concept_id":"REGION:3000000000"}` | `WITHIN`과 `ABOUT` 간선, 값은 `label`+`concept_id` |
+
+"N년 미만"(`LT`)과 "N년 이내"(`LTE`)를 같은 `max_years`에 담으면 정확히 N년인 경우 결과가 달라지므로 연산자를 보존한다. K-Startup 옵션 목록도 같은 스키마로 바꾼다("3년미만" → `LT {"value":3,"unit":"YEAR"}`). **예비창업자 허용은 업력 조건과 OR로 묶는다.** 옵션이 "예비창업자, 1·2·3년미만"이면 업력 요건은 `OR(applicant_type IN {예비창업자}, business_age LT 3)`을 하나의 요건(`logic=OR`)으로 만들고 공고의 다른 필수 요건과는 공고 단위에서 AND로 합친다. 예비창업자를 별도 조건으로만 추가하면 기본값 AND에 묶여 "예비창업자이면서 업력 3년 미만"이 되어 틀린다. 옵션에 예비창업자가 없으면 `business_age LT N` 하나만 둔다. 옵션 7개 전부(예비창업자 + 10년미만까지)는 필터 체크박스를 모두 고른 것일 수 있으므로(§4.2) 조건을 만들지 않는 것이 아니라 **`UNKNOWN` 조건으로 처리**하고(`all_options`), 본문에 업력 조건이 있으면 본문을 우선한다. 같은 프로필·공고로 정규화 층 조건과 그래프 조건을 각각 평가해 결과가 같은지 비교하는 시험을 둔다(VAL-19).
+
+**트랙과 공통 요건의 합성(O-14).** `HAS_REQUIREMENT`는 공고와 트랙 양쪽에서 나온다. **공고에 직접 붙은 공통 요건은 모든 트랙에 AND로 적용**하고, 각 트랙의 추가 요건을 평가한 뒤 트랙 합성(하나라도 `ELIGIBLE`이면 `ELIGIBLE`)을 한다. 트랙이 없으면 공통 요건만 평가한다.
 
 3값 결합(AND/OR/NONE_OF/AT_LEAST), 트랙 합성(하나라도 `ELIGIBLE`이면 `ELIGIBLE`, 전부 `NOT_ELIGIBLE`이면 `NOT_ELIGIBLE`, 그 외 `NEEDS_CHECK`), 구조화 필드와 본문 충돌 규칙(본문 우선, `source_conflict` 기록), 목록형 값 해석(전체 구간이면 제한 없음)은 기초 설계서 §4.2를 따른다.
 
@@ -229,7 +262,7 @@ flowchart TB
 | 업력 기산점 `ref_start_kind` | 표준 `BUSINESS_START_DATE`(사업 개시일) | 창업지원법 제2조 제3호 원문: 창업기업은 "사업을 개시한 날부터 7년이 지나지 아니한 기업". 공고는 창업·설립·사업개시·사업자등록 표현을 섞어 쓴다(공고 수 861·104·80·58) |
 | 연산자 | `LTE`(이내·이하), `LT`(미만·지나지 아니한), `GTE`(이상), `GT`(초과) | "N년 이내"(1,306건)와 "N년 미만"(484건)은 경계 값에서 결과가 달라 하나로 합치지 않는다 |
 | 기준일 `ref_date_kind` | `NOTICE_DATE`, `DEADLINE`, `APPLICATION_DATE`, `PREV_YEAR`, `AGREEMENT_DATE` | 공고일 기준 680건, 신청일·접수일 기준 425건, 전년도 151건, 마감일 기준 116건, 협약(선정)일 기준 10건 |
-| 지역 기준 `region_basis` | `BUSINESS_LOCATION`, `JURISDICTION`, `RESIDENCE`, `HEADQUARTERS`, `REGISTERED_ADDRESS` | 소재 1,521건, 사업장 620건, 본사 584건, 주소 306건, 거주 282건, 관내 255건 |
+| 지역 기준 `region_basis` | `BUSINESS_LOCATION`, `JURISDICTION`, `RESIDENCE`, `HEADQUARTERS`, `REGISTERED_ADDRESS` | 소재 1,521건, 사업장 620건, 본사 584건, 주소 306건, 거주 282건, 관내 255건. **이 이름은 "무엇을 기준으로 지역을 판단하는가"만 뜻한다.** 정리·정규화 층의 `region_basis`(`supt_regin` 3,822건, `jurisdiction_org_sido` 964건, 없음 330건)는 "지역 값을 가져온 필드"라서 `region_source`로 이름을 바꿔 구분한다(D-16). v1 정규화(`region.basis`)도 같은 값을 쓰므로 함께 고친다 |
 | 대표자 연령 | `founder_age`(만 나이), K-Startup 구간 → [0,20)·[20,40)·[40,∞) | 창업지원법: 청년창업기업은 대표자 39세 이하, 중장년창업기업은 40세 이상 |
 | 신청자 유형 | 표준 사전 24개(`data/ref/term_standard_v0.1.json`) | 법령 원문 정의 6개: 중소기업·창업기업·예비창업자·초기창업기업·청년창업기업·중장년창업기업. 소상공인·중견기업·사회적기업·여성기업·장애인기업은 원문 없음 |
 | 계층(`IS_A`) | 소기업·중기업 → 중소기업(중소기업기본법 제2조 제2항 원문). 사회적기업·협동조합은 조건부 포함이라 `IS_A`가 아님. 소상공인 계층은 가설 | 나머지는 `proposed` |
@@ -251,10 +284,10 @@ Thing
 ├─ Program ─ Track (사업 ─ 대상별 트랙)
 ├─ Requirement (요건)            kind: ELIGIBILITY | EXCLUSION | PREFERENCE | DOCUMENT | LIMIT | CRITERION
 │   └─ Condition (조건)          cond_type: ATOM(원자) | GROUP(하위 조건을 묶음, 3단까지)
-├─ Concept (개념)                scheme: REGION | INDUSTRY | APPLICANT_TYPE | SUPPORT_FIELD | SPECIAL_GROUP | ZONE
-│                                 REGION 안에서 level: NATION > SIDO > SIGUNGU, 중간 묶음 GROUP
+├─ Concept (개념)                scheme: REGION | INDUSTRY | APPLICANT_TYPE | CERTIFICATION | SUPPORT_FIELD | SPECIAL_GROUP | ZONE
+│                                 REGION 안에서 level: NATION > SIDO > SIGUNGU > GU(일반구), 중간 묶음 GROUP
 ├─ Definition (정의)             → 개념의 판정 기준(rule_json)
-└─ ExternalLaw (법령)            → 정의의 근거 조문(text_hash)
+└─ ExternalLaw (법령)            ─ PART_OF ─ LawArticle (조문), LawAppendix (별표)
 ```
 
 **속성 제약.** 아래 값 목록은 평가기와 점검 도구(`tools/graphrag/label_eval.py`, `tools/goldset_check.py`)가 쓰는 값과 같다.
@@ -265,21 +298,27 @@ Thing
 | Requirement | req_id, kind, logic, logic_basis, status | kind 6종, logic 4종, logic_basis는 explicit 또는 assumed, status는 parsed 또는 unparsed. **AT_LEAST이면 min_count(1 이상, 하위 조건 수 이하) 필수.** 자격·제외 요건은 source_sentence 필수 | req_id 유일. 공고 또는 트랙에 속함(고아 금지) |
 | Condition(ATOM) | cond_id, attribute, operator, value | attribute 13종(+제안 5종), operator 10종, **attribute와 operator 조합은 아래 표를 따름.** 업력·연령·매출·고용은 ref_date_kind 필수 | cond_id 유일. 요건 또는 그룹에 속함 |
 | Condition(GROUP) | cond_id, logic | logic 4종, 하위 조건 1개 이상, 그룹 중첩 3단 이하 | 하위 조건은 `HAS_CHILD`로만 연결 |
-| Concept | concept_id, scheme, label | scheme 6종. concept_id는 `{scheme}:{코드}` 또는 묶음 `{scheme}_GROUP:{이름}` | concept_id 유일. scheme이 다른 개념 사이 간선 금지(예외 ZONE→REGION), 순환 금지 |
+| Concept | concept_id, scheme, label | scheme 7종(CERTIFICATION 추가). concept_id는 `{scheme}:{코드}` 또는 묶음 `{scheme}_GROUP:{이름}`. REGION은 level·status 필수 | concept_id 유일. scheme이 다른 개념 사이 간선 금지(예외 ZONE→REGION), 순환 금지. 행정 `WITHIN` 상위는 1개 |
 | Definition | def_id, term, rule_json | rule_json은 법령 원문을 확인한 뒤에만 채움 | CITES_LAW 대상이 없으면 `CHAIN_BROKEN` |
-| ExternalLaw | law_id, name, text_hash | article_no는 조문 단위 | law_id 유일. 원문 해시가 없으면 정의가 유효하지 않음 |
+| ExternalLaw | law_id, name | 법령 단위(조문·별표는 `LawArticle`·`LawAppendix`) | law_id 유일 |
+| LawArticle·LawAppendix | article_id 또는 appendix_id, law_id, text_hash | `PART_OF`로 `ExternalLaw`에 속함 | 각 id 유일. 원문 해시가 없으면 정의가 유효하지 않음 |
 
 **attribute와 operator의 허용 조합.** 이 조합 밖이면 조건을 만들지 않고 `other`로 두며 판정에서 `UNKNOWN`으로 처리한다.
 
-| attribute | 허용 operator | value 형태 | 기준일 | 비고 |
-|---|---|---|---|---|
-| business_age, founder_age, revenue, employees | LT, LTE, GT, GTE, EQ, BETWEEN | `{"value":7,"unit":"YEAR"}` 또는 `{"min":,"max":,"min_inclusive":,"max_inclusive":}` | **필수** | "이내·이하"는 LTE, "미만"은 LT(§4.4) |
-| region, zone | WITHIN, EQ, IN | `{"label":"구미","concept_id":"REGION:…"}` | 아니오 | `region_basis`(소재·본사·거주 등) 권장 |
-| applicant_type, company_size, industry | IS_A, EQ, IN | `{"label":…}` 또는 `{"labels":[…]}` | 아니오 | 법령·제도 용어는 `needs_definition=true`, 정의는 쓰지 않음 |
-| certification, registration, prior_award | EXISTS | `{"label":"벤처기업 확인서"}` | 아니오 | 목록이 "등"으로 열려 있으면 요건에 `open_ended=true` |
-| other | EQ | `{"label":…}`, note 필수 | 아니오 | 판정에서 항상 `UNKNOWN` |
+| attribute | 허용 operator | value 형태 | ABOUT 대상 scheme | 기준일 | 비고 |
+|---|---|---|---|---|---|
+| business_age, founder_age, revenue, employees | LT, LTE, GT, GTE, EQ, BETWEEN | `{"value":7,"unit":"YEAR"}` 또는 `{"min":,"max":,"min_inclusive":,"max_inclusive":}` | 없음 | **필수**(`ref_date_kind`, 업력은 `ref_start_kind`도. 문장에 없으면 `UNSPECIFIED`) | "이내·이하"는 LTE, "미만"은 LT(§4.4). `unit` 필수 |
+| region, zone | WITHIN, IN, EQ | `{"label":"구미","concept_id":"REGION:…"}` | REGION(zone은 ZONE) | 아니오 | `ABOUT` 필수. `region_basis`(소재·본사·거주 등) 권장 |
+| applicant_type | IS_A, IN | `{"label":…}` 또는 `{"labels":[…]}` | APPLICANT_TYPE | 아니오 | 창업 단계·사업 형태·개인 구분. **`EQ` 금지**(계층 확장 불가). 발급형 지위는 넣지 않음 |
+| company_size | IS_A | `{"label":…}` | APPLICANT_TYPE(소기업·중기업·중소기업·중견기업·소상공인) | 아니오 | 규모 개념만. 법령·제도 용어는 `needs_definition=true`, 정의는 쓰지 않음 |
+| industry | IS_A, IN | `{"label":…}` 또는 `{"labels":[…]}` | INDUSTRY | 아니오 | 업종 계층 사전이 없어 일치만 충족(§4.6 한계) |
+| certification | EXISTS | `{"label":"벤처기업 확인서"}` | CERTIFICATION | 아니오 | 사회적기업·벤처기업·여성기업·장애인기업 등 발급형 지위. 목록이 "등"으로 열려 있으면 요건에 `open_ended=true` |
+| registration, prior_award | EXISTS | `{"label":…}` | 없음 | 아니오 | 목록이 "등"으로 열려 있으면 `open_ended=true` |
+| other | EQ | `{"label":…}`, note 필수 | 없음 | 아니오 | 판정에서 항상 `UNKNOWN` |
 
-**구현 상태.** 점검 도구는 허용 값, `min_count`, 기준일, `cond_id` 중복, 그룹 논리·깊이, 근거 문장 일치를 검사한다(단위 시험 포함). attribute와 operator의 허용 조합 검사는 아직 도구에 없고 이 표가 설계 규칙이다. Neo4j의 속성 존재·값 목록 제약은 인스턴스 종류에 따라 걸 수 없을 수 있어(확인 필요) 유일성 제약만 `schema.cypher`에 두고, 나머지는 적재 후 점검 쿼리(§5.4)로 확인한다.
+법령 인용(정규화 층 `law_reference` 2,572건)은 조건 속성이 아니라 `CITES` 관계로 옮긴다(§5.2). 그 인용이 정한 자격(예: 중소기업)은 위 속성의 조건으로 따로 남긴다. 이 조합 밖이면 조건을 만들지 않고 `other`로 두며 판정에서 `UNKNOWN`으로 처리한다.
+
+**구현 상태.** 점검 도구는 허용 값, `min_count`, 기준일, `cond_id` 중복, 그룹 논리·깊이, 근거 문장 일치를 검사한다(단위 시험 포함). attribute와 operator, ABOUT 대상 scheme의 허용 조합 검사는 아직 도구에 없고 이 표가 설계 규칙이다. Neo4j의 속성 존재·값 목록 제약은 Enterprise 기능이라 팀 Aura 인스턴스 등급에서 되는지 **아직 확인하지 못했다**. 그래서 유일성 제약만 `schema.cypher`에 둔다(13개: Program·SupportCategory·LawArticle·LawAppendix 추가), 필수 속성(Condition의 `operator`, 요건 관계의 `evidence`)과 관계 방향은 적재 코드와 점검 쿼리(§5.4)로 확인한다(D-21).
 
 ### 4.6 자격·제외·우대의 복합 조건 트리
 
@@ -302,11 +341,11 @@ Notice (루트)
 | kind | 정규화 방법 | 판정에서의 역할 |
 |---|---|---|
 | ELIGIBILITY(자격) | 요건 logic으로 조건을 묶음. 서로 다른 자격 요건끼리는 AND | **모두 충족해야 함.** 하나라도 확정 불충족이면 `NOT_ELIGIBLE` |
-| EXCLUSION(제외) | logic을 `NONE_OF`로 정규화: 조건 중 하나라도 **해당하면 불충족** | 요건이 충족(해당 사항 없음)이어야 통과. 해당이 확인되면 `NOT_ELIGIBLE`, 해당 여부를 알 수 없으면 `UNKNOWN` |
+| EXCLUSION(제외) | 조건은 제외 대상의 상태를 그대로 쓰고 logic을 `NONE_OF`로 정규화: 조건 중 하나라도 **해당하면 불충족**. "A이면서 B" 제외는 AND 그룹을 `NONE_OF` 아래에 둔다(§4.3 부정 표현 규칙) | 요건이 충족(해당 사항 없음)이어야 통과. 해당이 확인되면 `NOT_ELIGIBLE`, 해당 여부를 알 수 없으면 `UNKNOWN` |
 | PREFERENCE(우대) | 자격과 같은 방식으로 조건을 만들되 판정에서 분리 | **판정(overall)을 바꾸지 않는다.** 결과 화면에 "우대 해당 여부"를 3값으로 따로 보여 줌 |
 | DOCUMENT·LIMIT·CRITERION | 표시용 | 판정에 쓰지 않음(서류·선정 후 의무·평가 기준) |
 
-**평가 순서.** ① 트랙이 있으면 트랙별로 따로 평가한다. ② 트랙 안에서 말단 조건(ATOM)을 3값으로 평가한다(§7 규칙표). ③ 그룹을 아래에서 위로 합친다(그룹 logic). ④ 요건을 합친다: 자격 요건은 AND, 제외 요건은 `NONE_OF`가 이미 반영된 결과를 AND로 합친다. ⑤ 강등 규칙(`assumed` 논리, `open_ended`, `unparsed`, `needs_definition`이 있는 정의 용어)을 적용해 `ELIGIBLE`을 `NEEDS_CHECK`로 낮춘다. ⑥ 트랙이 둘 이상이면 하나라도 `ELIGIBLE`이면 `ELIGIBLE`, 전부 `NOT_ELIGIBLE`이면 `NOT_ELIGIBLE`, 그 외 `NEEDS_CHECK`. ⑦ 우대 요건은 따로 평가해 참고로만 붙인다.
+**평가 순서.** ① 트랙이 있으면 트랙별로 따로 평가한다. ② 트랙 안에서 말단 조건(ATOM)을 3값으로 평가한다(§7 규칙표). ③ 그룹을 아래에서 위로 합친다(그룹 logic). ④ 요건을 합친다: 공고에 직접 붙은 공통 요건은 모든 트랙에 적용하고, 자격 요건은 AND, 제외 요건은 `NONE_OF`가 이미 반영된 결과를 AND로 합친다. ⑤ 강등 규칙(`assumed` 논리, `open_ended`, `unparsed`, `needs_definition`이 있는 정의 용어)을 적용해 `ELIGIBLE`을 `NEEDS_CHECK`로 낮춘다. ⑥ 트랙이 둘 이상이면 하나라도 `ELIGIBLE`이면 `ELIGIBLE`, 전부 `NOT_ELIGIBLE`이면 `NOT_ELIGIBLE`, 그 외 `NEEDS_CHECK`. ⑦ 우대 요건은 따로 평가해 참고로만 붙인다.
 
 **예시 1. 구미 스타트업 제작센터(`BIZINFO:PBLN_000000000120707`, T-07).** 자격 요건 R1이 `OR`이고 첫 가지가 지역과 업력을 `AND`로 묶는 그룹이다. 정규화는 본문을 읽은 **검수 전 가설**이다.
 
@@ -352,9 +391,36 @@ R3 PREFERENCE   (가상) C9 founder_age LTE 39
 | 경남 김해시, 제조업, 직원 12명 | 불충족 | 미확인 | 미확인 | `NOT_ELIGIBLE` | 제조업은 10인 미만이어야 함. 그룹 G1이 불충족 |
 | 경남 김해시, 도소매업, 직원 3명 | 미확인 | 미확인 | 불충족 | `NEEDS_CHECK` | 업종 사전이 없어 "그 외 업종"을 확정하지 못함(아래 한계) |
 
-두 번째 행의 우대 불충족, 첫 행의 우대 충족은 공고 판정을 바꾸지 않았다. 이 표는 평가기가 계산한 값이며 평가기 단위 시험(28건)에 같은 구조의 시험이 들어 있다.
+두 번째 행의 우대 불충족, 첫 행의 우대 충족은 공고 판정을 바꾸지 않았다. 이 표는 평가기가 계산한 값이며 평가기 단위 시험(32건)에 같은 구조의 시험이 들어 있다.
 
 **한계와 결정.** ① 그룹 중첩은 3단까지만 허용한다. 공고 문장의 논리가 깊어질수록 사람이 일치시키기 어려워(정답셋 일치율 문제) 얕게 제한하고, 넘으면 `UNKNOWN`과 점검 오류로 처리한다. ② 업종은 포함 관계 사전이 없어 일치하면 충족, 불일치는 `UNKNOWN`이다. 업종 계층은 미구축(§4.2). ③ 자연어에서 AND/OR가 분명하지 않으면 `logic_basis=assumed`로 표시하고 그 요건이 `ELIGIBLE`을 만들면 `NEEDS_CHECK`로 낮춘다. ④ 우대를 판정에서 분리한 것은 설계 결정이다(팀 확인 필요, D-12). ⑤ 그룹(`GROUP`)과 `HAS_CHILD`는 이 개정에서 새로 넣은 구조로 Neo4j에 적재해 보지 않았다.
+
+### 4.7 예외 조건의 방향
+
+공고의 "단, ~는 예외", "~라도 가능", "(단, ~ 제외)"는 방향에 따라 판정이 반대가 된다. 자격을 넓히는 예외를 제외로 처리하면 벤처기업이 오히려 제외되고, 제외를 풀어 주는 예외를 자격 축소로 처리하면 회생 중인 기업이 제외된다. 예외 문장은 세 방향 중 하나로 분류한다. 새 관계는 만들지 않고 요건 논리(AND·OR)와 `EXCLUSION` 요건, `negate`로 표현하며 요건에 `exception_kind`를 기록한다(D-20).
+
+| 방향 | `exception_kind` | 공고 원문 예(정리 층 청크) | 뜻 | 표현 |
+|---|---|---|---|---|
+| 자격을 넓힘 | `RELAXES_ELIGIBILITY` | "고용보험 피보험자 10인 이상 기업 ※ 벤처기업, 이노비즈, 메인비즈, 사회적기업은 10인 미만이라도 참여 가능"(T-03) | 기본 자격을 못 채워도 예외에 해당하면 자격 충족 | ELIGIBILITY 요건을 OR로: `OR(employees GTE 10, certification EXISTS {벤처기업, 이노비즈, 메인비즈, 사회적기업})` |
+| 자격을 좁힘 | `NARROWS_ELIGIBILITY` | "직접 생산한 수산물을 직거래하는 어업인, 어업법인… (단, 수협 제외)" | 자격 대상 중 일부를 뺌 | 자격 요건 안에 두지 않고 `EXCLUSION` 요건으로 분리: `NONE_OF{applicant_type IS_A 수협}` |
+| 제외를 풀어 줌 | `LIFTS_EXCLUSION` | "…파산·회생절차·개인회생절차의 개시 신청이 이루어진 경우 ※ 단, 법원의 인가를 받은 회생계획 또는 변제계획에 따른 채무변제를 정상적으로 이행하고 있는 경우 예외" | 제외 대상이어도 예외에 해당하면 제외되지 않음 | `EXCLUSION` 요건 `NONE_OF{ GROUP AND(회생절차 개시 EXISTS, 정상 이행 EXISTS negate) }` |
+
+**3값 판정.** 예외 여부를 모르면 판정을 확정하지 않는다. 아래 표는 위 표현을 평가기로 계산한 결과와 같다(시험 `TestExceptionDirections`).
+
+| 방향 | 기본 조건 | 예외 | 결과 |
+|---|---|---|---|
+| 자격을 넓힘 | 충족 | (상관없음) | 충족 |
+| 자격을 넓힘 | 불충족 | 충족 | 충족 |
+| 자격을 넓힘 | 불충족 | 미확인 | 미확인 → `NEEDS_CHECK` |
+| 자격을 넓힘 | 불충족 | 불충족 | 불충족 |
+| 제외를 풀어 줌 | 제외 대상 아님 | (상관없음) | 제외되지 않음 |
+| 제외를 풀어 줌 | 제외 대상 | 예외 해당 | 제외되지 않음 |
+| 제외를 풀어 줌 | 제외 대상 | 예외 여부 미확인 | 미확인 → `NEEDS_CHECK` |
+| 제외를 풀어 줌 | 제외 대상 | 예외 해당 안 됨 | 제외(`NOT_ELIGIBLE`) |
+
+자격을 좁히는 예외는 분리한 `EXCLUSION` 요건의 판정 규칙(요건 결과가 SATISFIED면 `NOT_ELIGIBLE`, UNKNOWN이면 `NEEDS_CHECK`)을 그대로 따른다.
+
+**규칙.** ① 예외 문장은 세 방향 중 하나로 분류하고 근거 문장(`source_sentence`)과 `exception_kind`를 함께 남긴다. ② 방향을 판단하지 못한 예외는 `logic_basis=assumed`로 두고 그 예외가 판정을 바꾸면 `NEEDS_CHECK`로 낮춘다. ③ "※ 단, 65세 이상자는 국민연금 가입 제외 대상"처럼 자격과 관계없는 설명 문장도 같은 표현을 쓰므로 문장 패턴만으로 예외를 만들지 않고 요건 추출 검수에서 확인한다. ④ 제외 요건 안의 AND·OR 보존과 `negate` 사용 범위는 §4.3 부정 표현 규칙을 따른다. 이 문장 유형이 실제로 많다는 점은 정리 층에서 확인했다(자격 구간에서 "미만이라도"·"(단, … 제외)" 유형 222개 청크, 회생계획 예외 문장 53개 청크).
 
 ## 5. 관계 정의 및 카디널리티
 
@@ -370,6 +436,7 @@ R3 PREFERENCE   (가상) C9 founder_age LTE 39
 | 분류 계층 | `SUBCATEGORY_OF`, `SUBCLASS_OF` | `IS_A` | `SUPPORT_FIELD`용 `IS_A`로 통일 |
 | 대체 공고 | `SUPERSEDES`(새→이전) | `SUPERSEDES`(새→이전) | 일치 |
 | 동일 기관 후보 | `SAME_AS_CANDIDATE` | (없음) | 기관용으로 설계서에 추가 |
+| 대칭 관계 저장 | (없음) | (없음) | `SAME_AS`, `SAME_AS_CANDIDATE`는 **ID가 작은 쪽→큰 쪽으로 하나만 저장**하고 질의는 방향 없이 한다. 정하지 않으면 A→B와 B→A가 함께 생긴다 |
 | 노드 레이블 | `PublicNotice`, `Region` | `Notice`, `Concept{scheme:REGION}` | `Notice`로 통일, `Region`은 `Concept`의 보조 레이블(D-2) |
 | 개념 ID | `KR:REGION:{코드}` | `{scheme}:{code}` | `REGION:{코드}`로 통일(D-2) |
 | 공고 ID | `BIZINFO:PBLN_…`, `KSTARTUP:{번호}` | 같음 | 정리층에서 두 출처 모두 일치(`notice_id`, `version`, `content_hash`, `raw_hash`). `fetched_at` 형식은 기업마당 일시·K-Startup 날짜로 다름 |
@@ -384,18 +451,22 @@ R3 PREFERENCE   (가상) C9 founder_age LTE 39
 | HAS_ATTACHMENT | Notice→Attachment | 첨부 메타 | 1:N | 메타, 기업마당만 |
 | SUPERSEDES | Notice→Notice | 새 버전이 이전을 대체 | 1:1, 새→이전, 이전은 `is_latest=false` | 메타. 재수집 후 `content_hash` 변화로 생성. K-Startup 제목의 "연장"·"재공고"는 **후보**일 뿐 확정하지 않는다 |
 | TARGETS_REGION | Notice→Concept(REGION) | 공고의 대상 지역(후보 필터) | N:M | 메타. K-Startup `supt_regin`만 근거로 쓴다 |
-| WITHIN | Concept→Concept | 공간 포함(하위→상위) | N:1(REGION), N:M(ZONE·권역 묶음) | 개념, 코드표+묶음 사전 |
+| WITHIN | Concept→Concept | 행정 포함(하위→상위, 일반구→시→시도→전국) | N:1(REGION 행정 상위 1개), ZONE→REGION | 개념, 코드표 |
+| MEMBER_OF | Concept→Concept | 묶음·권역 소속(구성 지역→묶음, 묶음→더 큰 묶음) | N:M. 근거 공고·`reviewed` 기록 | 개념, 묶음 사전(D-14) |
+| SUCCEEDED_BY | Concept→Concept | 행정구역 분할·통합의 후계(옛 지역→새 지역) | N:M, `partial` 속성. 판정은 상위까지만 확인하고 `NEEDS_CHECK` | 개념, 코드표 `successor_ids`(D-15) |
 | IS_A | Concept→Concept | 종류 계층 | N:M(DAG), 순환 금지 | 개념, 미구축 |
 | OF_PROGRAM | Notice→Program | 공고가 속한 사업 | N:1 | 요건, 미구축 |
 | HAS_TRACK | Notice→Track | 대상별 하위 구분 | 1:N | 요건, 미구축 |
-| HAS_REQUIREMENT | Notice \| Track→Requirement | 요건 | 1:N, `evidence` 필수 | 요건, 미구축 |
+| HAS_REQUIREMENT | Notice \| Track→Requirement | 요건 | 1:N, `evidence` 필수. 공고에 직접 붙은 요건은 모든 트랙에 AND로 적용(§4.3) | 요건, 미구축 |
+| CITES | Requirement→LawArticle \| ExternalLaw | 요건이 법령을 **직접 인용**한 사실 | N:M, `evidence` 필수. 인용된 자격은 조건으로 따로 남김(§4.3). 준수·증빙 맥락의 인용은 `CITES`만 두고 조건을 만들지 않음 | 요건, 미구축(P1). 공고→조문 인용 543건(466건) |
 | HAS_CONDITION | Requirement→Condition | 원자 조건 | 1:N, `evidence` 필수 | 요건, 미구축 |
 | HAS_CHILD | Condition→Condition | 그룹 조건의 하위 조건(§4.6) | 1:N, `cond_type=GROUP`에서만, 요건 아래 그룹 3단까지, `evidence` 필수 | 요건, 미구축 |
 | ABOUT | Condition→Concept | 조건이 가리키는 개념 | N:M, 정확·확정 별칭 일치만 | 요건, 미구축 |
 | DEFINED_BY | Concept→Definition | 개념의 판정 기준 | 1:N | 개념, 미구축(P1) |
-| CITES_LAW | Definition→ExternalLaw | 정의의 근거 법령 | N:M, 명시된 인용만 | 개념, 미구축(P1) |
-| SAME_AS | Notice→Notice | 포털 간 동시 중복 게재 | N:M, 대체 관계와 구별 | 요건, 미구축(P1) |
-| SAME_AS_CANDIDATE | Organization→Organization | 동일 기관 후보(검토 대기) | N:M, `review_status` | 메타 |
+| CITES_LAW | Definition→LawArticle \| LawAppendix | 정의의 근거 조문·별표 | N:M, 명시된 인용만 | 개념, 미구축(P1) |
+| PART_OF | LawArticle \| LawAppendix→ExternalLaw | 조문·별표가 속한 법령 | N:1 | 개념, 미구축(P1) |
+| SAME_AS | Notice→Notice | 포털 간 동시 중복 게재 | N:M, 대체 관계와 구별. 대칭이라 ID가 작은 쪽→큰 쪽으로 하나만 저장(§5.1) | 요건, 미구축(P1) |
+| SAME_AS_CANDIDATE | Organization→Organization | 동일 기관 후보(검토 대기) | N:M, `review_status`. 대칭이라 한 방향만 저장(§5.1) | 메타 |
 | HAS_TAG | Notice→Tag | 검색 키워드 | N:M | 메타, 정리 필요 |
 
 설계 규칙: 관계 이름은 대문자 스네이크, 방향은 하위·인용하는 쪽→상위·인용되는 쪽이다. 시간상 대체(`SUPERSEDES`)와 동시 중복(`SAME_AS`), 종류(`IS_A`)와 공간 포함(`WITHIN`), 정의(`DEFINED_BY`)와 법령 인용(`CITES_LAW`)은 하나로 뭉개지 않는다. 요건 층 관계에는 `evidence`(원문 구절, 수정 없이 복사)와 `source`(필드·첨부·위치), 모델 추출 관계에는 `extraction_run_id`·`review_status`를 붙인다. 구조 관계에는 `source_system`·`source_field`를 붙인다.
@@ -426,7 +497,7 @@ R3 PREFERENCE   (가상) C9 founder_age LTE 39
 
 ### 5.4 관계 시그니처와 금지 관계
 
-관계마다 허용되는 (시작, 끝) 쌍은 5.2의 표가 정한다. 아래는 **금지 관계**와 적재 후에 0이어야 하는 점검 쿼리다(VAL-03·05·10·16). 아직 적재하지 않았으므로 실행하지 않았다.
+관계마다 허용되는 (시작, 끝) 쌍은 5.2의 표가 정한다. 아래는 **금지 관계**와 적재 후에 0이어야 하는 점검 쿼리다(VAL-03·05·10·16·18·20). 아직 적재하지 않았으므로 실행하지 않았다.
 
 | ID | 금지 사항 | 이유 | 기대 결과 |
 |---|---|---|---|
@@ -437,6 +508,9 @@ R3 PREFERENCE   (가상) C9 founder_age LTE 39
 | V5 | `evidence`가 없는 `HAS_REQUIREMENT`·`HAS_CONDITION`·`HAS_CHILD` | 근거 없는 요건은 서비스하지 않는다 | 0 |
 | V6 | 그룹 중첩 3단 초과 | 평가기·검수 일치율 한계(§4.6) | 0 |
 | V7 | `SUPERSEDES`가 자기 자신이거나 구→신 방향 | 최신 버전만 판정에 쓴다 | 0 |
+| V8 | 행정 `WITHIN` 상위가 둘 이상인 REGION 노드 | `WITHIN`을 N:1로 지키려면 권역 소속은 `MEMBER_OF`여야 한다(O-03, 지금은 32개) | 0 |
+| V9 | `ABOUT`이 없는 개념형 조건(region·applicant_type·company_size·industry·certification) 또는 속성과 scheme이 맞지 않는 `ABOUT` | 개념형 값을 문자열로만 두면 계층 확장이 안 된다(O-06) | 0 |
+| V10 | 대칭 관계 `SAME_AS`·`SAME_AS_CANDIDATE`가 양방향으로 저장됨 | 중복 간선(O-14) | 0 |
 
 ```cypher
 // 점검 쿼리: 모두 0이어야 한다 (적재 후 실행)
@@ -456,6 +530,12 @@ MATCH ()-[r:HAS_REQUIREMENT|HAS_CONDITION|HAS_CHILD]->() WHERE r.evidence IS NUL
 MATCH p = (:Requirement)-[:HAS_CONDITION]->(:Condition)-[:HAS_CHILD*4..]->(:Condition) RETURN count(p) AS too_deep;
 // V7 SUPERSEDES 방향(새 버전이 이전 버전을 대체: 새.version > 이전.version)
 MATCH (n:Notice)-[:SUPERSEDES]->(o:Notice) WHERE n = o OR n.version <= o.version RETURN count(*) AS bad_supersedes;
+// V8 행정 WITHIN 상위가 둘 이상
+MATCH (a:Concept {scheme:'REGION'})-[r:WITHIN]->(b:Concept) WITH a, count(r) AS parents WHERE parents > 1 RETURN count(a) AS multi_parent;
+// V9 ABOUT 없는 개념형 조건
+MATCH (c:Condition {cond_type:'ATOM'}) WHERE c.attribute IN ['region','applicant_type','company_size','industry','certification'] AND NOT (c)-[:ABOUT]->(:Concept) RETURN count(c) AS no_about;
+// V10 대칭 관계 양방향
+MATCH (a:Notice)-[:SAME_AS]->(b:Notice), (b)-[:SAME_AS]->(a) RETURN count(*) AS both_directions;
 ```
 
 ## 6. S-P-O 트리플과 출처 문장 매핑
@@ -465,7 +545,7 @@ MATCH (n:Notice)-[:SUPERSEDES]->(o:Notice) WHERE n = o OR n.version <= o.version
 | ID | Subject — Predicate — Object | 근거 문장(원문) | 출처 |
 |---|---|---|---|
 | T-01 | `BIZINFO:PBLN_000000000119999` — HAS_REQUIREMENT → R1[E]; R1 — HAS_CONDITION → `business_age LTE 7`(ref=NOTICE_DATE) | "초격차 분야 업력 7년 이내 창업기업(공고일 기준)" | 기업마당 API 자격 문구 |
-| T-02 | `KSTARTUP:179834` — HAS_TRACK → Track{학생창업, 예비창업}; 학생창업: `business_age LTE 7`, `region WITHIN 경상권`, `applicant_type EQ 대학(원)생`; 예비창업: `region WITHIN 경상권`, `founder_age LTE 39` | "(학생창업) 업력 7년 이내 경상권* 소재 대학(원)생 창업기업 / (예비창업) 대표자 소재지가 경상권*인 만 39세 이하 청년 / *경상권 : 부산/대구/울산/경상남북도" | K-Startup 자격 문구(IBK창공 UNIST캠프 공고) |
+| T-02 | `KSTARTUP:179834` — HAS_TRACK → Track{학생창업, 예비창업}; 학생창업: `business_age LTE 7`, `region WITHIN 경상권`, `applicant_type IS_A 대학(원)생`; 예비창업: `region WITHIN 경상권`, `founder_age LTE 39` | "(학생창업) 업력 7년 이내 경상권* 소재 대학(원)생 창업기업 / (예비창업) 대표자 소재지가 경상권*인 만 39세 이하 청년 / *경상권 : 부산/대구/울산/경상남북도" | K-Startup 자격 문구(IBK창공 UNIST캠프 공고) |
 | T-03 | `BIZINFO:PBLN_000000000117956` — … → `employees GTE 10`(고용보험 피보험자), 예외 `certification EXISTS`{벤처기업, 이노비즈, 메인비즈, 사회적기업}이면 10인 미만도 가능 | "고용보험 피보험자 10인 이상 기업 / ※ 벤처기업, 이노비즈, 메인비즈, 사회적기업은 10인 미만이라도 참여 가능" | 기업마당 API 자격 문구 |
 | T-04 | `BIZINFO:PBLN_000000000117491` — … → `registration EXISTS 여행업 등록`; 그 조건 — ABOUT → 법령 인용 「관광진흥법」 제4조 제1항 | "「관광진흥법」제4조 제1항에 따른 여행업 등록을 필한 여행사" | 기업마당 API 자격 문구 |
 | T-05 | `BIZINFO:PBLN_000000000117985` — … → R1 `OR`{벤처기업, 이노비즈, 메인비즈 `certification EXISTS`}(`open_ended`), R2 `NONE_OF`{최근 6개월 지상파 전국권 방송광고 집행} | "벤처기업, 이노비즈, 메인비즈 등 중 하나 이상의 확인서를 보유한 기업 중 최근 6개월간 지상파 전국권 방송광고 집행이 없는 기업" | 기업마당 API 자격 문구 |
@@ -480,7 +560,7 @@ MATCH (n:Notice)-[:SUPERSEDES]->(o:Notice) WHERE n = o OR n.version <= o.version
 
 ## 7. Multi-hop 추론 시나리오
 
-모든 사용자 값은 **가상 입력**이다. 아래 시나리오의 평가는 손으로 계산했고, 4.6의 조건 트리 예시와 이 절의 규칙표는 평가기(`tools/graphrag/label_eval.py`)로 계산한 값이다(단위 시험 28건 통과, 정답 라벨과의 비교는 아직 없음).
+모든 사용자 값은 **가상 입력**이다. 아래 시나리오의 평가는 손으로 계산했고, 4.6의 조건 트리 예시와 이 절의 규칙표는 평가기(`tools/graphrag/label_eval.py`)로 계산한 값이다(단위 시험 32건 통과, 정답 라벨과의 비교는 아직 없음).
 
 ### 판정 규칙 (3값)
 
@@ -534,12 +614,13 @@ MATCH (n:Notice)-[:SUPERSEDES]->(o:Notice) WHERE n = o OR n.version <= o.version
 
 | 경로 | 패턴 | hop 한도 | 판정 영향·중단 규칙 | 시나리오·CQ | SQL로 풀 때 |
 |---|---|---|---|---|---|
-| P-1 지역 포함 | (사용자 지역)-[WITHIN*0..3]→(조건 지역) | 3(시군구→시도→권역·전국) | 닿으면 충족, 서로 다른 가지면 불충족, 사용자 값이 상위면 `UNKNOWN` | 시나리오 1·4, CQ-01·04·17 | 재귀 쿼리 또는 폐쇄 테이블 1회 조인. 구현·실측함(A2) |
+| P-1 지역 포함 | (사용자 지역)-[WITHIN\|MEMBER_OF*0..3]→(조건 지역) | 3(일반구→시→시도→권역·전국) | 닿으면 충족, 서로 다른 가지면 불충족, 사용자 값이 상위면 `UNKNOWN` | 시나리오 1·4, CQ-01·04·17 | 재귀 쿼리 또는 폐쇄 테이블 1회 조인. 구현·실측함(A2) |
 | P-2 종류 포함 | (사용자 유형)-[IS_A*0..3]→(조건 유형) | 3 | 확정 계층은 소기업·중기업→중소기업뿐. 나머지는 `UNKNOWN` | CQ-03 | 폐쇄 테이블 |
 | P-3 정의→법령 | (조건)-[ABOUT]→(개념)-[DEFINED_BY]→(정의)-[CITES_LAW]→(법령) | 3 | 법령 원문이 없으면 `CHAIN_BROKEN` → `NEEDS_CHECK`. 숫자 기준은 원문 확인 전에 쓰지 않음 | 시나리오 3, CQ-05·06 | 4개 테이블 조인. 데이터가 없어 시험 못 함 |
 | P-4 요건 트리 | (공고)-[HAS_TRACK*0..1]→(트랙)-[HAS_REQUIREMENT]→(요건)-[HAS_CONDITION]→(조건)-[HAS_CHILD*0..2]→(하위 조건) | 최대 5 | 아래에서 위로 합성(4.6). 그룹 3단 초과는 `UNKNOWN` | 시나리오 2·4, CQ-02·03·07·10 | 인접 목록 + 재귀. 가능 |
 | P-5 공고 대체 | (새 공고)-[SUPERSEDES*1..5]→(이전 공고) | 5 | 최신 버전만 판정. 이전 버전은 이력 | CQ-08 | 자기 조인 |
-| P-6 영향 전파 | (법령)←[CITES_LAW]←(정의)←[DEFINED_BY]←(개념)←[ABOUT]←(조건)←…←(공고) | 5~7 | 조문 `text_hash`가 바뀌면 영향받는 공고를 재평가 대상으로 표시 | CQ-15 | 조인 5개 이상. 재현이 어려운 쪽 |
+| P-6 영향 전파 | (조문)←[CITES_LAW]←(정의)←[DEFINED_BY]←(개념)←[ABOUT]←(조건)←…←(공고) | 5~7 | 조문 `text_hash`가 바뀌면 영향받는 공고를 재평가 대상으로 표시 | CQ-15 | 조인 5개 이상. 재현이 어려운 쪽 |
+| P-7 직접 인용 | (조문)←[CITES]←(요건)←[HAS_REQUIREMENT]←(공고) | 2~3 | 법령이 바뀌면 인용한 공고를 찾는다. 자격 조건 자체는 평가 경로에서 따로 평가 | CQ-15 | 조인 2~3개로 SQL도 가능 |
 
 ```cypher
 // P-4 요건 트리 한 번에 읽기: 공고 → (트랙) → 요건 → 조건 → 하위 조건
@@ -553,7 +634,7 @@ RETURN x, r, c, collect(d) AS children;
 
 질문: "광주 남구에 사업장이 있는 소상공인이 [광주] 소상공인 SNS·블로그 홍보지원(`BIZINFO:PBLN_000000000121231`)에 신청할 수 있나?"
 
-경로: (남구 `REGION:1227000000`) —[:WITHIN]→ (광주(구) 묶음) —[:WITHIN]→ (전남광주통합특별시 `REGION:1200000000`). 조건 C1은 `광주광역시 관내`를 가리키지만 코드표에 `광주광역시` 노드가 없다. 코드표는 2026-07 개편으로 광주·전남을 통합했고 남구(1227000000)가 통합시 아래에 직접 있다. 따라서 **`광주(구)` 중간 묶음 개념을 사전으로 만들고 광주에 속했던 구를 그 아래에 두는 것**이 이 질문이 풀리는 전제다. 묶음에 어느 구가 속하는지는 행정 자료로 확인해야 한다(현재 확인 전). 같은 문제가 현재 데이터에도 있다. 기업마당 소관 기관 `전남광주통합특별시`가 113건, K-Startup 지역 값 `전남광주`가 20건이다.
+경로: (남구 `REGION:1227000000`) —[:MEMBER_OF]→ (광주(구) 묶음) —[:MEMBER_OF]→ (전남광주통합특별시 `REGION:1200000000`). 조건 C1은 `광주광역시 관내`를 가리키지만 코드표에 `광주광역시` 노드가 없다. 코드표는 2026-07 개편으로 광주·전남을 통합했고 남구(1227000000)가 통합시 아래에 직접 있다. 따라서 **`광주(구)` 중간 묶음 개념을 사전으로 만들고 광주에 속했던 구를 그 아래에 두는 것**이 이 질문이 풀리는 전제다. 묶음에 어느 구가 속하는지는 행정 자료로 확인해야 한다(현재 확인 전). 같은 문제가 현재 데이터에도 있다. 기업마당 소관 기관 `전남광주통합특별시`가 113건, K-Startup 지역 값 `전남광주`가 20건이다.
 
 | 조건 | 평가 | 근거 |
 |---|---|---|
@@ -586,7 +667,7 @@ RETURN x, r, c, collect(d) AS children;
 
 정규화 초안(T-02): 트랙 두 개. 학생창업은 업력 7년 이내 + 경상권 소재 + 대학(원)생 창업기업, 예비창업은 경상권 소재 + 만 39세 이하. "경상권"은 본문이 부산·대구·울산·경상남북도로 직접 정의한다. API 지역 필드 `supt_regin`은 `전국`인데 본문은 경상권으로 제한하므로 **구조화 필드와 본문이 충돌**한다(`source_conflict`, 본문 우선).
 
-경로: (달서구) —[:WITHIN]→ (대구 `REGION:2700000000`) —[:WITHIN]→ (경상권 묶음 개념). 경상권 묶음은 공고가 정의한 값을 **공유 사전의 중간 개념**으로 만들어야 풀린다(H12).
+경로: (달서구) —[:WITHIN]→ (대구 `REGION:2700000000`) —[:MEMBER_OF]→ (경상권 묶음 개념). 경상권 묶음은 공고가 정의한 값을 **공유 사전의 중간 개념**으로 만들어야 풀린다(H12).
 
 | 트랙·조건 | 평가 | 근거 |
 |---|---|---|
@@ -625,10 +706,10 @@ RETURN x, r, c, collect(d) AS children;
 | 주장 | 근거 | 상태 |
 |---|---|---|
 | 그래프 DB가 SQL보다 빠르거나 정확하다 | 위 실측은 반대 | **주장하지 않음** |
-| 개념 계층(지역·권역·행정개편, 신청자 유형)을 **하나의 모델**로 관리한다 | 같은 `WITHIN`·`IS_A` 규칙을 지역·권역·구역·신청자 유형에 재사용. 행정개편(광주→전남광주통합특별시)과 권역(경상권)은 공고마다 새로 만들지 않고 공유 사전(H11·H12)으로 둠 | 모델링 이점은 설명 가능. **SQL로도 구현 가능**하므로 질의 이점은 N-04로 측정 |
+| 개념 계층(지역·권역·행정개편, 신청자 유형)을 **하나의 모델**로 관리한다 | 같은 `WITHIN`·`MEMBER_OF`·`IS_A` 규칙을 지역·권역·구역·신청자 유형에 재사용. 행정개편(광주→전남광주통합특별시)과 권역(경상권)은 공고마다 새로 만들지 않고 공유 사전(H11·H12)으로 둠 | 모델링 이점은 설명 가능. **SQL로도 구현 가능**하므로 질의 이점은 N-04로 측정 |
 | 용어 정의 → 법령 → 영향 공고까지 **끊김 없이 추적** | 첨부 자격·제외 구간 1,142건 중 법령 인용 36%, 중소기업기본법 115건 | 데이터 미구축. 시험 대상(P1) |
 | 모든 판정에 경로와 원문 문장을 붙인다(설명) | 요건 층 간선에 `evidence` 필수 | 설계 규칙. SQL 컬럼으로도 가능해 **차별성은 아님** |
-| 판정은 저장소가 아니라 **평가기**가 한다 | 3값 규칙을 코드로 구현·시험(28건) | 그래프·SQL 어느 쪽을 써도 필요 |
+| 판정은 저장소가 아니라 **평가기**가 한다 | 3값 규칙을 코드로 구현·시험(32건) | 그래프·SQL 어느 쪽을 써도 필요 |
 
 **검증 방법과 결과를 보기 전에 정해 둘 해석.** 비교 대상은 A(SQL 필터), A2(SQL+폐쇄 테이블), B(벡터 RAG + LLM 판정, 미구현), C(그래프 + 평가기)이며 질문 유형별로 따로 본다(KPI N-07, 측정 방법은 `docs/BASELINE_SQL_벡터RAG_측정방법_KPI산정근거_v0.1.md`).
 
@@ -655,6 +736,10 @@ CREATE CONSTRAINT def_id      IF NOT EXISTS FOR (d:Definition)   REQUIRE d.def_i
 CREATE CONSTRAINT law_id      IF NOT EXISTS FOR (l:ExternalLaw)  REQUIRE l.law_id IS UNIQUE;
 CREATE CONSTRAINT track_id    IF NOT EXISTS FOR (t:Track)        REQUIRE t.track_id IS UNIQUE;
 CREATE CONSTRAINT attach_id   IF NOT EXISTS FOR (a:Attachment)   REQUIRE a.attachment_id IS UNIQUE;
+CREATE CONSTRAINT program_id  IF NOT EXISTS FOR (p:Program)      REQUIRE p.program_id IS UNIQUE;
+CREATE CONSTRAINT category_id IF NOT EXISTS FOR (s:SupportCategory) REQUIRE s.category_id IS UNIQUE;
+CREATE CONSTRAINT article_id  IF NOT EXISTS FOR (a:LawArticle)   REQUIRE a.article_id IS UNIQUE;
+CREATE CONSTRAINT appendix_id IF NOT EXISTS FOR (a:LawAppendix)  REQUIRE a.appendix_id IS UNIQUE;
 // 속성 존재·값 목록 제약(예: Requirement.kind IN [...])은 인스턴스 종류에 따라 걸 수 없을 수 있어 §5.4 점검 쿼리로 대신한다
 
 // 개념 층: 시군구 → 시도 (하위→상위)
@@ -669,7 +754,7 @@ MERGE (grp:Concept {concept_id:'REGION_GROUP:GYEONGSANG'})
   SET grp.scheme='REGION', grp.label='경상권', grp.kind='GROUP', grp.defined_in='KSTARTUP:179834', grp.reviewed=false;
 // 구성 시도: 부산·대구·울산·경남·경북 (코드표에서 코드 확인 후 연결)
 MERGE (dg:Concept:Region {concept_id:'REGION:2700000000'});
-MERGE (dg)-[:WITHIN {basis:'공고 본문 정의'}]->(grp);
+MERGE (dg)-[:MEMBER_OF {basis:'공고 본문 정의'}]->(grp);
 
 // 메타 층 예시
 MERGE (n:Notice {notice_id:'KSTARTUP:179839'})
@@ -705,7 +790,7 @@ MATCH p = (u:Concept {concept_id:$user_concept})-[:IS_A|WITHIN*0..3]->(t:Concept
 RETURN [x IN nodes(p) | x.label] AS route, length(p) AS hops ORDER BY hops LIMIT 1;
 ```
 
-Neo4j 속성은 맵을 직접 담지 못해 `Condition.value`는 JSON 문자열로 둔다. 개념을 가리키는 값은 `ABOUT` 간선이 기준이다. 권역 사이 hop은 시군구→시도→권역으로 2 hop이다.
+Neo4j 속성은 맵을 직접 담지 못해 `Condition.value`는 JSON 문자열로 둔다. 개념을 가리키는 값은 `ABOUT` 간선이 기준이다. 권역 사이 hop은 시군구→시도(`WITHIN`)→권역(`MEMBER_OF`)으로 2 hop이다.
 
 ## 9. 품질 검증·논리 일관성·변경 관리
 
@@ -727,8 +812,11 @@ Neo4j 속성은 맵을 직접 담지 못해 `Condition.value`는 JSON 문자열�
 | VAL-12 | 첨부 텍스트 확보율 | 첨부가 있는 공고의 텍스트 확보 | 기업마당 본문출력파일 1,292/1,294건(99.8%, OCR 126건 포함). K-Startup 해당 없음 |
 | VAL-13 | 출처별 `NEEDS_CHECK` 비율 | 출처별로 따로 측정·보고 | `[적재 후 기록]`. K-Startup은 첨부가 없어 더 높을 것이라는 **가설** |
 | VAL-14 | 원문 보존 | 정리·마스킹이 원문 값(URL·텍스트)을 바꾸지 않음 | 정리층은 되돌릴 수 있는 정리만 하고 `title_raw`를 보존(제목 공백 정리 기업마당 20건·K-Startup 382건). K-Startup 원문 대조 30,576개 필드 중 불일치 0 |
-| VAL-15 | 지역 정확성 | 지역이 본문·소관 기관과 일치 | 기업마당 태그는 전 시도 347건(27%)이라 **근거로 쓰지 못함**. K-Startup 지역은 약칭 19종, `전남광주` 20건 코드 미연결 |
-| VAL-16 | 조건 트리·판정 규칙 일관성 | §5.4 점검 쿼리 V4~V6이 0, 그룹 3단 이하, AT_LEAST의 `min_count` 필수 | 점검 도구와 평가기 단위 시험 28건 통과(`tools/test_goldset_check.py`). 쿼리는 `[적재 후 기록]` |
+| VAL-15 | 지역 정확성 | 지역이 본문·소관 기관과 일치 | 기업마당 태그는 전 시도 347건(27%)이라 **근거로 쓰지 못함**. K-Startup 지역은 지역 별칭 사전(`지역_별칭사전.csv`) 기준 3,819건이 모두 OK·BUNDLE로 연결된다. 팀 코드표에서 시군구 12개가 빠져 있었다(SRC-04) |
+| VAL-16 | 조건 트리·판정 규칙 일관성 | §5.4 점검 쿼리 V4~V6이 0, 그룹 3단 이하, AT_LEAST의 `min_count` 필수 | 점검 도구와 평가기 단위 시험 32건 통과(`tools/test_goldset_check.py`). 쿼리는 `[적재 후 기록]` |
+| VAL-18 | 행정 계층 N:1 | 행정 `WITHIN` 상위가 둘 이상인 REGION 노드 0(V8) | 그래프 생성 코드 기준 32개(`MEMBER_OF` 분리 전). 분리 후 `[적재 후 기록]` |
+| VAL-19 | 조건 값 형식 일치 | 같은 프로필·공고를 정규화 층 조건과 그래프 조건으로 각각 평가해 결과가 같음 | `[ ]` (값 스키마 통일 전, §4.3) |
+| VAL-20 | 개념형 조건 연결 | `ABOUT` 없는 개념형 조건 0(V9) | 정규화 층 인증 후보 2,694건이 모두 `concept_id` 없음. `[적재 후 기록]` |
 | VAL-17 | 규칙 평가기와 사람 판정 일치 | 파일럿 라벨 B와 평가기의 공고·조건 단위 일치를 측정하고 어긋난 곳을 규칙 버그·가이드 모호·라벨 오류로 분류 | `[ ]` (라벨 0건) |
 
 품질 지표 예시: 요건·조건 추출 Precision/Recall, 개념 연결(`ABOUT`) 정확도, 판정 정확도(질문 유형별), 근거 추적률, CQ 충족률, SQL 베이스라인 대비 성능(KPI N-07). 목표값은 샘플 적재 후 팀이 정하며 **합격선은 결과를 보기 전에 정한다.**
@@ -753,7 +841,8 @@ Neo4j 속성은 맵을 직접 담지 못해 `Condition.value`는 JSON 문자열�
 |---|---|---|---|---|---|
 | 2026-11-23 | v0.1 | [ ] | [ ] | 초안 작성(공고 90건 점검 결과와 기초 설계서 §4를 양식에 맞춰 정리) | □ |
 | 2026-11-24 | v0.2 | [ ] | [ ] | (오후) EDA·용어 표준화 문서 연결, §4.4 용어 표준화 요약 추가, K-Startup 자격 문구 수치를 정리 층 기준(104자, 340건)으로 갱신. 기업마당 1,294건·K-Startup 3,819건(API 30,632건 중) 전수 데이터로 재작성. 나라장터를 범위에서 제외, 요건 입력 비율 표·인용 법령 빈도·원천 필드 대응표·K-Startup 옵션 목록 분포 추가, CQ-17·18, 시나리오 4, H12(권역), `evidence_source`, VAL-12~14, D-9~11 추가. v0.1은 `docs/old/`에 보관 | □ |
-| 2026-11-25 | v0.2 | 강사 가이드(2026-11-25) | ② 클래스 계층·속성·제약조건·관계 방향 점검, ③ 자격·제외·우대의 복합 조건 트리 설계, ④ 3값 판정 규칙과 Multi-hop 경로 구체화, ⑤ SQL 대비 필요성·차별성 점검 | §4.5(클래스 계층·속성 제약·허용 조합), §4.6(조건 트리, 그룹 `GROUP`·`HAS_CHILD` 신설, 예시 2건을 평가기로 계산), §5.4(금지 관계와 점검 쿼리), §7(3값 규칙표, 경로 카탈로그 P-1~P-6, SQL 대비 필요성·차별성), VAL-16·17, D-12 추가. 평가기에 중첩 그룹·우대 분리를 구현하고 단위 시험 28건. K-Startup 입력을 정리층으로 변경 | □ |
+| 2026-11-25 | v0.2 | 강사 가이드(2026-11-25) | ② 클래스 계층·속성·제약조건·관계 방향 점검, ③ 자격·제외·우대의 복합 조건 트리 설계, ④ 3값 판정 규칙과 Multi-hop 경로 구체화, ⑤ SQL 대비 필요성·차별성 점검 | §4.5(클래스 계층·속성 제약·허용 조합), §4.6(조건 트리, 그룹 `GROUP`·`HAS_CHILD` 신설, 예시 2건을 평가기로 계산), §5.4(금지 관계와 점검 쿼리), §7(3값 규칙표, 경로 카탈로그 P-1~P-6, SQL 대비 필요성·차별성), VAL-16·17, D-12 추가. 평가기에 중첩 그룹·우대 분리를 구현하고 단위 시험 32건. K-Startup 입력을 정리층으로 변경 | □ |
+| 2026-11-25 | v0.2 | 팀 검토(온톨로지 보완안 O-01~O-16) | 지역 코드표 누락·일반구, 행정 분할, 행정 계층과 묶음 소속 혼용, `region_basis` 이중 의미, 부정 표현 중복, 개념형 속성의 연산자·scheme, 인증 scheme, 기준일, 법령 클래스 단위와 직접 인용, 조건 값 형식 불일치, 속성명 불일치, 제약 범위, 대칭 관계·공통 요건, 수치 갱신, 예외 방향 | 보완안의 수치를 저장소 파일로 대조해 확인한 뒤 반영: SRC-04·05, §4.1(속성명·법령 3분리), §4.2(CERTIFICATION, H13·H14), §4.3(부정 표현 규칙·scheme 대응·기준일·값 스키마·공통 요건), §4.5(허용 조합 표), §4.7(예외 방향, 평가기 시험), §5.1·5.2(`MEMBER_OF`·`SUCCEEDED_BY`·`CITES`·`PART_OF`), §5.4(V8~V10), VAL-18~20, D-13~D-21. 보완안과 달리 `NONE_OF`는 폐기하지 않고 요건·그룹 논리에만 두며 정규화 층 operator를 `TEXT_ONLY`로 바꾼다(D-17) | □ |
 | [ ] | v0.3 | [ ] | [ ] | [ ] | □ |
 
 제출 파일: `ontology_design.docx`, `ontology_diagram.png`, `ontology_instance.png`, `entities.csv`, `relationships.csv`, `cq_tests.xlsx`, `schema.cypher`, `evidence_manifest.csv` (저장소 `docs/submission/ontology/`).
@@ -766,13 +855,22 @@ Neo4j 속성은 맵을 직접 담지 못해 `Condition.value`는 JSON 문자열�
 | D-2 | 레이블·ID 통일 | `Notice`·`Concept{scheme}`·`REGION:{코드}` / 이전 적재본 이름 | 설계서 이름으로 통일, `Region`은 보조 레이블 |
 | D-3 | 광주 등 개편으로 사라진 명칭과 권역 | 중간 묶음 개념 / 별칭만 / 처리 안 함(`UNKNOWN`) | 중간 묶음 + `code_version`·근거 공고 기록(H11·H12). 구성 구는 행정 자료로 확인 후 |
 | D-4 | 속성 허용 목록 확장 | 5종 추가 / `other`로 두고 판정 제외 | 추가(SAMPLE D1) |
-| D-5 | 나라장터·개인 대상 공고 포함 여부 | 포함 / 제외 | 이번 판은 **두 출처만**, 둘 다 제외. 나라장터는 동료의 DS-10 명세서를 검토한 뒤 별도 결정 |
+| D-5 | 나라장터·개인 대상 공고 포함 여부 | 포함 / 제외 | 이번 판은 **두 출처만**, 둘 다 제외. 나라장터는 기획서 v0.3·화면설계서 v3.5·상세 WBS가 입찰공고 탭(FR-N22, P1)으로 제안하므로, 입찰 요건(면허·지역·마감)을 어느 모델로 담을지는 팀 확정 뒤 별도 설계 |
 | D-6 | 관계 이름 | 적재본(`ANNOUNCED_BY` 등) / 설계서(`PUBLISHES`) | 적재본 기준으로 설계서 수정 |
 | D-7 | 정답 세트 규모·검수 | 후보 50건 전체 / 일부 | 우선 후보 30건 중 파일럿 10건부터 두 검수자가 각각 라벨링. 합격선은 결과를 보기 전에 확정 |
 | D-8 | 법령 수집 범위(P1) | 신청자 유형을 정의하는 법령부터 / 인용 전체(545종) | 중소기업기본법·소상공인기본법 등 정의 법령부터. 이용 조건 확인 후 |
 | D-9 | K-Startup 첨부 수집 | 수집하지 않음 / 사람이 직접 소량 확인 / 운영기관 문의 | 수집하지 않음(`robots.txt` 금지). 비교 시트 10건 결과를 보고 필요성을 판단 |
 | D-10 | 기업마당 일반 첨부 1,360개 다운로드 | 정답셋 후보만 / 전체 / 안 받음 | 정답셋 후보 공고의 일반 첨부만(원본 고정 후 라벨링) |
 | D-11 | K-Startup 정리본 | 동료 정리본 수정 후 사용 / 우리가 원본에서 다시 정리 | **결정됨(2026-11-25):** 전체 API 원본에서 정리층을 다시 만들어 사용. 동료 `kstartup_*` 산출물은 비교용 |
+| D-13 | 팀 지역 코드표 | 234개 유지 / 318행으로 교체 | 318행 교체(SRC-04). 세종은 팀 코드 유지 + 원본 코드 속성 |
+| D-14 | 묶음 소속 관계 | `WITHIN` 유지(`basis`로 구분) / `MEMBER_OF` 분리 | 분리(§4.2 H13). 행정 `WITHIN`을 N:1로 지킨다 |
+| D-15 | 행정구역 분할 | 처리 안 함 / `SUCCEEDED_BY` 추가 | 추가(§4.2 H14) |
+| D-16 | `region_basis` 이름 | 정리 층 뜻 유지 / 판단 기준으로 통일하고 `region_source` 신설 | 판단 기준으로 통일. 정리·정규화 층 필드를 `region_source`로 바꾸고 v1 정규화도 함께 수정 |
+| D-17 | 부정 표현 | 세 가지 허용 / 하나로 고정(`NONE_OF` 폐기) / 요건·그룹 논리로만 `NONE_OF`를 쓰고 정규화 층 operator를 `TEXT_ONLY`로 | 마지막 안. 평가기와 시험을 바꾸지 않고 뜻 충돌만 없앤다(§4.3) |
+| D-18 | 법령 클래스 | `ExternalLaw` 하나 / 법령·조문·별표 분리 | 분리, 요건→조문 직접 인용 `CITES` 추가(§4.1·§5.2) |
+| D-19 | 인증 scheme과 발급형 지위 | APPLICANT_TYPE에 포함 / CERTIFICATION 신설 | 신설. 사회적기업·벤처기업·여성기업·장애인기업은 CERTIFICATION으로만 둔다(§4.2·§4.3) |
+| D-20 | 예외 조건 표현 | 예시로만 둠 / 세 방향 분류와 `exception_kind` | 세 방향 분류(§4.7) |
+| D-21 | Neo4j 필수 속성 검증 방식 | DB 속성 존재 제약 / 적재 코드·점검 쿼리 | Enterprise 기능 가능 여부 확인 전까지 적재 코드·점검 쿼리(§5.4). 고유 제약만 `schema.cypher` |
 | D-12 | 우대 요건의 판정 반영 | 판정에서 분리(표시만) / 가점으로 점수화 / 제외 | 판정에서 분리하고 3값 결과만 따로 표시(§4.6). 점수화는 선정 가능성 예측이라 제외 범위 |
 
 ## 부록 B. 한계
@@ -782,6 +880,6 @@ Neo4j 속성은 맵을 직접 담지 못해 `Condition.value`는 JSON 문자열�
 - 기업마당 지역 태그는 판정 근거로 쓸 수 없다. 지역은 본문·첨부 추출과 소관 기관으로 정해야 한다.
 - K-Startup은 첨부를 받지 않아 첨부에만 있는 요건을 볼 수 없다. 제외 요건 필드가 비어 있어 제외 조건은 본문(자격 문구의 4%)에서만 찾을 수 있다.
 - K-Startup 최근 1년 3,819건은 **접수 시작일 기준**이며 게시일을 확인할 수 없다(동료의 상세 페이지 표본 24건에서도 등록일 라벨을 찾지 못함). 번호가 오래된 공고도 시작일이 최근일 수 있어 번호순으로 걸러서는 전체를 얻지 못한다.
-- 법령 기준(중소기업·소상공인·여성기업 등)은 원문을 확인하지 않았다. 법령 인용 비율은 신청자 유형 정의 이외의 인용을 포함한다.
+- 법령 원문은 신청자 유형 정의 법령 26종을 수집했지만(2026-11-25) 판정 숫자가 별표의 괘선 텍스트로 있어 행 단위 변환 전이고, 소상공인·여성기업·장애인기업 등 일부 기준은 원문 확인 전이다. 법령 인용 비율은 신청자 유형 정의 이외의 인용을 포함한다.
 - 정규식 근사치(§3)는 오탐·중복이 있어 정확도 지표가 아니다. 첨부 텍스트는 HWP·HWPX 표 구조가 사라지고 OCR 126건은 오인식이 있을 수 있다.
 - **그래프가 SQL보다 필요하다는 증거는 이번 전수 데이터로도 늘지 않았다.** 계층 확장(지역·권역)과 정의→법령 경로만 시험 대상으로 남으며 SQL 베이스라인 비교가 선행돼야 한다. 법령 인용이 첨부의 자격·제외 구간 36%에 나타난다는 사실은 정의→법령 경로의 필요 범위를 보여 줄 뿐 효용을 증명하지 않는다.

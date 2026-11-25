@@ -1,14 +1,16 @@
 ﻿클래스,층,식별자(예),핵심 속성,현재 데이터·예시(2026-11-24)
-Notice,메타,notice_id,"source_system, source_id, notice_kind, title, summary, deadline_at, deadline_raw, apply_status_kind, version, is_latest, fetched_at, content_hash, raw_hash, detail_url","기업마당 1,294건은 위 속성이 모두 있음(BIZINFO:PBLN_000000000128083). K-Startup 3,822건도 정리층에 notice_id(KSTARTUP:{pbanc_sn})·version·content_hash·raw_hash가 있음. 단 fetched_at은 날짜만, published_at은 API가 주지 않아 비어 있음"
+Notice,메타,notice_id,"source_system, source_id, title, body_text, is_open, period_status, published_at, application_start, application_end, deadline_at, apply_status_kind, version, is_latest, fetched_at, content_hash, raw_hash, detail_url (정리층 필드명 기준. notice_kind는 정리층에 없어 뺐고, deadline_raw는 apply_status_kind와 원문 문구로 대신한다)","기업마당 1,294건은 위 속성이 모두 있음(BIZINFO:PBLN_000000000128083). K-Startup 3,822건도 정리층에 notice_id(KSTARTUP:{pbanc_sn})·version·content_hash·raw_hash가 있음. 단 fetched_at은 날짜만, published_at은 API가 주지 않아 비어 있음"
 Organization,메타,org_id,"name, normalized_name, source_org_code, role_title, org_kind","기업마당 소관 36곳·수행 기관 320곳(직접수행 52건·기초자치단체 295건은 범주값이라 기관 노드가 아님). K-Startup은 정리층에서 직함을 role_title로 분리함(직함 109건·공고 106건, 기관이 둘 이상인 공고 50건은 multiple_orgs 플래그), 주관 유형(sprv_inst) 공공기관 1,794·민간 1,327·교육기관 510·지자체 191"
-SupportCategory,메타,category_id,"name, level(major/medium/source_label)","기업마당 대 8·중 37, K-Startup 11. 통합 매핑표 필요"
+SupportCategory,메타,category_id,"name, level(major/medium/source_label)","기업마당 대 8·중 37, K-Startup 11. 통합 매핑표 필요. 그래프 생성 코드(build.py)는 출처별 한 단계 19개(CAT:{출처}:…)만 만들어 대·중분류 노드와 IS_A가 아직 없다"
 Attachment,메타,attachment_id,"file_name, file_extension, role, source_url, text_status, usable","기업마당 2,654개(본문출력 1,294 + 일반 1,360). K-Startup은 정보 없음"
 Tag,메타,tag_id,name,기업마당 해시태그. 지역 이름은 Concept로 연결하고 태그로 두지 않음(§5.3)
-Region → Concept(scheme=REGION),개념,region_id,"name, level, region_code, parent_region_id, code_source, code_version",코드표 234개. 두 출처 모두 지역 값을 시도 단위 약칭으로 주므로(K-Startup 19종) 시군구 계층은 본문 추출 조건에서만 쓰인다
+Region → Concept(scheme=REGION),개념,region_id,"name, level(SIDO·SIGUNGU·GU·GROUP), region_code, parent_region_id, code_source, code_version, status(존재·폐지), valid_from·valid_to(개편일 2026-07-01), source_region_code(세종처럼 원본 코드가 다른 경우)",보완 코드표 318행(SRC-04). 두 출처 모두 지역 값을 시도 단위 약칭으로 주므로(K-Startup 19종) 시군구 계층은 본문 추출 조건에서만 쓰인다. 일반구(GU)는 (일반구)-[:WITHIN]->(시)로 둔다
 Program,요건,program_id,"name, level",미구축
 Track,요건,track_id,"name, benefit_summary, benefit_limit",미구축. K-Startup 통합공고 854건이 후보
-Requirement,요건,req_id,"kind, logic(AND/OR/NONE_OF/AT_LEAST), min_count, logic_basis, source_sentence, status, extraction_run_id",미구축. 입력은 기업마당 첨부 자격·제외 구간과 두 출처의 자격 문구
-Condition,요건,cond_id,"cond_type(ATOM·GROUP), attribute, operator, value(JSON), unit, ref_date_kind, negate, source_conflict, open_ended, confidence, reviewed. GROUP은 attribute 대신 logic(AND·OR·NONE_OF·AT_LEAST), min_count를 가짐(§4.6)","미구축. 정규화 층에 값 후보 17,211건(업력·연령·지역·기업 규모·인증·법령 인용·제외 등, 전부 unreviewed, 근거 문장 포함). 확정 0"
-Concept,개념,concept_id,"scheme, code, label, aliases, code_version",지역만 코드표로 가능
+Requirement,요건,req_id,"kind, logic(AND/OR/NONE_OF/AT_LEAST), min_count, logic_basis, source_sentence, status(parsed·unparsed·structured_only), exception_kind(§4.7), extraction_run_id","미구축. 입력은 기업마당 첨부 자격·제외 구간과 두 출처의 자격 문구. 그래프 생성 코드가 구조화 필드만으로 만든 Requirement 4,783개는 모두 logic=AND, logic_basis=assumed이므로 status=structured_only로 구분한다"
+Condition,요건,cond_id,"cond_type(ATOM·GROUP), attribute, operator, value(JSON), unit, ref_date_kind, negate, source_conflict, open_ended, confidence, reviewed. GROUP은 attribute 대신 logic(AND·OR·NONE_OF·AT_LEAST), min_count를 가짐(§4.6)","미구축. 정규화 층에 값 후보 17,211건(업력·연령·지역·기업 규모·인증·법령 인용·제외 등, 전부 unreviewed, 근거 문장 포함). 확정 0. 그래프 생성 코드의 Condition 노드에는 operator가 없고(strength가 있음) 값 형식도 정규화 층과 달라 §4.3의 값 스키마로 통일해야 한다"
+Concept,개념,concept_id,"scheme, code, label, code_version, level, status, valid_from, valid_to","지역만 코드표로 가능. 별칭(aliases)은 노드 속성이 아니라 그래프 밖 사전 data/사전/지역_별칭사전.csv(639개, 상태 OK·BUNDLE·AMBIGUOUS·NEEDS_REVIEW)에 둔다. 서구처럼 대상이 여럿인 별칭은 그것만으로 개념을 확정하지 못하므로 후보가 여럿이면 검수 큐로 보낸다"
 Definition,개념,def_id,"term, rule_json, basis_note",미구축(P1)
-ExternalLaw,개념,law_id,"name, article_no, text_hash, source_url",미구축(P1)
+ExternalLaw,개념,law_id,"name, doc_kind(법률·시행령), effective_date, source_url","법령 단위. 수집 26종, Neo4j 미적재(P1)"
+LawArticle,,article_id,"law_id, article_no, article_title, text_hash, deleted","조문 단위. 수집 1,286개. 공고 직접 인용 543건이 이 단위로 연결된다"
+LawAppendix,,appendix_id,"law_id, table_no, table_kind, title, text_hash",별표 단위(중소기업 업종별 매출 기준 등 판정 숫자 기준). 수집 40개. 정의(Definition)는 정의가 있는 조문이나 기준이 있는 별표를 가리킨다

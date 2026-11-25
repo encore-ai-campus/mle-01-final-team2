@@ -55,9 +55,9 @@ def concept(path: Path) -> None:
         ax.text(2.2, y1 - 2.2, label, fontsize=9, weight="bold", color="#334")
     P = {"Organization": (3, 47), "Notice": (33, 47), "SupportCategory": (64, 54), "Attachment": (64, 41),
          "Program": (2, 22), "Track": (22, 22), "Requirement": (50, 22), "Condition": (78, 22),
-         "Concept": (78, 1), "Definition": (52, 1), "ExternalLaw": (26, 1)}
+         "Concept": (78, 1), "Definition": (52, 1), "LawArticle": (27, 1), "ExternalLaw": (3, 1)}
     for k, (x, y) in P.items():
-        box(ax, x, y, k, fill="#ffffff" if k in ("Program", "Track") else FILL, ls="--" if k in ("Program", "Track") else "-")
+        box(ax, x, y, k, sub="+ LawAppendix(별표)" if k == "LawArticle" else None, fill="#ffffff" if k in ("Program", "Track") else FILL, ls="--" if k in ("Program", "Track") else "-")
     arrow(ax, mid(*P["Notice"], "l"), mid(*P["Organization"], "r"), "ANNOUNCED_BY\nEXECUTED_BY", dy=2.6)
     arrow(ax, mid(*P["Notice"], "r"), mid(*P["SupportCategory"], "l"), "IN_SUPPORT_CATEGORY", dy=3.2, dx=-1)
     arrow(ax, mid(*P["Notice"], "r"), mid(*P["Attachment"], "l"), "HAS_ATTACHMENT", dy=-3.0, dx=-1)
@@ -68,10 +68,12 @@ def concept(path: Path) -> None:
     arrow(ax, mid(*P["Requirement"], "r"), mid(*P["Condition"], "l"), "HAS_CONDITION", dy=2.2)
     arrow(ax, mid(*P["Condition"], "b"), mid(*P["Concept"], "t"), "ABOUT", dx=3.5)
     arrow(ax, mid(*P["Concept"], "l"), mid(*P["Definition"], "r"), "DEFINED_BY", dy=2.2)
-    arrow(ax, mid(*P["Definition"], "l"), mid(*P["ExternalLaw"], "r"), "CITES_LAW", dy=2.2)
-    ax.text(3, -4.5, "Concept(scheme) 내부: IS_A(종류) · WITHIN(공간 포함), 하위→상위", fontsize=8.5, color="#254")
+    arrow(ax, mid(*P["Definition"], "l"), mid(*P["LawArticle"], "r"), "CITES_LAW", dy=2.2)
+    arrow(ax, mid(*P["LawArticle"], "l"), mid(*P["ExternalLaw"], "r"), "PART_OF", dy=2.2)
+    arrow(ax, (P["Requirement"][0] + 3, P["Requirement"][1]), mid(*P["LawArticle"], "t"), "CITES", dx=-5, dy=2)
+    ax.text(3, -4.5, "Concept(scheme) 내부: IS_A(종류) · WITHIN(행정 포함) · MEMBER_OF(권역 묶음) · SUCCEEDED_BY(개편), 하위→상위", fontsize=8.5, color="#254")
     ax.text(3, -6.8, "공고 간: SUPERSEDES(새→이전) · SAME_AS(포털 간 중복)  |  공고→지역: TARGETS_REGION", fontsize=8.5, color="#254")
-    ax.text(3, -9.1, "점선 상자(Program, Track)는 미구축. 실선은 정리 파일에서 만들 수 있는 것(Condition·Definition·ExternalLaw은 요건 추출·법령 수집 후).", fontsize=7.5, color="#555")
+    ax.text(3, -9.1, "점선 상자(Program, Track)는 미구축. 실선은 정리 파일에서 만들 수 있는 것(Condition·Definition은 요건 추출 후, 법령 3종은 수집했으나 미적재).", fontsize=7.5, color="#555")
     fig.savefig(path, dpi=160, bbox_inches="tight", facecolor="white")
     plt.close(fig)
 
@@ -99,8 +101,8 @@ def instance(path: Path) -> None:
     box(ax, *n["sme"], "소상공인", "Concept · APPLICANT_TYPE", w=bw, h=6)
     box(ax, *n["defn"], "Definition", "원문 없음(rule_json 비어 있음)", w=bw, h=6, fill="#f1f1f1", edge="#888", ls="--", color="#555")
     box(ax, *n["law"], "소상공인기본법", "ExternalLaw 후보 · 미수집", w=bw, h=6, fill="#f1f1f1", edge="#888", ls="--", color="#555")
-    arrow(ax, mid(*n["namgu"], "r", bw, bh), mid(*n["gj"], "l", bw, bh), "WITHIN", dy=2.0)
-    arrow(ax, mid(*n["gj"], "r", bw, bh), mid(*n["merged"], "l", bw, bh), "WITHIN", dy=2.0)
+    arrow(ax, mid(*n["namgu"], "r", bw, bh), mid(*n["gj"], "l", bw, bh), "MEMBER_OF", dy=2.0)
+    arrow(ax, mid(*n["gj"], "r", bw, bh), mid(*n["merged"], "l", bw, bh), "MEMBER_OF", dy=2.0)
     arrow(ax, mid(*n["notice"], "r", bw, bh), mid(*n["r1"], "l", bw, bh), "HAS_REQUIREMENT", dy=2.2)
     arrow(ax, (n["r1"][0] + bw, n["r1"][1] + 5), (n["c1"][0], n["c1"][1] + 3), "HAS_CONDITION", dx=-2, dy=3.6)
     arrow(ax, (n["r1"][0] + bw, n["r1"][1] + 3), (n["c2"][0], n["c2"][1] + 3), "", dy=0)

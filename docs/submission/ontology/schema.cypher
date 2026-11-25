@@ -12,6 +12,10 @@ CREATE CONSTRAINT def_id      IF NOT EXISTS FOR (d:Definition)   REQUIRE d.def_i
 CREATE CONSTRAINT law_id      IF NOT EXISTS FOR (l:ExternalLaw)  REQUIRE l.law_id IS UNIQUE;
 CREATE CONSTRAINT track_id    IF NOT EXISTS FOR (t:Track)        REQUIRE t.track_id IS UNIQUE;
 CREATE CONSTRAINT attach_id   IF NOT EXISTS FOR (a:Attachment)   REQUIRE a.attachment_id IS UNIQUE;
+CREATE CONSTRAINT program_id  IF NOT EXISTS FOR (p:Program)      REQUIRE p.program_id IS UNIQUE;
+CREATE CONSTRAINT category_id IF NOT EXISTS FOR (s:SupportCategory) REQUIRE s.category_id IS UNIQUE;
+CREATE CONSTRAINT article_id  IF NOT EXISTS FOR (a:LawArticle)   REQUIRE a.article_id IS UNIQUE;
+CREATE CONSTRAINT appendix_id IF NOT EXISTS FOR (a:LawAppendix)  REQUIRE a.appendix_id IS UNIQUE;
 // 속성 존재·값 목록 제약(예: Requirement.kind IN [...])은 인스턴스 종류에 따라 걸 수 없을 수 있어 §5.4 점검 쿼리로 대신한다
 
 // 개념 층: 시군구 → 시도 (하위→상위)
@@ -26,7 +30,7 @@ MERGE (grp:Concept {concept_id:'REGION_GROUP:GYEONGSANG'})
   SET grp.scheme='REGION', grp.label='경상권', grp.kind='GROUP', grp.defined_in='KSTARTUP:179834', grp.reviewed=false;
 // 구성 시도: 부산·대구·울산·경남·경북 (코드표에서 코드 확인 후 연결)
 MERGE (dg:Concept:Region {concept_id:'REGION:2700000000'});
-MERGE (dg)-[:WITHIN {basis:'공고 본문 정의'}]->(grp);
+MERGE (dg)-[:MEMBER_OF {basis:'공고 본문 정의'}]->(grp);
 
 // 메타 층 예시
 MERGE (n:Notice {notice_id:'KSTARTUP:179839'})
@@ -78,6 +82,12 @@ MATCH ()-[r:HAS_REQUIREMENT|HAS_CONDITION|HAS_CHILD]->() WHERE r.evidence IS NUL
 MATCH p = (:Requirement)-[:HAS_CONDITION]->(:Condition)-[:HAS_CHILD*4..]->(:Condition) RETURN count(p) AS too_deep;
 // V7 SUPERSEDES 방향(새 버전이 이전 버전을 대체: 새.version > 이전.version)
 MATCH (n:Notice)-[:SUPERSEDES]->(o:Notice) WHERE n = o OR n.version <= o.version RETURN count(*) AS bad_supersedes;
+// V8 행정 WITHIN 상위가 둘 이상
+MATCH (a:Concept {scheme:'REGION'})-[r:WITHIN]->(b:Concept) WITH a, count(r) AS parents WHERE parents > 1 RETURN count(a) AS multi_parent;
+// V9 ABOUT 없는 개념형 조건
+MATCH (c:Condition {cond_type:'ATOM'}) WHERE c.attribute IN ['region','applicant_type','company_size','industry','certification'] AND NOT (c)-[:ABOUT]->(:Concept) RETURN count(c) AS no_about;
+// V10 대칭 관계 양방향
+MATCH (a:Notice)-[:SAME_AS]->(b:Notice), (b)-[:SAME_AS]->(a) RETURN count(*) AS both_directions;
 
 // P-4 요건 트리 한 번에 읽기: 공고 → (트랙) → 요건 → 조건 → 하위 조건
 MATCH (n:Notice {notice_id: $id})-[:HAS_TRACK*0..1]->(x)-[:HAS_REQUIREMENT]->(r:Requirement)-[:HAS_CONDITION]->(c:Condition)
