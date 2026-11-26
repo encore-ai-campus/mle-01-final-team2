@@ -130,11 +130,23 @@ class ConceptsAndLawsTests(unittest.TestCase):
         self.assertEqual(len(ids), len(set(ids)))  # 같은 번호의 별표가 있어도 ID는 유일
 
     def test_definitions_link_only_what_exists(self):
-        self.assertEqual(len(self.dnodes), 6)
-        self.assertEqual(sum(e["type"] == "CITES_LAW" for e in self.dedges), 6)
-        self.assertEqual(sum(e["type"] == "DEFINED_BY" for e in self.dedges), 4)  # 청년창업기업·중장년창업기업은 같은 이름의 개념이 없다
-        self.assertEqual(len(self.notes), 2)
+        self.assertEqual(len(self.dnodes), 16)  # v0.1 사전 6 + v0.3 추가 법령 10
+        self.assertEqual(sum(e["type"] == "CITES_LAW" for e in self.dedges), 16)
+        self.assertEqual(sum(e["type"] == "DEFINED_BY" for e in self.dedges), 8)  # 청년창업기업·중장년창업기업·마을기업·어업인·농업인·자활기업·연구소기업·중소기업협동조합은 같은 이름의 개념이 없다
+        self.assertEqual(len(self.notes), 8)
         self.assertTrue(all("rule_json" not in n for n in self.dnodes))  # 원문 확인 전에는 판정 기준을 만들지 않는다
+
+    def test_v03_definitions_are_verbatim_clauses(self):
+        from graphrag import concepts_laws as C
+        arts = {(r["doc_name"], str(r["article_no"])): r["text"] for r in C._jsonl(C.LAW_DIR / "조문.jsonl") if r.get("level") == "article"}
+        defs = C.law_definitions_v03()
+        self.assertEqual(len(defs), len(C.LAW_DEFS_V03))  # 원문에서 못 찾은 정의가 없어야 한다
+        for name, legal, law, art_no, _, _ in C.LAW_DEFS_V03:
+            self.assertIn(defs[name]["text"], arts[(law, art_no)])  # 잘라 온 조항이 조문 원문 그대로다
+            self.assertIn(legal, defs[name]["text"])
+        self.assertNotIn("3의3.", defs["이노비즈"]["text"])  # 다음 호에서 멈춘다
+        self.assertIn("나. 해당 기업에 고용된", defs["장애인기업"]["text"])  # 딸린 목은 포함
+        self.assertNotIn("③", defs["자활기업"]["text"])
 
     def test_citation_backlog_keeps_every_citing_notice(self):
         self.assertEqual(len(self.pending), 640)  # v0.1 543 + v0.2 추가 법령 인용 97

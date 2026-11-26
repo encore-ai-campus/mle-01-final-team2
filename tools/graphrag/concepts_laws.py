@@ -87,17 +87,76 @@ def laws() -> tuple[list[dict], list[dict], dict[tuple[str, str], str], list[dic
     return nodes, edges, index, pending
 
 
+# 데이터명세서 v0.3 추가 법령의 정의 조항. (개념 이름, 법령 용어, 법령, 조, 시작 표지, 조항 표기)
+# 시작 표지가 "N." 꼴이면 그 호(딸린 목 포함)만, "①②"처럼 항 묶음이면 그 항들만 `조문.jsonl` 원문에서 그대로 잘라 온다.
+LAW_DEFS_V03 = [
+    ("장애인기업", "장애인기업", "장애인기업활동 촉진법", "2", "2.", "제2조 제2호"),
+    ("이노비즈", "기술혁신형 중소기업", "중소기업 기술혁신 촉진법", "2", "3의2.", "제2조 제3호의2"),
+    ("메인비즈", "경영혁신형 중소기업", "중소기업 기술혁신 촉진법", "2", "4의2.", "제2조 제4호의2"),
+    ("청년", "청년", "청년기본법", "3", "1.", "제3조 제1호"),
+    ("마을기업", "마을기업", "마을기업 육성 및 지원에 관한 법률", "2", "1.", "제2조 제1호"),
+    ("어업인", "어업인", "수산업ㆍ어촌 발전 기본법", "3", "3.", "제3조 제3호"),
+    ("농업인", "농업인", "농업ㆍ농촌 및 식품산업 기본법", "3", "2.", "제3조 제2호"),
+    ("자활기업", "자활기업", "국민기초생활 보장법", "18", "①②", "제18조 제1항·제2항"),
+    ("연구소기업", "연구소기업", "연구개발특구의 육성에 관한 특별법", "2", "6.", "제2조 제6호"),
+    ("중소기업협동조합", "중소기업협동조합", "중소기업협동조합법", "3", "①", "제3조 제1항"),
+]
+_ITEM = re.compile(r"^\d+(?:의\d+)?\.\s")
+_PARA = "①②③④⑤⑥⑦⑧⑨⑩"
+
+
+def clause_text(article_text: str, marker: str) -> str | None:
+    """조문 원문에서 정의 조항만 그대로 잘라 온다(글자를 바꾸지 않는다). 찾지 못하면 None."""
+    lines = article_text.split("\n")
+    if marker[0] in _PARA:  # 항 묶음: 첫 항부터 묶음 밖의 항이 나오기 전까지
+        # v0.2 수집분은 첫 항이 조 제목과 같은 줄에 붙어 있다(`제18조(자활기업) ① …`)
+        start = next((i for i, l in enumerate(lines) if l.startswith(marker[0]) or (i == 0 and f") {marker[0]}" in l)), None)
+        if start is None:
+            return None
+        out = [lines[start]]
+        for l in lines[start + 1:]:
+            if (l[:1] in _PARA and l[:1] not in marker) or l.startswith("["):
+                break
+            out.append(l)
+        return "\n".join(out).strip()
+    start = next((i for i, l in enumerate(lines) if l.startswith(marker + " ")), None)
+    if start is None:
+        return None
+    out = [lines[start]]
+    for l in lines[start + 1:]:  # 다음 호, 다음 항, [개정 표시]가 나오면 멈춘다(딸린 목 "가."는 포함)
+        if _ITEM.match(l) or l[:1] in _PARA or l.startswith("["):
+            break
+        out.append(l)
+    return "\n".join(out).strip()
+
+
+def law_definitions_v03() -> dict[str, dict]:
+    """개념 이름 -> {law, article, text, legal_term}. 원문을 찾지 못한 정의는 넣지 않는다."""
+    arts = {(r["doc_name"], str(r["article_no"])): r["text"] for r in _jsonl(LAW_DIR / "조문.jsonl") if r.get("level") == "article"}
+    out = {}
+    for name, legal, law, art_no, marker, ref in LAW_DEFS_V03:
+        text = clause_text(arts.get((law, art_no), ""), marker)
+        if text:
+            out[name] = {"law": law, "article": ref, "text": text, "legal_term": legal, "source": "data/지원사업_법령 v0.3"}
+    return out
+
+
 def definitions(by_label: dict[str, str], article_index: dict[tuple[str, str], str]) -> tuple[list[dict], list[dict], list[str]]:
-    """(노드, 간선, 연결하지 못한 정의 설명). 법령 원문을 그대로 인용한 정의만 만든다."""
+    """(노드, 간선, 연결하지 못한 정의 설명). 법령 원문을 그대로 인용한 정의만 만든다.
+
+    v0.1 용어 사전의 정의 6개에 데이터명세서 v0.3 추가 법령의 정의 10개(`LAW_DEFS_V03`)를 더한다.
+    """
     terms = json.loads(TERMS.read_text(encoding="utf-8"))
     nodes, edges, notes = [], [], []
-    for term, d in terms["law_definitions_verbatim"].items():
+    all_defs = {**terms["law_definitions_verbatim"], **law_definitions_v03()}
+    for term, d in all_defs.items():
         m = re.search(r"제\s*(\d+)\s*조(?:의\s*(\d+))?", d["article"])
         art_no = f"{m.group(1)}의{m.group(2)}" if m and m.group(2) else (m.group(1) if m else None)
         aid = article_index.get((d["law"], art_no or ""))
         did = f"DEF:{term}"
         nodes.append({"label": "Definition", "def_id": did, "term": term, "basis_note": f"{d['law']} {d['article']} 원문 인용",
-                      "article_text_hash": sha(d["text"]), "needs_review": True})  # rule_json은 원문 확인 후에만 채운다
+                      "article_text_hash": sha(d["text"]), "needs_review": True,  # rule_json은 원문 확인 후에만 채운다
+                      **{k: d[k] for k in ("legal_term", "source") if d.get(k)}})
         if aid:
             edges.append({"type": "CITES_LAW", "from": did, "to": aid, "article_ref": d["article"]})
         else:

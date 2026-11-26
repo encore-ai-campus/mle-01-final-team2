@@ -10,11 +10,11 @@
 
 | 항목 | 현재 상태 |
 |---|---|
-| 적재 | 노드 32,582 · 관계 56,961 (2026-11-26 추가 법령 18문서 적재 후). 공고 5,116건 전량(기업마당·K-Startup), 정형 API 필드에서 만든 요건·조건 |
+| 적재 | 노드 32,592 · 관계 56,975 (2026-11-26 추가 법령 18문서·정의 10개 적재 후). 공고 5,116건 전량(기업마당·K-Startup), 정형 API 필드에서 만든 요건·조건 |
 | 식별·중복 | 노드 10종에 유일키 제약. 키 결측 0, 중복 0, 중복 간선 0 |
 | 관계 방향 | 모든 관계가 정의한 방향(하위→상위, 공고→요건→조건→개념)만 가짐. 계층 순환 0 |
 | 추론 경로 | 조건 → 개념 → (IS_A) → 정의 → 조문 → 법령이 실제로 이어짐. API `/api/chat`이 요청마다 이 경로를 읽는다. 다만 정의에 닿는 공고 1,252건은 **모두 "예비창업자" 개념 하나**를 거친다(중소기업 등 다른 정의 개념을 가리키는 조건 0개, §8) |
-| **검수** | **조건 17,366개 전부 `reviewed=false`, 정의 6개 전부 `needs_review=true`, 공고 5,116건 전부 본문 요건 `unparsed`** |
+| **검수** | **조건 17,366개 전부 `reviewed=false`, 정의 16개 전부 `needs_review=true`, 공고 5,116건 전부 본문 요건 `unparsed`** |
 | 판정 | 3단 규칙은 구현됨. 다만 본문 요건이 검수 전이라 지금은 "신청 가능"이 **나오지 않도록 막혀 있다**(§9.2) |
 | SQL 대비 | 정확도·속도 우위 없음(기존 측정). 계층·다단 질의의 **코드량은 Cypher가 줄 수 약 1/4, 토큰 수 약 1/2**(§10.2, 결과 일치 확인) |
 
@@ -80,9 +80,9 @@ flowchart LR
 | LawAppendix | 59 | EXECUTED_BY | 947 |
 | ExternalLaw | 44 | WITHIN | 284 |
 | SupportCategory | 19 | MEMBER_OF | 35 |
-| Definition | 6 | SUCCEEDED_BY | 35 |
-| | | CITES_LAW | 6 |
-| | | DEFINED_BY | 4 |
+| Definition | 16 | SUCCEEDED_BY | 35 |
+| | | CITES_LAW | 16 |
+| | | DEFINED_BY | 8 |
 | | | IS_A | 2 |
 
 ---
@@ -98,7 +98,7 @@ flowchart LR
 | `Condition` | `cond_id` = `{notice_id}#C-{attribute}` | `cond_type`(`ATOM`), `attribute`, `operator`, `value`(JSON 문자열), `strength`(`hard`/`soft`), `evidence_source`, `reviewed`, `ref_date_kind`, `about_pending`, `about_unmapped`, `unknown_reason` | 정형 필드 규칙 추출 |
 | `Concept` | `concept_id` = `{SCHEME}:{값}` 예: `APPLICANT_TYPE:중소기업`, `CERTIFICATION:벤처기업`, `SPECIAL_GROUP:청년` | `name`, `scheme` | 용어 표준 `data/ref/term_standard_v0.1.json` |
 | `Concept:Region` | `REGION:{법정동코드 10자리}`, 묶음은 `REGION_GROUP:{이름}`, 전국은 `REGION:NATIONWIDE` | `name`, `full_name`, `level`(`SIDO`/`SIGUNGU`/`GU`/`GROUP`/`NATIONWIDE`), `region_code`, `parent_region_id`, `status`(현행/폐지), `code_version` | 행정표준코드 `data/사전/지역_코드표.csv` |
-| `Definition` | `def_id` = `DEF:{용어}` | `term`, `basis_note`, `article_text_hash`, `needs_review` | 법령 조문 원문 |
+| `Definition` | `def_id` = `DEF:{용어}` | `term`, `basis_note`, `article_text_hash`, `needs_review`, (v0.3 추가분) `legal_term`, `source` | 법령 조문 원문 |
 | `LawArticle` | `article_id` = `LAW:{법령일련번호}:A{조}` | `law_id`, `article_no`, `article_title`, `text`, `text_hash`, `deleted` | 법제처 OPEN API |
 | `LawAppendix` | `appendix_id` = `LAW:{일련번호}:T{번호}-{가지}` | `table_no`, `table_kind`(별표/서식), `title`, `text`, `text_hash` | 법제처 OPEN API |
 | `ExternalLaw` | `law_id` = `LAW:{법령일련번호}` | `name`, `doc_kind`, `effective_date`, `org`, `source_url`, `priority` | 법제처 OPEN API |
@@ -140,8 +140,8 @@ flowchart LR
 | `MEMBER_OF` | Region → Region(GROUP) | 공고가 정의한 권역·통합 이전 지역 묶음 소속 | `basis` | 35 | 예 |
 | `SUCCEEDED_BY` | Region(폐지) → Region(현행) | 행정구역 개편 승계 | `partial`, `reviewed` | 35 | 아니오(검수 전) |
 | `IS_A` | Concept → Concept | 개념 상하위(소기업 → 중소기업) | `basis`, `note` | 2 | 예(정의 찾기) |
-| `DEFINED_BY` | Concept → Definition | 개념의 법적 정의 | — | 4 | 근거 표시 |
-| `CITES_LAW` | Definition → LawArticle | 정의가 인용한 조문 | `article_ref` | 6 | 근거 표시 |
+| `DEFINED_BY` | Concept → Definition | 개념의 법적 정의 | — | 8 | 근거 표시 |
+| `CITES_LAW` | Definition → LawArticle | 정의가 인용한 조문 | `article_ref` | 16 | 근거 표시 |
 | `PART_OF` | LawArticle / LawAppendix → ExternalLaw | 조문·별표가 속한 법령 | — | 2,384 | 근거 표시 |
 | `ANNOUNCED_BY` | Notice → Organization | 공고 기관 | `source_field` | 5,116 | 아니오 |
 | `EXECUTED_BY` | Notice → Organization | 수행 기관 | `source_field` | 947 | 아니오 |
@@ -225,7 +225,7 @@ CREATE INDEX concept_scheme      IF NOT EXISTS FOR (k:Concept)   ON (k.scheme);
 | V9 | 개념형 조건(`applicant_type`)인데 `ABOUT` 없음 | **546** | 확인 필요: 모두 `일반기업` 선택지. 개념 사전에 `일반기업`이 없다 |
 | V15 | 요건이 하나도 없는 공고 | **330** | 확인 필요: 모두 기업마당 모집 중 공고. 정형 필드에 판정 조건이 없는 공고 |
 | V16 | 상위(`WITHIN`)가 없는 비시도 지역 | **34** | 31개는 폐지된 시군구(`SUCCEEDED_BY`로만 연결, 검수 전), 3개는 권역 묶음(정상) |
-| V17 | 개념에 안 붙은 정의 | **2** | `청년창업기업`·`중장년창업기업` 정의는 있는데 대응 개념이 없다 |
+| V17 | 개념에 안 붙은 정의 | **8** | `청년창업기업`·`중장년창업기업`·`마을기업`·`어업인`·`농업인`·`자활기업`·`연구소기업`·`중소기업협동조합` 정의는 있는데 대응 개념이 없다(2026-11-26 정의 10개 추가 후) |
 
 점검 쿼리 원문은 `docs/submission/ontology/schema.cypher`의 V1~V10에 있고, V11~V17은 이번에 추가한다(부록 A).
 
@@ -412,7 +412,7 @@ E1~E3은 지금 데이터로 바로 할 수 있다. E4는 업종 코드표와 �
 
 **수집은 정확하다. 부족한 것은 범위와 연결이다.**
 
-1. **정의 연결이 4개 개념뿐이고, 공고에 실제로 쓰이는 것은 `예비창업자` 하나다**(§8). 법령 원문은 있는데 `Definition`을 만든 개념은 중소기업·창업기업·초기창업기업·예비창업자뿐이다. 정의가 없는 개념은 다음과 같다.
+1. **정의 연결이 4개 개념뿐이고, 공고에 실제로 쓰이는 것은 `예비창업자` 하나다**(§8). → 2026-11-26 추가 법령 정의 10개를 더해 8개 개념(장애인기업·이노비즈·메인비즈·청년 추가)이 연결됐다. 공고 조건이 가리키는 개념은 여전히 `예비창업자`뿐이다. 법령 원문은 있는데 `Definition`을 만든 개념은 중소기업·창업기업·초기창업기업·예비창업자뿐이다. 정의가 없는 개념은 다음과 같다.
    - 소상공인, 중견기업, 벤처기업, 여성기업, 사회적기업, 협동조합, 1인 창조기업
    - 장애인기업, 이노비즈, 메인비즈, 재창업기업, 청년 등
    - 이 가운데 소상공인·중견기업·벤처기업·여성기업·사회적기업·협동조합·1인 창조기업은 **정의 조문이 이미 수집돼 있어** 노드만 만들면 된다.
@@ -444,7 +444,7 @@ E1~E3은 지금 데이터로 바로 할 수 있다. E4는 업종 코드표와 �
 | P0 | 정의 확대 | 개념 4개만 정의 연결 | 수집된 조문으로 정의 7개 추가(소상공인, 중견기업, 벤처기업, 여성기업, 사회적기업, 협동조합, 1인 창조기업). 고아 정의 2개 연결 | 신청자 유형 개념 중 법령 정의가 있는 것 100% 연결 |
 | P0 | 정의 검수 | 6개 모두 `needs_review=true` | 조문 원문과 대조해 사람이 확인 | `needs_review=false` |
 | P1 | 본문 요건 | 공고 전부 `unparsed`. 중소기업 등 법령 정의 개념을 가리키는 조건 0개 | 본문·첨부 요건 추출 → 그룹 조건(`HAS_CHILD`) 적재 → 검수 | 검수한 공고에서 "신청 가능" 판정이 나옴. 중소기업기본법 제2조 경로(P4)가 0건을 벗어남 |
-| P1 | 추가 법령 정의 연결 | 18문서·별표 19개 적재 완료(2026-11-26) | 장애인기업·청년 등 정의 노드를 만들어 `CITES_LAW`로 조문에 연결 | V14 = 0 유지, 새 개념의 정의 경로가 1건 이상 |
+| P1 | 추가 법령 개념 | 정의 10개 적재·조문 연결 완료(2026-11-26). 6개(마을기업·어업인·농업인·자활기업·연구소기업·중소기업협동조합)는 대응 개념이 없음(V17) | 개념 사전에 6개 개념을 추가하고 `DEFINED_BY` 연결, 본문 요건의 `ABOUT`으로 공고와 잇기 | V17 = 2(창업지원법 연령형 정의만 남음) |
 | P1 | 미매핑 개념 | `일반기업` 546건 | 용어 표준에 `일반기업` 추가 여부 결정 | V9 = 0 |
 | P1 | 평가기와 그래프 요건 논리 일치 | OR 요건 1,114건 | 평가기가 `Requirement.logic`을 읽도록 변경 | 같은 입력에서 결과 동일 |
 | P2 | 폐지 지역 승계 | `SUCCEEDED_BY` 35건 검수 전 | 행정구역 개편 자료로 검수 | `reviewed=true` |
