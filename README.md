@@ -197,7 +197,7 @@ uvicorn api.main:app --reload                   # http://localhost:8000/docs
 | 구분 | 문서 |
 | --- | --- |
 | 기획 | [기획 보고서](docs/plan/%5B기획설계%5D%20MLE_기획보고서_2팀.md) · [기초 설계서](docs/plan/MLE_2팀_기초%20설계.md) · [KPI 초안](docs/plan/KPI_DRAFT.md) |
-| 기획 · 화면 | [화면설계서 v3.5](docs/design/MLE_2팀_화면설계서_v3.5_와이어프레임.pdf) · [WBS](docs/design/MLE_2팀_WBS.xlsx) |
+| 기획 · 화면 | [화면설계서 v3.5](docs/design/MLE_2팀_화면설계서_v3.5_와이어프레임.pdf) · [화면설계서 v3 핵심화면](docs/design/화면설계서_v3_핵심화면/) · [API 명세서 v0.1](docs/design/API_명세서_v0.1.md) · [WBS](docs/design/MLE_2팀_WBS.xlsx) |
 | 온톨로지 | [도메인 온톨로지 설계서](docs/ontology/%5B도메인온톨로지%5D%20MLE_도메인_온톨로지_설계서_2팀.md) · [온톨로지 필요성](docs/plan/ONTOLOGY_NECESSITY.md) · [제출 파일](docs/submission/ontology/) |
 | 데이터 | [기업마당 명세서](docs/data/DATA_SPEC_기업마당_v0.1.md) · [EDA · 용어 표준화](docs/data/DOMAIN_ANALYSIS_EDA_용어표준화_v0.1.md) · [정리층](docs/data/PREPROCESS_정리층_설계와_결과_v0.1.md) · [값 정규화](docs/data/NORMALIZE_값정규화층과_첨부_읽기_v0.1.md) · [공통 스키마 v1](docs/SUPPORT_DATA_NORMALIZATION_V1.md) |
 | 그래프 · 평가 | [Neo4j 적재 기록](docs/LOAD_Neo4j_적재기록_v0.1.md) · [SQL 대 그래프 비교 결과](docs/ontology/BASELINE_SQL_그래프_비교측정결과_v0.1.md) · [베이스라인 측정 방법](docs/BASELINE_SQL_벡터RAG_측정방법_KPI산정근거_v0.1.md) |
