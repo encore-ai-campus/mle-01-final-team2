@@ -200,7 +200,7 @@ uvicorn api.main:app --reload                   # http://localhost:8000/docs
 | 기획 · 화면 | [화면설계서 v3.5](docs/design/MLE_2팀_화면설계서_v3.5_와이어프레임.pdf) · [WBS](docs/design/MLE_2팀_WBS.xlsx) |
 | 온톨로지 | [도메인 온톨로지 설계서](docs/[도메인온톨로지]%20MLE_도메인_온톨로지_설계서_2팀.md) · [온톨로지 필요성](docs/ONTOLOGY_NECESSITY.md) · [제출 파일](docs/submission/ontology/) |
 | 데이터 | [기업마당 명세서](docs/DATA_SPEC_기업마당_v0.1.md) · [EDA · 용어 표준화](docs/DOMAIN_ANALYSIS_EDA_용어표준화_v0.1.md) · [정리층](docs/PREPROCESS_정리층_설계와_결과_v0.1.md) · [값 정규화](docs/NORMALIZE_값정규화층과_첨부_읽기_v0.1.md) · [공통 스키마 v1](docs/SUPPORT_DATA_NORMALIZATION_V1.md) |
-| 그래프 · 평가 | [그래프 RAG 1~3단계 결과](docs/GRAPHRAG_구성가능성과_1-3단계_결과_v0.1.md) · [Neo4j 적재 기록](docs/LOAD_Neo4j_적재기록_v0.1.md) · [SQL 대 그래프 비교 결과](docs/BASELINE_SQL_그래프_비교측정결과_v0.1.md) · [베이스라인 측정 방법](docs/BASELINE_SQL_벡터RAG_측정방법_KPI산정근거_v0.1.md) |
+| 그래프 · 평가 | [Neo4j 적재 기록](docs/LOAD_Neo4j_적재기록_v0.1.md) · [SQL 대 그래프 비교 결과](docs/BASELINE_SQL_그래프_비교측정결과_v0.1.md) · [베이스라인 측정 방법](docs/BASELINE_SQL_벡터RAG_측정방법_KPI산정근거_v0.1.md) |
 | 조건 추출 | [조건 스키마 v1](docs/CONDITION_SCHEMA_V1.md) · [조건 평가기 v1](docs/CONDITION_EVALUATION_PROGRAM_V1.md) · [작업 기록](docs/WORKLOG_20261125_CONDITION_PIPELINE.md) |
 | API | [API 뼈대 안내](api/README.md) |
 | 정답셋 | [라벨링 가이드](docs/GOLDSET_라벨링_가이드_v0.1.md) · [수기 정규화 작업 안내](docs/PILOT_수기정규화_작업안내_v0.1.md) · [첨부 공고문 추출 가이드](docs/GUIDE_첨부_공고문_추출_가이드_v0.1.md) |
