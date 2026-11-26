@@ -1,0 +1,344 @@
+{
+  "collected_on": "2026-11-26",
+  "method": "공공데이터포털 법제처 국가법령정보 공유서비스(lawSearchList.do: target=law, licbyl) + 국가법령정보센터 본문·별표 PDF",
+  "docs": [
+    {
+      "doc_name": "장애인기업활동 촉진법",
+      "doc_id": "280145",
+      "law_id": "010011",
+      "doc_kind": "법률",
+      "effective": "20260603",
+      "org": "중소벤처기업부",
+      "promulgated": "20251202",
+      "articles": 30,
+      "deleted": 1,
+      "appendices": []
+    },
+    {
+      "doc_name": "장애인기업활동 촉진법 시행령",
+      "doc_id": "279877",
+      "law_id": "010055",
+      "doc_kind": "대통령령",
+      "effective": "20251128",
+      "org": "중소벤처기업부",
+      "promulgated": "20251125",
+      "articles": 23,
+      "deleted": 5,
+      "appendices": [
+        {
+          "label": "[별지 제1호서식] 장애인기업(확인, 변경확인)신청서",
+          "api_verified": false,
+          "text_chars": 1342,
+          "error": null
+        },
+        {
+          "label": "[별지 제2호서식] 장애인기업 확인서",
+          "api_verified": false,
+          "text_chars": 460,
+          "error": null
+        }
+      ]
+    },
+    {
+      "doc_name": "중소기업 기술혁신 촉진법",
+      "doc_id": "281987",
+      "law_id": "009145",
+      "doc_kind": "법률",
+      "effective": "20260701",
+      "org": "중소벤처기업부",
+      "promulgated": "20251230",
+      "articles": 52,
+      "deleted": 3,
+      "appendices": []
+    },
+    {
+      "doc_name": "중소기업 기술혁신 촉진법 시행령",
+      "doc_id": "289953",
+      "law_id": "009255",
+      "doc_kind": "대통령령",
+      "effective": "20260922",
+      "org": "중소벤처기업부",
+      "promulgated": "20260922",
+      "articles": 51,
+      "deleted": 10,
+      "appendices": [
+        {
+          "label": "[별표 1] 기술진흥전문기관의 지정취소 및 업무정지 기준(제5조제5항 관련)",
+          "api_verified": true,
+          "text_chars": 751,
+          "error": null
+        },
+        {
+          "label": "[별표 2] 참여제한 사유별 제한기간 및 출연금 환수범위(제20조제2항 및 제21조제1항 관련)",
+          "api_verified": true,
+          "text_chars": 2619,
+          "error": null
+        },
+        {
+          "label": "[별표 3] 제재부가금의 부과기준(제20조의3제1항 관련)",
+          "api_verified": true,
+          "text_chars": 1082,
+          "error": null
+        },
+        {
+          "label": "[별표 4] 과태료의 부과기준(제23조 관련)",
+          "api_verified": true,
+          "text_chars": 434,
+          "error": null
+        }
+      ]
+    },
+    {
+      "doc_name": "청년기본법",
+      "doc_id": "277289",
+      "law_id": "013672",
+      "doc_kind": "법률",
+      "effective": "20251001",
+      "org": "국무조정실",
+      "promulgated": "20251001",
+      "articles": 34,
+      "deleted": 0,
+      "appendices": []
+    },
+    {
+      "doc_name": "청년기본법 시행령",
+      "doc_id": "285455",
+      "law_id": "013822",
+      "doc_kind": "대통령령",
+      "effective": "20260414",
+      "org": "국무조정실",
+      "promulgated": "20260414",
+      "articles": 34,
+      "deleted": 1,
+      "appendices": [
+        {
+          "label": "[별표 ] 지역센터 또는 중앙센터의 지정 취소 기준(제21조의6 관련)",
+          "api_verified": true,
+          "text_chars": 810,
+          "error": null
+        },
+        {
+          "label": "[별지 제1호서식] 청년정책 분석ㆍ평가지원기관 지정신청서",
+          "api_verified": true,
+          "text_chars": 333,
+          "error": null
+        },
+        {
+          "label": "[별지 제2호서식] 청년정책 분석ㆍ평가지원기관 지정서",
+          "api_verified": true,
+          "text_chars": 186,
+          "error": null
+        }
+      ]
+    },
+    {
+      "doc_name": "마을기업 육성 및 지원에 관한 법률",
+      "doc_id": "273375",
+      "law_id": "014910",
+      "doc_kind": "법률",
+      "effective": "20260815",
+      "org": "행정안전부",
+      "promulgated": "20250814",
+      "articles": 22,
+      "deleted": 0,
+      "appendices": []
+    },
+    {
+      "doc_name": "마을기업 육성 및 지원에 관한 법률 시행령",
+      "doc_id": "288671",
+      "law_id": "015187",
+      "doc_kind": "대통령령",
+      "effective": "20260815",
+      "org": "행정안전부",
+      "promulgated": "20260811",
+      "articles": 25,
+      "deleted": 0,
+      "appendices": [
+        {
+          "label": "[별표 ] 과태료의 부과기준(제25조 관련)",
+          "api_verified": true,
+          "text_chars": 700,
+          "error": null
+        }
+      ]
+    },
+    {
+      "doc_name": "수산업ㆍ어촌 발전 기본법",
+      "doc_id": "273689",
+      "law_id": "012311",
+      "doc_kind": "법률",
+      "effective": "20260317",
+      "org": "해양수산부",
+      "promulgated": "20250916",
+      "articles": 54,
+      "deleted": 0,
+      "appendices": []
+    },
+    {
+      "doc_name": "수산업ㆍ어촌 발전 기본법 시행령",
+      "doc_id": "288665",
+      "law_id": "012409",
+      "doc_kind": "대통령령",
+      "effective": "20260811",
+      "org": "해양수산부",
+      "promulgated": "20260811",
+      "articles": 34,
+      "deleted": 0,
+      "appendices": []
+    },
+    {
+      "doc_name": "농업ㆍ농촌 및 식품산업 기본법",
+      "doc_id": "281879",
+      "law_id": "001979",
+      "doc_kind": "법률",
+      "effective": "20260701",
+      "org": "농림축산식품부",
+      "promulgated": "20251230",
+      "articles": 81,
+      "deleted": 0,
+      "appendices": []
+    },
+    {
+      "doc_name": "농업ㆍ농촌 및 식품산업 기본법 시행령",
+      "doc_id": "287341",
+      "law_id": "003241",
+      "doc_kind": "대통령령",
+      "effective": "20260701",
+      "org": "농림축산식품부",
+      "promulgated": "20260623",
+      "articles": 35,
+      "deleted": 0,
+      "appendices": [
+        {
+          "label": "[별표 1] 전담기관의 지정취소 및 업무정지 기준(제16조의5제1항 관련)",
+          "api_verified": true,
+          "text_chars": 1076,
+          "error": null
+        },
+        {
+          "label": "[별표 2] 과징금의 부과기준(제16조의6 관련)",
+          "api_verified": true,
+          "text_chars": 858,
+          "error": null
+        },
+        {
+          "label": "[별표 3] 관계 기관ㆍ단체의 장에게 제공을 요청할 수 있는 정보의 범위(제20조의2제1항 관련)",
+          "api_verified": true,
+          "text_chars": 6047,
+          "error": null
+        }
+      ]
+    },
+    {
+      "doc_name": "국민기초생활 보장법",
+      "doc_id": "276653",
+      "law_id": "001973",
+      "doc_kind": "법률",
+      "effective": "20251001",
+      "org": "보건복지부",
+      "promulgated": "20251001",
+      "articles": 85,
+      "deleted": 2,
+      "appendices": []
+    },
+    {
+      "doc_name": "국민기초생활 보장법 시행령",
+      "doc_id": "281585",
+      "law_id": "002820",
+      "doc_kind": "대통령령",
+      "effective": "20260102",
+      "org": "보건복지부",
+      "promulgated": "20251230",
+      "articles": 67,
+      "deleted": 5,
+      "appendices": [
+        {
+          "label": "[별표 ] 과태료의 부과기준(제43조 관련)",
+          "api_verified": true,
+          "text_chars": 1343,
+          "error": null
+        }
+      ]
+    },
+    {
+      "doc_name": "연구개발특구의 육성에 관한 특별법",
+      "doc_id": "283353",
+      "law_id": "009878",
+      "doc_kind": "법률",
+      "effective": "20260820",
+      "org": "과학기술정보통신부",
+      "promulgated": "20260219",
+      "articles": 110,
+      "deleted": 1,
+      "appendices": []
+    },
+    {
+      "doc_name": "연구개발특구의 육성에 관한 특별법 시행령",
+      "doc_id": "288785",
+      "law_id": "010024",
+      "doc_kind": "대통령령",
+      "effective": "20260820",
+      "org": "과학기술정보통신부",
+      "promulgated": "20260818",
+      "articles": 94,
+      "deleted": 5,
+      "appendices": [
+        {
+          "label": "[별표 1] 연구개발특구 내 토지용도구역에서 건축이 허용되는 건축물의 종류(제30조제1항 본문 관련)",
+          "api_verified": true,
+          "text_chars": 4813,
+          "error": null
+        },
+        {
+          "label": "[별표 8] 교육ㆍ연구 및 사업화구역에서의 양도가격 산정 시 취득가격 및 취득일(제34조제3항 관련)",
+          "api_verified": true,
+          "text_chars": 532,
+          "error": null
+        },
+        {
+          "label": "[별표 9] 과태료의 부과기준(제44조 관련)",
+          "api_verified": true,
+          "text_chars": 2677,
+          "error": null
+        }
+      ]
+    },
+    {
+      "doc_name": "중소기업협동조합법",
+      "doc_id": "280149",
+      "law_id": "001482",
+      "doc_kind": "법률",
+      "effective": "20260603",
+      "org": "중소벤처기업부",
+      "promulgated": "20251202",
+      "articles": 156,
+      "deleted": 0,
+      "appendices": []
+    },
+    {
+      "doc_name": "중소기업협동조합법 시행령",
+      "doc_id": "286637",
+      "law_id": "004977",
+      "doc_kind": "대통령령",
+      "effective": "20260603",
+      "org": "중소벤처기업부",
+      "promulgated": "20260602",
+      "articles": 52,
+      "deleted": 1,
+      "appendices": [
+        {
+          "label": "[별표 1] 주무부장관이 관장하는 전국조합 및 업종연합회(제42조제1항 관련)",
+          "api_verified": true,
+          "text_chars": 561,
+          "error": null
+        },
+        {
+          "label": "[별표 2] 과태료의 부과기준(제43조 관련)",
+          "api_verified": true,
+          "text_chars": 1657,
+          "error": null
+        }
+      ]
+    }
+  ]
+}

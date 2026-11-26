@@ -1,0 +1,206 @@
+{
+  "collected_on": "2026-11-26",
+  "method": "law.go.kr 공개 본문 페이지(lsInfoR.do)",
+  "docs": [
+    {
+      "doc_name": "장애인기업활동 촉진법",
+      "doc_kind": "법률",
+      "effective": "20260603",
+      "org": "중소벤처기업부",
+      "articles": 30,
+      "deleted": 1,
+      "law_level_citing_notices": 6,
+      "article_level_citations": 1,
+      "cited_articles_not_found": []
+    },
+    {
+      "doc_name": "장애인기업활동 촉진법 시행령",
+      "doc_kind": "대통령령",
+      "effective": "20251128",
+      "org": "중소벤처기업부",
+      "articles": 23,
+      "deleted": 5,
+      "law_level_citing_notices": 0,
+      "article_level_citations": 1,
+      "cited_articles_not_found": []
+    },
+    {
+      "doc_name": "중소기업 기술혁신 촉진법",
+      "doc_kind": "법률",
+      "effective": "20260701",
+      "org": "중소벤처기업부",
+      "articles": 52,
+      "deleted": 3,
+      "law_level_citing_notices": 12,
+      "article_level_citations": 13,
+      "cited_articles_not_found": [
+        "42"
+      ]
+    },
+    {
+      "doc_name": "중소기업 기술혁신 촉진법 시행령",
+      "doc_kind": "대통령령",
+      "effective": "20260922",
+      "org": "중소벤처기업부",
+      "articles": 51,
+      "deleted": 10,
+      "law_level_citing_notices": 1,
+      "article_level_citations": 0,
+      "cited_articles_not_found": []
+    },
+    {
+      "doc_name": "청년기본법",
+      "doc_kind": "법률",
+      "effective": "20251001",
+      "org": "국무조정실",
+      "articles": 34,
+      "deleted": 0,
+      "law_level_citing_notices": 2,
+      "article_level_citations": 2,
+      "cited_articles_not_found": []
+    },
+    {
+      "doc_name": "청년기본법 시행령",
+      "doc_kind": "대통령령",
+      "effective": "20260414",
+      "org": "국무조정실",
+      "articles": 34,
+      "deleted": 1,
+      "law_level_citing_notices": 0,
+      "article_level_citations": 0,
+      "cited_articles_not_found": []
+    },
+    {
+      "doc_name": "마을기업 육성 및 지원에 관한 법률",
+      "doc_kind": "법률",
+      "effective": "20260815",
+      "org": "행정안전부",
+      "articles": 22,
+      "deleted": 0,
+      "law_level_citing_notices": 9,
+      "article_level_citations": 0,
+      "cited_articles_not_found": []
+    },
+    {
+      "doc_name": "마을기업 육성 및 지원에 관한 법률 시행령",
+      "doc_kind": "대통령령",
+      "effective": "20260815",
+      "org": "행정안전부",
+      "articles": 25,
+      "deleted": 0,
+      "law_level_citing_notices": 0,
+      "article_level_citations": 0,
+      "cited_articles_not_found": []
+    },
+    {
+      "doc_name": "수산업ㆍ어촌 발전 기본법",
+      "doc_kind": "법률",
+      "effective": "20260317",
+      "org": "해양수산부",
+      "articles": 54,
+      "deleted": 0,
+      "law_level_citing_notices": 0,
+      "article_level_citations": 11,
+      "cited_articles_not_found": []
+    },
+    {
+      "doc_name": "수산업ㆍ어촌 발전 기본법 시행령",
+      "doc_kind": "대통령령",
+      "effective": "20260811",
+      "org": "해양수산부",
+      "articles": 34,
+      "deleted": 0,
+      "law_level_citing_notices": 1,
+      "article_level_citations": 1,
+      "cited_articles_not_found": []
+    },
+    {
+      "doc_name": "농업ㆍ농촌 및 식품산업 기본법",
+      "doc_kind": "법률",
+      "effective": "20260701",
+      "org": "농림축산식품부",
+      "articles": 81,
+      "deleted": 0,
+      "law_level_citing_notices": 1,
+      "article_level_citations": 3,
+      "cited_articles_not_found": []
+    },
+    {
+      "doc_name": "농업ㆍ농촌 및 식품산업 기본법 시행령",
+      "doc_kind": "대통령령",
+      "effective": "20260701",
+      "org": "농림축산식품부",
+      "articles": 35,
+      "deleted": 0,
+      "law_level_citing_notices": 1,
+      "article_level_citations": 1,
+      "cited_articles_not_found": []
+    },
+    {
+      "doc_name": "국민기초생활 보장법",
+      "doc_kind": "법률",
+      "effective": "20251001",
+      "org": "보건복지부",
+      "articles": 85,
+      "deleted": 2,
+      "law_level_citing_notices": 1,
+      "article_level_citations": 5,
+      "cited_articles_not_found": []
+    },
+    {
+      "doc_name": "국민기초생활 보장법 시행령",
+      "doc_kind": "대통령령",
+      "effective": "20260102",
+      "org": "보건복지부",
+      "articles": 67,
+      "deleted": 5,
+      "law_level_citing_notices": 1,
+      "article_level_citations": 0,
+      "cited_articles_not_found": []
+    },
+    {
+      "doc_name": "연구개발특구의 육성에 관한 특별법",
+      "doc_kind": "법률",
+      "effective": "20260820",
+      "org": "과학기술정보통신부",
+      "articles": 110,
+      "deleted": 1,
+      "law_level_citing_notices": 2,
+      "article_level_citations": 2,
+      "cited_articles_not_found": []
+    },
+    {
+      "doc_name": "연구개발특구의 육성에 관한 특별법 시행령",
+      "doc_kind": "대통령령",
+      "effective": "20260820",
+      "org": "과학기술정보통신부",
+      "articles": 94,
+      "deleted": 5,
+      "law_level_citing_notices": 0,
+      "article_level_citations": 0,
+      "cited_articles_not_found": []
+    },
+    {
+      "doc_name": "중소기업협동조합법",
+      "doc_kind": "법률",
+      "effective": "20260603",
+      "org": "중소벤처기업부",
+      "articles": 156,
+      "deleted": 0,
+      "law_level_citing_notices": 13,
+      "article_level_citations": 9,
+      "cited_articles_not_found": []
+    },
+    {
+      "doc_name": "중소기업협동조합법 시행령",
+      "doc_kind": "대통령령",
+      "effective": "20260603",
+      "org": "중소벤처기업부",
+      "articles": 52,
+      "deleted": 1,
+      "law_level_citing_notices": 0,
+      "article_level_citations": 0,
+      "cited_articles_not_found": []
+    }
+  ]
+}

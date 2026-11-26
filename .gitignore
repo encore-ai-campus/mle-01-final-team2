@@ -21,3 +21,6 @@ data/goldset/pilot/packets/
 
 # 팀 내부 공유용 묶음(원문 포함, git 제외)
 share/
+
+# 법령 별표 PDF 원본(로컬 전용)
+data/지원사업_법령/_별표원본/
