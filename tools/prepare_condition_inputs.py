@@ -82,9 +82,10 @@ def candidate_ref(notice_id, fact, occurrence=0):
     return canonical, f'{notice_id}:FACT:{hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:20]}:{occurrence}'
 
 
-def run(out=OUT, *, snapshot=SNAP, facts_path=FACTS, ks_path=KS, seed=SEED):
+def run(out=OUT, *, snapshot=SNAP, facts_path=FACTS, ks_path=KS, seed=SEED, facts_label=None):
     out, snapshot = Path(out), Path(snapshot)
     facts_path, ks_path = Path(facts_path), Path(ks_path)
+    facts_label = str(facts_label if facts_label is not None else facts_path)
     paths = {'notices': snapshot/'notices.jsonl', 'chunks': snapshot/'chunks.jsonl',
              'facts': facts_path, 'kstartup': ks_path}
     for path in paths.values():
@@ -189,7 +190,7 @@ def run(out=OUT, *, snapshot=SNAP, facts_path=FACTS, ks_path=KS, seed=SEED):
                     local_refs.append(ref)
                     emit(stream, {'notice_id': nid, 'source_system': src, 'candidate_ref': ref,
                                   'legacy_candidate_ref': f'{nid}:{fact.get("attribute")}:{fact.get("char_start")}',
-                                  'source_file': str(facts_path), 'source_field': fact.get('source_field'),
+                                  'source_file': facts_label, 'source_field': fact.get('source_field'),
                                   'source_position': fact.get('char_start'), 'candidate_ordinal': occurrence,
                                   'attribute': fact.get('attribute'), 'kind': fact.get('kind'),
                                   'normalized_value': fact.get('value'), 'evidence_text': ev, 'review_status': 'UNREVIEWED',

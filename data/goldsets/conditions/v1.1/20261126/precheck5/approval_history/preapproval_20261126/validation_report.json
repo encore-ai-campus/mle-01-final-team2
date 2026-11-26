@@ -1,0 +1,89 @@
+{
+  "schema_and_reference_validation": {
+    "split": "DEVELOPMENT",
+    "condition_review_rows": 5,
+    "logic_review_rows": 5,
+    "schema_version": "1.1",
+    "evaluation_version": "1.1",
+    "reviewed_condition_records": 0,
+    "reviewed_logic_records": 0,
+    "unreviewed_records": 5,
+    "evaluation_candidate_data_present": false,
+    "all_rows_schema_valid": true,
+    "human_review_claimed_by_tool": false
+  },
+  "evaluation_preflight": {
+    "split": "DEVELOPMENT",
+    "schema_version": "1.1",
+    "evaluation_version": "1.1",
+    "score_status": "BLOCKED",
+    "blocking_reasons": [
+      {
+        "code": "V11_SEMANTIC_EVALUATION_NOT_IMPLEMENTED"
+      },
+      {
+        "code": "UNREVIEWED_GOLD",
+        "count": 5
+      }
+    ],
+    "reviewed_gold_conditions": 0,
+    "reviewed_gold_logic_notices": 0,
+    "review_packet_validation": {
+      "split": "DEVELOPMENT",
+      "condition_review_rows": 5,
+      "logic_review_rows": 5,
+      "schema_version": "1.1",
+      "evaluation_version": "1.1",
+      "reviewed_condition_records": 0,
+      "reviewed_logic_records": 0,
+      "unreviewed_records": 5,
+      "evaluation_candidate_data_present": false,
+      "all_rows_schema_valid": true,
+      "human_review_claimed_by_tool": false
+    }
+  },
+  "v10_files_written": 0,
+  "evaluation_gold_written": 0,
+  "draft_comparison": {
+    "KSTARTUP:177469": {
+      "v10_conditions": 3,
+      "v11_conditions": 3,
+      "v11_sections": 1
+    },
+    "KSTARTUP:176813": {
+      "v10_conditions": 6,
+      "v11_conditions": 6,
+      "v11_sections": 3
+    },
+    "BIZINFO:PBLN_000000000118927": {
+      "v10_conditions": 3,
+      "v11_conditions": 3,
+      "v11_sections": 1
+    },
+    "KSTARTUP:178507": {
+      "v10_conditions": 10,
+      "v11_conditions": 10,
+      "v11_sections": 5
+    },
+    "BIZINFO:PBLN_000000000118182": {
+      "v10_conditions": 11,
+      "v11_conditions": 11,
+      "v11_sections": 1
+    }
+  },
+  "manual_approval": false,
+  "update_note": "2-4B: only KSTARTUP:178507 temporal/phase semantics updated; other four drafts retained.",
+  "verified_count": 0,
+  "stage_2_4b": {
+    "updated_notice": "KSTARTUP:178507",
+    "other_four_notices_rewritten": false,
+    "condition_rows_csv": 41,
+    "logic_section_rows_csv": 11,
+    "v11_tests": 8,
+    "v10_review_and_evaluation_tests": 18,
+    "tests_failed": 0,
+    "root_reference_errors": 0,
+    "evidence_span_errors": 0,
+    "score_status": "BLOCKED"
+  }
+}

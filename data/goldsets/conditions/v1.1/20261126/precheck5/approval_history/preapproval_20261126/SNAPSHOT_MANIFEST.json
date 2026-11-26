@@ -1,0 +1,45 @@
+{
+  "source": "data\\goldsets\\conditions\\v1.1\\20261126\\precheck5\\development",
+  "files": [
+    {
+      "file": "condition_review.csv",
+      "sha256": "b75edc3db9246f0b608368c95190cc860a91664891d881cf64d8c3f267125907",
+      "bytes": 17414
+    },
+    {
+      "file": "condition_review.jsonl",
+      "sha256": "e601e0e2526b622a9d989d3ad4dddc6048383c3083e4ff66e5656ea0d82dcb66",
+      "bytes": 65143
+    },
+    {
+      "file": "HUMAN_REVIEW_PRECHECK5_V11.md",
+      "sha256": "964330d6a177a731a3520dd2b6696264c34ed7e0ee6fba84e46407c54ed35e40",
+      "bytes": 47924
+    },
+    {
+      "file": "logic_review.csv",
+      "sha256": "2c2815a913ca7c6580adf985bf58876b340feb20387dd36243acb54e76d12408",
+      "bytes": 30273
+    },
+    {
+      "file": "logic_review.jsonl",
+      "sha256": "b54919ded1726aad10a594fd2673148d3dc10a68e499d7ecf3ed3b15e342c757",
+      "bytes": 101514
+    },
+    {
+      "file": "SEMANTIC_CASE_SPEC_V11.md",
+      "sha256": "3d49d67e0132015e0a409cd4b2d77b1d19c400f7329bc7023e783afa87d93ee6",
+      "bytes": 2472
+    },
+    {
+      "file": "VALIDATION_NOTES.md",
+      "sha256": "d6499719739be27cdbf3bfdf798b86aca0b33cfb28edc80e4f99b11ff802c83d",
+      "bytes": 3297
+    },
+    {
+      "file": "validation_report.json",
+      "sha256": "16280038e7bc5ffc392f175ff3ca5d9fd0c465df7798dc1f7a505bd60ec3aa8e",
+      "bytes": 2527
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "experiment_version": "rule-improved-2-5c-v1",
+  "data_version": "condition-inputs-v1-20261125",
+  "goldset_version": "conditions-development-v1.1-20261126-final30",
+  "evaluation_policy": "1.1.0",
+  "development_generation_notice_count": 80,
+  "scored_notice_count": 30,
+  "modes": {
+    "A": "Numeric and quantitative extraction; comparison and unit normalization",
+    "B": "Categorical extraction with applicant/scope guards",
+    "C": "Context filtering for region/business type; type-marker clauses go to review queue only",
+    "D": "A+B plus exact source-span round-trip validation",
+    "E": "Integrated A+B+C+D"
+  },
+  "strict_match_policy_changed": false,
+  "legacy_augmentation_enabled": false,
+  "logic_transformer_modified": false,
+  "external_llm_calls": 0,
+  "evaluation_split_used": false,
+  "gold_values_used_during_generation": false,
+  "decision_eligible": false,
+  "review_status": "UNREVIEWED"
+}

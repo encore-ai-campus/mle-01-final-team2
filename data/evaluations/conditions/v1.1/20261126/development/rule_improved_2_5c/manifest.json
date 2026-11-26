@@ -1,0 +1,533 @@
+{
+    "status":  "COMPLETED_EXPERIMENTAL_NOT_ADOPTED",
+    "experiment":  "2-5C-2C/D General Rules and Normalization",
+    "created_date":  "2026-11-26",
+    "data_version":  "conditions-v1-20261125",
+    "goldset_version":  "conditions-development-v1.1-20261126-final30",
+    "evaluation_policy":  "1.1.0",
+    "generated_development_notices":  80,
+    "scored_gold_notices":  30,
+    "unscored_development_notices":  50,
+    "evaluation_split_used":  false,
+    "data_v2_used":  false,
+    "gold_values_used_during_extraction":  false,
+    "external_llm_calls":  0,
+    "legacy_augmentation_default_enabled":  false,
+    "baseline_extractor_modified":  false,
+    "logic_transformer_modified":  false,
+    "thresholds":  {
+                       "f1":  0.55,
+                       "recall":  0.5,
+                       "precision":  0.6,
+                       "max_zero_prediction_notices":  2
+                   },
+    "thresholds_met":  false,
+    "baseline_failure_analysis_known_mismatch":  {
+                                                     "manifest_expected_sha256":  "f4c8594943c1e280d91ea607467a2d3aca55f68aed281aa720ed6160a0156e6e",
+                                                     "observed_sha256":  "fcb0651a69d9fd73c9e2e31af0dd7e89688acfe2900211b83cafc62b1f8d2452",
+                                                     "used_for_scores":  false
+                                                 },
+    "test_results":  {
+                         "new_rule_synthetic_run":  25,
+                         "new_rule_synthetic_passed":  25,
+                         "full_suite_run":  193,
+                         "passed":  165,
+                         "skipped":  28,
+                         "failed":  0,
+                         "new_agent_skips":  23,
+                         "existing_api_skips":  5
+                     },
+    "determinism":  {
+                        "independent_prediction_regeneration":  true,
+                        "A":  true,
+                        "B":  true,
+                        "C":  true,
+                        "D":  true,
+                        "E":  true,
+                        "repeated_evaluation_summary_sha256":  "02d0046fa976f298e7b1f6f5d833d7a9f16dc92b06043f2705e6d1d66cd23da0"
+                    },
+    "inputs":  {
+                   "data/evaluations/conditions/v1.1/20261126/development/baseline_v1/failure_analysis.csv":  {
+                                                                                                                  "path":  "data/evaluations/conditions/v1.1/20261126/development/baseline_v1/failure_analysis.csv",
+                                                                                                                  "sha256":  "fcb0651a69d9fd73c9e2e31af0dd7e89688acfe2900211b83cafc62b1f8d2452",
+                                                                                                                  "bytes":  112657
+                                                                                                              },
+                   "tests/test_condition_legacy_augmented.py":  {
+                                                                    "path":  "tests/test_condition_legacy_augmented.py",
+                                                                    "sha256":  "f5e45fbc75bd80c09c7b6541928b5515478db4f0c9b19eb671cb77c452096e23",
+                                                                    "bytes":  8344
+                                                                },
+                   "data/normalized/20261124/notices_normalized.jsonl":  {
+                                                                             "path":  "data/normalized/20261124/notices_normalized.jsonl",
+                                                                             "sha256":  "31452b47a592744245b2953ed4cf544567f771dc3f0868e54ae4215da59886e2",
+                                                                             "bytes":  13771546
+                                                                         },
+                   "data/condition_inputs/v1/20261125/extraction_inputs.jsonl":  {
+                                                                                     "path":  "data/condition_inputs/v1/20261125/extraction_inputs.jsonl",
+                                                                                     "sha256":  "14e4f7dd74d71046555998ebdcee93e39ed62f5725cfb9f0dc7091f0328023d1",
+                                                                                     "bytes":  7305807
+                                                                                 },
+                   "data/condition_inputs/v1/20261125/candidate_refs.jsonl":  {
+                                                                                  "path":  "data/condition_inputs/v1/20261125/candidate_refs.jsonl",
+                                                                                  "sha256":  "5765dad05de72b8a44875353495e12224704da3f5b0067b955e1fb5e4b5c06e3",
+                                                                                  "bytes":  11795783
+                                                                              },
+                   "data/evaluations/conditions/v1.1/20261126/development/baseline_v1/evaluation_summary.json":  {
+                                                                                                                     "path":  "data/evaluations/conditions/v1.1/20261126/development/baseline_v1/evaluation_summary.json",
+                                                                                                                     "sha256":  "4d194c7267374c7e6416a9a9e02eaf3603724474bc2ebcd2da9adf0154848fb2",
+                                                                                                                     "bytes":  217709
+                                                                                                                 },
+                   "data/goldsets/conditions/v1.1/20261126/final30/development/manifest.json":  {
+                                                                                                    "path":  "data/goldsets/conditions/v1.1/20261126/final30/development/manifest.json",
+                                                                                                    "sha256":  "9bdaa9597615885209b353417a33b34d5c976544831a6bae8ced4295542bf725",
+                                                                                                    "bytes":  8773
+                                                                                                },
+                   "data/condition_inputs/v1/20261125/logic/notice_condition_sets.jsonl":  {
+                                                                                               "path":  "data/condition_inputs/v1/20261125/logic/notice_condition_sets.jsonl",
+                                                                                               "sha256":  "bf7b995b880c048f844a725920909d0a26e7cf362f2f0947c901844ba0e889dc",
+                                                                                               "bytes":  385404
+                                                                                           },
+                   "schemas/conditions/condition-v1.schema.json":  {
+                                                                       "path":  "schemas/conditions/condition-v1.schema.json",
+                                                                       "sha256":  "5afdfc89682775c30786c627e481cfc5b1e17962f120c1af0e820c7e5f38a75d",
+                                                                       "bytes":  271
+                                                                   },
+                   "tools/extract_condition_candidates.py":  {
+                                                                 "path":  "tools/extract_condition_candidates.py",
+                                                                 "sha256":  "13cb692eb495cc440e94102bb9e6a7377657c75815e824300ba2a03457f17bef",
+                                                                 "bytes":  8772
+                                                             },
+                   "data/evaluations/conditions/v1.1/20261126/development/baseline_v1/manifest.json":  {
+                                                                                                           "path":  "data/evaluations/conditions/v1.1/20261126/development/baseline_v1/manifest.json",
+                                                                                                           "sha256":  "369e1bc29bdf01f700a6b49a5760056086ab15f263b1df4682acc648019fb94b",
+                                                                                                           "bytes":  5319
+                                                                                                       },
+                   "tools/evaluate_condition_rule_experiments.py":  {
+                                                                        "path":  "tools/evaluate_condition_rule_experiments.py",
+                                                                        "sha256":  "ec274c49b9108b88995fca378307db8b5501579d1ddb785fa1c43c5c2ad46f69",
+                                                                        "bytes":  11211
+                                                                    },
+                   "data/condition_inputs/v1/20261125/extracted/improved/development_conditions.jsonl":  {
+                                                                                                             "path":  "data/condition_inputs/v1/20261125/extracted/improved/development_conditions.jsonl",
+                                                                                                             "sha256":  "5585302b26de77d324cf93ec5e05c8b89459af9149d81c0306af09f8225399a0",
+                                                                                                             "bytes":  99794
+                                                                                                         },
+                   "tools/evaluate_condition_pipeline_v11.py":  {
+                                                                    "path":  "tools/evaluate_condition_pipeline_v11.py",
+                                                                    "sha256":  "7e41d2fb1393d4a99e89f16b7f08b128e9c8e3e6c00cc57f7d4c0ebbb5d0da07",
+                                                                    "bytes":  23910
+                                                                },
+                   "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/evaluation_summary.json":  {
+                                                                                                                                 "path":  "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/evaluation_summary.json",
+                                                                                                                                 "sha256":  "66ddfc907e5a8d7b17f5bc6007bf673015422d68c464cfb2a85386c13830e197",
+                                                                                                                                 "bytes":  218785
+                                                                                                                             },
+                   "schemas/conditions/condition-common-v1.schema.json":  {
+                                                                              "path":  "schemas/conditions/condition-common-v1.schema.json",
+                                                                              "sha256":  "3353877173e3534539347254f1440d6508f32eb111aa4a8b0fe99d7e93f2bbbc",
+                                                                              "bytes":  19009
+                                                                          },
+                   "tools/extract_condition_candidates_rules_v2.py":  {
+                                                                          "path":  "tools/extract_condition_candidates_rules_v2.py",
+                                                                          "sha256":  "24ff8fb35b3023903bf39aa9da0cb9dcfccd2a639bf4a973b4dd8b9b55e470db",
+                                                                          "bytes":  19765
+                                                                      },
+                   "data/condition_inputs/v1/20261125/representative_samples.jsonl":  {
+                                                                                          "path":  "data/condition_inputs/v1/20261125/representative_samples.jsonl",
+                                                                                          "sha256":  "a2aefa309b93bd1ea7070ac1c46412d03b0d140c0ce0997de6c10b1dcffa8b22",
+                                                                                          "bytes":  44757
+                                                                                      },
+                   "tests/test_condition_rules_v2.py":  {
+                                                            "path":  "tests/test_condition_rules_v2.py",
+                                                            "sha256":  "68aae229d5b895e2666aa5c22f88dc885bad3b0598acb8352c9a5a920c445030",
+                                                            "bytes":  8771
+                                                        },
+                   "tools/build_condition_logic.py":  {
+                                                          "path":  "tools/build_condition_logic.py",
+                                                          "sha256":  "65d2e4f54ab77627c26a4443e3450a0cca0f178d66dc6c1e2e8b5291e7f30fd2",
+                                                          "bytes":  18381
+                                                      },
+                   "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/manifest.json":  {
+                                                                                                                       "path":  "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/manifest.json",
+                                                                                                                       "sha256":  "ccbd5905601d02826514234189baa4643449c9534315115767f092b081a49077",
+                                                                                                                       "bytes":  38524
+                                                                                                                   },
+                   "data/goldsets/conditions/v1.1/20261126/final30/development/reviewed_logic_gold.jsonl":  {
+                                                                                                                "path":  "data/goldsets/conditions/v1.1/20261126/final30/development/reviewed_logic_gold.jsonl",
+                                                                                                                "sha256":  "e74adee73086cf1304ecee9d06f988c0f6af86c4149a9c7eb439e6a9509e08e3",
+                                                                                                                "bytes":  139694
+                                                                                                            },
+                   "configs/condition_evaluation_v11_development.json":  {
+                                                                             "path":  "configs/condition_evaluation_v11_development.json",
+                                                                             "sha256":  "da8270fb7a32dc1d03b9ea6375532d8405009bce5505166a125df58868bc7b05",
+                                                                             "bytes":  923
+                                                                         },
+                   "data/goldsets/conditions/v1.1/20261126/final30/development/reviewed_condition_gold.jsonl":  {
+                                                                                                                    "path":  "data/goldsets/conditions/v1.1/20261126/final30/development/reviewed_condition_gold.jsonl",
+                                                                                                                    "sha256":  "8450df33455daced4c5e95ca2a51ca262e88c53476c7a8a18e38b3164a52ee76",
+                                                                                                                    "bytes":  189102
+                                                                                                                }
+               },
+    "outputs":  {
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_C/logic/condition_group_map.jsonl":  {
+                                                                                                                                                  "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_C/logic/condition_group_map.jsonl",
+                                                                                                                                                  "sha256":  "997a11075e28ba6bfedcea0f1fb2602bb4ef44011b073651e6f1d380e04a1114",
+                                                                                                                                                  "bytes":  22639
+                                                                                                                                              },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_C/evaluation_summary.json":  {
+                                                                                                                                          "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_C/evaluation_summary.json",
+                                                                                                                                          "sha256":  "f6034b4bc2b8ef250005f32a9326b0d373c6c18f79845965b82272c3ac06a5e2",
+                                                                                                                                          "bytes":  215378
+                                                                                                                                      },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/logic/relation_review.jsonl":  {
+                                                                                                                                              "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/logic/relation_review.jsonl",
+                                                                                                                                              "sha256":  "c063535892314eb471cc7538162504dd8cf3c1ba9512291979a7a070f792529a",
+                                                                                                                                              "bytes":  25650
+                                                                                                                                          },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_C/logic/human_logic_review.csv":  {
+                                                                                                                                               "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_C/logic/human_logic_review.csv",
+                                                                                                                                               "sha256":  "90862bfa1b0987e041c9453aa365de160516ebceb6c310cebb5d68eabfd8b169",
+                                                                                                                                               "bytes":  58830
+                                                                                                                                           },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_B/logic/unresolved_logic_review.jsonl":  {
+                                                                                                                                                      "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_B/logic/unresolved_logic_review.jsonl",
+                                                                                                                                                      "sha256":  "92ab55f324d86a01b8efebbadd673dcbf2fc244352b7aee3a54f71fb22f77bfe",
+                                                                                                                                                      "bytes":  23525
+                                                                                                                                                  },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/repeat_regeneration/experiment_A/development_conditions.jsonl":  {
+                                                                                                                                                                   "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/repeat_regeneration/experiment_A/development_conditions.jsonl",
+                                                                                                                                                                   "sha256":  "28c921eab2c1851178fb85f4f502047d7e9b070d7e59bc2d7686dfde8d78243d",
+                                                                                                                                                                   "bytes":  112994
+                                                                                                                                                               },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/repeat_regeneration/experiment_B/development_conditions.jsonl":  {
+                                                                                                                                                                   "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/repeat_regeneration/experiment_B/development_conditions.jsonl",
+                                                                                                                                                                   "sha256":  "c3036d8d7f25309336cbee307b6807d1e6ba712fb117ccfa3f3b585ee067239c",
+                                                                                                                                                                   "bytes":  115957
+                                                                                                                                                               },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/development_conditions.jsonl":  {
+                                                                                                                                               "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/development_conditions.jsonl",
+                                                                                                                                               "sha256":  "b8a304f8a081d255d9fe2a9fb43fbbd98593fec52e81b8678886abd85022295a",
+                                                                                                                                               "bytes":  106913
+                                                                                                                                           },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/remaining_failure_analysis.csv":  {
+                                                                                                                                    "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/remaining_failure_analysis.csv",
+                                                                                                                                    "sha256":  "350697b451bfe5e8657ff2bba3d8607e3715c5478df2c2d81def4bcbcdb708e2",
+                                                                                                                                    "bytes":  210442
+                                                                                                                                },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/repeat_regeneration/experiment_E/development_conditions.jsonl":  {
+                                                                                                                                                                   "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/repeat_regeneration/experiment_E/development_conditions.jsonl",
+                                                                                                                                                                   "sha256":  "b8a304f8a081d255d9fe2a9fb43fbbd98593fec52e81b8678886abd85022295a",
+                                                                                                                                                                   "bytes":  106913
+                                                                                                                                                               },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/logic/conflict_review.jsonl":  {
+                                                                                                                                              "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/logic/conflict_review.jsonl",
+                                                                                                                                              "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                                                                                                                                              "bytes":  0
+                                                                                                                                          },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/generation_summary.json":  {
+                                                                                                                             "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/generation_summary.json",
+                                                                                                                             "sha256":  "291f098c170d988fdb95287a183ba24332bb5c126887d0826abaa6e06bbdaad2",
+                                                                                                                             "bytes":  4023
+                                                                                                                         },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_comparison.csv":  {
+                                                                                                                               "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_comparison.csv",
+                                                                                                                               "sha256":  "f89c2f984178e5b209c7b9ed14c1609b01416b4d69c35c3cbe48f01f46e521c5",
+                                                                                                                               "bytes":  1607
+                                                                                                                           },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_B/logic/human_logic_review.jsonl":  {
+                                                                                                                                                 "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_B/logic/human_logic_review.jsonl",
+                                                                                                                                                 "sha256":  "6eff1aae93e082f7baacd38a75fdc241ef12b611900a2287acc298dbe9d18f37",
+                                                                                                                                                 "bytes":  90526
+                                                                                                                                             },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_B/logic/qualifier_candidates.jsonl":  {
+                                                                                                                                                   "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_B/logic/qualifier_candidates.jsonl",
+                                                                                                                                                   "sha256":  "6076bd769c9eb856edff1e65ea4fab3596207a675761542078a4edfd94abb1db",
+                                                                                                                                                   "bytes":  2611
+                                                                                                                                               },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_B/evaluation_summary.json":  {
+                                                                                                                                          "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_B/evaluation_summary.json",
+                                                                                                                                          "sha256":  "83bd5a880e0ea4b999f6796bb757f0967f65ae6ff812335ebcec84c7b7245669",
+                                                                                                                                          "bytes":  217854
+                                                                                                                                      },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_A/logic/run_report.json":  {
+                                                                                                                                        "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_A/logic/run_report.json",
+                                                                                                                                        "sha256":  "05617a7d578a027fcfb1b938a42fe23069b54e9d4c6b1d040d5f958750374f9d",
+                                                                                                                                        "bytes":  870
+                                                                                                                                    },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/repeat_regeneration/experiment_C/condition_type_review_candidates.jsonl":  {
+                                                                                                                                                                             "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/repeat_regeneration/experiment_C/condition_type_review_candidates.jsonl",
+                                                                                                                                                                             "sha256":  "c4c1fab604d1d1eab9b7d043017868036e63c5e4c5ce34106595e1eae3a341ce",
+                                                                                                                                                                             "bytes":  13359
+                                                                                                                                                                         },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_A/logic/unresolved_logic_review.jsonl":  {
+                                                                                                                                                      "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_A/logic/unresolved_logic_review.jsonl",
+                                                                                                                                                      "sha256":  "e178e75d69bb882d82b3e859e6d48f4de4b2677c80594ae0612b748372171a2b",
+                                                                                                                                                      "bytes":  23372
+                                                                                                                                                  },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/logic/unresolved_logic_review.jsonl":  {
+                                                                                                                                                      "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/logic/unresolved_logic_review.jsonl",
+                                                                                                                                                      "sha256":  "732b93858ab127cfc21c97ace10e6d964f5860aa5ef34f06d2c44c9bd6e41d00",
+                                                                                                                                                      "bytes":  23096
+                                                                                                                                                  },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_B/logic/condition_group_map.jsonl":  {
+                                                                                                                                                  "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_B/logic/condition_group_map.jsonl",
+                                                                                                                                                  "sha256":  "b21da024d71c53a7e5ed22b8d917155888c4570d213a292298861f45cf103086",
+                                                                                                                                                  "bytes":  34058
+                                                                                                                                              },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_D/development_conditions.jsonl":  {
+                                                                                                                                               "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_D/development_conditions.jsonl",
+                                                                                                                                               "sha256":  "d62d47c44e90beee1230e46bda82a88418a8989e7eebc2a59d27ec4f53fb723d",
+                                                                                                                                               "bytes":  129255
+                                                                                                                                           },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_A/logic/notice_condition_sets.jsonl":  {
+                                                                                                                                                    "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_A/logic/notice_condition_sets.jsonl",
+                                                                                                                                                    "sha256":  "bf0e2652dba8b221d776ec47a1002bb94f2523ad0d773d6b525a60b0a37340a4",
+                                                                                                                                                    "bytes":  403880
+                                                                                                                                                },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_D/logic/conflict_review.jsonl":  {
+                                                                                                                                              "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_D/logic/conflict_review.jsonl",
+                                                                                                                                              "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                                                                                                                                              "bytes":  0
+                                                                                                                                          },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_A/logic/conflict_review.jsonl":  {
+                                                                                                                                              "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_A/logic/conflict_review.jsonl",
+                                                                                                                                              "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                                                                                                                                              "bytes":  0
+                                                                                                                                          },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_D/logic/run_report.json":  {
+                                                                                                                                        "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_D/logic/run_report.json",
+                                                                                                                                        "sha256":  "4344b329fe6a7f1878a934b17e1007c2d10b25a432fcf928e4d632fd59bfaf87",
+                                                                                                                                        "bytes":  870
+                                                                                                                                    },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_A/evaluation_summary.json":  {
+                                                                                                                                          "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_A/evaluation_summary.json",
+                                                                                                                                          "sha256":  "dabf7712e9d68cc2cb6770bc366f8275e57129fdbf6d0162e40622e94d7a5c43",
+                                                                                                                                          "bytes":  218756
+                                                                                                                                      },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_B/logic/human_logic_review.csv":  {
+                                                                                                                                               "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_B/logic/human_logic_review.csv",
+                                                                                                                                               "sha256":  "af23a6d183677f0e16ecdf4f3e9e395a937c290c0353db7d72de4ff18bc7e759",
+                                                                                                                                               "bytes":  97950
+                                                                                                                                           },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_D/logic/condition_group_map.jsonl":  {
+                                                                                                                                                  "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_D/logic/condition_group_map.jsonl",
+                                                                                                                                                  "sha256":  "575fb53d057f935fddb560b82cf23731d9a83e8504c453e84cee3283b6c4ed0a",
+                                                                                                                                                  "bytes":  37906
+                                                                                                                                              },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_C/development_conditions.jsonl":  {
+                                                                                                                                               "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_C/development_conditions.jsonl",
+                                                                                                                                               "sha256":  "6a39bdabd28132b3dec297085fa077b36366ec3126da33c52a3af551b4b6494b",
+                                                                                                                                               "bytes":  77354
+                                                                                                                                           },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_config.json":  {
+                                                                                                                            "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_config.json",
+                                                                                                                            "sha256":  "3d4f66e6707791b4f927337cb21b00f1f2cbc212f8b518a656ce6ab38dc246ff",
+                                                                                                                            "bytes":  922
+                                                                                                                        },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/logic/condition_group_map.jsonl":  {
+                                                                                                                                                  "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/logic/condition_group_map.jsonl",
+                                                                                                                                                  "sha256":  "85c4502b45936e00988ad18bcebec5e8190db8111aefc93e7ca33a71f351a89a",
+                                                                                                                                                  "bytes":  31282
+                                                                                                                                              },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_C/logic/human_logic_review.jsonl":  {
+                                                                                                                                                 "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_C/logic/human_logic_review.jsonl",
+                                                                                                                                                 "sha256":  "ea1906d6a2f21cc4f72362e8d5dae17a7631e4c73361b3fbcaa7b95f2ed46ed4",
+                                                                                                                                                 "bytes":  57102
+                                                                                                                                             },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_D/logic/human_logic_review.jsonl":  {
+                                                                                                                                                 "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_D/logic/human_logic_review.jsonl",
+                                                                                                                                                 "sha256":  "9008e8452abca1c7377913ffa4609a72bbe189b6d4752832ea548d0aad2a19d3",
+                                                                                                                                                 "bytes":  95220
+                                                                                                                                             },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/logic/qualifier_candidates.jsonl":  {
+                                                                                                                                                   "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/logic/qualifier_candidates.jsonl",
+                                                                                                                                                   "sha256":  "3cca46e6a8cca57a35499d41da9b821f3689d971c5bf7536f83a6b569ed0276a",
+                                                                                                                                                   "bytes":  2612
+                                                                                                                                               },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/evaluation_summary.json":  {
+                                                                                                                                          "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/evaluation_summary.json",
+                                                                                                                                          "sha256":  "041dc7212a39b991e7ce3403cb1dbdb95b3fc61cdcf9cfa0d159c20ee257e819",
+                                                                                                                                          "bytes":  216488
+                                                                                                                                      },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_B/logic/notice_condition_sets.jsonl":  {
+                                                                                                                                                    "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_B/logic/notice_condition_sets.jsonl",
+                                                                                                                                                    "sha256":  "7b95a7e2b51488cf1be9cb51b5f51240beb11c23531e9d663044b26d3f02199a",
+                                                                                                                                                    "bytes":  411187
+                                                                                                                                                },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_D/evaluation_summary.json":  {
+                                                                                                                                          "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_D/evaluation_summary.json",
+                                                                                                                                          "sha256":  "0cb026684b9ac94b012167cbea2a0e8cd9ac38eb4e0751e0f4f708f47442b505",
+                                                                                                                                          "bytes":  218916
+                                                                                                                                      },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/logic/run_report.json":  {
+                                                                                                                                        "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/logic/run_report.json",
+                                                                                                                                        "sha256":  "2f523031e2ebed8c69eeb2e6b5491a790bd6d20614a42a2abe99f8de7a8f07d2",
+                                                                                                                                        "bytes":  869
+                                                                                                                                    },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/logic/notice_condition_sets.jsonl":  {
+                                                                                                                                                    "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/logic/notice_condition_sets.jsonl",
+                                                                                                                                                    "sha256":  "e3a7cf1f7b65e2d88011478b4e69d08a6b58b5c9d05579b07516655aa823535c",
+                                                                                                                                                    "bytes":  397310
+                                                                                                                                                },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_C/logic/unresolved_logic_review.jsonl":  {
+                                                                                                                                                      "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_C/logic/unresolved_logic_review.jsonl",
+                                                                                                                                                      "sha256":  "7d71f156964fbb370635f689c29426de9fbdf3748a4cc10212c985611a052be8",
+                                                                                                                                                      "bytes":  21927
+                                                                                                                                                  },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_B/logic/relation_review.jsonl":  {
+                                                                                                                                              "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_B/logic/relation_review.jsonl",
+                                                                                                                                              "sha256":  "1d8cbe5490395c4e358022691916e3183023899d12c1eeb64ca083c352eb79da",
+                                                                                                                                              "bytes":  31386
+                                                                                                                                          },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_D/logic/notice_condition_sets.jsonl":  {
+                                                                                                                                                    "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_D/logic/notice_condition_sets.jsonl",
+                                                                                                                                                    "sha256":  "f82f09754ce8c4c0543ce205d6710a68ada36ab6130d0c2266593992521ca0f4",
+                                                                                                                                                    "bytes":  429663
+                                                                                                                                                },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/logic/human_logic_review.jsonl":  {
+                                                                                                                                                 "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/logic/human_logic_review.jsonl",
+                                                                                                                                                 "sha256":  "1433e205ad3230184e5c16d801e6992e6c0c564e3bf33b2b22c28d5d8d1fb1c7",
+                                                                                                                                                 "bytes":  76869
+                                                                                                                                             },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_B/logic/run_report.json":  {
+                                                                                                                                        "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_B/logic/run_report.json",
+                                                                                                                                        "sha256":  "24403bf79a08f5eec698b932bb0b6630e6b26924f5eddfc6afebf3c3a98cd9d6",
+                                                                                                                                        "bytes":  870
+                                                                                                                                    },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/repeat_regeneration/experiment_E/condition_type_review_candidates.jsonl":  {
+                                                                                                                                                                             "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/repeat_regeneration/experiment_E/condition_type_review_candidates.jsonl",
+                                                                                                                                                                             "sha256":  "c4c1fab604d1d1eab9b7d043017868036e63c5e4c5ce34106595e1eae3a341ce",
+                                                                                                                                                                             "bytes":  13359
+                                                                                                                                                                         },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_C/logic/qualifier_candidates.jsonl":  {
+                                                                                                                                                   "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_C/logic/qualifier_candidates.jsonl",
+                                                                                                                                                   "sha256":  "00e087d9b77034d81b456fd0ebc51485ba931c557ef380ac8e445e987a424978",
+                                                                                                                                                   "bytes":  2519
+                                                                                                                                               },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/condition_type_review_candidates.jsonl":  {
+                                                                                                                                                         "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/condition_type_review_candidates.jsonl",
+                                                                                                                                                         "sha256":  "c4c1fab604d1d1eab9b7d043017868036e63c5e4c5ce34106595e1eae3a341ce",
+                                                                                                                                                         "bytes":  13359
+                                                                                                                                                     },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_D/logic/unresolved_logic_review.jsonl":  {
+                                                                                                                                                      "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_D/logic/unresolved_logic_review.jsonl",
+                                                                                                                                                      "sha256":  "8c8a14c1fdc43c93bbc0d28f83311f6b54ff54ee69a5c28eafac2d0b894ca255",
+                                                                                                                                                      "bytes":  23988
+                                                                                                                                                  },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_D/logic/qualifier_candidates.jsonl":  {
+                                                                                                                                                   "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_D/logic/qualifier_candidates.jsonl",
+                                                                                                                                                   "sha256":  "67601fa8643cea844e1f36ea63f5c213ca92ee1383a97115e056d4a9bab3fd3f",
+                                                                                                                                                   "bytes":  2704
+                                                                                                                                               },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_C/condition_type_review_candidates.jsonl":  {
+                                                                                                                                                         "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_C/condition_type_review_candidates.jsonl",
+                                                                                                                                                         "sha256":  "c4c1fab604d1d1eab9b7d043017868036e63c5e4c5ce34106595e1eae3a341ce",
+                                                                                                                                                         "bytes":  13359
+                                                                                                                                                     },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/repeat_regeneration/experiment_C/development_conditions.jsonl":  {
+                                                                                                                                                                   "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/repeat_regeneration/experiment_C/development_conditions.jsonl",
+                                                                                                                                                                   "sha256":  "6a39bdabd28132b3dec297085fa077b36366ec3126da33c52a3af551b4b6494b",
+                                                                                                                                                                   "bytes":  77354
+                                                                                                                                                               },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/repeat_regeneration/generation_summary.json":  {
+                                                                                                                                                 "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/repeat_regeneration/generation_summary.json",
+                                                                                                                                                 "sha256":  "bf04659a267a60c401066daefd5d4861d8293fa6553543137524531367366be8",
+                                                                                                                                                 "bytes":  4128
+                                                                                                                                             },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_A/logic/human_logic_review.csv":  {
+                                                                                                                                               "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_A/logic/human_logic_review.csv",
+                                                                                                                                               "sha256":  "b781aac806b2cfe226025ab1483592357238fa96b65f759bf650ec102aee0bb7",
+                                                                                                                                               "bytes":  88691
+                                                                                                                                           },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_A/development_conditions.jsonl":  {
+                                                                                                                                               "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_A/development_conditions.jsonl",
+                                                                                                                                               "sha256":  "28c921eab2c1851178fb85f4f502047d7e9b070d7e59bc2d7686dfde8d78243d",
+                                                                                                                                               "bytes":  112994
+                                                                                                                                           },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_C/logic/run_report.json":  {
+                                                                                                                                        "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_C/logic/run_report.json",
+                                                                                                                                        "sha256":  "35cf91ffd7f0389005be32d5b932eb8631febaf014299c4d7590102ea9d0bdea",
+                                                                                                                                        "bytes":  866
+                                                                                                                                    },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_D/logic/relation_review.jsonl":  {
+                                                                                                                                              "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_D/logic/relation_review.jsonl",
+                                                                                                                                              "sha256":  "a4934100644b7770d1d6a4af25c198976c1e79ccd2dd3efe27e46ae8d68d0ac8",
+                                                                                                                                              "bytes":  33948
+                                                                                                                                          },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/TEST_SKIP_DIAGNOSTIC.md":  {
+                                                                                                                             "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/TEST_SKIP_DIAGNOSTIC.md",
+                                                                                                                             "sha256":  "350aac20f42a99f4e80b8617f69ad757ddea788ff3a570fc0c4af5d3a0a6bd54",
+                                                                                                                             "bytes":  2400
+                                                                                                                         },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_A/logic/relation_review.jsonl":  {
+                                                                                                                                              "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_A/logic/relation_review.jsonl",
+                                                                                                                                              "sha256":  "7d822f51c8227922e429d213f2582740dff5cf77fa56363975aed41b3c631a33",
+                                                                                                                                              "bytes":  28955
+                                                                                                                                          },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_C/logic/notice_condition_sets.jsonl":  {
+                                                                                                                                                    "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_C/logic/notice_condition_sets.jsonl",
+                                                                                                                                                    "sha256":  "34838559ff1f8f15d44c2bc82cd51a2ad15e233ffddf7682f9d7b060ec4d4bf6",
+                                                                                                                                                    "bytes":  351466
+                                                                                                                                                },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_summary.json":  {
+                                                                                                                             "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_summary.json",
+                                                                                                                             "sha256":  "02d0046fa976f298e7b1f6f5d833d7a9f16dc92b06043f2705e6d1d66cd23da0",
+                                                                                                                             "bytes":  10090
+                                                                                                                         },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/repeat_regeneration/experiment_D/development_conditions.jsonl":  {
+                                                                                                                                                                   "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/repeat_regeneration/experiment_D/development_conditions.jsonl",
+                                                                                                                                                                   "sha256":  "d62d47c44e90beee1230e46bda82a88418a8989e7eebc2a59d27ec4f53fb723d",
+                                                                                                                                                                   "bytes":  129255
+                                                                                                                                                               },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/logic/human_logic_review.csv":  {
+                                                                                                                                               "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/logic/human_logic_review.csv",
+                                                                                                                                               "sha256":  "9696ff98a368e56a3232af667b5a0050cc0b023dcebbf7f59cdb5a8209340d3b",
+                                                                                                                                               "bytes":  81975
+                                                                                                                                           },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_B/development_conditions.jsonl":  {
+                                                                                                                                               "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_B/development_conditions.jsonl",
+                                                                                                                                               "sha256":  "c3036d8d7f25309336cbee307b6807d1e6ba712fb117ccfa3f3b585ee067239c",
+                                                                                                                                               "bytes":  115957
+                                                                                                                                           },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/CONDITION_EXTRACTION_RULE_IMPROVEMENT_REPORT.md":  {
+                                                                                                                                                     "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/CONDITION_EXTRACTION_RULE_IMPROVEMENT_REPORT.md",
+                                                                                                                                                     "sha256":  "a029707645e6875d46e9a344fe5144a7ae179def823cb286c25c65b5e3f8517f",
+                                                                                                                                                     "bytes":  8349
+                                                                                                                                                 },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_B/logic/conflict_review.jsonl":  {
+                                                                                                                                              "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_B/logic/conflict_review.jsonl",
+                                                                                                                                              "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                                                                                                                                              "bytes":  0
+                                                                                                                                          },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_A/logic/qualifier_candidates.jsonl":  {
+                                                                                                                                                   "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_A/logic/qualifier_candidates.jsonl",
+                                                                                                                                                   "sha256":  "67601fa8643cea844e1f36ea63f5c213ca92ee1383a97115e056d4a9bab3fd3f",
+                                                                                                                                                   "bytes":  2704
+                                                                                                                                               },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_C/logic/relation_review.jsonl":  {
+                                                                                                                                              "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_C/logic/relation_review.jsonl",
+                                                                                                                                              "sha256":  "ded9f1d8c03c375616c171adf6440e9f1cf2112ab40f01151c588de49c934c51",
+                                                                                                                                              "bytes":  15825
+                                                                                                                                          },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_C/logic/conflict_review.jsonl":  {
+                                                                                                                                              "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_C/logic/conflict_review.jsonl",
+                                                                                                                                              "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                                                                                                                                              "bytes":  0
+                                                                                                                                          },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_D/logic/human_logic_review.csv":  {
+                                                                                                                                               "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_D/logic/human_logic_review.csv",
+                                                                                                                                               "sha256":  "e183f3140d140efe1f26b96c8a629b079b91269801856ebfc65099592929e77b",
+                                                                                                                                               "bytes":  103494
+                                                                                                                                           },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_A/logic/condition_group_map.jsonl":  {
+                                                                                                                                                  "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_A/logic/condition_group_map.jsonl",
+                                                                                                                                                  "sha256":  "b24348f5032a67bc89a43f1a3c0fa85c63549ae337cc1fd925ea3b10a218475a",
+                                                                                                                                                  "bytes":  33111
+                                                                                                                                              },
+                    "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_A/logic/human_logic_review.jsonl":  {
+                                                                                                                                                 "path":  "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_A/logic/human_logic_review.jsonl",
+                                                                                                                                                 "sha256":  "a661228cd3448b9f6ca169de9ceae9f887fe77dd87e0b67f43c0a70ca6eebd32",
+                                                                                                                                                 "bytes":  82545
+                                                                                                                                             }
+                }
+}

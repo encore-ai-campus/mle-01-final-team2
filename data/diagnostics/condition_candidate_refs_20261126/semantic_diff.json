@@ -1,0 +1,69 @@
+{
+  "baseline_rows": 17211,
+  "current_rows_in_same_notices": 17242,
+  "matched_by_source_and_value": 17211,
+  "baseline_unmatched_by_source_and_value": 0,
+  "current_unmatched_by_source_and_value": 31,
+  "attribute_transitions": {
+    "company_size->certification": 232
+  },
+  "kind_transitions": {},
+  "examples": [
+    {
+      "notice_id": "KSTARTUP:178004",
+      "source_position": 47,
+      "from_attribute": "company_size",
+      "to_attribute": "certification",
+      "evidence_text": "○ 충청남도 내 본점을 둔 창업 7년 미만 여성기업"
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000118204",
+      "source_position": 7,
+      "from_attribute": "company_size",
+      "to_attribute": "certification",
+      "evidence_text": "◦「여성기업법」제2조* 및 시행령 제2조에 따른 여성기업"
+    },
+    {
+      "notice_id": "KSTARTUP:175755",
+      "source_position": 69,
+      "from_attribute": "company_size",
+      "to_attribute": "certification",
+      "evidence_text": "• (예비)사회적기업,사회적협동조합, 예비청년창업자(팀)"
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000126171",
+      "source_position": 351,
+      "from_attribute": "company_size",
+      "to_attribute": "certification",
+      "evidence_text": "‣ 우선순위 부여 가능(제조업, 청년기업, 사회적기업, 사회적협동조합, 여성기업)"
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000117316",
+      "source_position": 609,
+      "from_attribute": "company_size",
+      "to_attribute": "certification",
+      "evidence_text": "全 업종(①사회적기업 ②(청년)일자리 창출 우수기업 지원사업 선정업체 (최근 3년이내),"
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000119395",
+      "source_position": 166,
+      "from_attribute": "company_size",
+      "to_attribute": "certification",
+      "evidence_text": "③「사회적기업 육성법」에 따른 사회적기업"
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000126442",
+      "source_position": 37,
+      "from_attribute": "company_size",
+      "to_attribute": "certification",
+      "evidence_text": "- 사회적기업가 육성사업 졸업팀 등 지역 내 초기 창업기업"
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000126473",
+      "source_position": 184,
+      "from_attribute": "company_size",
+      "to_attribute": "certification",
+      "evidence_text": "→ 사회적기업이면서 참여대상에 해당하는 기업은 타 국비 지원 일경험 사업에 참여하고 있지 않은 경우에 한하여 참여 가능(중복 참여 시 향후 일경"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "preflight": {
+    "status": "PASS",
+    "errors": [],
+    "goldset_version": "conditions-development-v1.1-20261126-final30",
+    "policy_version": "1.1.0",
+    "notice_count": 30,
+    "condition_count": 116,
+    "scores_computed": false
+  },
+  "scored_notice_count": 30,
+  "gold_conditions": 116,
+  "strict_tp_fp_fn": [
+    10,
+    36,
+    106
+  ],
+  "independent_evaluation_ids_used_for_semantic_scoring": 0,
+  "outside_development50_counted": 0,
+  "source_errors": 0,
+  "logic_reference_errors": 0,
+  "baseline_sha_mismatches": 0,
+  "goldset_sha_mismatches": 0,
+  "scores_computed": true,
+  "evaluation_policy_version": "1.1.0"
+}

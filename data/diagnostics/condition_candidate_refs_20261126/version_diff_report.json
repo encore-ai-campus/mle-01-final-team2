@@ -1,0 +1,35 @@
+{
+  "from_version": "condition-inputs-v1-20261125",
+  "to_version": "condition-inputs-v2-20261126",
+  "input_hashes": {
+    "legacy_facts_sha256": "c47bccc38ee373f756481a93e68e1a123a24d31f04ed1b4f198d3647930ac2e8",
+    "current_facts_sha256": "31452b47a592744245b2953ed4cf544567f771dc3f0868e54ae4215da59886e2"
+  },
+  "candidate_refs": {
+    "legacy_count": 17211,
+    "current_count": 17253,
+    "legacy_sha256": "5765dad05de72b8a44875353495e12224704da3f5b0067b955e1fb5e4b5c06e3",
+    "current_sha256": "f20acf5599785e4d3e9c7224359ba41e11a5ae01f867108470798064f4d1b51c"
+  },
+  "deltas": {
+    "reclassified_legacy_candidates": 232,
+    "added_region_candidates": 42,
+    "development_80_reclassified": 17,
+    "development_80_added": 1,
+    "precheck5_reclassified_refs": 4,
+    "precheck5_notices": [
+      "BIZINFO:PBLN_000000000118182"
+    ],
+    "evaluation_ids_semantic_analysis": false
+  },
+  "change_lists": {
+    "reclassified_csv": "data\\diagnostics\\condition_candidate_refs_20261126\\reclassified_232.csv",
+    "added_region_csv": "data\\diagnostics\\condition_candidate_refs_20261126\\new_region_42.csv"
+  },
+  "review_policy": {
+    "all_changed_candidates": "needs_review",
+    "semantic_review_complete": false,
+    "automatic_approval": false
+  },
+  "version_comparison_status": "DATA_VERSION_MISMATCH_EXPECTED; do not compare v1 outputs against v2 outputs"
+}

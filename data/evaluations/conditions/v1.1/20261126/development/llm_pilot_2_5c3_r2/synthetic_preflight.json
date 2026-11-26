@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "request_ordinal": 1,
+  "model_id": "gpt-5.6-luna",
+  "usage": {
+    "prompt_tokens": 1673,
+    "completion_tokens": 269,
+    "reasoning_tokens": 73
+  },
+  "provider_metadata": {
+    "model_id": "gpt-5.6-luna",
+    "response_id": "chatcmpl-EoP32rPLwjB4Kz32jKlb6ndb6iCvL",
+    "request_id": "req_491841e8d95a4b3ba4986d6e8781076f",
+    "http_status": 200,
+    "finish_reason": "stop",
+    "refusal": false,
+    "response_text_length": 799
+  },
+  "response_text_length": 799
+}

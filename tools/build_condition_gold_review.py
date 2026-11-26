@@ -106,7 +106,7 @@ def logic_review_row(sample: dict[str, Any], condition_row: dict[str, Any], *, s
     return row
 
 
-def build(output: Path = OUTPUT) -> dict[str, Any]:
+def build(output: Path = OUTPUT, development_ids_path: Path | None = None) -> dict[str, Any]:
     samples = read_jsonl(SAMPLES)
     dev = [r for r in samples if r.get("split") == "DEVELOPMENT"]
     evaluation = [r for r in samples if r.get("split") == "EVALUATION"]
@@ -126,7 +126,16 @@ def build(output: Path = OUTPUT) -> dict[str, Any]:
     by_notice: dict[str, list[dict[str, Any]]] = {}
     for row in dev_conditions:
         by_notice.setdefault(row["notice_id"], []).append(row)
-    if len(dev_existing) != 30:
+    if development_ids_path is not None:
+        selected_ids = json.loads(development_ids_path.read_text(encoding="utf-8"))
+        if not isinstance(selected_ids, list) or len(selected_ids) != 30 or len(set(selected_ids)) != 30:
+            raise ValueError("Development ID file must contain exactly 30 unique notice IDs")
+        samples_by_id = {r["notice_id"]: r for r in dev}
+        missing = sorted(set(selected_ids) - samples_by_id.keys())
+        if missing:
+            raise ValueError(f"Selected IDs are not in DEVELOPMENT: {missing}")
+        dev_existing = [{"notice_id": nid, "raw_text": samples_by_id[nid]["raw_text"]} for nid in selected_ids]
+    elif len(dev_existing) != 30:
         raise ValueError(f"Expected the existing 30-notice development review set, got {len(dev_existing)}")
     dev_ids = {r["notice_id"] for r in dev}
     eval_ids = {r["notice_id"] for r in evaluation}
@@ -195,4 +204,7 @@ def build(output: Path = OUTPUT) -> dict[str, Any]:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--output-dir", type=Path, default=OUTPUT)
-    print(json.dumps(build(parser.parse_args().output_dir), ensure_ascii=False, indent=2))
+    parser.add_argument("--development-ids", type=Path, default=None,
+                        help="Optional UTF-8 JSON array of 30 existing DEVELOPMENT notice IDs")
+    args = parser.parse_args()
+    print(json.dumps(build(args.output_dir, args.development_ids), ensure_ascii=False, indent=2))

@@ -1,0 +1,13 @@
+{
+  "split": "DEVELOPMENT",
+  "condition_review_rows": 25,
+  "logic_review_rows": 25,
+  "schema_version": "1.1",
+  "evaluation_version": "1.1",
+  "reviewed_condition_records": 24,
+  "reviewed_logic_records": 24,
+  "unreviewed_records": 1,
+  "evaluation_candidate_data_present": false,
+  "all_rows_schema_valid": true,
+  "human_review_claimed_by_tool": false
+}

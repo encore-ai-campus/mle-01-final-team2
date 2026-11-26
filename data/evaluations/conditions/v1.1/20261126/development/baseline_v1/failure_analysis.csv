@@ -1,0 +1,677 @@
+﻿notice_id,source_system,failure_type,failure_cause,gold_id,prediction_id,condition_type,field,gold_condition,prediction_condition,differences,evidence_status,cause_confidence,source_excerpt
+BIZINFO:PBLN_000000000117168,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:BFBSIRQNKPL3VNUSVXQG23GL,,ELIGIBILITY,BUSINESS_LOCATION,사업장을 둔,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"대구시에 주소와 사업장을 둔 소상공인
+- 2024. 1. 1. 이전부터 대구시에 사업자등록증명원 소재지 및 주소지 유지
+※ 상세 사업별 신청자격 공고문 참조"
+BIZINFO:PBLN_000000000117168,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:CF2M4RF4BRNZUYQ4BVTWXL4T,,ELIGIBILITY,APPLICANT_ADDRESS,주소지 유지,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"대구시에 주소와 사업장을 둔 소상공인
+- 2024. 1. 1. 이전부터 대구시에 사업자등록증명원 소재지 및 주소지 유지
+※ 상세 사업별 신청자격 공고문 참조"
+BIZINFO:PBLN_000000000117168,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:OF2NP666TGZ4IAUHRZ2IOAE3,,ELIGIBILITY,BUSINESS_LOCATION,사업자등록증명원 소재지,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"대구시에 주소와 사업장을 둔 소상공인
+- 2024. 1. 1. 이전부터 대구시에 사업자등록증명원 소재지 및 주소지 유지
+※ 상세 사업별 신청자격 공고문 참조"
+BIZINFO:PBLN_000000000117168,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:VNILCNYBU23H7S5J2V5O2ZZT,,ELIGIBILITY,APPLICANT_ADDRESS,대구시에 주소,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"대구시에 주소와 사업장을 둔 소상공인
+- 2024. 1. 1. 이전부터 대구시에 사업자등록증명원 소재지 및 주소지 유지
+※ 상세 사업별 신청자격 공고문 참조"
+BIZINFO:PBLN_000000000117168,BIZINFO,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:JRG6EAAJCDPQ2BWRACAES6AU,ELIGIBILITY,BUSINESS_LOCATION,,대구,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"대구시에 주소와 사업장을 둔 소상공인
+- 2024. 1. 1. 이전부터 대구시에 사업자등록증명원 소재지 및 주소지 유지
+※ 상세 사업별 신청자격 공고문 참조"
+BIZINFO:PBLN_000000000117340,BIZINFO,PARTIAL_MATCH,WRONG_EVIDENCE,GOLD:H4UIZ5TFGDIIEBV3ZOIRSFB5,CND:4YEL3C5ZJZHDSBBSSUDZFN7E,ELIGIBILITY,BUSINESS_TYPE,｢중소기업기본법｣ 상의 중소기업,중소기업,evidence,OVERLAPPING_SPAN,MECHANICAL_FIELD_DIFF,"칠곡군 내 사업장(사업자등록증명원의 소재지, 매출액)을 둔 ｢중소기업기본법｣ 상의 중소기업
+※ 자세한 지원대상 공고문 참조"
+BIZINFO:PBLN_000000000117340,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:7JFJLGRMN4SZ5G7Q66NAAV7V,,ELIGIBILITY,BUSINESS_LOCATION,칠곡군 내 사업장,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"칠곡군 내 사업장(사업자등록증명원의 소재지, 매출액)을 둔 ｢중소기업기본법｣ 상의 중소기업
+※ 자세한 지원대상 공고문 참조"
+BIZINFO:PBLN_000000000117340,BIZINFO,FALSE_NEGATIVE,STRICT_FN_OVERLAPS_PARTIAL_MATCH,GOLD:H4UIZ5TFGDIIEBV3ZOIRSFB5,,ELIGIBILITY,BUSINESS_TYPE,｢중소기업기본법｣ 상의 중소기업,,partial pair exists; counted FN under strict policy; not a separate absent extraction,GOLD_SPAN_VERIFIED,CONFIRMED_EVALUATOR_MATCH_OUTPUT,"칠곡군 내 사업장(사업자등록증명원의 소재지, 매출액)을 둔 ｢중소기업기본법｣ 상의 중소기업
+※ 자세한 지원대상 공고문 참조"
+BIZINFO:PBLN_000000000117340,BIZINFO,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:4YEL3C5ZJZHDSBBSSUDZFN7E,ELIGIBILITY,BUSINESS_TYPE,,중소기업,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"칠곡군 내 사업장(사업자등록증명원의 소재지, 매출액)을 둔 ｢중소기업기본법｣ 상의 중소기업
+※ 자세한 지원대상 공고문 참조"
+BIZINFO:PBLN_000000000117526,BIZINFO,PARTIAL_MATCH,WRONG_VALUE,GOLD:HA6DO5GSJ4GOHIZF45SXAGBU,CND:RH7LVE5TUYU3YZWCHXXGH2WE,ELIGIBILITY,BUSINESS_LOCATION,경남 도내에 소재하고 있는,경남,value;evidence,OVERLAPPING_SPAN,MECHANICAL_FIELD_DIFF,"경남 도내에 소재하고 있는 「소상공인기본법」 제2조에 따른 소상공인
+※ 세부사업별 지원대상 상이 (공고문 참조)"
+BIZINFO:PBLN_000000000117526,BIZINFO,PARTIAL_MATCH,WRONG_EVIDENCE,GOLD:ZNBP5ON3B2BABWEDIDS7B7GJ,CND:3Q2O7JBBJMQN5DDJVBGGW3MB,ELIGIBILITY,BUSINESS_TYPE,「소상공인기본법」 제2조에 따른 소상공인,소상공인,evidence,OVERLAPPING_SPAN,MECHANICAL_FIELD_DIFF,"경남 도내에 소재하고 있는 「소상공인기본법」 제2조에 따른 소상공인
+※ 세부사업별 지원대상 상이 (공고문 참조)"
+BIZINFO:PBLN_000000000117526,BIZINFO,FALSE_NEGATIVE,STRICT_FN_OVERLAPS_PARTIAL_MATCH,GOLD:HA6DO5GSJ4GOHIZF45SXAGBU,,ELIGIBILITY,BUSINESS_LOCATION,경남 도내에 소재하고 있는,,partial pair exists; counted FN under strict policy; not a separate absent extraction,GOLD_SPAN_VERIFIED,CONFIRMED_EVALUATOR_MATCH_OUTPUT,"경남 도내에 소재하고 있는 「소상공인기본법」 제2조에 따른 소상공인
+※ 세부사업별 지원대상 상이 (공고문 참조)"
+BIZINFO:PBLN_000000000117526,BIZINFO,FALSE_NEGATIVE,STRICT_FN_OVERLAPS_PARTIAL_MATCH,GOLD:ZNBP5ON3B2BABWEDIDS7B7GJ,,ELIGIBILITY,BUSINESS_TYPE,「소상공인기본법」 제2조에 따른 소상공인,,partial pair exists; counted FN under strict policy; not a separate absent extraction,GOLD_SPAN_VERIFIED,CONFIRMED_EVALUATOR_MATCH_OUTPUT,"경남 도내에 소재하고 있는 「소상공인기본법」 제2조에 따른 소상공인
+※ 세부사업별 지원대상 상이 (공고문 참조)"
+BIZINFO:PBLN_000000000117526,BIZINFO,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:3Q2O7JBBJMQN5DDJVBGGW3MB,ELIGIBILITY,BUSINESS_TYPE,,소상공인,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"경남 도내에 소재하고 있는 「소상공인기본법」 제2조에 따른 소상공인
+※ 세부사업별 지원대상 상이 (공고문 참조)"
+BIZINFO:PBLN_000000000117526,BIZINFO,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:RH7LVE5TUYU3YZWCHXXGH2WE,ELIGIBILITY,BUSINESS_LOCATION,,경남,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"경남 도내에 소재하고 있는 「소상공인기본법」 제2조에 따른 소상공인
+※ 세부사업별 지원대상 상이 (공고문 참조)"
+BIZINFO:PBLN_000000000118182,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:5JIPAID7CCBFOU3RIOTPMKOI,,ELIGIBILITY,BUSINESS_TYPE,-「국민기초생활보장법」 제18조에 의한 자활기업,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"사업장이 도내에 소재하는 기업 중 다음 중 하나에 해당하는 영리기업인 경우,다만, 비영리사업자 가능으로 표시된 경우 비영리사업자도 지원할 수 있음
+- 「사회적기업 육성법」 제2조에 의한 사회적기업(비영리사업자 가능)
+-「경기도 사회적경제 기본조례」 제2조에 의한 예비사회적기업
+-「협동조합기본법」 제2조에 의한 협동조합(비영리사업자 가능)
+-「경기도 사회적경제 기본조례」 제2조에 의한 마을기업
+-「경기도 사회적경제 기본조례」 제2조에 의한 예비마을기업
+-「소비자생활협동조합법」 제2조에 의한 소비자생활협동조합(비영리사업자 가능)
+-「국민기초생활보장법」 제18조에 의한 자활기업
+-「벤처기업육성에 관한 특별법」 제2조에 의한 소셜벤처기업"
+BIZINFO:PBLN_000000000118182,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:A4WSO43TKQWP7ID5FPS7U7HO,,ELIGIBILITY,BUSINESS_TYPE,-「벤처기업육성에 관한 특별법」 제2조에 의한 소셜벤처기업,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"사업장이 도내에 소재하는 기업 중 다음 중 하나에 해당하는 영리기업인 경우,다만, 비영리사업자 가능으로 표시된 경우 비영리사업자도 지원할 수 있음
+- 「사회적기업 육성법」 제2조에 의한 사회적기업(비영리사업자 가능)
+-「경기도 사회적경제 기본조례」 제2조에 의한 예비사회적기업
+-「협동조합기본법」 제2조에 의한 협동조합(비영리사업자 가능)
+-「경기도 사회적경제 기본조례」 제2조에 의한 마을기업
+-「경기도 사회적경제 기본조례」 제2조에 의한 예비마을기업
+-「소비자생활협동조합법」 제2조에 의한 소비자생활협동조합(비영리사업자 가능)
+-「국민기초생활보장법」 제18조에 의한 자활기업
+-「벤처기업육성에 관한 특별법」 제2조에 의한 소셜벤처기업"
+BIZINFO:PBLN_000000000118182,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:AK6QCETSJGS72OBGPPVH3DRQ,,ELIGIBILITY,FOR_PROFIT_STATUS,영리기업인 경우,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"사업장이 도내에 소재하는 기업 중 다음 중 하나에 해당하는 영리기업인 경우,다만, 비영리사업자 가능으로 표시된 경우 비영리사업자도 지원할 수 있음
+- 「사회적기업 육성법」 제2조에 의한 사회적기업(비영리사업자 가능)
+-「경기도 사회적경제 기본조례」 제2조에 의한 예비사회적기업
+-「협동조합기본법」 제2조에 의한 협동조합(비영리사업자 가능)
+-「경기도 사회적경제 기본조례」 제2조에 의한 마을기업
+-「경기도 사회적경제 기본조례」 제2조에 의한 예비마을기업
+-「소비자생활협동조합법」 제2조에 의한 소비자생활협동조합(비영리사업자 가능)
+-「국민기초생활보장법」 제18조에 의한 자활기업
+-「벤처기업육성에 관한 특별법」 제2조에 의한 소셜벤처기업"
+BIZINFO:PBLN_000000000118182,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:BP3Y47M5FUWWJYFGJHP3D2DF,,ELIGIBILITY,BUSINESS_TYPE,-「경기도 사회적경제 기본조례」 제2조에 의한 예비사회적기업,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"사업장이 도내에 소재하는 기업 중 다음 중 하나에 해당하는 영리기업인 경우,다만, 비영리사업자 가능으로 표시된 경우 비영리사업자도 지원할 수 있음
+- 「사회적기업 육성법」 제2조에 의한 사회적기업(비영리사업자 가능)
+-「경기도 사회적경제 기본조례」 제2조에 의한 예비사회적기업
+-「협동조합기본법」 제2조에 의한 협동조합(비영리사업자 가능)
+-「경기도 사회적경제 기본조례」 제2조에 의한 마을기업
+-「경기도 사회적경제 기본조례」 제2조에 의한 예비마을기업
+-「소비자생활협동조합법」 제2조에 의한 소비자생활협동조합(비영리사업자 가능)
+-「국민기초생활보장법」 제18조에 의한 자활기업
+-「벤처기업육성에 관한 특별법」 제2조에 의한 소셜벤처기업"
+BIZINFO:PBLN_000000000118182,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:BWZKRDSI567HUS6IFN4GJ3HL,,ELIGIBILITY,BUSINESS_TYPE,-「경기도 사회적경제 기본조례」 제2조에 의한 예비마을기업,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"사업장이 도내에 소재하는 기업 중 다음 중 하나에 해당하는 영리기업인 경우,다만, 비영리사업자 가능으로 표시된 경우 비영리사업자도 지원할 수 있음
+- 「사회적기업 육성법」 제2조에 의한 사회적기업(비영리사업자 가능)
+-「경기도 사회적경제 기본조례」 제2조에 의한 예비사회적기업
+-「협동조합기본법」 제2조에 의한 협동조합(비영리사업자 가능)
+-「경기도 사회적경제 기본조례」 제2조에 의한 마을기업
+-「경기도 사회적경제 기본조례」 제2조에 의한 예비마을기업
+-「소비자생활협동조합법」 제2조에 의한 소비자생활협동조합(비영리사업자 가능)
+-「국민기초생활보장법」 제18조에 의한 자활기업
+-「벤처기업육성에 관한 특별법」 제2조에 의한 소셜벤처기업"
+BIZINFO:PBLN_000000000118182,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:JB3FUI37RSO2M425UG5TFERN,,ELIGIBILITY,BUSINESS_TYPE,-「협동조합기본법」 제2조에 의한 협동조합(비영리사업자 가능),,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"사업장이 도내에 소재하는 기업 중 다음 중 하나에 해당하는 영리기업인 경우,다만, 비영리사업자 가능으로 표시된 경우 비영리사업자도 지원할 수 있음
+- 「사회적기업 육성법」 제2조에 의한 사회적기업(비영리사업자 가능)
+-「경기도 사회적경제 기본조례」 제2조에 의한 예비사회적기업
+-「협동조합기본법」 제2조에 의한 협동조합(비영리사업자 가능)
+-「경기도 사회적경제 기본조례」 제2조에 의한 마을기업
+-「경기도 사회적경제 기본조례」 제2조에 의한 예비마을기업
+-「소비자생활협동조합법」 제2조에 의한 소비자생활협동조합(비영리사업자 가능)
+-「국민기초생활보장법」 제18조에 의한 자활기업
+-「벤처기업육성에 관한 특별법」 제2조에 의한 소셜벤처기업"
+BIZINFO:PBLN_000000000118182,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:MD6SUB2ZEWNHTSQA4KVOGP3K,,ELIGIBILITY,FOR_PROFIT_STATUS,비영리사업자도 지원할 수 있음,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"사업장이 도내에 소재하는 기업 중 다음 중 하나에 해당하는 영리기업인 경우,다만, 비영리사업자 가능으로 표시된 경우 비영리사업자도 지원할 수 있음
+- 「사회적기업 육성법」 제2조에 의한 사회적기업(비영리사업자 가능)
+-「경기도 사회적경제 기본조례」 제2조에 의한 예비사회적기업
+-「협동조합기본법」 제2조에 의한 협동조합(비영리사업자 가능)
+-「경기도 사회적경제 기본조례」 제2조에 의한 마을기업
+-「경기도 사회적경제 기본조례」 제2조에 의한 예비마을기업
+-「소비자생활협동조합법」 제2조에 의한 소비자생활협동조합(비영리사업자 가능)
+-「국민기초생활보장법」 제18조에 의한 자활기업
+-「벤처기업육성에 관한 특별법」 제2조에 의한 소셜벤처기업"
+BIZINFO:PBLN_000000000118182,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:O53W5ZPOQ3J4GMSQ2ACMSFOJ,,ELIGIBILITY,BUSINESS_LOCATION,도내,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"사업장이 도내에 소재하는 기업 중 다음 중 하나에 해당하는 영리기업인 경우,다만, 비영리사업자 가능으로 표시된 경우 비영리사업자도 지원할 수 있음
+- 「사회적기업 육성법」 제2조에 의한 사회적기업(비영리사업자 가능)
+-「경기도 사회적경제 기본조례」 제2조에 의한 예비사회적기업
+-「협동조합기본법」 제2조에 의한 협동조합(비영리사업자 가능)
+-「경기도 사회적경제 기본조례」 제2조에 의한 마을기업
+-「경기도 사회적경제 기본조례」 제2조에 의한 예비마을기업
+-「소비자생활협동조합법」 제2조에 의한 소비자생활협동조합(비영리사업자 가능)
+-「국민기초생활보장법」 제18조에 의한 자활기업
+-「벤처기업육성에 관한 특별법」 제2조에 의한 소셜벤처기업"
+BIZINFO:PBLN_000000000118182,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:UOAGRRT2R3XTU2SNSXFR242C,,ELIGIBILITY,BUSINESS_TYPE,-「소비자생활협동조합법」 제2조에 의한 소비자생활협동조합(비영리사업자 가능),,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"사업장이 도내에 소재하는 기업 중 다음 중 하나에 해당하는 영리기업인 경우,다만, 비영리사업자 가능으로 표시된 경우 비영리사업자도 지원할 수 있음
+- 「사회적기업 육성법」 제2조에 의한 사회적기업(비영리사업자 가능)
+-「경기도 사회적경제 기본조례」 제2조에 의한 예비사회적기업
+-「협동조합기본법」 제2조에 의한 협동조합(비영리사업자 가능)
+-「경기도 사회적경제 기본조례」 제2조에 의한 마을기업
+-「경기도 사회적경제 기본조례」 제2조에 의한 예비마을기업
+-「소비자생활협동조합법」 제2조에 의한 소비자생활협동조합(비영리사업자 가능)
+-「국민기초생활보장법」 제18조에 의한 자활기업
+-「벤처기업육성에 관한 특별법」 제2조에 의한 소셜벤처기업"
+BIZINFO:PBLN_000000000118182,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:VPS4NR5FIET4BQFGJ4YRBTER,,ELIGIBILITY,BUSINESS_TYPE,- 「사회적기업 육성법」 제2조에 의한 사회적기업(비영리사업자 가능),,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"사업장이 도내에 소재하는 기업 중 다음 중 하나에 해당하는 영리기업인 경우,다만, 비영리사업자 가능으로 표시된 경우 비영리사업자도 지원할 수 있음
+- 「사회적기업 육성법」 제2조에 의한 사회적기업(비영리사업자 가능)
+-「경기도 사회적경제 기본조례」 제2조에 의한 예비사회적기업
+-「협동조합기본법」 제2조에 의한 협동조합(비영리사업자 가능)
+-「경기도 사회적경제 기본조례」 제2조에 의한 마을기업
+-「경기도 사회적경제 기본조례」 제2조에 의한 예비마을기업
+-「소비자생활협동조합법」 제2조에 의한 소비자생활협동조합(비영리사업자 가능)
+-「국민기초생활보장법」 제18조에 의한 자활기업
+-「벤처기업육성에 관한 특별법」 제2조에 의한 소셜벤처기업"
+BIZINFO:PBLN_000000000118182,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:YN5LOI5WGWIRFPR5NFKMYFSG,,ELIGIBILITY,BUSINESS_TYPE,-「경기도 사회적경제 기본조례」 제2조에 의한 마을기업,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"사업장이 도내에 소재하는 기업 중 다음 중 하나에 해당하는 영리기업인 경우,다만, 비영리사업자 가능으로 표시된 경우 비영리사업자도 지원할 수 있음
+- 「사회적기업 육성법」 제2조에 의한 사회적기업(비영리사업자 가능)
+-「경기도 사회적경제 기본조례」 제2조에 의한 예비사회적기업
+-「협동조합기본법」 제2조에 의한 협동조합(비영리사업자 가능)
+-「경기도 사회적경제 기본조례」 제2조에 의한 마을기업
+-「경기도 사회적경제 기본조례」 제2조에 의한 예비마을기업
+-「소비자생활협동조합법」 제2조에 의한 소비자생활협동조합(비영리사업자 가능)
+-「국민기초생활보장법」 제18조에 의한 자활기업
+-「벤처기업육성에 관한 특별법」 제2조에 의한 소셜벤처기업"
+BIZINFO:PBLN_000000000118182,BIZINFO,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:5ERHYIDNO5JBJZQI7IW5TOCD,ELIGIBILITY,BUSINESS_LOCATION,,경기도,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"사업장이 도내에 소재하는 기업 중 다음 중 하나에 해당하는 영리기업인 경우,다만, 비영리사업자 가능으로 표시된 경우 비영리사업자도 지원할 수 있음
+- 「사회적기업 육성법」 제2조에 의한 사회적기업(비영리사업자 가능)
+-「경기도 사회적경제 기본조례」 제2조에 의한 예비사회적기업
+-「협동조합기본법」 제2조에 의한 협동조합(비영리사업자 가능)
+-「경기도 사회적경제 기본조례」 제2조에 의한 마을기업
+-「경기도 사회적경제 기본조례」 제2조에 의한 예비마을기업
+-「소비자생활협동조합법」 제2조에 의한 소비자생활협동조합(비영리사업자 가능)
+-「국민기초생활보장법」 제18조에 의한 자활기업
+-「벤처기업육성에 관한 특별법」 제2조에 의한 소셜벤처기업"
+BIZINFO:PBLN_000000000118927,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:AGZY7KXCI5HI4DUEJPPMTBIW,,ELIGIBILITY,WORK_LIFE_BALANCE_PRACTICE,일ㆍ생활 균형을 실천하는 기업,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"도내 가족친화 및 일ㆍ생활 균형을 실천하는 기업
+※ 자세한 지원대상 공고문 참조"
+BIZINFO:PBLN_000000000118927,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:HBL5D5ZJI7UTI2IAXLZRRRTK,,ELIGIBILITY,BUSINESS_LOCATION,도내,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"도내 가족친화 및 일ㆍ생활 균형을 실천하는 기업
+※ 자세한 지원대상 공고문 참조"
+BIZINFO:PBLN_000000000118927,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:I6BFAXO5QDH553LCFFVUKGJ2,,ELIGIBILITY,FAMILY_FRIENDLY_PRACTICE,가족친화,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"도내 가족친화 및 일ㆍ생활 균형을 실천하는 기업
+※ 자세한 지원대상 공고문 참조"
+BIZINFO:PBLN_000000000119490,BIZINFO,PARTIAL_MATCH,WRONG_OPERATOR,GOLD:4CNJ6NBNNIINQ3U2XXXGKKD6,CND:3ZW23MK72GLPRBMEMBDWZY6Q,ELIGIBILITY,BUSINESS_LOCATION,"(수도권) 수도권(서울특별시, 인천광역시, 경기도)에 소재하는 기업",경기도,operator;value;evidence,OVERLAPPING_SPAN,MECHANICAL_FIELD_DIFF,"5인 이상 우선지원대상 기업
+- (수도권) 수도권(서울특별시, 인천광역시, 경기도)에 소재하는 기업이며 5인 이상 우선지원대상기업에서 취업애로청년을 정규직으로 채용 후
+- (비수도권) 수도권 제외한 지역에 소재하는 기업이며 5인 이상 우선지원대상기업에서 청년을 정규직으로 채용 후
+※ 자세한 지원대상 공고문 참조"
+BIZINFO:PBLN_000000000119490,BIZINFO,FALSE_NEGATIVE,STRICT_FN_OVERLAPS_PARTIAL_MATCH,GOLD:4CNJ6NBNNIINQ3U2XXXGKKD6,,ELIGIBILITY,BUSINESS_LOCATION,"(수도권) 수도권(서울특별시, 인천광역시, 경기도)에 소재하는 기업",,partial pair exists; counted FN under strict policy; not a separate absent extraction,GOLD_SPAN_VERIFIED,CONFIRMED_EVALUATOR_MATCH_OUTPUT,"5인 이상 우선지원대상 기업
+- (수도권) 수도권(서울특별시, 인천광역시, 경기도)에 소재하는 기업이며 5인 이상 우선지원대상기업에서 취업애로청년을 정규직으로 채용 후
+- (비수도권) 수도권 제외한 지역에 소재하는 기업이며 5인 이상 우선지원대상기업에서 청년을 정규직으로 채용 후
+※ 자세한 지원대상 공고문 참조"
+BIZINFO:PBLN_000000000119490,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:5ME3M7JJ3EHSU4EDM3RBR67A,,ELIGIBILITY,SUPPORTING_COMPANY_STATUS,우선지원대상 기업,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"5인 이상 우선지원대상 기업
+- (수도권) 수도권(서울특별시, 인천광역시, 경기도)에 소재하는 기업이며 5인 이상 우선지원대상기업에서 취업애로청년을 정규직으로 채용 후
+- (비수도권) 수도권 제외한 지역에 소재하는 기업이며 5인 이상 우선지원대상기업에서 청년을 정규직으로 채용 후
+※ 자세한 지원대상 공고문 참조"
+BIZINFO:PBLN_000000000119490,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:BNSAZ3SCURPTDENMJRN3CU2M,,ELIGIBILITY,BUSINESS_LOCATION,(비수도권) 수도권 제외한 지역에 소재하는 기업,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"5인 이상 우선지원대상 기업
+- (수도권) 수도권(서울특별시, 인천광역시, 경기도)에 소재하는 기업이며 5인 이상 우선지원대상기업에서 취업애로청년을 정규직으로 채용 후
+- (비수도권) 수도권 제외한 지역에 소재하는 기업이며 5인 이상 우선지원대상기업에서 청년을 정규직으로 채용 후
+※ 자세한 지원대상 공고문 참조"
+BIZINFO:PBLN_000000000119490,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:DQ63JDCGDQXMWOWP67DEFR26,,ELIGIBILITY,HIRE_STATUS,취업애로청년을 정규직으로 채용 후,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"5인 이상 우선지원대상 기업
+- (수도권) 수도권(서울특별시, 인천광역시, 경기도)에 소재하는 기업이며 5인 이상 우선지원대상기업에서 취업애로청년을 정규직으로 채용 후
+- (비수도권) 수도권 제외한 지역에 소재하는 기업이며 5인 이상 우선지원대상기업에서 청년을 정규직으로 채용 후
+※ 자세한 지원대상 공고문 참조"
+BIZINFO:PBLN_000000000119490,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:SIL562G3O4GDPSSAVOQYZQPR,,ELIGIBILITY,HIRE_STATUS,청년을 정규직으로 채용 후,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"5인 이상 우선지원대상 기업
+- (수도권) 수도권(서울특별시, 인천광역시, 경기도)에 소재하는 기업이며 5인 이상 우선지원대상기업에서 취업애로청년을 정규직으로 채용 후
+- (비수도권) 수도권 제외한 지역에 소재하는 기업이며 5인 이상 우선지원대상기업에서 청년을 정규직으로 채용 후
+※ 자세한 지원대상 공고문 참조"
+BIZINFO:PBLN_000000000119490,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:ZOC6BM43M3Z7H3ZQD73ZTCWK,,ELIGIBILITY,EMPLOYEE_COUNT,5인 이상,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"5인 이상 우선지원대상 기업
+- (수도권) 수도권(서울특별시, 인천광역시, 경기도)에 소재하는 기업이며 5인 이상 우선지원대상기업에서 취업애로청년을 정규직으로 채용 후
+- (비수도권) 수도권 제외한 지역에 소재하는 기업이며 5인 이상 우선지원대상기업에서 청년을 정규직으로 채용 후
+※ 자세한 지원대상 공고문 참조"
+BIZINFO:PBLN_000000000119490,BIZINFO,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:3ZW23MK72GLPRBMEMBDWZY6Q,ELIGIBILITY,BUSINESS_LOCATION,,경기도,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"5인 이상 우선지원대상 기업
+- (수도권) 수도권(서울특별시, 인천광역시, 경기도)에 소재하는 기업이며 5인 이상 우선지원대상기업에서 취업애로청년을 정규직으로 채용 후
+- (비수도권) 수도권 제외한 지역에 소재하는 기업이며 5인 이상 우선지원대상기업에서 청년을 정규직으로 채용 후
+※ 자세한 지원대상 공고문 참조"
+BIZINFO:PBLN_000000000119490,BIZINFO,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:44GR2V7FN67RRVDEF7ALASB5,ELIGIBILITY,BUSINESS_LOCATION,,인천광역시,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"5인 이상 우선지원대상 기업
+- (수도권) 수도권(서울특별시, 인천광역시, 경기도)에 소재하는 기업이며 5인 이상 우선지원대상기업에서 취업애로청년을 정규직으로 채용 후
+- (비수도권) 수도권 제외한 지역에 소재하는 기업이며 5인 이상 우선지원대상기업에서 청년을 정규직으로 채용 후
+※ 자세한 지원대상 공고문 참조"
+BIZINFO:PBLN_000000000119490,BIZINFO,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:E6OXO4IHXZRGP4APAN42BAEP,ELIGIBILITY,BUSINESS_LOCATION,,서울특별시,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"5인 이상 우선지원대상 기업
+- (수도권) 수도권(서울특별시, 인천광역시, 경기도)에 소재하는 기업이며 5인 이상 우선지원대상기업에서 취업애로청년을 정규직으로 채용 후
+- (비수도권) 수도권 제외한 지역에 소재하는 기업이며 5인 이상 우선지원대상기업에서 청년을 정규직으로 채용 후
+※ 자세한 지원대상 공고문 참조"
+BIZINFO:PBLN_000000000119490,BIZINFO,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:OOK7DGIRZ364DCFZEWUJQYHO,EXCLUSION,,,제외,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"5인 이상 우선지원대상 기업
+- (수도권) 수도권(서울특별시, 인천광역시, 경기도)에 소재하는 기업이며 5인 이상 우선지원대상기업에서 취업애로청년을 정규직으로 채용 후
+- (비수도권) 수도권 제외한 지역에 소재하는 기업이며 5인 이상 우선지원대상기업에서 청년을 정규직으로 채용 후
+※ 자세한 지원대상 공고문 참조"
+BIZINFO:PBLN_000000000122876,BIZINFO,PARTIAL_MATCH,WRONG_EVIDENCE,GOLD:LS2K3AZSTGCS73VZ7FP4VHJQ,CND:D3DFWCZ3JFNPPOMBDNVI4JC7,ELIGIBILITY,BUSINESS_TYPE,「중소기업기본법」제2조 및 시행령 제3조에 따른 중소기업,중소기업,evidence,OVERLAPPING_SPAN,MECHANICAL_FIELD_DIFF,「중소기업기본법」제2조 및 시행령 제3조에 따른 중소기업
+BIZINFO:PBLN_000000000122876,BIZINFO,FALSE_NEGATIVE,STRICT_FN_OVERLAPS_PARTIAL_MATCH,GOLD:LS2K3AZSTGCS73VZ7FP4VHJQ,,ELIGIBILITY,BUSINESS_TYPE,「중소기업기본법」제2조 및 시행령 제3조에 따른 중소기업,,partial pair exists; counted FN under strict policy; not a separate absent extraction,GOLD_SPAN_VERIFIED,CONFIRMED_EVALUATOR_MATCH_OUTPUT,「중소기업기본법」제2조 및 시행령 제3조에 따른 중소기업
+BIZINFO:PBLN_000000000122876,BIZINFO,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:D3DFWCZ3JFNPPOMBDNVI4JC7,ELIGIBILITY,BUSINESS_TYPE,,중소기업,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,「중소기업기본법」제2조 및 시행령 제3조에 따른 중소기업
+BIZINFO:PBLN_000000000125094,BIZINFO,PARTIAL_MATCH,WRONG_VALUE,GOLD:EXOY2ZS2JTJGPLQ5MBEKSS55,CND:LW6JFQQ4LKHZJ3GMGJTOREE7,ELIGIBILITY,BUSINESS_LOCATION,울산광역시 2026년 하반기 Stand-up 맞춤지원 대상 중소기업 밀집지역 소재 중소기업,울산광역시,value;evidence,OVERLAPPING_SPAN,MECHANICAL_FIELD_DIFF,울산광역시 2026년 하반기 Stand-up 맞춤지원 대상 중소기업 밀집지역 소재 중소기업
+BIZINFO:PBLN_000000000125094,BIZINFO,FALSE_NEGATIVE,STRICT_FN_OVERLAPS_PARTIAL_MATCH,GOLD:EXOY2ZS2JTJGPLQ5MBEKSS55,,ELIGIBILITY,BUSINESS_LOCATION,울산광역시 2026년 하반기 Stand-up 맞춤지원 대상 중소기업 밀집지역 소재 중소기업,,partial pair exists; counted FN under strict policy; not a separate absent extraction,GOLD_SPAN_VERIFIED,CONFIRMED_EVALUATOR_MATCH_OUTPUT,울산광역시 2026년 하반기 Stand-up 맞춤지원 대상 중소기업 밀집지역 소재 중소기업
+BIZINFO:PBLN_000000000125094,BIZINFO,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:LW6JFQQ4LKHZJ3GMGJTOREE7,ELIGIBILITY,BUSINESS_LOCATION,,울산광역시,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,울산광역시 2026년 하반기 Stand-up 맞춤지원 대상 중소기업 밀집지역 소재 중소기업
+BIZINFO:PBLN_000000000125345,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:3B5ZWMZCK2MPZSUVJYFW6DTQ,,ELIGIBILITY,BUSINESS_TYPE,「협동조합 기본법」에 따른 사회적협동조합,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"근로자 5인 미만 기업(70%), 5인 이상 기업(30%)
+-「사회적기업 육성법」에 따른 (예비)사회적기업
+-「마을기업 육성 및 지원에 관한 법률」에 따른 (예비)마을기업
+-「협동조합 기본법」에 따른 사회적협동조합"
+BIZINFO:PBLN_000000000125345,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:VDE4TE5IYGKOQHNY4C5CW3ID,,ELIGIBILITY,BUSINESS_TYPE,「마을기업 육성 및 지원에 관한 법률」에 따른 (예비)마을기업,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"근로자 5인 미만 기업(70%), 5인 이상 기업(30%)
+-「사회적기업 육성법」에 따른 (예비)사회적기업
+-「마을기업 육성 및 지원에 관한 법률」에 따른 (예비)마을기업
+-「협동조합 기본법」에 따른 사회적협동조합"
+BIZINFO:PBLN_000000000125345,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:XRWVSMMAS3FHYNAVYSFCQBQN,,ELIGIBILITY,BUSINESS_TYPE,「사회적기업 육성법」에 따른 (예비)사회적기업,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"근로자 5인 미만 기업(70%), 5인 이상 기업(30%)
+-「사회적기업 육성법」에 따른 (예비)사회적기업
+-「마을기업 육성 및 지원에 관한 법률」에 따른 (예비)마을기업
+-「협동조합 기본법」에 따른 사회적협동조합"
+BIZINFO:PBLN_000000000125974,BIZINFO,PARTIAL_MATCH,WRONG_VALUE,GOLD:TEFDTMO53JINEPFKJCJ2JIPB,CND:EREHCCODQMCTWPCEDVASQPZT,ELIGIBILITY,BUSINESS_TYPE,진주시 지역의 발달장애인 가족공동 창업기업,창업기업,value;evidence,OVERLAPPING_SPAN,MECHANICAL_FIELD_DIFF,"진주시 지역의 발달장애인 가족공동 창업기업, 예비창업자 및 창업특화교육 참여 교육생"
+BIZINFO:PBLN_000000000125974,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:DGZZY3OLVW4MRFC5EBWS563S,,ELIGIBILITY,BUSINESS_LOCATION,진주시 지역,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"진주시 지역의 발달장애인 가족공동 창업기업, 예비창업자 및 창업특화교육 참여 교육생"
+BIZINFO:PBLN_000000000125974,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:ELW44XRIKVDP6WGGDXLQNUKZ,,ELIGIBILITY,PROGRAM_PARTICIPATION,창업특화교육 참여 교육생,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"진주시 지역의 발달장애인 가족공동 창업기업, 예비창업자 및 창업특화교육 참여 교육생"
+BIZINFO:PBLN_000000000125974,BIZINFO,FALSE_NEGATIVE,STRICT_FN_OVERLAPS_PARTIAL_MATCH,GOLD:TEFDTMO53JINEPFKJCJ2JIPB,,ELIGIBILITY,BUSINESS_TYPE,진주시 지역의 발달장애인 가족공동 창업기업,,partial pair exists; counted FN under strict policy; not a separate absent extraction,GOLD_SPAN_VERIFIED,CONFIRMED_EVALUATOR_MATCH_OUTPUT,"진주시 지역의 발달장애인 가족공동 창업기업, 예비창업자 및 창업특화교육 참여 교육생"
+BIZINFO:PBLN_000000000125974,BIZINFO,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:EREHCCODQMCTWPCEDVASQPZT,ELIGIBILITY,BUSINESS_TYPE,,창업기업,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"진주시 지역의 발달장애인 가족공동 창업기업, 예비창업자 및 창업특화교육 참여 교육생"
+BIZINFO:PBLN_000000000126490,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:CD7GO4EYSLWUYM7X2X7Y7P5P,,ELIGIBILITY,IP_RIGHT_VALIDITY,유효한 지식재산권,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,대한민국에 사업자로 등록된 중소ㆍ중견기업 중 지원 희망 국가 내 유효한 지식재산권(상표ㆍ디자인)을 보유한 기업
+BIZINFO:PBLN_000000000126490,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:G7UCL7P2QR2S644ZNOOMIA6X,,ELIGIBILITY,BUSINESS_REGISTRATION_STATUS,대한민국에 사업자로 등록된,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,대한민국에 사업자로 등록된 중소ㆍ중견기업 중 지원 희망 국가 내 유효한 지식재산권(상표ㆍ디자인)을 보유한 기업
+BIZINFO:PBLN_000000000126490,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:IUI7OJRR3CKO27RGPIGAQ7PL,,ELIGIBILITY,IP_RIGHT_COUNTRY,지원 희망 국가 내,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,대한민국에 사업자로 등록된 중소ㆍ중견기업 중 지원 희망 국가 내 유효한 지식재산권(상표ㆍ디자인)을 보유한 기업
+BIZINFO:PBLN_000000000126490,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:JBVFWBQQPQE2BAT5W3QT2FMJ,,ELIGIBILITY,IP_RIGHT_OWNERSHIP,보유한 기업,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,대한민국에 사업자로 등록된 중소ㆍ중견기업 중 지원 희망 국가 내 유효한 지식재산권(상표ㆍ디자인)을 보유한 기업
+BIZINFO:PBLN_000000000126490,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:KLBG2PGX6LPQBHAAWRGRFEWO,,ELIGIBILITY,IP_RIGHT_TYPE,상표ㆍ디자인,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,대한민국에 사업자로 등록된 중소ㆍ중견기업 중 지원 희망 국가 내 유효한 지식재산권(상표ㆍ디자인)을 보유한 기업
+BIZINFO:PBLN_000000000126490,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:VKMSFSS6WQWCAH3F3CCYWKII,,ELIGIBILITY,BUSINESS_TYPE,중소ㆍ중견기업,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,대한민국에 사업자로 등록된 중소ㆍ중견기업 중 지원 희망 국가 내 유효한 지식재산권(상표ㆍ디자인)을 보유한 기업
+BIZINFO:PBLN_000000000126715,BIZINFO,PARTIAL_MATCH,WRONG_EVIDENCE,GOLD:3HUEFEUMXRG65C4ERUYF3QZM,CND:HRCRNQLAG4IATHKU4GIYZJ2H,ELIGIBILITY,BUSINESS_AGE,국내기업은 접수마감일 현재 사업자등록증 및 법인등기부등본 기준으로 창업 1년 이상 경과,창업 1년 이상,evidence,OVERLAPPING_SPAN,MECHANICAL_FIELD_DIFF,"기업, 대학, 연구기관, 의료기관(산업기술혁신사업 공통 운영요령 제2조(용어의 정의))
+- 주관연구개발기관 및 공동연구개발기관 中 국내기업은 접수마감일 현재 사업자등록증 및 법인등기부등본 기준으로 창업 1년 이상 경과하고, 한국산업기술진흥협회가 발급한 “기업부설연구소 인정서“를 보유하고 있는 국내사업자"
+BIZINFO:PBLN_000000000126715,BIZINFO,FALSE_NEGATIVE,STRICT_FN_OVERLAPS_PARTIAL_MATCH,GOLD:3HUEFEUMXRG65C4ERUYF3QZM,,ELIGIBILITY,BUSINESS_AGE,국내기업은 접수마감일 현재 사업자등록증 및 법인등기부등본 기준으로 창업 1년 이상 경과,,partial pair exists; counted FN under strict policy; not a separate absent extraction,GOLD_SPAN_VERIFIED,CONFIRMED_EVALUATOR_MATCH_OUTPUT,"기업, 대학, 연구기관, 의료기관(산업기술혁신사업 공통 운영요령 제2조(용어의 정의))
+- 주관연구개발기관 및 공동연구개발기관 中 국내기업은 접수마감일 현재 사업자등록증 및 법인등기부등본 기준으로 창업 1년 이상 경과하고, 한국산업기술진흥협회가 발급한 “기업부설연구소 인정서“를 보유하고 있는 국내사업자"
+BIZINFO:PBLN_000000000126715,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:NTM4C6LSAWVPGV3LWZKNLHOF,,ELIGIBILITY,BUSINESS_TYPE,"기업, 대학, 연구기관, 의료기관",,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"기업, 대학, 연구기관, 의료기관(산업기술혁신사업 공통 운영요령 제2조(용어의 정의))
+- 주관연구개발기관 및 공동연구개발기관 中 국내기업은 접수마감일 현재 사업자등록증 및 법인등기부등본 기준으로 창업 1년 이상 경과하고, 한국산업기술진흥협회가 발급한 “기업부설연구소 인정서“를 보유하고 있는 국내사업자"
+BIZINFO:PBLN_000000000126715,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:W7UTQQGSTSDQWE6TTFAXCLGG,,ELIGIBILITY,CERTIFICATION,한국산업기술진흥협회가 발급한 “기업부설연구소 인정서“를 보유,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"기업, 대학, 연구기관, 의료기관(산업기술혁신사업 공통 운영요령 제2조(용어의 정의))
+- 주관연구개발기관 및 공동연구개발기관 中 국내기업은 접수마감일 현재 사업자등록증 및 법인등기부등본 기준으로 창업 1년 이상 경과하고, 한국산업기술진흥협회가 발급한 “기업부설연구소 인정서“를 보유하고 있는 국내사업자"
+BIZINFO:PBLN_000000000126715,BIZINFO,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:HRCRNQLAG4IATHKU4GIYZJ2H,ELIGIBILITY,BUSINESS_AGE,,창업 1년 이상,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"기업, 대학, 연구기관, 의료기관(산업기술혁신사업 공통 운영요령 제2조(용어의 정의))
+- 주관연구개발기관 및 공동연구개발기관 中 국내기업은 접수마감일 현재 사업자등록증 및 법인등기부등본 기준으로 창업 1년 이상 경과하고, 한국산업기술진흥협회가 발급한 “기업부설연구소 인정서“를 보유하고 있는 국내사업자"
+BIZINFO:PBLN_000000000126899,BIZINFO,PARTIAL_MATCH,WRONG_OPERATOR,GOLD:HZ53XBKB4MYLIOEBBVU6PVLN,CND:I2QXS2GLUWZY2LPNQT6EJWEV,ELIGIBILITY,BUSINESS_TYPE,「중소기업기본법」시행령 제3조제1항에 따른 중ㆍ소기업,중소기업,operator;value;evidence,OVERLAPPING_SPAN,MECHANICAL_FIELD_DIFF,홍천군 관내 소재지의 「중소기업기본법」시행령 제3조제1항에 따른 중ㆍ소기업 중 IoT 측정기기 부착 의무 대상 사업장
+BIZINFO:PBLN_000000000126899,BIZINFO,FALSE_NEGATIVE,STRICT_FN_OVERLAPS_PARTIAL_MATCH,GOLD:HZ53XBKB4MYLIOEBBVU6PVLN,,ELIGIBILITY,BUSINESS_TYPE,「중소기업기본법」시행령 제3조제1항에 따른 중ㆍ소기업,,partial pair exists; counted FN under strict policy; not a separate absent extraction,GOLD_SPAN_VERIFIED,CONFIRMED_EVALUATOR_MATCH_OUTPUT,홍천군 관내 소재지의 「중소기업기본법」시행령 제3조제1항에 따른 중ㆍ소기업 중 IoT 측정기기 부착 의무 대상 사업장
+BIZINFO:PBLN_000000000126899,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:LO2DVXPVU5RGGJBPZELBXR7N,,ELIGIBILITY,BUSINESS_LOCATION,홍천군 관내 소재지,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,홍천군 관내 소재지의 「중소기업기본법」시행령 제3조제1항에 따른 중ㆍ소기업 중 IoT 측정기기 부착 의무 대상 사업장
+BIZINFO:PBLN_000000000126899,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:UEUE3CTKYGFJ6XMRJTRWU733,,ELIGIBILITY,REGULATORY_STATUS,IoT 측정기기 부착 의무 대상 사업장,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,홍천군 관내 소재지의 「중소기업기본법」시행령 제3조제1항에 따른 중ㆍ소기업 중 IoT 측정기기 부착 의무 대상 사업장
+BIZINFO:PBLN_000000000126899,BIZINFO,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:I2QXS2GLUWZY2LPNQT6EJWEV,ELIGIBILITY,BUSINESS_TYPE,,중소기업,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,홍천군 관내 소재지의 「중소기업기본법」시행령 제3조제1항에 따른 중ㆍ소기업 중 IoT 측정기기 부착 의무 대상 사업장
+BIZINFO:PBLN_000000000127992,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:6RAWCPUTX3CXN7GKVIWHKY5J,,ELIGIBILITY,QUALITATIVE_QUALIFICATION,(정보문화 분야) 디지털 격차ㆍ역기능 해소 및 디지털 역량 강화 등을 통해 디지털 포용사회 구현과 건전한 정보문화 창달에 기여한 다음과 같은 공적을 갖춘 자,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"(정보통신 분야) 인공지능, 정보방송통신, 국가지능정보화, 우정사업 등의 발전에 기여한 공적이 뛰어난 단체 등
+- (정보문화 분야) 디지털 격차ㆍ역기능 해소 및 디지털 역량 강화 등을 통해 디지털 포용사회 구현과 건전한 정보문화 창달에 기여한 다음과 같은 공적을 갖춘 자
+※ 자세한 지원대상 공고문 참조"
+BIZINFO:PBLN_000000000127992,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:ZFO33UY2FOFDR3EUY3IL7I7B,,ELIGIBILITY,QUALITATIVE_QUALIFICATION,"(정보통신 분야) 인공지능, 정보방송통신, 국가지능정보화, 우정사업 등의 발전에 기여한 공적이 뛰어난 단체 등",,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"(정보통신 분야) 인공지능, 정보방송통신, 국가지능정보화, 우정사업 등의 발전에 기여한 공적이 뛰어난 단체 등
+- (정보문화 분야) 디지털 격차ㆍ역기능 해소 및 디지털 역량 강화 등을 통해 디지털 포용사회 구현과 건전한 정보문화 창달에 기여한 다음과 같은 공적을 갖춘 자
+※ 자세한 지원대상 공고문 참조"
+BIZINFO:PBLN_000000000128028,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:2OTFWPYD5V3ZWNU3VCZ4T4XY,,ELIGIBILITY,BUSINESS_TYPE,어업경영 관련 정보 등을 등록한 어업인 등,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"강화된 자원보호 의무를 이행하는 어업인 등
+-「농어업경영체 육성 및 지원에 관한 법률」제4조제1항제2호에 따라 어업경영 관련 정보 등을 등록한 어업인 등과「수산업법」제7조ㆍ제40조 및「내수면어업법」제6조ㆍ제9조에 따라 면허 또는 허가를 받은「상법」상 회사
+- 법 시행령 제6조에 따라 해양수산부장관이 정하여 고시하는 준수의무 중에서 기본의무와 2개 이상의 선택의무 이행계획서를 제출한 어업인 등"
+BIZINFO:PBLN_000000000128028,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:5ZJTE4BIUAX3EUSQ5ITDADN3,,ELIGIBILITY,LICENSE_STATUS,면허 또는 허가를 받은,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"강화된 자원보호 의무를 이행하는 어업인 등
+-「농어업경영체 육성 및 지원에 관한 법률」제4조제1항제2호에 따라 어업경영 관련 정보 등을 등록한 어업인 등과「수산업법」제7조ㆍ제40조 및「내수면어업법」제6조ㆍ제9조에 따라 면허 또는 허가를 받은「상법」상 회사
+- 법 시행령 제6조에 따라 해양수산부장관이 정하여 고시하는 준수의무 중에서 기본의무와 2개 이상의 선택의무 이행계획서를 제출한 어업인 등"
+BIZINFO:PBLN_000000000128028,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:E4CL7MPMP5KOLIG4HDGYGSEC,,ELIGIBILITY,OPTIONAL_DUTY_COUNT,2개 이상의 선택의무,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"강화된 자원보호 의무를 이행하는 어업인 등
+-「농어업경영체 육성 및 지원에 관한 법률」제4조제1항제2호에 따라 어업경영 관련 정보 등을 등록한 어업인 등과「수산업법」제7조ㆍ제40조 및「내수면어업법」제6조ㆍ제9조에 따라 면허 또는 허가를 받은「상법」상 회사
+- 법 시행령 제6조에 따라 해양수산부장관이 정하여 고시하는 준수의무 중에서 기본의무와 2개 이상의 선택의무 이행계획서를 제출한 어업인 등"
+BIZINFO:PBLN_000000000128028,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:FYNJKZMSMVCDXR7TNUWZ47GV,,ELIGIBILITY,COMPLIANCE_STATUS,강화된 자원보호 의무를 이행하는 어업인 등,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"강화된 자원보호 의무를 이행하는 어업인 등
+-「농어업경영체 육성 및 지원에 관한 법률」제4조제1항제2호에 따라 어업경영 관련 정보 등을 등록한 어업인 등과「수산업법」제7조ㆍ제40조 및「내수면어업법」제6조ㆍ제9조에 따라 면허 또는 허가를 받은「상법」상 회사
+- 법 시행령 제6조에 따라 해양수산부장관이 정하여 고시하는 준수의무 중에서 기본의무와 2개 이상의 선택의무 이행계획서를 제출한 어업인 등"
+BIZINFO:PBLN_000000000128028,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:H2CEZ2GPY6OJL7PGCHYX7LQQ,,ELIGIBILITY,BUSINESS_TYPE,「상법」상 회사,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"강화된 자원보호 의무를 이행하는 어업인 등
+-「농어업경영체 육성 및 지원에 관한 법률」제4조제1항제2호에 따라 어업경영 관련 정보 등을 등록한 어업인 등과「수산업법」제7조ㆍ제40조 및「내수면어업법」제6조ㆍ제9조에 따라 면허 또는 허가를 받은「상법」상 회사
+- 법 시행령 제6조에 따라 해양수산부장관이 정하여 고시하는 준수의무 중에서 기본의무와 2개 이상의 선택의무 이행계획서를 제출한 어업인 등"
+BIZINFO:PBLN_000000000128028,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:V4RWLG7CMNSKJ2JGFZXY2PGU,,ELIGIBILITY,COMPLIANCE_PLAN_CONTENT,기본의무,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"강화된 자원보호 의무를 이행하는 어업인 등
+-「농어업경영체 육성 및 지원에 관한 법률」제4조제1항제2호에 따라 어업경영 관련 정보 등을 등록한 어업인 등과「수산업법」제7조ㆍ제40조 및「내수면어업법」제6조ㆍ제9조에 따라 면허 또는 허가를 받은「상법」상 회사
+- 법 시행령 제6조에 따라 해양수산부장관이 정하여 고시하는 준수의무 중에서 기본의무와 2개 이상의 선택의무 이행계획서를 제출한 어업인 등"
+BIZINFO:PBLN_000000000128028,BIZINFO,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:WQMKMUOWL2FYX3PID6ZG5JB5,,ELIGIBILITY,DOCUMENT_SUBMISSION,이행계획서를 제출한,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"강화된 자원보호 의무를 이행하는 어업인 등
+-「농어업경영체 육성 및 지원에 관한 법률」제4조제1항제2호에 따라 어업경영 관련 정보 등을 등록한 어업인 등과「수산업법」제7조ㆍ제40조 및「내수면어업법」제6조ㆍ제9조에 따라 면허 또는 허가를 받은「상법」상 회사
+- 법 시행령 제6조에 따라 해양수산부장관이 정하여 고시하는 준수의무 중에서 기본의무와 2개 이상의 선택의무 이행계획서를 제출한 어업인 등"
+KSTARTUP:176001,KSTARTUP,PARTIAL_MATCH,WRONG_EVIDENCE,GOLD:3K2JYZN2YHN2QCUYJDJ3RKKD,CND:L32RLGA23VMTZMZ6K6MHYGL2,ELIGIBILITY,BUSINESS_TYPE,중소기업기본법에 의한 중소기업,중소기업,evidence,OVERLAPPING_SPAN,MECHANICAL_FIELD_DIFF,"- 업력 만 1년 이상
+- 전체 매출액 중 스포츠산업 비중 10% 이상
+- 최근 결산년도 매출액 3억원 이상
+- 중소기업기본법에 의한 중소기업"
+KSTARTUP:176001,KSTARTUP,FALSE_NEGATIVE,STRICT_FN_OVERLAPS_PARTIAL_MATCH,GOLD:3K2JYZN2YHN2QCUYJDJ3RKKD,,ELIGIBILITY,BUSINESS_TYPE,중소기업기본법에 의한 중소기업,,partial pair exists; counted FN under strict policy; not a separate absent extraction,GOLD_SPAN_VERIFIED,CONFIRMED_EVALUATOR_MATCH_OUTPUT,"- 업력 만 1년 이상
+- 전체 매출액 중 스포츠산업 비중 10% 이상
+- 최근 결산년도 매출액 3억원 이상
+- 중소기업기본법에 의한 중소기업"
+KSTARTUP:176001,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:LBHRZSRUMR3AC4TP4VRAIF4M,,ELIGIBILITY,REVENUE,최근 결산년도 매출액 3억원 이상,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"- 업력 만 1년 이상
+- 전체 매출액 중 스포츠산업 비중 10% 이상
+- 최근 결산년도 매출액 3억원 이상
+- 중소기업기본법에 의한 중소기업"
+KSTARTUP:176001,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:YY7C3VVWNOHRCG33RVRBXZAK,,ELIGIBILITY,INDUSTRY_REVENUE_SHARE,전체 매출액 중 스포츠산업 비중 10% 이상,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"- 업력 만 1년 이상
+- 전체 매출액 중 스포츠산업 비중 10% 이상
+- 최근 결산년도 매출액 3억원 이상
+- 중소기업기본법에 의한 중소기업"
+KSTARTUP:176001,KSTARTUP,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:L32RLGA23VMTZMZ6K6MHYGL2,ELIGIBILITY,BUSINESS_TYPE,,중소기업,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"- 업력 만 1년 이상
+- 전체 매출액 중 스포츠산업 비중 10% 이상
+- 최근 결산년도 매출액 3억원 이상
+- 중소기업기본법에 의한 중소기업"
+KSTARTUP:176001,KSTARTUP,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:Z3DLRYMGSCRBVNJHXRPVXDI7,ELIGIBILITY,REVENUE_FINANCIAL,,매출액 3억원 이상,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"- 업력 만 1년 이상
+- 전체 매출액 중 스포츠산업 비중 10% 이상
+- 최근 결산년도 매출액 3억원 이상
+- 중소기업기본법에 의한 중소기업"
+KSTARTUP:176387,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:3W6FRNVH5K3FERWLWHNQYZW2,,ELIGIBILITY,MARKET_DEMAND_EVIDENCE,시장의 실제 수요를 증명하고,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"아래 조건 중 하나 이상 충족한 팀/2년 미만 기업
+1. 피지컬ai 관련 하드웨어, 소프트웨어 등 딥테크 분야의 혁신적인 기술력을 보유한 엔지니어링 기반 창업팀
+2. 시장의 실제 수요를 증명하고, $400,000 이상(한화 약 5억 원 이상)의 투자를 유치하고자 하는 초기 기업
+
+*선발 프로세스는 지원서 접수 순으로 진행되며, 선발 인원 충족 시 조기에 마감될 수 있으니 빠른 지원을 권장합니다.
+* 해당 프로그램은 이미 제품을 개발 중이거나 초기 모델을 보유한 팀에게 최적화되어 있습니다. 단순한 아이디어 단계를 넘어, 실제 구현 가능한 기술력을 바탕으로 빠르게 시장에 진입하고자 하는 팀을 환영합니다. 프로그램 기간 중 유의미한 고객 지표나 실제 수요가 확인될 경우, 즉시 최대 50만 달러 규모(6억원 규모)의 투자 심사가 진행됩니다.
+
+대상 산업
+• Physical AI
+• 로보틱스
+• 반도체
+• 모빌리티 및 스마트 인프라
+• 게임, e스포츠
+• 생물의학 및 의료
+• 항공우주 및 방위
+• 기타 시스템 또는 첨단 산업"
+KSTARTUP:176387,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:7MYR6H3EWDHLXIIPEU7ZHTB5,,ELIGIBILITY,QUALITATIVE_QUALIFICATION,"피지컬ai 관련 하드웨어, 소프트웨어 등 딥테크 분야의 혁신적인 기술력을 보유한 엔지니어링 기반 창업팀",,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"아래 조건 중 하나 이상 충족한 팀/2년 미만 기업
+1. 피지컬ai 관련 하드웨어, 소프트웨어 등 딥테크 분야의 혁신적인 기술력을 보유한 엔지니어링 기반 창업팀
+2. 시장의 실제 수요를 증명하고, $400,000 이상(한화 약 5억 원 이상)의 투자를 유치하고자 하는 초기 기업
+
+*선발 프로세스는 지원서 접수 순으로 진행되며, 선발 인원 충족 시 조기에 마감될 수 있으니 빠른 지원을 권장합니다.
+* 해당 프로그램은 이미 제품을 개발 중이거나 초기 모델을 보유한 팀에게 최적화되어 있습니다. 단순한 아이디어 단계를 넘어, 실제 구현 가능한 기술력을 바탕으로 빠르게 시장에 진입하고자 하는 팀을 환영합니다. 프로그램 기간 중 유의미한 고객 지표나 실제 수요가 확인될 경우, 즉시 최대 50만 달러 규모(6억원 규모)의 투자 심사가 진행됩니다.
+
+대상 산업
+• Physical AI
+• 로보틱스
+• 반도체
+• 모빌리티 및 스마트 인프라
+• 게임, e스포츠
+• 생물의학 및 의료
+• 항공우주 및 방위
+• 기타 시스템 또는 첨단 산업"
+KSTARTUP:176387,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:RRSZY4GHHCLOGXSIPBBELABS,,ELIGIBILITY,INVESTMENT_INTENT,"$400,000 이상(한화 약 5억 원 이상)의 투자를 유치하고자 하는",,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"아래 조건 중 하나 이상 충족한 팀/2년 미만 기업
+1. 피지컬ai 관련 하드웨어, 소프트웨어 등 딥테크 분야의 혁신적인 기술력을 보유한 엔지니어링 기반 창업팀
+2. 시장의 실제 수요를 증명하고, $400,000 이상(한화 약 5억 원 이상)의 투자를 유치하고자 하는 초기 기업
+
+*선발 프로세스는 지원서 접수 순으로 진행되며, 선발 인원 충족 시 조기에 마감될 수 있으니 빠른 지원을 권장합니다.
+* 해당 프로그램은 이미 제품을 개발 중이거나 초기 모델을 보유한 팀에게 최적화되어 있습니다. 단순한 아이디어 단계를 넘어, 실제 구현 가능한 기술력을 바탕으로 빠르게 시장에 진입하고자 하는 팀을 환영합니다. 프로그램 기간 중 유의미한 고객 지표나 실제 수요가 확인될 경우, 즉시 최대 50만 달러 규모(6억원 규모)의 투자 심사가 진행됩니다.
+
+대상 산업
+• Physical AI
+• 로보틱스
+• 반도체
+• 모빌리티 및 스마트 인프라
+• 게임, e스포츠
+• 생물의학 및 의료
+• 항공우주 및 방위
+• 기타 시스템 또는 첨단 산업"
+KSTARTUP:176387,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:UXPA362Y6IMQQIHYKLAPLSE3,,ELIGIBILITY,BUSINESS_AGE,2년 미만 기업,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"아래 조건 중 하나 이상 충족한 팀/2년 미만 기업
+1. 피지컬ai 관련 하드웨어, 소프트웨어 등 딥테크 분야의 혁신적인 기술력을 보유한 엔지니어링 기반 창업팀
+2. 시장의 실제 수요를 증명하고, $400,000 이상(한화 약 5억 원 이상)의 투자를 유치하고자 하는 초기 기업
+
+*선발 프로세스는 지원서 접수 순으로 진행되며, 선발 인원 충족 시 조기에 마감될 수 있으니 빠른 지원을 권장합니다.
+* 해당 프로그램은 이미 제품을 개발 중이거나 초기 모델을 보유한 팀에게 최적화되어 있습니다. 단순한 아이디어 단계를 넘어, 실제 구현 가능한 기술력을 바탕으로 빠르게 시장에 진입하고자 하는 팀을 환영합니다. 프로그램 기간 중 유의미한 고객 지표나 실제 수요가 확인될 경우, 즉시 최대 50만 달러 규모(6억원 규모)의 투자 심사가 진행됩니다.
+
+대상 산업
+• Physical AI
+• 로보틱스
+• 반도체
+• 모빌리티 및 스마트 인프라
+• 게임, e스포츠
+• 생물의학 및 의료
+• 항공우주 및 방위
+• 기타 시스템 또는 첨단 산업"
+KSTARTUP:176387,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:VLL2HEE7YWR4TICK3RKKE7WQ,,ELIGIBILITY,INDUSTRY,"대상 산업
+• Physical AI
+• 로보틱스
+• 반도체
+• 모빌리티 및 스마트 인프라
+• 게임, e스포츠
+• 생물의학 및 의료
+• 항공우주 및 방위
+• 기타 시스템 또는 첨단 산업",,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"아래 조건 중 하나 이상 충족한 팀/2년 미만 기업
+1. 피지컬ai 관련 하드웨어, 소프트웨어 등 딥테크 분야의 혁신적인 기술력을 보유한 엔지니어링 기반 창업팀
+2. 시장의 실제 수요를 증명하고, $400,000 이상(한화 약 5억 원 이상)의 투자를 유치하고자 하는 초기 기업
+
+*선발 프로세스는 지원서 접수 순으로 진행되며, 선발 인원 충족 시 조기에 마감될 수 있으니 빠른 지원을 권장합니다.
+* 해당 프로그램은 이미 제품을 개발 중이거나 초기 모델을 보유한 팀에게 최적화되어 있습니다. 단순한 아이디어 단계를 넘어, 실제 구현 가능한 기술력을 바탕으로 빠르게 시장에 진입하고자 하는 팀을 환영합니다. 프로그램 기간 중 유의미한 고객 지표나 실제 수요가 확인될 경우, 즉시 최대 50만 달러 규모(6억원 규모)의 투자 심사가 진행됩니다.
+
+대상 산업
+• Physical AI
+• 로보틱스
+• 반도체
+• 모빌리티 및 스마트 인프라
+• 게임, e스포츠
+• 생물의학 및 의료
+• 항공우주 및 방위
+• 기타 시스템 또는 첨단 산업"
+KSTARTUP:176387,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:XJF4UD66OOR3WSEYH2MRQPAI,,ELIGIBILITY,BUSINESS_TYPE,초기 기업,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"아래 조건 중 하나 이상 충족한 팀/2년 미만 기업
+1. 피지컬ai 관련 하드웨어, 소프트웨어 등 딥테크 분야의 혁신적인 기술력을 보유한 엔지니어링 기반 창업팀
+2. 시장의 실제 수요를 증명하고, $400,000 이상(한화 약 5억 원 이상)의 투자를 유치하고자 하는 초기 기업
+
+*선발 프로세스는 지원서 접수 순으로 진행되며, 선발 인원 충족 시 조기에 마감될 수 있으니 빠른 지원을 권장합니다.
+* 해당 프로그램은 이미 제품을 개발 중이거나 초기 모델을 보유한 팀에게 최적화되어 있습니다. 단순한 아이디어 단계를 넘어, 실제 구현 가능한 기술력을 바탕으로 빠르게 시장에 진입하고자 하는 팀을 환영합니다. 프로그램 기간 중 유의미한 고객 지표나 실제 수요가 확인될 경우, 즉시 최대 50만 달러 규모(6억원 규모)의 투자 심사가 진행됩니다.
+
+대상 산업
+• Physical AI
+• 로보틱스
+• 반도체
+• 모빌리티 및 스마트 인프라
+• 게임, e스포츠
+• 생물의학 및 의료
+• 항공우주 및 방위
+• 기타 시스템 또는 첨단 산업"
+KSTARTUP:176482,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:22TNQD3I4E5RRBSFHNQQP4DD,,ELIGIBILITY,BRAND_SECTOR,K-뷰티·웰니스 브랜드,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,국내·외 판로 확장이 필요한 K-뷰티·웰니스 브랜드
+KSTARTUP:176482,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:PRLDREXY4VK4PQM3LGNAEXSY,,ELIGIBILITY,MARKET_EXPANSION_NEED,국내·외 판로 확장이 필요한,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,국내·외 판로 확장이 필요한 K-뷰티·웰니스 브랜드
+KSTARTUP:176659,KSTARTUP,PARTIAL_MATCH,WRONG_OPERATOR,GOLD:AXVMIDI43OATF5QS5JEJYHD5,CND:ASA356OE3P2OXP5Q2YB2EPOS,ELIGIBILITY,BUSINESS_TYPE,중소기업 및 스타트업 등,중소기업,operator;value;evidence,OVERLAPPING_SPAN,MECHANICAL_FIELD_DIFF,서울 소재 중소기업 및 스타트업 등
+KSTARTUP:176659,KSTARTUP,PARTIAL_MATCH,WRONG_VALUE,GOLD:LQ6WGJFWKFP57QHDO6PQ7MPL,CND:D4FGTPDRPH2FTH4EBGDCO5BU,ELIGIBILITY,BUSINESS_LOCATION,서울 소재,서울,value;evidence,OVERLAPPING_SPAN,MECHANICAL_FIELD_DIFF,서울 소재 중소기업 및 스타트업 등
+KSTARTUP:176659,KSTARTUP,FALSE_NEGATIVE,STRICT_FN_OVERLAPS_PARTIAL_MATCH,GOLD:AXVMIDI43OATF5QS5JEJYHD5,,ELIGIBILITY,BUSINESS_TYPE,중소기업 및 스타트업 등,,partial pair exists; counted FN under strict policy; not a separate absent extraction,GOLD_SPAN_VERIFIED,CONFIRMED_EVALUATOR_MATCH_OUTPUT,서울 소재 중소기업 및 스타트업 등
+KSTARTUP:176659,KSTARTUP,FALSE_NEGATIVE,STRICT_FN_OVERLAPS_PARTIAL_MATCH,GOLD:LQ6WGJFWKFP57QHDO6PQ7MPL,,ELIGIBILITY,BUSINESS_LOCATION,서울 소재,,partial pair exists; counted FN under strict policy; not a separate absent extraction,GOLD_SPAN_VERIFIED,CONFIRMED_EVALUATOR_MATCH_OUTPUT,서울 소재 중소기업 및 스타트업 등
+KSTARTUP:176659,KSTARTUP,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:ASA356OE3P2OXP5Q2YB2EPOS,ELIGIBILITY,BUSINESS_TYPE,,중소기업,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,서울 소재 중소기업 및 스타트업 등
+KSTARTUP:176659,KSTARTUP,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:D4FGTPDRPH2FTH4EBGDCO5BU,ELIGIBILITY,BUSINESS_LOCATION,,서울,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,서울 소재 중소기업 및 스타트업 등
+KSTARTUP:176813,KSTARTUP,PARTIAL_MATCH,WRONG_EVIDENCE,GOLD:CLG4YUJX3JBDNDXIIAIMP6HK,CND:F77XTN5WHTCQTTNVTQ4V6NTF,ELIGIBILITY,BUSINESS_AGE,창업 7년 미만의 기업,창업자 또는 창업 7년 미만,evidence,OVERLAPPING_SPAN,MECHANICAL_FIELD_DIFF,"ㅇ사업목적과 아이템이 「첨단기술 및 제품의 범위」에 속하는 예비창업자 또는 창업 7년 미만의 기업(입주신청일 현재)
+ㅇ정부지원 타 보육센터 입주경험이 없는 자(지방 창업보육센터 제외)
+ㅇ서강대학교와 산학협력사업 진행중인 기업 우대
+ㅇ서강대학교와 기술이전 가능한 기업 우대"
+KSTARTUP:176813,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:A3WST6DTWQKFYMUD6DWLMKYK,,PREFERENCE,SOGANG_ACADEMIC_COOPERATION,서강대학교와 산학협력사업 진행중인 기업 우대,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"ㅇ사업목적과 아이템이 「첨단기술 및 제품의 범위」에 속하는 예비창업자 또는 창업 7년 미만의 기업(입주신청일 현재)
+ㅇ정부지원 타 보육센터 입주경험이 없는 자(지방 창업보육센터 제외)
+ㅇ서강대학교와 산학협력사업 진행중인 기업 우대
+ㅇ서강대학교와 기술이전 가능한 기업 우대"
+KSTARTUP:176813,KSTARTUP,FALSE_NEGATIVE,STRICT_FN_OVERLAPS_PARTIAL_MATCH,GOLD:CLG4YUJX3JBDNDXIIAIMP6HK,,ELIGIBILITY,BUSINESS_AGE,창업 7년 미만의 기업,,partial pair exists; counted FN under strict policy; not a separate absent extraction,GOLD_SPAN_VERIFIED,CONFIRMED_EVALUATOR_MATCH_OUTPUT,"ㅇ사업목적과 아이템이 「첨단기술 및 제품의 범위」에 속하는 예비창업자 또는 창업 7년 미만의 기업(입주신청일 현재)
+ㅇ정부지원 타 보육센터 입주경험이 없는 자(지방 창업보육센터 제외)
+ㅇ서강대학교와 산학협력사업 진행중인 기업 우대
+ㅇ서강대학교와 기술이전 가능한 기업 우대"
+KSTARTUP:176813,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:UTDHOPDVHP5NDS7BL2XQ773U,,ELIGIBILITY,RESTRICTED_GOV_INCUBATOR_EXPERIENCE_COUNT,정부지원 타 보육센터 입주경험이 없는 자(지방 창업보육센터 제외),,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"ㅇ사업목적과 아이템이 「첨단기술 및 제품의 범위」에 속하는 예비창업자 또는 창업 7년 미만의 기업(입주신청일 현재)
+ㅇ정부지원 타 보육센터 입주경험이 없는 자(지방 창업보육센터 제외)
+ㅇ서강대학교와 산학협력사업 진행중인 기업 우대
+ㅇ서강대학교와 기술이전 가능한 기업 우대"
+KSTARTUP:176813,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:UUO4VKZ34CFAU3U3V45ME6XD,,ELIGIBILITY,BUSINESS_TECHNOLOGY_SCOPE,사업목적과 아이템이 「첨단기술 및 제품의 범위」에 속하는,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"ㅇ사업목적과 아이템이 「첨단기술 및 제품의 범위」에 속하는 예비창업자 또는 창업 7년 미만의 기업(입주신청일 현재)
+ㅇ정부지원 타 보육센터 입주경험이 없는 자(지방 창업보육센터 제외)
+ㅇ서강대학교와 산학협력사업 진행중인 기업 우대
+ㅇ서강대학교와 기술이전 가능한 기업 우대"
+KSTARTUP:176813,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:VXO7CQZP4XQO64HSS7XBZ2CI,,PREFERENCE,SOGANG_TECH_TRANSFER_POSSIBILITY,서강대학교와 기술이전 가능한 기업 우대,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"ㅇ사업목적과 아이템이 「첨단기술 및 제품의 범위」에 속하는 예비창업자 또는 창업 7년 미만의 기업(입주신청일 현재)
+ㅇ정부지원 타 보육센터 입주경험이 없는 자(지방 창업보육센터 제외)
+ㅇ서강대학교와 산학협력사업 진행중인 기업 우대
+ㅇ서강대학교와 기술이전 가능한 기업 우대"
+KSTARTUP:176813,KSTARTUP,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:AA5EI662A5TEPVKB6UMUFRSG,EXCLUSION,,,제외,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"ㅇ사업목적과 아이템이 「첨단기술 및 제품의 범위」에 속하는 예비창업자 또는 창업 7년 미만의 기업(입주신청일 현재)
+ㅇ정부지원 타 보육센터 입주경험이 없는 자(지방 창업보육센터 제외)
+ㅇ서강대학교와 산학협력사업 진행중인 기업 우대
+ㅇ서강대학교와 기술이전 가능한 기업 우대"
+KSTARTUP:176813,KSTARTUP,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:BH26BINNLVA2VMM5VCQH5RZ5,PREFERENCE,,,우대,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"ㅇ사업목적과 아이템이 「첨단기술 및 제품의 범위」에 속하는 예비창업자 또는 창업 7년 미만의 기업(입주신청일 현재)
+ㅇ정부지원 타 보육센터 입주경험이 없는 자(지방 창업보육센터 제외)
+ㅇ서강대학교와 산학협력사업 진행중인 기업 우대
+ㅇ서강대학교와 기술이전 가능한 기업 우대"
+KSTARTUP:176813,KSTARTUP,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:F77XTN5WHTCQTTNVTQ4V6NTF,ELIGIBILITY,BUSINESS_AGE,,창업자 또는 창업 7년 미만,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"ㅇ사업목적과 아이템이 「첨단기술 및 제품의 범위」에 속하는 예비창업자 또는 창업 7년 미만의 기업(입주신청일 현재)
+ㅇ정부지원 타 보육센터 입주경험이 없는 자(지방 창업보육센터 제외)
+ㅇ서강대학교와 산학협력사업 진행중인 기업 우대
+ㅇ서강대학교와 기술이전 가능한 기업 우대"
+KSTARTUP:177051,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:EI3KFA22GXNDKHHJ5ERL5MRA,,ELIGIBILITY,AI_SOLUTION,AI 솔루션 보유한 창업기업,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"공고일 기준 창업 후 7년* 이내의 AI 솔루션 보유한 창업기업
+* 신청가능 창업(설립)일 기준:’19.03.26.~’26.03.25."
+KSTARTUP:177051,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:SJF7RZ7LU57D5SYSQ722BT5R,,ELIGIBILITY,BUSINESS_AGE,공고일 기준 창업 후 7년* 이내,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"공고일 기준 창업 후 7년* 이내의 AI 솔루션 보유한 창업기업
+* 신청가능 창업(설립)일 기준:’19.03.26.~’26.03.25."
+KSTARTUP:177051,KSTARTUP,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:VUJBIE7AWNXWTHHJDGDKHLKR,ELIGIBILITY,BUSINESS_TYPE,,창업기업,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"공고일 기준 창업 후 7년* 이내의 AI 솔루션 보유한 창업기업
+* 신청가능 창업(설립)일 기준:’19.03.26.~’26.03.25."
+KSTARTUP:177292,KSTARTUP,PARTIAL_MATCH,WRONG_EVIDENCE,GOLD:IQQ5CZERF3KW2QBCVURFBWQN,CND:MEQEGWDTWUOAQG23Z7C4UGY5,ELIGIBILITY,BUSINESS_AGE,창업 3년 이내 기업,창업 3년 이내,evidence,OVERLAPPING_SPAN,MECHANICAL_FIELD_DIFF,"핀테크 분야 사업을 영위하고, 서울에 소재(본사 기준)한 창업 3년 이내 기업"
+KSTARTUP:177292,KSTARTUP,PARTIAL_MATCH,WRONG_VALUE,GOLD:ZRLT2LIHZFF7ISFRX3ATJUBK,CND:GFXGZMMUHLY7JXDOAWTE5JP2,ELIGIBILITY,BUSINESS_LOCATION,서울에 소재(본사 기준)한,서울,value;evidence,OVERLAPPING_SPAN,MECHANICAL_FIELD_DIFF,"핀테크 분야 사업을 영위하고, 서울에 소재(본사 기준)한 창업 3년 이내 기업"
+KSTARTUP:177292,KSTARTUP,FALSE_NEGATIVE,STRICT_FN_OVERLAPS_PARTIAL_MATCH,GOLD:IQQ5CZERF3KW2QBCVURFBWQN,,ELIGIBILITY,BUSINESS_AGE,창업 3년 이내 기업,,partial pair exists; counted FN under strict policy; not a separate absent extraction,GOLD_SPAN_VERIFIED,CONFIRMED_EVALUATOR_MATCH_OUTPUT,"핀테크 분야 사업을 영위하고, 서울에 소재(본사 기준)한 창업 3년 이내 기업"
+KSTARTUP:177292,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:KEG2YFCRW2FHGMRB5EHCKOH7,,ELIGIBILITY,INDUSTRY,핀테크 분야 사업을 영위하고,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"핀테크 분야 사업을 영위하고, 서울에 소재(본사 기준)한 창업 3년 이내 기업"
+KSTARTUP:177292,KSTARTUP,FALSE_NEGATIVE,STRICT_FN_OVERLAPS_PARTIAL_MATCH,GOLD:ZRLT2LIHZFF7ISFRX3ATJUBK,,ELIGIBILITY,BUSINESS_LOCATION,서울에 소재(본사 기준)한,,partial pair exists; counted FN under strict policy; not a separate absent extraction,GOLD_SPAN_VERIFIED,CONFIRMED_EVALUATOR_MATCH_OUTPUT,"핀테크 분야 사업을 영위하고, 서울에 소재(본사 기준)한 창업 3년 이내 기업"
+KSTARTUP:177292,KSTARTUP,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:GFXGZMMUHLY7JXDOAWTE5JP2,ELIGIBILITY,BUSINESS_LOCATION,,서울,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"핀테크 분야 사업을 영위하고, 서울에 소재(본사 기준)한 창업 3년 이내 기업"
+KSTARTUP:177292,KSTARTUP,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:MEQEGWDTWUOAQG23Z7C4UGY5,ELIGIBILITY,BUSINESS_AGE,,창업 3년 이내,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"핀테크 분야 사업을 영위하고, 서울에 소재(본사 기준)한 창업 3년 이내 기업"
+KSTARTUP:177447,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:2DQHTBU7LBCMIF3TV7UBSOB7,,ELIGIBILITY,DOCUMENT_SUBMISSION,관련 증빙서류 별첨 필수,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"ㅇ 대상 : 서울시 거주 청년(만 19~39세)
+
+※신청일 기준, 대상의 나이에 부합해야 함
+※대표자 및 팀원이 모두 만 19~39세 이하의 청년이어야 함
+※주민등록등본상 서울거주로 확인(신청일 날짜 기준으로 제출), 관련 증빙서류 별첨 필수
+※단, 군필자의 경우(병적증명서, 전역증 등 별도 제출) 상한 연령을 다음과 같이 연장함
+- ①군복무기간 1년 미만 : 1세, ②1년 이상~2년 미만 : 2세, ③2년이상 : 3세 연장"
+KSTARTUP:177447,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:QBTTRF3JZNJMBATWCAT3JTGC,,ELIGIBILITY,RESIDENCE,주민등록등본상 서울거주로 확인(신청일 날짜 기준으로 제출),,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"ㅇ 대상 : 서울시 거주 청년(만 19~39세)
+
+※신청일 기준, 대상의 나이에 부합해야 함
+※대표자 및 팀원이 모두 만 19~39세 이하의 청년이어야 함
+※주민등록등본상 서울거주로 확인(신청일 날짜 기준으로 제출), 관련 증빙서류 별첨 필수
+※단, 군필자의 경우(병적증명서, 전역증 등 별도 제출) 상한 연령을 다음과 같이 연장함
+- ①군복무기간 1년 미만 : 1세, ②1년 이상~2년 미만 : 2세, ③2년이상 : 3세 연장"
+KSTARTUP:177447,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:UMIN5GYYJI25MI4RXWSOFKZQ,,ELIGIBILITY,APPLICANT_AGE,대표자 및 팀원이 모두 만 19~39세 이하의 청년이어야 함,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"ㅇ 대상 : 서울시 거주 청년(만 19~39세)
+
+※신청일 기준, 대상의 나이에 부합해야 함
+※대표자 및 팀원이 모두 만 19~39세 이하의 청년이어야 함
+※주민등록등본상 서울거주로 확인(신청일 날짜 기준으로 제출), 관련 증빙서류 별첨 필수
+※단, 군필자의 경우(병적증명서, 전역증 등 별도 제출) 상한 연령을 다음과 같이 연장함
+- ①군복무기간 1년 미만 : 1세, ②1년 이상~2년 미만 : 2세, ③2년이상 : 3세 연장"
+KSTARTUP:177447,KSTARTUP,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:BUCZM3BXYMTYNACDAS47T42D,ELIGIBILITY,BUSINESS_LOCATION,,서울,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"ㅇ 대상 : 서울시 거주 청년(만 19~39세)
+
+※신청일 기준, 대상의 나이에 부합해야 함
+※대표자 및 팀원이 모두 만 19~39세 이하의 청년이어야 함
+※주민등록등본상 서울거주로 확인(신청일 날짜 기준으로 제출), 관련 증빙서류 별첨 필수
+※단, 군필자의 경우(병적증명서, 전역증 등 별도 제출) 상한 연령을 다음과 같이 연장함
+- ①군복무기간 1년 미만 : 1세, ②1년 이상~2년 미만 : 2세, ③2년이상 : 3세 연장"
+KSTARTUP:177447,KSTARTUP,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:CUBRQ6S66FNJBGGF52NU2JGP,ELIGIBILITY,REPRESENTATIVE_AGE,,대표자 및 팀원이 모두 만 19~39세 이하,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"ㅇ 대상 : 서울시 거주 청년(만 19~39세)
+
+※신청일 기준, 대상의 나이에 부합해야 함
+※대표자 및 팀원이 모두 만 19~39세 이하의 청년이어야 함
+※주민등록등본상 서울거주로 확인(신청일 날짜 기준으로 제출), 관련 증빙서류 별첨 필수
+※단, 군필자의 경우(병적증명서, 전역증 등 별도 제출) 상한 연령을 다음과 같이 연장함
+- ①군복무기간 1년 미만 : 1세, ②1년 이상~2년 미만 : 2세, ③2년이상 : 3세 연장"
+KSTARTUP:177469,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:F6FL67YCDDMVPJWEVNSKY2YP,,ELIGIBILITY,APPLICANT_AGE,만 40세 이상,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,창업에 관심 있는 중장년(만 40세 이상) 예비창업자
+KSTARTUP:177469,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:HH45KL6O5TMBFKCOKSP3PFXM,,ELIGIBILITY,FOUNDER_PROFILE,창업에 관심 있는 중장년,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,창업에 관심 있는 중장년(만 40세 이상) 예비창업자
+KSTARTUP:177506,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:A5ESK53EUM2F5O2DCLPVI4A2,,ELIGIBILITY,RECOMMENDATION_CAPABILITY,"전시회별 전시 기준에 충족하는 창업기업을 발굴하고, 추천이 가능한",,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"※ 아래 3가지 자격조건을 모두 충족하여야 함
+① SWITCH  2026 'K-스타트업 통합관' 참여를 희망하는 지방정부, 공공기관, 민간기관 및 협·단체
+* 단, 민간기업의 경우 기업신용평가등급 'B등급' 이상
+② 전시회별 전시 기준에 충족하는 창업기업을 발굴하고, 추천이 가능한 지방정부, 공공기관, 민간기관 및 협·단체
+③ K-스타트업 통합관 협약금(기업당 10백만원) 부담이 가능한 지방정부, 공공기관, 민간기관 및 협·단체"
+KSTARTUP:177506,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:OKFYXEH7HYJI2G267KCSYI7B,,ELIGIBILITY,FINANCIAL_CAPACITY,협약금(기업당 10백만원) 부담이 가능한,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"※ 아래 3가지 자격조건을 모두 충족하여야 함
+① SWITCH  2026 'K-스타트업 통합관' 참여를 희망하는 지방정부, 공공기관, 민간기관 및 협·단체
+* 단, 민간기업의 경우 기업신용평가등급 'B등급' 이상
+② 전시회별 전시 기준에 충족하는 창업기업을 발굴하고, 추천이 가능한 지방정부, 공공기관, 민간기관 및 협·단체
+③ K-스타트업 통합관 협약금(기업당 10백만원) 부담이 가능한 지방정부, 공공기관, 민간기관 및 협·단체"
+KSTARTUP:177506,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:Q7VA6LVCU7MDG6O4EPAR54ZB,,ELIGIBILITY,CREDIT_RATING,기업신용평가등급 'B등급' 이상,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"※ 아래 3가지 자격조건을 모두 충족하여야 함
+① SWITCH  2026 'K-스타트업 통합관' 참여를 희망하는 지방정부, 공공기관, 민간기관 및 협·단체
+* 단, 민간기업의 경우 기업신용평가등급 'B등급' 이상
+② 전시회별 전시 기준에 충족하는 창업기업을 발굴하고, 추천이 가능한 지방정부, 공공기관, 민간기관 및 협·단체
+③ K-스타트업 통합관 협약금(기업당 10백만원) 부담이 가능한 지방정부, 공공기관, 민간기관 및 협·단체"
+KSTARTUP:177506,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:SJDYLI2CGQAITBHYLES4CBG3,,ELIGIBILITY,APPLICANT_TYPE,"지방정부, 공공기관, 민간기관 및 협·단체",,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"※ 아래 3가지 자격조건을 모두 충족하여야 함
+① SWITCH  2026 'K-스타트업 통합관' 참여를 희망하는 지방정부, 공공기관, 민간기관 및 협·단체
+* 단, 민간기업의 경우 기업신용평가등급 'B등급' 이상
+② 전시회별 전시 기준에 충족하는 창업기업을 발굴하고, 추천이 가능한 지방정부, 공공기관, 민간기관 및 협·단체
+③ K-스타트업 통합관 협약금(기업당 10백만원) 부담이 가능한 지방정부, 공공기관, 민간기관 및 협·단체"
+KSTARTUP:177506,KSTARTUP,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:WLWLBIW554GDNEAWXEM3VNJQ,ELIGIBILITY,BUSINESS_TYPE,,창업기업,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"※ 아래 3가지 자격조건을 모두 충족하여야 함
+① SWITCH  2026 'K-스타트업 통합관' 참여를 희망하는 지방정부, 공공기관, 민간기관 및 협·단체
+* 단, 민간기업의 경우 기업신용평가등급 'B등급' 이상
+② 전시회별 전시 기준에 충족하는 창업기업을 발굴하고, 추천이 가능한 지방정부, 공공기관, 민간기관 및 협·단체
+③ K-스타트업 통합관 협약금(기업당 10백만원) 부담이 가능한 지방정부, 공공기관, 민간기관 및 협·단체"
+KSTARTUP:177857,KSTARTUP,PARTIAL_MATCH,WRONG_EVIDENCE,GOLD:XV7NNESGEASTNJF7W3QA6KTS,CND:OIK3OPO2ZX3KOQMBOJ762KG6,ELIGIBILITY,BUSINESS_AGE,창업 7년 이내 초기 기업,창업 7년 이내,evidence,OVERLAPPING_SPAN,MECHANICAL_FIELD_DIFF,"1. 예비창업자
+2. 창업 7년 이내 초기 기업"
+KSTARTUP:177857,KSTARTUP,FALSE_NEGATIVE,STRICT_FN_OVERLAPS_PARTIAL_MATCH,GOLD:XV7NNESGEASTNJF7W3QA6KTS,,ELIGIBILITY,BUSINESS_AGE,창업 7년 이내 초기 기업,,partial pair exists; counted FN under strict policy; not a separate absent extraction,GOLD_SPAN_VERIFIED,CONFIRMED_EVALUATOR_MATCH_OUTPUT,"1. 예비창업자
+2. 창업 7년 이내 초기 기업"
+KSTARTUP:177857,KSTARTUP,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:OIK3OPO2ZX3KOQMBOJ762KG6,ELIGIBILITY,BUSINESS_AGE,,창업 7년 이내,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"1. 예비창업자
+2. 창업 7년 이내 초기 기업"
+KSTARTUP:178507,KSTARTUP,PARTIAL_MATCH,WRONG_EVIDENCE,GOLD:XNGCLJRMJ6SBOJFO6PQZI5SF,CND:OAGVVLW22ZLPWV46AUOLHOJS,EXCLUSION,,지원제외 대상 : 중소기업창업 지원법 시행령 준용(6p 지원제외대상 참고),지원제외,evidence,OVERLAPPING_SPAN,MECHANICAL_FIELD_DIFF,"전국 19세 이상 45세 이하 2026. 7. 7.(화) 기준, 사업 개시일로부터 7년이 지나지 아니한* 기업/예비창업자 *2019. 7. 8. 이후 사업을 개시한 창업기업
+· 예비창업자의 경우 입주 후 3개월 이내 사업자등록이 가능한 자
+· 기 창업자는 신청일 기준 사업자등록이 완료되어야 하며, 사업장 소재지의 제한 없음
+· 최종선정 기업은 입주개시일 기준 30일 이내에 본점 또는 지점의 주소지를 청년창업지원센터 상주올래 입주공간으로 이전해야 함 ※단, 해외기업․기업부설연구소의 경우 입주계약체결일로부터 3개월 이내에 이전등록을 완료
+· 지원제외 대상 : 중소기업창업 지원법 시행령 준용(6p 지원제외대상 참고)
+· 국가, 지방자치단체, 공공기관의 창업지원시설에 중복입주 불가
+· 최종 선정된 기업은 상주올래와 타창업지원시설에 중복입주 불가(본점 및 지점 모두 포함)"
+KSTARTUP:178507,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:64HML7YO6L4FES5PLPUTFK2O,,EXCLUSION,DUPLICATE_OCCUPANCY,"국가, 지방자치단체, 공공기관의 창업지원시설에 중복입주 불가",,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"전국 19세 이상 45세 이하 2026. 7. 7.(화) 기준, 사업 개시일로부터 7년이 지나지 아니한* 기업/예비창업자 *2019. 7. 8. 이후 사업을 개시한 창업기업
+· 예비창업자의 경우 입주 후 3개월 이내 사업자등록이 가능한 자
+· 기 창업자는 신청일 기준 사업자등록이 완료되어야 하며, 사업장 소재지의 제한 없음
+· 최종선정 기업은 입주개시일 기준 30일 이내에 본점 또는 지점의 주소지를 청년창업지원센터 상주올래 입주공간으로 이전해야 함 ※단, 해외기업․기업부설연구소의 경우 입주계약체결일로부터 3개월 이내에 이전등록을 완료
+· 지원제외 대상 : 중소기업창업 지원법 시행령 준용(6p 지원제외대상 참고)
+· 국가, 지방자치단체, 공공기관의 창업지원시설에 중복입주 불가
+· 최종 선정된 기업은 상주올래와 타창업지원시설에 중복입주 불가(본점 및 지점 모두 포함)"
+KSTARTUP:178507,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:IZGLBYNHDYFKYAW7RWGYQUCJ,,ELIGIBILITY,BUSINESS_LOCATION,최종선정 기업은 입주개시일 기준 30일 이내에 본점 또는 지점의 주소지를 청년창업지원센터 상주올래 입주공간으로 이전해야 함,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"전국 19세 이상 45세 이하 2026. 7. 7.(화) 기준, 사업 개시일로부터 7년이 지나지 아니한* 기업/예비창업자 *2019. 7. 8. 이후 사업을 개시한 창업기업
+· 예비창업자의 경우 입주 후 3개월 이내 사업자등록이 가능한 자
+· 기 창업자는 신청일 기준 사업자등록이 완료되어야 하며, 사업장 소재지의 제한 없음
+· 최종선정 기업은 입주개시일 기준 30일 이내에 본점 또는 지점의 주소지를 청년창업지원센터 상주올래 입주공간으로 이전해야 함 ※단, 해외기업․기업부설연구소의 경우 입주계약체결일로부터 3개월 이내에 이전등록을 완료
+· 지원제외 대상 : 중소기업창업 지원법 시행령 준용(6p 지원제외대상 참고)
+· 국가, 지방자치단체, 공공기관의 창업지원시설에 중복입주 불가
+· 최종 선정된 기업은 상주올래와 타창업지원시설에 중복입주 불가(본점 및 지점 모두 포함)"
+KSTARTUP:178507,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:M7PXG6623INOEMITL3AOE3CK,,ELIGIBILITY,APPLICANT_AGE,19세 이상 45세 이하,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"전국 19세 이상 45세 이하 2026. 7. 7.(화) 기준, 사업 개시일로부터 7년이 지나지 아니한* 기업/예비창업자 *2019. 7. 8. 이후 사업을 개시한 창업기업
+· 예비창업자의 경우 입주 후 3개월 이내 사업자등록이 가능한 자
+· 기 창업자는 신청일 기준 사업자등록이 완료되어야 하며, 사업장 소재지의 제한 없음
+· 최종선정 기업은 입주개시일 기준 30일 이내에 본점 또는 지점의 주소지를 청년창업지원센터 상주올래 입주공간으로 이전해야 함 ※단, 해외기업․기업부설연구소의 경우 입주계약체결일로부터 3개월 이내에 이전등록을 완료
+· 지원제외 대상 : 중소기업창업 지원법 시행령 준용(6p 지원제외대상 참고)
+· 국가, 지방자치단체, 공공기관의 창업지원시설에 중복입주 불가
+· 최종 선정된 기업은 상주올래와 타창업지원시설에 중복입주 불가(본점 및 지점 모두 포함)"
+KSTARTUP:178507,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:RKY5YC5WF6UKLIPCFCPOBLSC,,ELIGIBILITY,BUSINESS_AGE,사업 개시일로부터 7년이 지나지 아니한* 기업,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"전국 19세 이상 45세 이하 2026. 7. 7.(화) 기준, 사업 개시일로부터 7년이 지나지 아니한* 기업/예비창업자 *2019. 7. 8. 이후 사업을 개시한 창업기업
+· 예비창업자의 경우 입주 후 3개월 이내 사업자등록이 가능한 자
+· 기 창업자는 신청일 기준 사업자등록이 완료되어야 하며, 사업장 소재지의 제한 없음
+· 최종선정 기업은 입주개시일 기준 30일 이내에 본점 또는 지점의 주소지를 청년창업지원센터 상주올래 입주공간으로 이전해야 함 ※단, 해외기업․기업부설연구소의 경우 입주계약체결일로부터 3개월 이내에 이전등록을 완료
+· 지원제외 대상 : 중소기업창업 지원법 시행령 준용(6p 지원제외대상 참고)
+· 국가, 지방자치단체, 공공기관의 창업지원시설에 중복입주 불가
+· 최종 선정된 기업은 상주올래와 타창업지원시설에 중복입주 불가(본점 및 지점 모두 포함)"
+KSTARTUP:178507,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:UTYFQJK6CDHOFA3MZKFI3DFP,,ELIGIBILITY,BUSINESS_REGISTRATION_COMPLETED,기 창업자는 신청일 기준 사업자등록이 완료되어야 하며,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"전국 19세 이상 45세 이하 2026. 7. 7.(화) 기준, 사업 개시일로부터 7년이 지나지 아니한* 기업/예비창업자 *2019. 7. 8. 이후 사업을 개시한 창업기업
+· 예비창업자의 경우 입주 후 3개월 이내 사업자등록이 가능한 자
+· 기 창업자는 신청일 기준 사업자등록이 완료되어야 하며, 사업장 소재지의 제한 없음
+· 최종선정 기업은 입주개시일 기준 30일 이내에 본점 또는 지점의 주소지를 청년창업지원센터 상주올래 입주공간으로 이전해야 함 ※단, 해외기업․기업부설연구소의 경우 입주계약체결일로부터 3개월 이내에 이전등록을 완료
+· 지원제외 대상 : 중소기업창업 지원법 시행령 준용(6p 지원제외대상 참고)
+· 국가, 지방자치단체, 공공기관의 창업지원시설에 중복입주 불가
+· 최종 선정된 기업은 상주올래와 타창업지원시설에 중복입주 불가(본점 및 지점 모두 포함)"
+KSTARTUP:178507,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:V4K4AAIB7KG32LIHAEKQMZIU,,ELIGIBILITY,BUSINESS_REGISTRATION,예비창업자의 경우 입주 후 3개월 이내 사업자등록이 가능한 자,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"전국 19세 이상 45세 이하 2026. 7. 7.(화) 기준, 사업 개시일로부터 7년이 지나지 아니한* 기업/예비창업자 *2019. 7. 8. 이후 사업을 개시한 창업기업
+· 예비창업자의 경우 입주 후 3개월 이내 사업자등록이 가능한 자
+· 기 창업자는 신청일 기준 사업자등록이 완료되어야 하며, 사업장 소재지의 제한 없음
+· 최종선정 기업은 입주개시일 기준 30일 이내에 본점 또는 지점의 주소지를 청년창업지원센터 상주올래 입주공간으로 이전해야 함 ※단, 해외기업․기업부설연구소의 경우 입주계약체결일로부터 3개월 이내에 이전등록을 완료
+· 지원제외 대상 : 중소기업창업 지원법 시행령 준용(6p 지원제외대상 참고)
+· 국가, 지방자치단체, 공공기관의 창업지원시설에 중복입주 불가
+· 최종 선정된 기업은 상주올래와 타창업지원시설에 중복입주 불가(본점 및 지점 모두 포함)"
+KSTARTUP:178507,KSTARTUP,FALSE_NEGATIVE,STRICT_FN_OVERLAPS_PARTIAL_MATCH,GOLD:XNGCLJRMJ6SBOJFO6PQZI5SF,,EXCLUSION,,지원제외 대상 : 중소기업창업 지원법 시행령 준용(6p 지원제외대상 참고),,partial pair exists; counted FN under strict policy; not a separate absent extraction,GOLD_SPAN_VERIFIED,CONFIRMED_EVALUATOR_MATCH_OUTPUT,"전국 19세 이상 45세 이하 2026. 7. 7.(화) 기준, 사업 개시일로부터 7년이 지나지 아니한* 기업/예비창업자 *2019. 7. 8. 이후 사업을 개시한 창업기업
+· 예비창업자의 경우 입주 후 3개월 이내 사업자등록이 가능한 자
+· 기 창업자는 신청일 기준 사업자등록이 완료되어야 하며, 사업장 소재지의 제한 없음
+· 최종선정 기업은 입주개시일 기준 30일 이내에 본점 또는 지점의 주소지를 청년창업지원센터 상주올래 입주공간으로 이전해야 함 ※단, 해외기업․기업부설연구소의 경우 입주계약체결일로부터 3개월 이내에 이전등록을 완료
+· 지원제외 대상 : 중소기업창업 지원법 시행령 준용(6p 지원제외대상 참고)
+· 국가, 지방자치단체, 공공기관의 창업지원시설에 중복입주 불가
+· 최종 선정된 기업은 상주올래와 타창업지원시설에 중복입주 불가(본점 및 지점 모두 포함)"
+KSTARTUP:178507,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:XNGYEKKQZZIRCEYLRC7XBPHS,,EXCLUSION,DUPLICATE_OCCUPANCY,최종 선정된 기업은 상주올래와 타창업지원시설에 중복입주 불가(본점 및 지점 모두 포함),,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"전국 19세 이상 45세 이하 2026. 7. 7.(화) 기준, 사업 개시일로부터 7년이 지나지 아니한* 기업/예비창업자 *2019. 7. 8. 이후 사업을 개시한 창업기업
+· 예비창업자의 경우 입주 후 3개월 이내 사업자등록이 가능한 자
+· 기 창업자는 신청일 기준 사업자등록이 완료되어야 하며, 사업장 소재지의 제한 없음
+· 최종선정 기업은 입주개시일 기준 30일 이내에 본점 또는 지점의 주소지를 청년창업지원센터 상주올래 입주공간으로 이전해야 함 ※단, 해외기업․기업부설연구소의 경우 입주계약체결일로부터 3개월 이내에 이전등록을 완료
+· 지원제외 대상 : 중소기업창업 지원법 시행령 준용(6p 지원제외대상 참고)
+· 국가, 지방자치단체, 공공기관의 창업지원시설에 중복입주 불가
+· 최종 선정된 기업은 상주올래와 타창업지원시설에 중복입주 불가(본점 및 지점 모두 포함)"
+KSTARTUP:178507,KSTARTUP,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:CZXVSBG3QPOCJO77ZRYCWLOD,EXCLUSION,,,불가,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"전국 19세 이상 45세 이하 2026. 7. 7.(화) 기준, 사업 개시일로부터 7년이 지나지 아니한* 기업/예비창업자 *2019. 7. 8. 이후 사업을 개시한 창업기업
+· 예비창업자의 경우 입주 후 3개월 이내 사업자등록이 가능한 자
+· 기 창업자는 신청일 기준 사업자등록이 완료되어야 하며, 사업장 소재지의 제한 없음
+· 최종선정 기업은 입주개시일 기준 30일 이내에 본점 또는 지점의 주소지를 청년창업지원센터 상주올래 입주공간으로 이전해야 함 ※단, 해외기업․기업부설연구소의 경우 입주계약체결일로부터 3개월 이내에 이전등록을 완료
+· 지원제외 대상 : 중소기업창업 지원법 시행령 준용(6p 지원제외대상 참고)
+· 국가, 지방자치단체, 공공기관의 창업지원시설에 중복입주 불가
+· 최종 선정된 기업은 상주올래와 타창업지원시설에 중복입주 불가(본점 및 지점 모두 포함)"
+KSTARTUP:178507,KSTARTUP,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:DNQ2I756A7TOBEMOIMJ6QSAA,ELIGIBILITY,BUSINESS_TYPE,,중소기업,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"전국 19세 이상 45세 이하 2026. 7. 7.(화) 기준, 사업 개시일로부터 7년이 지나지 아니한* 기업/예비창업자 *2019. 7. 8. 이후 사업을 개시한 창업기업
+· 예비창업자의 경우 입주 후 3개월 이내 사업자등록이 가능한 자
+· 기 창업자는 신청일 기준 사업자등록이 완료되어야 하며, 사업장 소재지의 제한 없음
+· 최종선정 기업은 입주개시일 기준 30일 이내에 본점 또는 지점의 주소지를 청년창업지원센터 상주올래 입주공간으로 이전해야 함 ※단, 해외기업․기업부설연구소의 경우 입주계약체결일로부터 3개월 이내에 이전등록을 완료
+· 지원제외 대상 : 중소기업창업 지원법 시행령 준용(6p 지원제외대상 참고)
+· 국가, 지방자치단체, 공공기관의 창업지원시설에 중복입주 불가
+· 최종 선정된 기업은 상주올래와 타창업지원시설에 중복입주 불가(본점 및 지점 모두 포함)"
+KSTARTUP:178507,KSTARTUP,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:KWCB7IE2Y65REOCIVH7KONW5,ELIGIBILITY,BUSINESS_LOCATION,,전국,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"전국 19세 이상 45세 이하 2026. 7. 7.(화) 기준, 사업 개시일로부터 7년이 지나지 아니한* 기업/예비창업자 *2019. 7. 8. 이후 사업을 개시한 창업기업
+· 예비창업자의 경우 입주 후 3개월 이내 사업자등록이 가능한 자
+· 기 창업자는 신청일 기준 사업자등록이 완료되어야 하며, 사업장 소재지의 제한 없음
+· 최종선정 기업은 입주개시일 기준 30일 이내에 본점 또는 지점의 주소지를 청년창업지원센터 상주올래 입주공간으로 이전해야 함 ※단, 해외기업․기업부설연구소의 경우 입주계약체결일로부터 3개월 이내에 이전등록을 완료
+· 지원제외 대상 : 중소기업창업 지원법 시행령 준용(6p 지원제외대상 참고)
+· 국가, 지방자치단체, 공공기관의 창업지원시설에 중복입주 불가
+· 최종 선정된 기업은 상주올래와 타창업지원시설에 중복입주 불가(본점 및 지점 모두 포함)"
+KSTARTUP:178507,KSTARTUP,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:OAGVVLW22ZLPWV46AUOLHOJS,EXCLUSION,,,지원제외,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"전국 19세 이상 45세 이하 2026. 7. 7.(화) 기준, 사업 개시일로부터 7년이 지나지 아니한* 기업/예비창업자 *2019. 7. 8. 이후 사업을 개시한 창업기업
+· 예비창업자의 경우 입주 후 3개월 이내 사업자등록이 가능한 자
+· 기 창업자는 신청일 기준 사업자등록이 완료되어야 하며, 사업장 소재지의 제한 없음
+· 최종선정 기업은 입주개시일 기준 30일 이내에 본점 또는 지점의 주소지를 청년창업지원센터 상주올래 입주공간으로 이전해야 함 ※단, 해외기업․기업부설연구소의 경우 입주계약체결일로부터 3개월 이내에 이전등록을 완료
+· 지원제외 대상 : 중소기업창업 지원법 시행령 준용(6p 지원제외대상 참고)
+· 국가, 지방자치단체, 공공기관의 창업지원시설에 중복입주 불가
+· 최종 선정된 기업은 상주올래와 타창업지원시설에 중복입주 불가(본점 및 지점 모두 포함)"
+KSTARTUP:178610,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:2WU5YEFDVE7UDITJV6EULMRF,,ELIGIBILITY,INDUSTRY,"지식기반산업(지식산업, 첨단기술활용 산업)",,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"- 제조업(스마트제조, 제조AI 등)
+- 지식기반산업(지식산업, 첨단기술활용 산업)
+- 정보통신산업
+- 전문, 과학 및 기술 서비스업 등"
+KSTARTUP:178610,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:DU2HLVAYWPB6SKGAML6OVCZT,,ELIGIBILITY,INDUSTRY,"제조업(스마트제조, 제조AI 등)",,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"- 제조업(스마트제조, 제조AI 등)
+- 지식기반산업(지식산업, 첨단기술활용 산업)
+- 정보통신산업
+- 전문, 과학 및 기술 서비스업 등"
+KSTARTUP:178610,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:XHAXFTDSRBRHA5EOJ24RXVKE,,ELIGIBILITY,INDUSTRY,"전문, 과학 및 기술 서비스업 등",,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"- 제조업(스마트제조, 제조AI 등)
+- 지식기반산업(지식산업, 첨단기술활용 산업)
+- 정보통신산업
+- 전문, 과학 및 기술 서비스업 등"
+KSTARTUP:178610,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:XZKE244L734HHYEPDRD6GFTT,,ELIGIBILITY,INDUSTRY,정보통신산업,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"- 제조업(스마트제조, 제조AI 등)
+- 지식기반산업(지식산업, 첨단기술활용 산업)
+- 정보통신산업
+- 전문, 과학 및 기술 서비스업 등"
+KSTARTUP:179386,KSTARTUP,PARTIAL_MATCH,WRONG_VALUE,GOLD:4PHRWOONTBVTFZAQ5BJAHJQB,CND:UZVVBGQJZQPGZWI36PNRQETP,ELIGIBILITY,BUSINESS_TYPE,초격차 창업기업,창업기업,value;evidence,OVERLAPPING_SPAN,MECHANICAL_FIELD_DIFF,"창업 7년 이내 초격차 창업기업
+※ 중점분야: 바이오·헬스, AI·빅데이터
+※ 강원 7대 전략산업(바이오·헬스, 반도체, 미래에너지, 미래모빌리티, 방위산업, 기후테크, 푸드테크) 분야 기업 우대"
+KSTARTUP:179386,KSTARTUP,FALSE_NEGATIVE,STRICT_FN_OVERLAPS_PARTIAL_MATCH,GOLD:4PHRWOONTBVTFZAQ5BJAHJQB,,ELIGIBILITY,BUSINESS_TYPE,초격차 창업기업,,partial pair exists; counted FN under strict policy; not a separate absent extraction,GOLD_SPAN_VERIFIED,CONFIRMED_EVALUATOR_MATCH_OUTPUT,"창업 7년 이내 초격차 창업기업
+※ 중점분야: 바이오·헬스, AI·빅데이터
+※ 강원 7대 전략산업(바이오·헬스, 반도체, 미래에너지, 미래모빌리티, 방위산업, 기후테크, 푸드테크) 분야 기업 우대"
+KSTARTUP:179386,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:BX7MXK4OPKU5KLAOI53KHSPV,,PREFERENCE,INDUSTRY,"강원 7대 전략산업(바이오·헬스, 반도체, 미래에너지, 미래모빌리티, 방위산업, 기후테크, 푸드테크) 분야 기업 우대",,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"창업 7년 이내 초격차 창업기업
+※ 중점분야: 바이오·헬스, AI·빅데이터
+※ 강원 7대 전략산업(바이오·헬스, 반도체, 미래에너지, 미래모빌리티, 방위산업, 기후테크, 푸드테크) 분야 기업 우대"
+KSTARTUP:179386,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:RBZS3UUFH5NAU6JE3BBRORZA,,ELIGIBILITY,INDUSTRY,"바이오·헬스, AI·빅데이터",,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,"창업 7년 이내 초격차 창업기업
+※ 중점분야: 바이오·헬스, AI·빅데이터
+※ 강원 7대 전략산업(바이오·헬스, 반도체, 미래에너지, 미래모빌리티, 방위산업, 기후테크, 푸드테크) 분야 기업 우대"
+KSTARTUP:179386,KSTARTUP,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:KF7GL6UKP2LSISJWOOBBS5EP,PREFERENCE,,,우대,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"창업 7년 이내 초격차 창업기업
+※ 중점분야: 바이오·헬스, AI·빅데이터
+※ 강원 7대 전략산업(바이오·헬스, 반도체, 미래에너지, 미래모빌리티, 방위산업, 기후테크, 푸드테크) 분야 기업 우대"
+KSTARTUP:179386,KSTARTUP,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:Q4C23HXVQPRL44C5YF2VY4UL,ELIGIBILITY,BUSINESS_LOCATION,,강원,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"창업 7년 이내 초격차 창업기업
+※ 중점분야: 바이오·헬스, AI·빅데이터
+※ 강원 7대 전략산업(바이오·헬스, 반도체, 미래에너지, 미래모빌리티, 방위산업, 기후테크, 푸드테크) 분야 기업 우대"
+KSTARTUP:179386,KSTARTUP,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:UZVVBGQJZQPGZWI36PNRQETP,ELIGIBILITY,BUSINESS_TYPE,,창업기업,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,"창업 7년 이내 초격차 창업기업
+※ 중점분야: 바이오·헬스, AI·빅데이터
+※ 강원 7대 전략산업(바이오·헬스, 반도체, 미래에너지, 미래모빌리티, 방위산업, 기후테크, 푸드테크) 분야 기업 우대"
+KSTARTUP:179676,KSTARTUP,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,GOLD:CKKR3STQYAYFKUA7VJTUWM6F,,ELIGIBILITY,APPLICANT_TYPE,대학생 및 대학원생,,no one-to-one prediction match,GOLD_SPAN_VERIFIED,MATCHING_OUTCOME; root cause uncertain,전국의 대학생 및 대학원생 누구나 지원 가능
+KSTARTUP:179676,KSTARTUP,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,,CND:BQMMBZFKARDMWVKXF2T3YFR4,ELIGIBILITY,BUSINESS_LOCATION,,전국,no one-to-one gold match,NEEDS_HUMAN_REVIEW,AUTOMATIC_CAUSE_UNCERTAIN,전국의 대학생 및 대학원생 누구나 지원 가능
+BIZINFO:PBLN_000000000117168,BIZINFO,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+BIZINFO:PBLN_000000000117340,BIZINFO,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+BIZINFO:PBLN_000000000117526,BIZINFO,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+BIZINFO:PBLN_000000000118182,BIZINFO,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+BIZINFO:PBLN_000000000118927,BIZINFO,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+BIZINFO:PBLN_000000000119490,BIZINFO,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+BIZINFO:PBLN_000000000125094,BIZINFO,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+BIZINFO:PBLN_000000000125345,BIZINFO,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+BIZINFO:PBLN_000000000125974,BIZINFO,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+BIZINFO:PBLN_000000000126490,BIZINFO,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+BIZINFO:PBLN_000000000126715,BIZINFO,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+BIZINFO:PBLN_000000000126899,BIZINFO,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+BIZINFO:PBLN_000000000127992,BIZINFO,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+BIZINFO:PBLN_000000000128028,BIZINFO,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+KSTARTUP:176001,KSTARTUP,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+KSTARTUP:176387,KSTARTUP,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+KSTARTUP:176482,KSTARTUP,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+KSTARTUP:176659,KSTARTUP,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+KSTARTUP:176813,KSTARTUP,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+KSTARTUP:177051,KSTARTUP,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+KSTARTUP:177292,KSTARTUP,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+KSTARTUP:177447,KSTARTUP,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+KSTARTUP:177469,KSTARTUP,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+KSTARTUP:177506,KSTARTUP,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+KSTARTUP:177857,KSTARTUP,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+KSTARTUP:178507,KSTARTUP,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+KSTARTUP:178610,KSTARTUP,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+KSTARTUP:179386,KSTARTUP,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,
+KSTARTUP:179676,KSTARTUP,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,,,,,,,structure_exact=false; stage=CONDITION_EXTRACTION,STRUCTURAL_COMPARE,STAGE_ATTRIBUTION; inspect notice detail,

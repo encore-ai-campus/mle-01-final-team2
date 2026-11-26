@@ -1,0 +1,46 @@
+{
+  "status": "PILOT_INCOMPLETE_NO_SCORING",
+  "model_id": "gpt-5.6-luna",
+  "notice_ids": [
+    "BIZINFO:PBLN_000000000117168",
+    "BIZINFO:PBLN_000000000118182",
+    "BIZINFO:PBLN_000000000119490",
+    "BIZINFO:PBLN_000000000126490",
+    "BIZINFO:PBLN_000000000128028",
+    "KSTARTUP:176001",
+    "KSTARTUP:176813",
+    "KSTARTUP:177447",
+    "KSTARTUP:178507",
+    "KSTARTUP:179386"
+  ],
+  "notice_status_counts": {
+    "PROVIDER_ERROR": 1,
+    "INVALID_RESPONSE": 9
+  },
+  "api_request_count_current_run_attempts": 11,
+  "prior_connection_attempts_reserved": 1,
+  "prior_connection_attempt_delivery_confirmed": false,
+  "api_request_count_conservative_total": 12,
+  "request_limit": 12,
+  "output_hashes": {
+    "api_preflight.json": "2fa79d91c3de646cafedf1cde04b1a6c9e29e657e2036d54413d069a5cf1e870",
+    "condition_interpretations.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "intermediate_responses.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "llm_condition_predictions.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "logic_proposals.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "notice_condition_sets.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "per_notice_execution.jsonl": "854927869ae09e1e5d4c9d962a6e50d2cecbd534bd4623c34849292c4756c643",
+    "predictions_after_validation.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "predictions_before_validation.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "raw_llm_responses.jsonl": "85b78830c576e8c2db830d836ffa2047b5b56aa00773163786ca9f6da3016cdc",
+    "raw_model_responses.jsonl": "85b78830c576e8c2db830d836ffa2047b5b56aa00773163786ca9f6da3016cdc",
+    "rejected_candidates.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "review_queue.jsonl": "1363cfec82edbcb1231b3b14907060c3ec1d4360067dbc0f973179aa51eb3221",
+    "run_report.json": "c9953ae269fb157d9e05e43b3f9d225aa76902f32dcac6bb590c8cf542924bbc",
+    "schema_errors.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "validation_details.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "gold_data_read": false,
+  "scores_computed": false,
+  "secret_written": false
+}

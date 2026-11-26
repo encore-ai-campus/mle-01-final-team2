@@ -1,0 +1,80 @@
+{
+  "source": "data\\goldsets\\conditions\\v1.1\\20261126\\remaining25\\development",
+  "files": [
+    {
+      "file": "condition_review.csv",
+      "sha256": "8ed6382e2a4dcd593e6789bdf89e05cc66b6ac0e06cc3be006d1e1072167191b",
+      "bytes": 50755
+    },
+    {
+      "file": "condition_review.jsonl",
+      "sha256": "3ebc5b9bc9073d0cab413aa7cb6e30b9874db011ecfd108ca387bb079018a50d",
+      "bytes": 173588
+    },
+    {
+      "file": "difference_report.csv",
+      "sha256": "9479d8717cf44de1ccdc8c847a34208eef52fc44df44798d4b0ae98a3b2e49bb",
+      "bytes": 23924
+    },
+    {
+      "file": "gold_id_migration.csv",
+      "sha256": "0b4534729c56be0a7a0900fea44e8eb806688760f8ca41d0829fe0724605f7eb",
+      "bytes": 23321
+    },
+    {
+      "file": "HUMAN_REVIEW_REMAINING25_BUNDLE1.md",
+      "sha256": "043031519cb9f23ba6940a5340ffbdccf8d205b5ebc691da4b3561348e0c989b",
+      "bytes": 19988
+    },
+    {
+      "file": "HUMAN_REVIEW_REMAINING25_BUNDLE2.md",
+      "sha256": "9cb3426185d4d83f5c130afa4f1453d1c4a7aa1674d8ad578ebbf9e031225717",
+      "bytes": 15255
+    },
+    {
+      "file": "HUMAN_REVIEW_REMAINING25_BUNDLE3.md",
+      "sha256": "8afa3a72d77e429fefdf91d5e460d8eef7a395280334fbacc93b45fbf73111ea",
+      "bytes": 16029
+    },
+    {
+      "file": "HUMAN_REVIEW_REMAINING25_BUNDLE4.md",
+      "sha256": "99f5b31d82e6343583a31e629822302da8baacc4ddf2f6f986c343b4521c0b6b",
+      "bytes": 17121
+    },
+    {
+      "file": "HUMAN_REVIEW_REMAINING25_BUNDLE5.md",
+      "sha256": "e2a890d9f19856a4ca50ac660ba1d35e58fcd7ac7f14b9b4cca2b4a4601881a4",
+      "bytes": 18435
+    },
+    {
+      "file": "logic_review.csv",
+      "sha256": "1c1c659f44c273e2143269927f526b7969022eddc02d89a63c119d732e5a6d16",
+      "bytes": 45574
+    },
+    {
+      "file": "logic_review.jsonl",
+      "sha256": "dece0ad47e6d718f2527b17a084534c92f9d61c75cc42a04b3bc9a8b604e0d18",
+      "bytes": 259356
+    },
+    {
+      "file": "remaining25_selection.csv",
+      "sha256": "fd8fd7524d19513bd12cbb107dd59e8c1cb7ee81fbc9cfddd72a8887a2c0f11b",
+      "bytes": 6536
+    },
+    {
+      "file": "review_opinion_matrix.csv",
+      "sha256": "1a49f80a7317297d9d56a9a154982fcd843a9c84036a4b42a2c25117fcf96bba",
+      "bytes": 7164
+    },
+    {
+      "file": "unresolved_semantics.csv",
+      "sha256": "74801e15d67fc888cf5b17c6f05749474fd8692c5afc1faf535cadeea4467970",
+      "bytes": 2117
+    },
+    {
+      "file": "VALIDATION_REPORT.md",
+      "sha256": "17579358680c210494cfe1e321c3385238b4c7668d4a87f379b8be9b049711e2",
+      "bytes": 3546
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "input_development_notices": 80,
+  "processed": 80,
+  "failed": 0,
+  "condition_candidates": 84,
+  "review_queue": 29,
+  "by_source": {
+    "BIZINFO": 31,
+    "KSTARTUP": 53
+  },
+  "by_type": {
+    "ELIGIBILITY": 75,
+    "EXCLUSION": 6,
+    "PREFERENCE": 3
+  },
+  "by_category": {
+    "BUSINESS_AGE": 14,
+    "BUSINESS_TYPE": 50,
+    "BUSINESS_LOCATION": 8,
+    "UNCLASSIFIED": 9,
+    "REPRESENTATIVE_AGE": 2,
+    "REVENUE_FINANCIAL": 1
+  },
+  "extraction_mode": "RULE_BASED",
+  "llm_status": "INTERFACE_ONLY_NOT_CONFIGURED",
+  "evaluation_records_used": false,
+  "elapsed_seconds": 0.19,
+  "decision_eligible_count": 0
+}

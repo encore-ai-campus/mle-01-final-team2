@@ -1,0 +1,11 @@
+{
+  "current_fact_rows_reconstructed": 17253,
+  "old_only": 232,
+  "new_only": 274,
+  "affected_old_notices": 136,
+  "affected_new_notices": 164,
+  "field_change_counts_matching_legacy_ref": {},
+  "examples": [],
+  "old_only_with_same_legacy_ref": 0,
+  "old_only_without_unique_legacy_match": 232
+}

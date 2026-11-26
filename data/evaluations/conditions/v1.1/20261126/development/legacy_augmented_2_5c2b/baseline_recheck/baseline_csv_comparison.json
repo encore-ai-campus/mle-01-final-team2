@@ -1,0 +1,85 @@
+{
+  "status": "REGENERATED_FROM_FROZEN_GOLD_PREDICTIONS_AND_EVALUATOR",
+  "existing_manifest_expected_sha256": "f4c8594943c1e280d91ea607467a2d3aca55f68aed281aa720ed6160a0156e6e",
+  "existing_manifest_expected_bytes": 111613,
+  "existing_observed_sha256": "fcb0651a69d9fd73c9e2e31af0dd7e89688acfe2900211b83cafc62b1f8d2452",
+  "existing_observed_bytes": 112657,
+  "regenerated_sha256": "5f6db9a008d3096200f929e842cbdf314e1a6aae0a55aeca56fbe6f36f341418",
+  "regenerated_bytes": 143788,
+  "existing_rows": 189,
+  "regenerated_rows": 189,
+  "existing_failure_type_counts": {
+    "FALSE_NEGATIVE": 106,
+    "FALSE_POSITIVE": 36,
+    "PARTIAL_MATCH": 18,
+    "LOGIC_FAILURE": 29
+  },
+  "regenerated_failure_type_counts": {
+    "FALSE_NEGATIVE": 106,
+    "FALSE_POSITIVE": 36,
+    "PARTIAL_MATCH": 18,
+    "LOGIC_FAILURE": 29
+  },
+  "columns_equal": true,
+  "regenerated_columns": [
+    "notice_id",
+    "source_system",
+    "failure_type",
+    "failure_cause",
+    "gold_id",
+    "prediction_id",
+    "condition_type",
+    "field",
+    "gold_condition",
+    "prediction_condition",
+    "differences",
+    "evidence_status",
+    "cause_confidence",
+    "source_excerpt"
+  ],
+  "row_identity_common_unique_keys": 189,
+  "only_existing_rows": 0,
+  "only_regenerated_rows": 0,
+  "field_difference_rows_by_column": {
+    "differences": 171,
+    "evidence_status": 29,
+    "cause_confidence": 189,
+    "source_excerpt": 29,
+    "failure_cause": 36
+  },
+  "exact_row_matches": 0,
+  "serialization": {
+    "existing_has_utf8_bom": true,
+    "regenerated_has_utf8_bom": true,
+    "existing_crlf_count": 190,
+    "existing_lf_count": 677,
+    "regenerated_crlf_count": 190,
+    "regenerated_lf_count": 745,
+    "existing_final_newline": true,
+    "regenerated_final_newline": true
+  },
+  "reevaluated_metrics": {
+    "tp": 10,
+    "fp": 36,
+    "fn": 106,
+    "precision": 0.21739130434782608,
+    "recall": 0.08620689655172414,
+    "f1": 0.12345679012345678,
+    "precision_status": "DEFINED",
+    "recall_status": "DEFINED"
+  },
+  "reevaluated_summary_sha256": "bbca490748e940d76aaf753bfc56107cd64422d284ac9981360a61fab5db11ed",
+  "fixed_summary_metrics": {
+    "tp": 10,
+    "fp": 36,
+    "fn": 106,
+    "precision": 0.21739130434782608,
+    "recall": 0.08620689655172414,
+    "f1": 0.12345679012345678,
+    "precision_status": "DEFINED",
+    "recall_status": "DEFINED"
+  },
+  "fixed_summary_sha256": "4d194c7267374c7e6416a9a9e02eaf3603724474bc2ebcd2da9adf0154848fb2",
+  "score_metrics_match": true,
+  "classification": "DIAGNOSTIC_ROW_CONTENT_DIFF; score-bearing inputs and metrics unchanged"
+}

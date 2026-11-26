@@ -1,0 +1,29 @@
+{
+  "mode": "legacy_augmented",
+  "data_version": "v1",
+  "schema_version": "1.0",
+  "development_notice_count": 80,
+  "legacy_candidate_count": 650,
+  "baseline_rule_condition_count": 98,
+  "output_condition_count": 128,
+  "admitted_legacy_proposal_count": 30,
+  "merged_duplicate_candidate_count": 26,
+  "held_or_rejected_candidate_count": 594,
+  "dispositions": {
+    "ADMITTED_PROPOSAL": 30,
+    "DUPLICATE_RULE": 26,
+    "HOLD_APPLICANT_SCOPE": 3,
+    "HOLD_ATTRIBUTE_UNSUPPORTED": 165,
+    "HOLD_CONDITION_POLARITY": 135,
+    "HOLD_EVIDENCE_NOT_IN_INPUT": 190,
+    "HOLD_POSITION_MISMATCH": 3,
+    "HOLD_REGION_SCOPE": 46,
+    "HOLD_SOURCE_FACT_CONFLICT": 35,
+    "HOLD_SOURCE_FACT_MISMATCH": 17
+  },
+  "decision_eligible_true_count": 0,
+  "verified_count": 0,
+  "gold_or_evaluation_ids_read_during_extraction": false,
+  "data_v2_used": false,
+  "llm_calls": 0
+}

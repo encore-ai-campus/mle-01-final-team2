@@ -1,0 +1,229 @@
+﻿notice_id,source_system,selected_new,selected_old,title,candidate_count,candidate_types,features,source_text,source_completeness
+BIZINFO:PBLN_000000000126490,BIZINFO,True,True,2026년 K-소비재 수출기업 대상 한류편승행위 대응 지원사업 참여기업 모집 변경 공고,0,,NO_EXTRACTION|LOGIC_UNRESOLVED,대한민국에 사업자로 등록된 중소ㆍ중견기업 중 지원 희망 국가 내 유효한 지식재산권(상표ㆍ디자인)을 보유한 기업,UNKNOWN
+BIZINFO:PBLN_000000000128028,BIZINFO,True,False,[부산] 중구 2027년 수산자원보호직불제 사업 신청 공고,0,,NO_EXTRACTION|LOGIC_UNRESOLVED,"강화된 자원보호 의무를 이행하는 어업인 등
+-「농어업경영체 육성 및 지원에 관한 법률」제4조제1항제2호에 따라 어업경영 관련 정보 등을 등록한 어업인 등과「수산업법」제7조ㆍ제40조 및「내수면어업법」제6조ㆍ제9조에 따라 면허 또는 허가를 받은「상법」상 회사
+- 법 시행령 제6조에 따라 해양수산부장관이 정하여 고시하는 준수의무 중에서 기본의무와 2개 이상의 선택의무 이행계획서를 제출한 어업인 등",UNKNOWN
+BIZINFO:PBLN_000000000127731,BIZINFO,False,False,2026년 onephai 플랫폼 활용 피지컬 AI 기술개발 및 실증 지원사업 지원기업 모집 공고(인간친화형 로봇 스케일업 밸리 혁신 생태계 구축사업),1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,"대전 소재 로봇산업관련 전ㆍ후방 중소, 중견기업
+- 대전소재 사업장(본사, 공장, 연구소, 지사)을 보유한 기업
+- 대전소재 사업장 이전(신설) 예정 기업(사업기간 내)
+※ 이전(신설) 예정 기업의 경우, 사업비 후지급(이전 완료 확인 후)",UNKNOWN
+BIZINFO:PBLN_000000000126715,BIZINFO,True,False,2026년 산업기술국제협력(양자-스페인) 접수 공고,1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,"기업, 대학, 연구기관, 의료기관(산업기술혁신사업 공통 운영요령 제2조(용어의 정의))
+- 주관연구개발기관 및 공동연구개발기관 中 국내기업은 접수마감일 현재 사업자등록증 및 법인등기부등본 기준으로 창업 1년 이상 경과하고, 한국산업기술진흥협회가 발급한 “기업부설연구소 인정서“를 보유하고 있는 국내사업자",UNKNOWN
+BIZINFO:PBLN_000000000124501,BIZINFO,False,True,[충북] 2026년 2차 사회연대경제 청년 일경험 시범사업 참여기업 추가모집 공고,0,,NO_EXTRACTION|LOGIC_UNRESOLVED,"마을기업, 협동조합, 고용 10인 미만의 사회연대경제 관련 비영리 법인ㆍ단체
+- 모집지역 : 8개 시ㆍ군별(청주, 충주, 보은, 영동, 증평, 괴산, 음성, 단양)",UNKNOWN
+BIZINFO:PBLN_000000000118891,BIZINFO,False,True,[경기] 2026년 식품진흥기금 식품위생업소 융자사업 수정 공고,0,,NO_EXTRACTION|LOGIC_UNRESOLVED,"「식품위생법」 제37조 의한 식품제조ㆍ가공업, 식품접객업소",UNKNOWN
+BIZINFO:PBLN_000000000127708,BIZINFO,False,False,[전남광주] 여수시 2027년 어선어업 노동력 절감장비 지원사업 신청자 모집 공고,0,,NO_EXTRACTION|LOGIC_UNRESOLVED,10톤 미만의 연안어업 허가 어선(관리선 포함),UNKNOWN
+BIZINFO:PBLN_000000000126965,BIZINFO,False,False,2026년 중소벤처기업부 소상공인 정책자금 융자사업 5차 변경 공고,1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,"「소상공인기본법」제2조 및 같은 법 시행령 제3조의 소상공인
+※ 세부사업별 지원대상 상이, 자세한 사항 공고문 참조",UNKNOWN
+BIZINFO:PBLN_000000000117168,BIZINFO,True,True,[대구] 2025년 4차 소상공인 맞춤형 출산ㆍ양육지원 사업 모집 공고,2,ELIGIBILITY,MULTIPLE_CANDIDATES|RELATION_REVIEW|LOGIC_UNRESOLVED,"대구시에 주소와 사업장을 둔 소상공인
+- 2024. 1. 1. 이전부터 대구시에 사업자등록증명원 소재지 및 주소지 유지
+※ 상세 사업별 신청자격 공고문 참조",UNKNOWN
+BIZINFO:PBLN_000000000120117,BIZINFO,False,True,2026년 소상공인 투자연계 지원사업 립스(LIPS) 프로그램 소상공인 모집 공고,2,ELIGIBILITY,MULTIPLE_CANDIDATES|RELATION_REVIEW|LOGIC_UNRESOLVED,"중기부가 지정한 운영사로부터 先투자받은 유망 소상공인(업력 1년이상)
+※ 자세한 지원대상 공고문 참조",UNKNOWN
+BIZINFO:PBLN_000000000118927,BIZINFO,True,True,[강원] 2026년 직장문화ㆍ환경개선지원사업 참여기업 모집 공고,0,,NO_EXTRACTION|LOGIC_UNRESOLVED,"도내 가족친화 및 일ㆍ생활 균형을 실천하는 기업
+※ 자세한 지원대상 공고문 참조",UNKNOWN
+BIZINFO:PBLN_000000000126954,BIZINFO,False,False,[울산] 2026년 수출 전문가 컨설팅 지원사업 참여기업 모집 공고,2,ELIGIBILITY,MULTIPLE_CANDIDATES|RELATION_REVIEW|LOGIC_UNRESOLVED,"다음 조건을 모두 충족하는 기업
+- 「중소기업기본법」 제2조 및 시행령 제3조에 따른 중소기업
+- 사업자등록증상 본점 또는 사업장이 울산지역에 소재한 기업",UNKNOWN
+BIZINFO:PBLN_000000000123696,BIZINFO,False,True,[대구] 2026년 노동존중 기업 모집 공고,1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,대구시 내 50인 미만 사업장 중 4대 기초 노동질서 준수 사업장,UNKNOWN
+BIZINFO:PBLN_000000000123494,BIZINFO,False,True,2026년 2차 국가신약개발사업 CDMO 사전상담 프로그램 모집 공고,0,,NO_EXTRACTION|LOGIC_UNRESOLVED,CDMO 계약을 고려 중인 국내 신약 개발사(학ㆍ연ㆍ병 및 중소ㆍ벤처 기업),UNKNOWN
+BIZINFO:PBLN_000000000124589,BIZINFO,False,True,[경북] 안동시 2026년 수출기업 역량강화 지원사업 참여기업 모집 공고(수출직불금),1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,"안동시 소재 제조 또는 무역업 중소기업
+- 안동시에 사업장을 두고 아래 요건(가 또는 나)을 충족하는 중소기업
+ㆍ 가.「중소기업기본법」상의 중소기업으로 공장등록증을 보유하고 신청일 현재
+가동 중인 기업, 한국표준산업분류 대분류(c)제조업(10~34)에 해당되는 기업
+ㆍ 나. 무역업 고유번호를 취득한 무역업 기업",UNKNOWN
+BIZINFO:PBLN_000000000117324,BIZINFO,False,True,[경북] 문경시 2026년 중소기업 운전자금 지원 계획 공고,1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,"문경시 내 사업장(사업자등록증명원의 소재지, 매출액)을 두고 정상 운영 중인 ｢중소기업기본법｣ 상의 중소기업",UNKNOWN
+BIZINFO:PBLN_000000000127992,BIZINFO,True,False,2027년 정보통신 및 정보문화 유공 정부포상 계획 공고,0,,NO_EXTRACTION|LOGIC_UNRESOLVED,"(정보통신 분야) 인공지능, 정보방송통신, 국가지능정보화, 우정사업 등의 발전에 기여한 공적이 뛰어난 단체 등
+- (정보문화 분야) 디지털 격차ㆍ역기능 해소 및 디지털 역량 강화 등을 통해 디지털 포용사회 구현과 건전한 정보문화 창달에 기여한 다음과 같은 공적을 갖춘 자
+※ 자세한 지원대상 공고문 참조",UNKNOWN
+BIZINFO:PBLN_000000000128017,BIZINFO,False,False,[인천] 강화군 2026년 여성어업인 특화건강검진 사업 검진대상자 추가 모집 공고,0,,NO_EXTRACTION|LOGIC_UNRESOLVED,"강화군에 거주하고 검진을 신청한 51세 이상(1975년 12월 31일 이전 출생) 여성어업인
+- 어업경영체에 등록된 여성어업인
+-「어업인 확인서 발급규정」에 따른 ‘어업인 확인서’를 발급받은 자
+- 신고어업에 종사하는 자로서 강화군에서 어업활동을 확인받은 자",UNKNOWN
+BIZINFO:PBLN_000000000124917,BIZINFO,False,True,[대전] 2026년 하반기 중소기업 구매조건 생산지원자금 지원 공고,2,ELIGIBILITY,MULTIPLE_CANDIDATES|RELATION_REVIEW|LOGIC_UNRESOLVED,"대전광역시에 본사 또는 사업장(사업자등록)을 소재한「중소기업기본법」상 중소기업으로 별첨 1「지원가능 업종」에 해당하는 기업
+- 2026년 5월 이후 국내 대기업 및 중소기업, 또는 공공기관과의 납품계약 및 해외구매자(해외조달시장 포함)와의 수출 또는 납품 계약을 체결 후 납품이 완료되지 아니한 기업",UNKNOWN
+BIZINFO:PBLN_000000000118336,BIZINFO,False,True,[경기] 광명시 2026년 중소기업 육성자금(제조업ㆍ지식산업ㆍ정보통신산업) 지원계획 공고,1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,"관내 제조업, 지식산업, 정보통신산업 중소기업
+※ 자세한 지원대상 공고문 참조",UNKNOWN
+BIZINFO:PBLN_000000000122551,BIZINFO,False,True,[울산] 2026년 AI무역지원센터 활용 해외 홍보 지원사업 모집 공고,2,ELIGIBILITY,MULTIPLE_CANDIDATES|RELATION_REVIEW|LOGIC_UNRESOLVED,울산 소재 중소기업,UNKNOWN
+BIZINFO:PBLN_000000000127870,BIZINFO,False,False,[경기] 안산시 2026년 국가기술거래플랫폼 기술코칭 참여기업 추가모집 공고,1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,안산시에 본사 또는 공장이 소재하는 중소기업,UNKNOWN
+BIZINFO:PBLN_000000000127492,BIZINFO,False,True,[경기] 화성시 2026년 안전-Up 현장개선 지원사업 모집 연장 공고,0,,NO_EXTRACTION|LOGIC_UNRESOLVED,화성시 관내 상시근로자 수 50인 미만 제조업 중소사업장,UNKNOWN
+BIZINFO:PBLN_000000000126899,BIZINFO,True,False,[강원] 홍천군 2026년 사물인터넷(IoT) 측정기기 부착 지원사업 공고,1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,홍천군 관내 소재지의 「중소기업기본법」시행령 제3조제1항에 따른 중ㆍ소기업 중 IoT 측정기기 부착 의무 대상 사업장,UNKNOWN
+BIZINFO:PBLN_000000000125974,BIZINFO,True,True,[경남] 진주시 2026년 발달장애인 가족창업 컨설팅 지원 모집 공고,2,ELIGIBILITY,MULTIPLE_CANDIDATES|RELATION_REVIEW|LOGIC_UNRESOLVED,"진주시 지역의 발달장애인 가족공동 창업기업, 예비창업자 및 창업특화교육 참여 교육생",UNKNOWN
+BIZINFO:PBLN_000000000128075,BIZINFO,False,False,2027년 마이데이터 중계 인프라 운영 지원사업 공모,0,,NO_EXTRACTION|LOGIC_UNRESOLVED,「개인정보 보호법 시행령」제42조의9제1항제1호에 따라 중계 전문기관으로 지정되어 중계 인프라를 운영 중인 기업 또는 기관,UNKNOWN
+BIZINFO:PBLN_000000000117340,BIZINFO,True,True,[경북] 칠곡군 2026년 설대비 중소기업 운전자금(이차보전) 지원 계획 공고,1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,"칠곡군 내 사업장(사업자등록증명원의 소재지, 매출액)을 둔 ｢중소기업기본법｣ 상의 중소기업
+※ 자세한 지원대상 공고문 참조",UNKNOWN
+BIZINFO:PBLN_000000000118182,BIZINFO,True,True,[경기] 2026년 사회적경제조직 특례보증 및 이차보전 지원 사업 공고,1,ELIGIBILITY,SINGLE_CANDIDATE|QUALIFIER|LOGIC_UNRESOLVED,"사업장이 도내에 소재하는 기업 중 다음 중 하나에 해당하는 영리기업인 경우,다만, 비영리사업자 가능으로 표시된 경우 비영리사업자도 지원할 수 있음
+- 「사회적기업 육성법」 제2조에 의한 사회적기업(비영리사업자 가능)
+-「경기도 사회적경제 기본조례」 제2조에 의한 예비사회적기업
+-「협동조합기본법」 제2조에 의한 협동조합(비영리사업자 가능)
+-「경기도 사회적경제 기본조례」 제2조에 의한 마을기업
+-「경기도 사회적경제 기본조례」 제2조에 의한 예비마을기업
+-「소비자생활협동조합법」 제2조에 의한 소비자생활협동조합(비영리사업자 가능)
+-「국민기초생활보장법」 제18조에 의한 자활기업
+-「벤처기업육성에 관한 특별법」 제2조에 의한 소셜벤처기업",UNKNOWN
+BIZINFO:PBLN_000000000119490,BIZINFO,True,True,2026년 청년일자리도약장려금 참여기업 모집 공고,4,"ELIGIBILITY,EXCLUSION",MULTIPLE_CANDIDATES|EXCLUSION|RELATION_REVIEW|LOGIC_UNRESOLVED,"5인 이상 우선지원대상 기업
+- (수도권) 수도권(서울특별시, 인천광역시, 경기도)에 소재하는 기업이며 5인 이상 우선지원대상기업에서 취업애로청년을 정규직으로 채용 후
+- (비수도권) 수도권 제외한 지역에 소재하는 기업이며 5인 이상 우선지원대상기업에서 청년을 정규직으로 채용 후
+※ 자세한 지원대상 공고문 참조",UNKNOWN
+BIZINFO:PBLN_000000000127205,BIZINFO,False,True,[경기] 양주시 2026년 음식점 미세먼지ㆍ악취 방지시설 설치 지원사업 변경 공고,0,,NO_EXTRACTION|LOGIC_UNRESOLVED,공고일 기준 사업대상 지역에 소재한 미세먼지ㆍ악취 배출 음식점,UNKNOWN
+BIZINFO:PBLN_000000000128016,BIZINFO,False,False,AI융합 의료기기 신뢰성 강화 및 성능 평가ㆍ실증 통합지원 사업 재공고,1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,"AI 융합 의료기기 제품 분야 제조 및 연구개발 중소기업
+※ 자세한 지원대상 공고문 참조",UNKNOWN
+BIZINFO:PBLN_000000000120821,BIZINFO,False,True,2026년 디지털커머스 전문기관(소담스퀘어강원) 소상공인 모집 공고,1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,소상공인,UNKNOWN
+BIZINFO:PBLN_000000000117546,BIZINFO,False,True,미국 관세정책 대응 심층컨설팅 지원사업 공고,0,,NO_EXTRACTION|LOGIC_UNRESOLVED,미국 수출 또는 예정 기업,UNKNOWN
+BIZINFO:PBLN_000000000125345,BIZINFO,True,True,[전남광주] 2026년 전남형 신중년 사회연대경제 노동통합 모델 구축사업 참여기업 상시 모집 공고,0,,NO_EXTRACTION|LOGIC_UNRESOLVED,"근로자 5인 미만 기업(70%), 5인 이상 기업(30%)
+-「사회적기업 육성법」에 따른 (예비)사회적기업
+-「마을기업 육성 및 지원에 관한 법률」에 따른 (예비)마을기업
+-「협동조합 기본법」에 따른 사회적협동조합",UNKNOWN
+BIZINFO:PBLN_000000000120481,BIZINFO,False,True,[경기] 김포시 2026년 중소기업 육성자금 지원계획 공고,1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,"운전자금, 시설자금 대출을 희망하는 관내 중소기업
+① 운전자금 : 신청일 현재 관내 사업자등록 및 공장등록을 필한「중소기업기본법」 제2조의 중소기업으로「김포시 중소기업 육성자금 지원조례」제6조에 해당하는 기업체
+② 시설자금 : 운전자금의 조건을 만족하면서 관내 개별입지공장에서 관내 산업단지로 입주한 기업체(이전한 지 3년 이내, 1회에 한함)",UNKNOWN
+BIZINFO:PBLN_000000000121247,BIZINFO,False,True,[전남] 2026년 3D프린팅 모형설계 및 후가공 수혜기업 모집 공고,1,EXCLUSION,SINGLE_CANDIDATE|EXCLUSION|LOGIC_UNRESOLVED,"IP창업Zone 수료생(‘25년 ~＇26년) (개인 및 기창업자 등) 중 IP 디딤돌 프로그램 권리화 지원사업 수혜자
+- 실제 구현 가능성 검토가 필요하며, 출력 가능한 시제품 아이템
+※ 제외대상 : 일반 형태의 피규어",UNKNOWN
+BIZINFO:PBLN_000000000117526,BIZINFO,True,True,[경남] 2026년 소상공인 정책자금 운용계획 공고,2,ELIGIBILITY,MULTIPLE_CANDIDATES|RELATION_REVIEW|LOGIC_UNRESOLVED,"경남 도내에 소재하고 있는 「소상공인기본법」 제2조에 따른 소상공인
+※ 세부사업별 지원대상 상이 (공고문 참조)",UNKNOWN
+BIZINFO:PBLN_000000000128056,BIZINFO,False,True,[경남] 통영시 2027년 청년어촌정착지원사업 신청 공고,1,EXCLUSION,SINGLE_CANDIDATE|EXCLUSION|LOGIC_UNRESOLVED,"‘26년도 1~2년차 사업대상 선정자(선정 제외대상 및 사업취소 대상자 제외), 귀어인, 후계어업경영인, 현지거주 어업인, 어업ㆍ양식업ㆍ수산물 유통ㆍ가공업사업자 및 해양레저관광업자
+- 연령 : 만 18세 이상 ~ 만 40세 미만 ※ 1987. 1. 1. ~ 2009. 12. 31. 출생자
+- 거주지 : 통영시에 수산업 경영기반 및 실제 거주(주민등록 포함)
+※ 자세한 지원대상 공고문 참조",UNKNOWN
+BIZINFO:PBLN_000000000125094,BIZINFO,True,True,[울산] 2026년 하반기 중소기업 밀집지역 위기대응 체계 구축사업 Stand-up 맞춤지원 모집 공고,2,ELIGIBILITY,MULTIPLE_CANDIDATES|RELATION_REVIEW|LOGIC_UNRESOLVED,울산광역시 2026년 하반기 Stand-up 맞춤지원 대상 중소기업 밀집지역 소재 중소기업,UNKNOWN
+BIZINFO:PBLN_000000000122876,BIZINFO,True,True,2026년 2차 일반 물류바우처 사업 참여기업 모집 공고,1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,「중소기업기본법」제2조 및 시행령 제3조에 따른 중소기업,UNKNOWN
+KSTARTUP:176813,KSTARTUP,True,True,2026년 서강비즈니스센터 입주기업 모집(~4/5),4,"ELIGIBILITY,EXCLUSION,PREFERENCE",MULTIPLE_CANDIDATES|EXCLUSION|PREFERENCE|RELATION_REVIEW|QUALIFIER|LOGIC_UNRESOLVED,"ㅇ사업목적과 아이템이 「첨단기술 및 제품의 범위」에 속하는 예비창업자 또는 창업 7년 미만의 기업(입주신청일 현재)
+ㅇ정부지원 타 보육센터 입주경험이 없는 자(지방 창업보육센터 제외)
+ㅇ서강대학교와 산학협력사업 진행중인 기업 우대
+ㅇ서강대학교와 기술이전 가능한 기업 우대",UNKNOWN
+KSTARTUP:179096,KSTARTUP,False,False,"[동대문구 창업지원센터] 9월 메이커스페이스(레이저커터, 3D프린팅) 교육 일정",0,,NO_EXTRACTION|LOGIC_UNRESOLVED,3D프린터 또는 레이저커터에 관심있는 누구나,UNKNOWN
+KSTARTUP:176488,KSTARTUP,False,False,[서울핀테크랩] ‘GEO 마케팅 활용 전략 비대면’ 교육 참가자 모집,0,,NO_EXTRACTION|LOGIC_UNRESOLVED,GEO 마케팅에 관심있는 누구나,UNKNOWN
+KSTARTUP:177447,KSTARTUP,True,False,「2026년 서울시 지역연계형 청년 창업 지원사업」 <넥스트로컬 8기> 참여자 모집공고,2,ELIGIBILITY,MULTIPLE_CANDIDATES|RELATION_REVIEW|LOGIC_UNRESOLVED,"ㅇ 대상 : 서울시 거주 청년(만 19~39세)
+
+※신청일 기준, 대상의 나이에 부합해야 함
+※대표자 및 팀원이 모두 만 19~39세 이하의 청년이어야 함
+※주민등록등본상 서울거주로 확인(신청일 날짜 기준으로 제출), 관련 증빙서류 별첨 필수
+※단, 군필자의 경우(병적증명서, 전역증 등 별도 제출) 상한 연령을 다음과 같이 연장함
+- ①군복무기간 1년 미만 : 1세, ②1년 이상~2년 미만 : 2세, ③2년이상 : 3세 연장",UNKNOWN
+KSTARTUP:178610,KSTARTUP,True,False,2026년 제4회 창업기업성장지원센터(이노플러스 스테이지) 신규 입주기업 모집공고,0,,NO_EXTRACTION|LOGIC_UNRESOLVED,"- 제조업(스마트제조, 제조AI 등)
+- 지식기반산업(지식산업, 첨단기술활용 산업)
+- 정보통신산업
+- 전문, 과학 및 기술 서비스업 등",UNKNOWN
+KSTARTUP:177506,KSTARTUP,True,False,SWITCH 2026 K-스타트업 통합관 참여기관 모집공고,1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,"※ 아래 3가지 자격조건을 모두 충족하여야 함
+① SWITCH  2026 'K-스타트업 통합관' 참여를 희망하는 지방정부, 공공기관, 민간기관 및 협·단체
+* 단, 민간기업의 경우 기업신용평가등급 'B등급' 이상
+② 전시회별 전시 기준에 충족하는 창업기업을 발굴하고, 추천이 가능한 지방정부, 공공기관, 민간기관 및 협·단체
+③ K-스타트업 통합관 협약금(기업당 10백만원) 부담이 가능한 지방정부, 공공기관, 민간기관 및 협·단체",UNKNOWN
+KSTARTUP:176387,KSTARTUP,True,False,앤틀러코리아 ANTLER FORGE 참여 기업 모집 | 팀 당 6억원 규모 투자,0,,NO_EXTRACTION|LOGIC_UNRESOLVED,"아래 조건 중 하나 이상 충족한 팀/2년 미만 기업
+1. 피지컬ai 관련 하드웨어, 소프트웨어 등 딥테크 분야의 혁신적인 기술력을 보유한 엔지니어링 기반 창업팀
+2. 시장의 실제 수요를 증명하고, $400,000 이상(한화 약 5억 원 이상)의 투자를 유치하고자 하는 초기 기업
+
+*선발 프로세스는 지원서 접수 순으로 진행되며, 선발 인원 충족 시 조기에 마감될 수 있으니 빠른 지원을 권장합니다.
+* 해당 프로그램은 이미 제품을 개발 중이거나 초기 모델을 보유한 팀에게 최적화되어 있습니다. 단순한 아이디어 단계를 넘어, 실제 구현 가능한 기술력을 바탕으로 빠르게 시장에 진입하고자 하는 팀을 환영합니다. 프로그램 기간 중 유의미한 고객 지표나 실제 수요가 확인될 경우, 즉시 최대 50만 달러 규모(6억원 규모)의 투자 심사가 진행됩니다.
+
+대상 산업
+• Physical AI
+• 로보틱스
+• 반도체
+• 모빌리티 및 스마트 인프라
+• 게임, e스포츠
+• 생물의학 및 의료
+• 항공우주 및 방위
+• 기타 시스템 또는 첨단 산업",UNKNOWN
+KSTARTUP:179687,KSTARTUP,False,False,2027년 청년 쿡 비즈니스·푸드테크 센터 스타트업 모집 공고,0,,NO_EXTRACTION|LOGIC_UNRESOLVED,"식품제조업 또는 푸드테크 분야 청년(19~39세, 대표자 기준) 스타트업
+※ 단, 제대군인의 경우 최대 3년 이내 지원 상한연령 가산",UNKNOWN
+KSTARTUP:175897,KSTARTUP,False,False,대덕특구 국가전략기술 확인제도 컨설팅 수요기업 모집,0,,NO_EXTRACTION|LOGIC_UNRESOLVED,"보유ㆍ관리하고 있거나 연구개발 중인 기술의 국가전략기술 해당 여부를 확인받고자 하는 기술육성주체
+※ (보유·관리) 국가전략기술에 해당하는 기술을 보유·관리하고 있음을 특허, 논문, 공인시험인증 자료, 기타 지식재산권 및 인증내역 등을 통해 입증할 수 있는 경우
+       (연구개발) 국가전략기술에 해당하는 기술을 연구개발하고 있음을 특허, 논문, 공인시험인증 자료, 기타 지식재산권 및 인증내역 등을 통해 현재 기술 수준을 입증 및 과제제안서, 기술개발서 등을 통해 목표 달성 가능성을 입증할 수 있는 경우",UNKNOWN
+KSTARTUP:179676,KSTARTUP,True,False,2026 별별상상 스타트업 챌린지,1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,전국의 대학생 및 대학원생 누구나 지원 가능,UNKNOWN
+KSTARTUP:177388,KSTARTUP,False,False,2026년 제2서울핀테크랩 상반기 신규 입주 ㆍ 멤버십 기업 모집공고,3,ELIGIBILITY,MULTIPLE_CANDIDATES|RELATION_REVIEW|LOGIC_UNRESOLVED,"입주기업: 업력 3년 이내 핀테크 기업
+멤버십기업: 업력 7년 이내 핀테크 기업 및 예비창업자
+※ 공고일 기준(’26.04.27)",UNKNOWN
+KSTARTUP:177654,KSTARTUP,False,False,5월『찾아가는 기업 고민해결 찐(眞)톡(talk)』,1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,광진구 소재 중소기업 및 스타트업,UNKNOWN
+KSTARTUP:176229,KSTARTUP,False,False,26년도 AI·스마트전자제품 개발·제조 지원 모집,1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,"전자기기 기반 제품을 개발, 제조하는 스타트업 및 중소기업",UNKNOWN
+KSTARTUP:176507,KSTARTUP,False,False,클리마 살롱: 에너지 저장 장치 및 운영 혁신,1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,"기후·에너지 분야에 관심이 있는 기업 및 스타트업, 투자사, 연구기관, 예비창업자 누구나",UNKNOWN
+KSTARTUP:179294,KSTARTUP,False,False,2026년 실리콘밸리 GTM(Go-To-Market) 프로그램 창업기업 모집공고,4,ELIGIBILITY,MULTIPLE_CANDIDATES|RELATION_REVIEW|LOGIC_UNRESOLVED,"공고일 기준 업력 7년 미만의 실리콘밸리 기진출, 또는 진출을 계획하고 있는 창업기업(단, 신산업창업분야는 업력 10년 미만)
+- 중소기업창업 지원법 상의 창업기업에 해당되는 국외창업기업*, 플립기업**도 지원가능
+* 한국인 또는 국내 법인이 국외(미국)에서 법인을 설립해 주식 총수 또는 출자 지분 총액의 일정규모 이상을 보유, 실질 지배력을 행사하는 7년 미만 기업(단, 신산업창업분야는 업력 10년 미만)
+** 해외(미국)에 지주회사 또는 본사를 신설하고 국내 회사를 자회사로 전환한 기업",UNKNOWN
+KSTARTUP:179386,KSTARTUP,True,False,2026년 창업-Bus 프로그램「강원브릿지 화요IR」 참여기업 모집,4,"ELIGIBILITY,PREFERENCE",MULTIPLE_CANDIDATES|PREFERENCE|RELATION_REVIEW|QUALIFIER|LOGIC_UNRESOLVED,"창업 7년 이내 초격차 창업기업
+※ 중점분야: 바이오·헬스, AI·빅데이터
+※ 강원 7대 전략산업(바이오·헬스, 반도체, 미래에너지, 미래모빌리티, 방위산업, 기후테크, 푸드테크) 분야 기업 우대",UNKNOWN
+KSTARTUP:177292,KSTARTUP,True,False,2026년 제1회 S.Challenge IR 참여 기업 모집 공고,2,ELIGIBILITY,MULTIPLE_CANDIDATES|RELATION_REVIEW|LOGIC_UNRESOLVED,"핀테크 분야 사업을 영위하고, 서울에 소재(본사 기준)한 창업 3년 이내 기업",UNKNOWN
+KSTARTUP:176659,KSTARTUP,True,False,2026년 서울시 창업허브 통합 설명회 개최,2,ELIGIBILITY,MULTIPLE_CANDIDATES|RELATION_REVIEW|LOGIC_UNRESOLVED,서울 소재 중소기업 및 스타트업 등,UNKNOWN
+KSTARTUP:175828,KSTARTUP,False,False,2026년 특허출원·등록 바우처 비용 지원사업,1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,"❍ 국내 특허출원⦁등록 비용을 지원받고 싶어하는 스타트업/중소기업
+❍ 특허증 1건 이상의 지적재산권을 보유하고 싶은 기업(법인 또는 개인)
+
+* 본 특허출원⦁등록 비용 바우처 지원사업은 기업당 최초 1회 1건만 선발 후 신규 특허등록 비용 바우처 지원",UNKNOWN
+KSTARTUP:175764,KSTARTUP,False,False,[창업] 실전창업아카데미 성과보고회 및 네트워킹,0,,NO_EXTRACTION|LOGIC_UNRESOLVED,"☑ 모집대상: 예비 및 초기 청년(19세~39세, 1986년~2006년생) 창업자
+☑ 실전창업아카데미에 대해 궁금하신 청년 창업가
+☑ 청년 창업가와 네트워킹이 필요하신 청년 창업가",UNKNOWN
+KSTARTUP:176546,KSTARTUP,False,False,‘부산 북구 도심형 청년창업주거복합공간’ 입주자 모집 공고,4,ELIGIBILITY,MULTIPLE_CANDIDATES|RELATION_REVIEW|LOGIC_UNRESOLVED,"◦ 만 39세 이하, 예비창업자 또는 창업 후 7년 이내 기업, 기업 구성원 50% 이상이 청년으로 이루어진 창업 후 7년 이내 기업
+   1) 만 39세이하 생년월일 관련 기준일 : 1986. 03. 05. 이후 출생자
+   2) 신청자격 기준일 : 2019. 03. 04. 이후 창업기업
+   3) 신청자격 증빙자료 : 고용보험 사업장 자격취득자 명부 (신청서 제출일 기준)",UNKNOWN
+KSTARTUP:177275,KSTARTUP,False,False,충주 바이오헬스산업 협의체 회원 모집 공고,0,,NO_EXTRACTION|LOGIC_UNRESOLVED,"기업, 기관, 대학 등 충주 바이오헬스산업 유관기관 관계자
+※ 협의체 운영에 기여 가능한 관외 유관기관 관계자 포함",UNKNOWN
+KSTARTUP:177857,KSTARTUP,True,False,26년 6월 스타트업 언론 홍보 지원사업 참가사 모집 공고(1차),2,ELIGIBILITY,MULTIPLE_CANDIDATES|RELATION_REVIEW|LOGIC_UNRESOLVED,"1. 예비창업자
+2. 창업 7년 이내 초기 기업",UNKNOWN
+KSTARTUP:177051,KSTARTUP,True,False,「2026년 지역주도형 AI대전환사업」 AI솔루션 보급·확산사업 지원기업 통합모집 공고,1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,"공고일 기준 창업 후 7년* 이내의 AI 솔루션 보유한 창업기업
+* 신청가능 창업(설립)일 기준:’19.03.26.~’26.03.25.",UNKNOWN
+KSTARTUP:178054,KSTARTUP,False,False,"[스파크랩] 에이전틱 AI 시대, 1인·소규모 팀 창업가를 위한 프로그램 SparkClaw 1기 모집",0,,NO_EXTRACTION|LOGIC_UNRESOLVED,1인·소규모 팀,UNKNOWN
+KSTARTUP:177214,KSTARTUP,False,False,2026 대덕특구 딥테크 혁신성장 플랫폼(전략기술 발굴 및 매칭),1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,"1. 대중견기업 오픈이노베이션 프로그램 운영자
+2. 중견기업 및 중소기업 신사업 스핀오프 사업부
+3. 스타트업 및 중소기업
+4. 투자기관/지원기관",UNKNOWN
+KSTARTUP:176235,KSTARTUP,False,False,2026년도 청년그린창업 스프링캠프 예비청년창업자·초기청년창업기업 모집 공고,3,ELIGIBILITY,MULTIPLE_CANDIDATES|RELATION_REVIEW|LOGIC_UNRESOLVED,"녹색산업 분야* 예비청년창업자, 초기청년창업기업
+* (정의) 「환경기술 및 환경산업 지원법」 제2조 제3호에 따른 환경산업 또는 「녹색융합클러스터의 조성 및 육성에 관한 법률」 제5조에 따른 녹색산업(덧붙임 10 참조)
+
+◦ (예비청년창업자) 공고일 기준으로 법인 또는 개인사업자의 대표가 아닌 자 중 만 39세 이하인 자(지원대상으로 선정될 경우, 협약 기간내창업 의무가 부여됨)
+◦ (초기청년창업기업) 공고일 기준으로 사업을 개시한 날로부터 3년이 지나지 않으면서(’23.2.10~‘26.2.9) 창업자(공동대표 포함)가 만 39세 이하 청년인 법인 또는 개인사업자",UNKNOWN
+KSTARTUP:178292,KSTARTUP,False,False,2026 글로벌 공공조달 DX·AX 혁신 리더 과정(2기) 세미나 모집,0,,NO_EXTRACTION|LOGIC_UNRESOLVED,"AI 기술 도입을 추진하는 기업의 최고 경영자 및 임원, 본부장
+해외사업 ·수출 총괄 기획 임원 및 본부장",UNKNOWN
+KSTARTUP:178456,KSTARTUP,False,False,"국내 대기업 협업 연계, 신한 오픈이노베이션 12기 모집(~8/3)",1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,"대기업·중견기업과 협업을 희망하는 설립 7년 이내 법인사업자
+(공고마감일 26. 8. 3. 기준, 지역 제한 없음)",UNKNOWN
+KSTARTUP:178937,KSTARTUP,False,False,[창업] AI 활용 상세페이지·상품 기획 실습,0,,NO_EXTRACTION|LOGIC_UNRESOLVED,예비 및 초기 청년(만 19세~39세) 창업자,UNKNOWN
+KSTARTUP:178297,KSTARTUP,False,False,2026 실무형 스타트업 클래스 참가 기업 모집,3,ELIGIBILITY,MULTIPLE_CANDIDATES|RELATION_REVIEW|LOGIC_UNRESOLVED,"(공통) 7년 이내 청년창업기업(대표자 만 39세 이하)
+아래의 요건 중 1개 이상 해당하는 기업
+1. 대구시 중구 거주자
+2. 대구시 중구 소재 기업
+3. 대구시 중구 로컬 자원 활용 사업 아이템 보유
+*해당 요건은 추후 증빙 자료 요청할 수 있으며, 부적합 판정시 선정 취소가 될 수 있음",UNKNOWN
+KSTARTUP:176001,KSTARTUP,True,False,2026년 글로벌 스포츠 강소기업 육성 지원(해외진출 역량강화) 사업 모집 공고,3,ELIGIBILITY,MULTIPLE_CANDIDATES|RELATION_REVIEW|LOGIC_UNRESOLVED,"- 업력 만 1년 이상
+- 전체 매출액 중 스포츠산업 비중 10% 이상
+- 최근 결산년도 매출액 3억원 이상
+- 중소기업기본법에 의한 중소기업",UNKNOWN
+KSTARTUP:176876,KSTARTUP,False,False,2026년 인천 관광상품 디자인 개발 지원 공모,1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,관광상품을 보유·판매하고 있는 인천 소재 관광기업,UNKNOWN
+KSTARTUP:176482,KSTARTUP,True,False,[CJ온스타일] 2026 ON:CUBATING K-뷰티 · 웰니스 브랜드 모집,0,,NO_EXTRACTION|LOGIC_UNRESOLVED,국내·외 판로 확장이 필요한 K-뷰티·웰니스 브랜드,UNKNOWN
+KSTARTUP:179819,KSTARTUP,False,False,2026년 5차 국립공주대학교 창업보육센터 입주기업 모집 2차 연장공고,4,"ELIGIBILITY,PREFERENCE",MULTIPLE_CANDIDATES|PREFERENCE|RELATION_REVIEW|QUALIFIER|LOGIC_UNRESOLVED,"[ 예비창업자]
+￭ 잠재력 높은 기술의 개발 단계에 있는 창업 준비자
+￭ 기술적 아이디어를 바탕으로 구체적 사업화 목적이 있는 자
+￭ 입주 후 3개월 이내 창업(사업자등록)이 가능한 자
+
+[기창업자]
+￭ 기술집약형 업종의 창업 기업으로 공고일 기준 업력 7년 이내의 기업
+￭ 입주 확정 시 3개월 이내 본점 소재지 이전이 가능한 기업
+※ 기업부설연구소 입주 가능(자격요건 관련 상세 내용 확인 필수)
+
+[공통]
+- 대학과의 산학협력을 통한 성장 가능성이 높은 예비창업자 또는 기업
+- 창업보육센터 입주 확정 기업은 주사업장(본점)이 입주하여야 함
+- 산학협력 공동연구 사업을 위한 기업부설연구소 입주 가능
+※ 단, 연구소 입주 시 본사가 정부나 지자체에서 지원하는 공간에 입주하지 않아야 함
+- 우대사항: 국립공주대학교 학생·교원창업자 / 공주 지역 특성화 알밤 사업 관련 / 지역주력산업 및 전･후방산업 분야* 등
+* 충남 주력산업: (주축산업) 디스플레이부품장비, 탄소저감자동차부품, 고기능성그린바이오
+(미래신산업) 수소연료전지 및 발전, 반도체첨단패키징",UNKNOWN
+KSTARTUP:177469,KSTARTUP,True,False,[달서구 중장년 기술창업센터] 예비창업자 교육 교육생 모집,1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,창업에 관심 있는 중장년(만 40세 이상) 예비창업자,UNKNOWN
+KSTARTUP:176594,KSTARTUP,False,False,2026 핀칸티에리 X 서울창업허브 오픈이노베이션,1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,"설립 10년 미만의 법인사업자
+모집분야에 해당하는 기술을 보유하여 즉시 실증(PoC)에 참여할 수 있는 기업
+실무자가 글로벌 의사소통 역량을 보유하여 협업 전 과정에서 소통 문제가 없는 기업",UNKNOWN
+KSTARTUP:179353,KSTARTUP,False,False,"AI 올라운더(기획,개발,마케팅) 창업가육성과정 8기 모집",2,ELIGIBILITY,MULTIPLE_CANDIDATES|RELATION_REVIEW|LOGIC_UNRESOLVED,"1. 내일배움카드 소지자 또는 발급 가능한 자
+2. 창업을 준비 중이지만 어디서부터 시작할지 막막한 예비창업자
+3. 사업계획서·IR 피칭을 제대로 배우고 싶은 분
+4. AI를 활용해 사업개발 역량을 빠르게 키우고 싶은 직장인
+5. 신사업 개발 담당자로 커리어 전환을 희망하는 분
+6. 정부지원사업 선정을 목표로 하는 소상공인·1인 창업자",UNKNOWN
+KSTARTUP:178288,KSTARTUP,False,False,2026 게임콘텐츠 전문인력 양성 교육 일반과정 교육생 모집,1,ELIGIBILITY,SINGLE_CANDIDATE|LOGIC_UNRESOLVED,"게임 개발 기초역량을 보유하고 실무 프로젝트 참여가 가능한 도내 대학생, 취업준비생, 예비창업자, 일반인 등",UNKNOWN
+KSTARTUP:178507,KSTARTUP,True,True,[청년창업지원센터 상주올래] 2026 입주기업 모집,6,"ELIGIBILITY,EXCLUSION",MULTIPLE_CANDIDATES|EXCLUSION|RELATION_REVIEW|LOGIC_UNRESOLVED,"전국 19세 이상 45세 이하 2026. 7. 7.(화) 기준, 사업 개시일로부터 7년이 지나지 아니한* 기업/예비창업자 *2019. 7. 8. 이후 사업을 개시한 창업기업
+· 예비창업자의 경우 입주 후 3개월 이내 사업자등록이 가능한 자
+· 기 창업자는 신청일 기준 사업자등록이 완료되어야 하며, 사업장 소재지의 제한 없음
+· 최종선정 기업은 입주개시일 기준 30일 이내에 본점 또는 지점의 주소지를 청년창업지원센터 상주올래 입주공간으로 이전해야 함 ※단, 해외기업․기업부설연구소의 경우 입주계약체결일로부터 3개월 이내에 이전등록을 완료
+· 지원제외 대상 : 중소기업창업 지원법 시행령 준용(6p 지원제외대상 참고)
+· 국가, 지방자치단체, 공공기관의 창업지원시설에 중복입주 불가
+· 최종 선정된 기업은 상주올래와 타창업지원시설에 중복입주 불가(본점 및 지점 모두 포함)",UNKNOWN

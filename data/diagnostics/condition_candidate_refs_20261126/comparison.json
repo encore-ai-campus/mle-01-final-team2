@@ -1,0 +1,180 @@
+{
+  "baseline": {
+    "bytes": 11795783,
+    "sha256": "5765dad05de72b8a44875353495e12224704da3f5b0067b955e1fb5e4b5c06e3",
+    "records": 17211,
+    "unique_candidate_refs": 17211,
+    "duplicate_candidate_refs": 0,
+    "bom": false,
+    "crlf": 0,
+    "lf": 17211,
+    "terminal_newline": true,
+    "field_sets": {
+      "('attribute', 'candidate_ordinal', 'candidate_ref', 'evidence_text', 'kind', 'legacy_candidate_ref', 'normalized_value', 'notice_id', 'review_status', 'section', 'source_field', 'source_file', 'source_kind', 'source_position', 'source_system')": 17211
+    }
+  },
+  "regenerations": [
+    {
+      "bytes": 11823288,
+      "sha256": "f20acf5599785e4d3e9c7224359ba41e11a5ae01f867108470798064f4d1b51c",
+      "records": 17253,
+      "unique_candidate_refs": 17253,
+      "duplicate_candidate_refs": 0,
+      "bom": false,
+      "crlf": 0,
+      "lf": 17253,
+      "terminal_newline": true,
+      "field_sets": {
+        "('attribute', 'candidate_ordinal', 'candidate_ref', 'evidence_text', 'kind', 'legacy_candidate_ref', 'normalized_value', 'notice_id', 'review_status', 'section', 'source_field', 'source_file', 'source_kind', 'source_position', 'source_system')": 17253
+      }
+    },
+    {
+      "bytes": 11823288,
+      "sha256": "f20acf5599785e4d3e9c7224359ba41e11a5ae01f867108470798064f4d1b51c",
+      "records": 17253,
+      "unique_candidate_refs": 17253,
+      "duplicate_candidate_refs": 0,
+      "bom": false,
+      "crlf": 0,
+      "lf": 17253,
+      "terminal_newline": true,
+      "field_sets": {
+        "('attribute', 'candidate_ordinal', 'candidate_ref', 'evidence_text', 'kind', 'legacy_candidate_ref', 'normalized_value', 'notice_id', 'review_status', 'section', 'source_field', 'source_file', 'source_kind', 'source_position', 'source_system')": 17253
+      }
+    },
+    {
+      "bytes": 11823288,
+      "sha256": "f20acf5599785e4d3e9c7224359ba41e11a5ae01f867108470798064f4d1b51c",
+      "records": 17253,
+      "unique_candidate_refs": 17253,
+      "duplicate_candidate_refs": 0,
+      "bom": false,
+      "crlf": 0,
+      "lf": 17253,
+      "terminal_newline": true,
+      "field_sets": {
+        "('attribute', 'candidate_ordinal', 'candidate_ref', 'evidence_text', 'kind', 'legacy_candidate_ref', 'normalized_value', 'notice_id', 'review_status', 'section', 'source_field', 'source_file', 'source_kind', 'source_position', 'source_system')": 17253
+      }
+    }
+  ],
+  "inputs": {
+    "C:\\Users\\rhksa\\Desktop\\mle-01-final-team2\\data\\normalized\\v1\\20261125_g2b\\notices.jsonl": "2cbcf09df66f8ba2c2c906451b228dad18ef0b562ed4ac9ad7e2d4042cc5a901",
+    "C:\\Users\\rhksa\\Desktop\\mle-01-final-team2\\data\\normalized\\v1\\20261125_g2b\\chunks.jsonl": "cdce6d9c01b4ad686adef0bbca0b7fcc9f2e27a8d552a70d6ba2ee36fda5abe7",
+    "C:\\Users\\rhksa\\Desktop\\mle-01-final-team2\\data\\normalized\\20261124\\notices_normalized.jsonl": "31452b47a592744245b2953ed4cf544567f771dc3f0868e54ae4215da59886e2",
+    "C:\\Users\\rhksa\\Desktop\\mle-01-final-team2\\data\\kstartup\\processed\\kstartup_conditions.jsonl": "9651c99316cdde2b818a63edad016d281895e13583dd9d24ac950dce4e614a09"
+  },
+  "comparison": {
+    "same_id_order": false,
+    "missing_ids": [
+      "BIZINFO:PBLN_000000000117067:FACT:05375773c49988c03e56:0",
+      "BIZINFO:PBLN_000000000117067:FACT:150340995b34d9a96c9d:0",
+      "BIZINFO:PBLN_000000000117146:FACT:73124ea78fa3248360cb:0",
+      "BIZINFO:PBLN_000000000117146:FACT:808bf5051d2653921af6:0",
+      "BIZINFO:PBLN_000000000117146:FACT:9475d0c9024b9d53216b:0",
+      "BIZINFO:PBLN_000000000117149:FACT:40560fcd55016bb4ebea:0",
+      "BIZINFO:PBLN_000000000117149:FACT:51010d82d62b4c83c67a:0",
+      "BIZINFO:PBLN_000000000117149:FACT:9d6e4171c63d4e5fa29c:0",
+      "BIZINFO:PBLN_000000000117188:FACT:c7165b0e681e5f27107c:0",
+      "BIZINFO:PBLN_000000000117254:FACT:4ea3d866b75676f8a80c:0",
+      "BIZINFO:PBLN_000000000117276:FACT:78c3bd4d899c7877ca07:0",
+      "BIZINFO:PBLN_000000000117316:FACT:4f5a752dfc59b2201ce7:0",
+      "BIZINFO:PBLN_000000000117319:FACT:57a988078fbc99b192b4:0",
+      "BIZINFO:PBLN_000000000117319:FACT:b5f97cd029a1b22168ea:0",
+      "BIZINFO:PBLN_000000000117319:FACT:ed524990cf088b35d631:0",
+      "BIZINFO:PBLN_000000000117324:FACT:0012efa5b93f3404a6d7:0",
+      "BIZINFO:PBLN_000000000117528:FACT:edba57af8a9d342f0580:0",
+      "BIZINFO:PBLN_000000000117611:FACT:b9c1e57a0f86864f0453:0",
+      "BIZINFO:PBLN_000000000117611:FACT:f90c8e96247116498c41:0",
+      "BIZINFO:PBLN_000000000117626:FACT:9716e5e7a7409f647525:0"
+    ],
+    "added_ids": [
+      "BIZINFO:PBLN_000000000117067:FACT:37a3b7fc2245b1890614:0",
+      "BIZINFO:PBLN_000000000117067:FACT:41cb9cc0c41e6a3792e6:0",
+      "BIZINFO:PBLN_000000000117146:FACT:01e4d433722ec31e94d8:0",
+      "BIZINFO:PBLN_000000000117146:FACT:6850d4cc822da4d87f39:0",
+      "BIZINFO:PBLN_000000000117146:FACT:8eeca8b11f492e227f30:0",
+      "BIZINFO:PBLN_000000000117149:FACT:02bfce9a18f1cbbcbd5c:0",
+      "BIZINFO:PBLN_000000000117149:FACT:17191ed7d8302f3a1dd1:0",
+      "BIZINFO:PBLN_000000000117149:FACT:9b49dd6dff0ba81e4e4b:0",
+      "BIZINFO:PBLN_000000000117188:FACT:b01183d4bea9136fe3a0:0",
+      "BIZINFO:PBLN_000000000117254:FACT:d9ecd38837efc2e53ed7:0",
+      "BIZINFO:PBLN_000000000117276:FACT:6146991801e3a189497f:0",
+      "BIZINFO:PBLN_000000000117316:FACT:2c4cfa26094de73923cf:0",
+      "BIZINFO:PBLN_000000000117319:FACT:a8d4694886e19736681b:0",
+      "BIZINFO:PBLN_000000000117319:FACT:b1d3ea39854ab0eb4a7c:0",
+      "BIZINFO:PBLN_000000000117319:FACT:e809a0a38b962665b7fa:0",
+      "BIZINFO:PBLN_000000000117324:FACT:6489c4c15547118f0d0b:0",
+      "BIZINFO:PBLN_000000000117528:FACT:bbcb44435e9f975b1b9b:0",
+      "BIZINFO:PBLN_000000000117534:FACT:78a039bbfc15fbc76326:0",
+      "BIZINFO:PBLN_000000000117611:FACT:811c359edb05e4a06317:0",
+      "BIZINFO:PBLN_000000000117611:FACT:b55c20efd91877ce2562:0"
+    ],
+    "missing_count": 232,
+    "added_count": 274,
+    "changed_common_count": 0,
+    "first_changed_common": [],
+    "first_baseline_row": {
+      "notice_id": "BIZINFO:PBLN_000000000103611",
+      "source_system": "BIZINFO",
+      "candidate_ref": "BIZINFO:PBLN_000000000103611:FACT:1320773dea0107f83067:0",
+      "legacy_candidate_ref": "BIZINFO:PBLN_000000000103611:certification:0",
+      "source_file": "C:\\Users\\rhksa\\Desktop\\mle-01-final-team2\\data\\normalized\\20261124\\notices_normalized.jsonl",
+      "source_field": null,
+      "source_position": 0,
+      "candidate_ordinal": 0,
+      "attribute": "certification",
+      "kind": "ELIGIBILITY",
+      "normalized_value": {
+        "label": "벤처기업"
+      },
+      "evidence_text": "경북ㆍ구미지역 내에 소재(본사, 연구소, 공장, 지사)한 중소ㆍ벤처기업",
+      "review_status": "UNREVIEWED",
+      "source_kind": "TEXT_RULE",
+      "section": "eligibility_api"
+    },
+    "first_regenerated_row": {
+      "notice_id": "BIZINFO:PBLN_000000000103611",
+      "source_system": "BIZINFO",
+      "candidate_ref": "BIZINFO:PBLN_000000000103611:FACT:1320773dea0107f83067:0",
+      "legacy_candidate_ref": "BIZINFO:PBLN_000000000103611:certification:0",
+      "source_file": "C:\\Users\\rhksa\\Desktop\\mle-01-final-team2\\data\\normalized\\20261124\\notices_normalized.jsonl",
+      "source_field": null,
+      "source_position": 0,
+      "candidate_ordinal": 0,
+      "attribute": "certification",
+      "kind": "ELIGIBILITY",
+      "normalized_value": {
+        "label": "벤처기업"
+      },
+      "evidence_text": "경북ㆍ구미지역 내에 소재(본사, 연구소, 공장, 지사)한 중소ㆍ벤처기업",
+      "review_status": "UNREVIEWED",
+      "source_kind": "TEXT_RULE",
+      "section": "eligibility_api"
+    },
+    "first_different_byte_offset": 176869,
+    "baseline_bytes_at_diff_hex": "31353033343039393562333464396139366339643a30222c226c65676163795f63616e6469646174655f726566223a2242495a494e464f3a50424c4e5f3030303030303030303131373036373a636f6d70616e795f73697a653a3231222c22736f757263",
+    "regenerated_bytes_at_diff_hex": "34316362396363306334316536613337393265363a30222c226c65676163795f63616e6469646174655f726566223a2242495a494e464f3a50424c4e5f3030303030303030303131373036373a63657274696669636174696f6e3a3231222c22736f7572",
+    "other_artifacts_sha256": {
+      "dispositions.jsonl": {
+        "baseline": "91b9fe6216e7084a60bf528095fe361ef993a87c4e25ee17a1d2a557de7faad9",
+        "regenerated": "91b9fe6216e7084a60bf528095fe361ef993a87c4e25ee17a1d2a557de7faad9"
+      },
+      "extraction_inputs.jsonl": {
+        "baseline": "14e4f7dd74d71046555998ebdcee93e39ed62f5725cfb9f0dc7091f0328023d1",
+        "regenerated": "605910a460e27b355990e2a85b94e795dce27fafd28591307d78ba58c23e7b8e"
+      },
+      "g2b_deferred_samples.jsonl": {
+        "baseline": "9f7e07ac272bc04b8eedabd4da117cdd9d0d3a5b1265399a71563a0281da0604",
+        "regenerated": "9f7e07ac272bc04b8eedabd4da117cdd9d0d3a5b1265399a71563a0281da0604"
+      },
+      "kstartup_candidate_audit.jsonl": {
+        "baseline": "4f6654011faa895ea247afbbf7aef7b4b9f38b603d1ed9374a2de275eb3a5e47",
+        "regenerated": "4f6654011faa895ea247afbbf7aef7b4b9f38b603d1ed9374a2de275eb3a5e47"
+      },
+      "representative_samples.jsonl": {
+        "baseline": "a2aefa309b93bd1ea7070ac1c46412d03b0d140c0ce0997de6c10b1dcffa8b22",
+        "regenerated": "a2aefa309b93bd1ea7070ac1c46412d03b0d140c0ce0997de6c10b1dcffa8b22"
+      }
+    }
+  }
+}

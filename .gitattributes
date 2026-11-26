@@ -1,0 +1,6 @@
+data/condition_inputs/** -text
+data/diagnostics/** -text
+data/evaluations/conditions/v1.1/** -text
+data/goldsets/conditions/v1.1/** -text
+data/goldsets/conditions/v1/20261126_balanced/** -text
+schemas/conditions/*v1.1.schema.json -text

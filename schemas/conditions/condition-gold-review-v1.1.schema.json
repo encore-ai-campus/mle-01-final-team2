@@ -1,0 +1,687 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:mle-team2:support-conditions:v1.1:gold-review",
+  "title": "Human review packet for condition gold data v1.1",
+  "$defs": {
+    "goldCondition": {
+      "type": "object",
+      "required": [
+        "gold_condition_id",
+        "condition_type",
+        "category",
+        "field",
+        "applicability_scope",
+        "operator",
+        "value",
+        "value_type",
+        "unit",
+        "reference_date",
+        "reference_date_type",
+        "raw_text",
+        "source_field",
+        "evidence_reference",
+        "source_completeness",
+        "decision_possible",
+        "review_status",
+        "review_comment",
+        "matched_candidate_ids",
+        "structure_capable",
+        "facts_sufficient",
+        "evaluation_phase",
+        "fulfillment_phase",
+        "requirement_kind",
+        "temporal_constraint",
+        "evidence_references",
+        "external_reference"
+      ],
+      "properties": {
+        "gold_condition_id": {
+          "type": "string",
+          "pattern": "^GOLD:[A-Z2-7]{24}$"
+        },
+        "condition_type": {
+          "type": "string",
+          "enum": [
+            "ELIGIBILITY",
+            "EXCLUSION",
+            "PREFERENCE",
+            "UNCLASSIFIED"
+          ]
+        },
+        "category": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "field": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "applicability_scope": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "operator": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "AND",
+            "OR",
+            "NOT",
+            "EQ",
+            "NEQ",
+            "GT",
+            "GTE",
+            "LT",
+            "LTE",
+            "IN",
+            "NOT_IN",
+            "BETWEEN",
+            "EXISTS",
+            "NOT_EXISTS",
+            null
+          ]
+        },
+        "value": {},
+        "value_type": {
+          "type": "string",
+          "enum": [
+            "STRING",
+            "NUMBER",
+            "DATE",
+            "BOOLEAN",
+            "ARRAY",
+            "OBJECT",
+            "RANGE",
+            "NULL",
+            "UNKNOWN"
+          ]
+        },
+        "unit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reference_date": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reference_date_type": {
+          "type": "string",
+          "enum": [
+            "PUBLICATION_DATE",
+            "APPLICATION_START",
+            "APPLICATION_END",
+            "SPECIFIC_DATE",
+            "RULE",
+            "UNKNOWN"
+          ]
+        },
+        "raw_text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_field": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_reference": {
+          "type": "object",
+          "required": [
+            "start_char",
+            "end_char"
+          ],
+          "properties": {
+            "start_char": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "end_char": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "additionalProperties": false
+        },
+        "source_completeness": {
+          "type": "string",
+          "enum": [
+            "COMPLETE",
+            "PARTIAL",
+            "UNKNOWN"
+          ]
+        },
+        "decision_possible": {
+          "type": "boolean"
+        },
+        "review_status": {
+          "type": "string",
+          "enum": [
+            "UNREVIEWED",
+            "VERIFIED",
+            "NEEDS_REVIEW",
+            "REJECTED"
+          ]
+        },
+        "review_comment": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "matched_candidate_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "structure_capable": {
+          "type": "boolean"
+        },
+        "facts_sufficient": {
+          "type": "boolean"
+        },
+        "evaluation_phase": {
+          "type": "string",
+          "enum": [
+            "APPLICATION",
+            "SELECTION",
+            "POST_SELECTION",
+            "POST_MOVE_IN",
+            "UNKNOWN"
+          ]
+        },
+        "fulfillment_phase": {
+          "type": "string",
+          "enum": [
+            "APPLICATION",
+            "SELECTION",
+            "POST_SELECTION",
+            "POST_MOVE_IN",
+            "UNKNOWN"
+          ]
+        },
+        "requirement_kind": {
+          "type": "string",
+          "enum": [
+            "CURRENT_STATE",
+            "FUTURE_FEASIBILITY",
+            "FULFILLMENT_OBLIGATION",
+            "UNKNOWN"
+          ]
+        },
+        "temporal_constraint": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "required": [
+            "anchor_event",
+            "fixed_reference_date",
+            "offset_value",
+            "offset_unit",
+            "operator",
+            "inclusive",
+            "applies_to",
+            "anchor_date_known"
+          ],
+          "properties": {
+            "anchor_event": {
+              "type": "string",
+              "enum": [
+                "APPLICATION",
+                "MOVE_IN_APPLICATION",
+                "MOVE_IN_START",
+                "CONTRACT_SIGNING",
+                "SELECTION",
+                "FIXED_DATE",
+                "UNKNOWN"
+              ]
+            },
+            "fixed_reference_date": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date"
+            },
+            "offset_value": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "offset_unit": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "DAY",
+                "MONTH",
+                "YEAR",
+                null
+              ]
+            },
+            "operator": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "EQ",
+                "GT",
+                "GTE",
+                "LT",
+                "LTE",
+                null
+              ]
+            },
+            "inclusive": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "applies_to": {
+              "type": "string",
+              "minLength": 1
+            },
+            "anchor_date_known": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        },
+        "evidence_references": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "role",
+              "source_field",
+              "start_char",
+              "end_char",
+              "evidence_text",
+              "document_id",
+              "evidence_id"
+            ],
+            "properties": {
+              "role": {
+                "type": "string",
+                "enum": [
+                  "PRIMARY",
+                  "SUPPORTING",
+                  "CONTEXT"
+                ]
+              },
+              "source_field": {
+                "type": "string",
+                "minLength": 1
+              },
+              "start_char": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "end_char": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "evidence_text": {
+                "type": "string",
+                "minLength": 1
+              },
+              "document_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "evidence_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "external_reference": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "required": [
+            "reference_type",
+            "reference_text",
+            "collection_status",
+            "details_confirmed"
+          ],
+          "properties": {
+            "reference_type": {
+              "type": "string",
+              "enum": [
+                "LAW",
+                "DETAIL_NOTICE",
+                "OTHER"
+              ]
+            },
+            "reference_text": {
+              "type": "string",
+              "minLength": 1
+            },
+            "collection_status": {
+              "type": "string",
+              "enum": [
+                "COLLECTED",
+                "NOT_COLLECTED",
+                "UNKNOWN"
+              ]
+            },
+            "details_confirmed": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "candidateAlignment": {
+      "type": "object",
+      "required": [
+        "candidate_id",
+        "gold_condition_ids",
+        "match_status",
+        "review_comment"
+      ],
+      "properties": {
+        "candidate_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "gold_condition_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "match_status": {
+          "type": "string",
+          "enum": [
+            "MATCH",
+            "PARTIAL_MATCH",
+            "FALSE_POSITIVE",
+            "DUPLICATE",
+            "UNRESOLVED"
+          ]
+        },
+        "review_comment": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "type": "object",
+  "required": [
+    "schema_version",
+    "record_type",
+    "data_kind",
+    "dataset_split",
+    "notice_id",
+    "source_system",
+    "source_field",
+    "source_text",
+    "provided_text_scope",
+    "source_text_completeness",
+    "whole_notice_conditions_complete",
+    "source_condition_status",
+    "evidence_reference",
+    "gold_conditions",
+    "missed_condition_candidates",
+    "candidate_alignments",
+    "review_status",
+    "adjudication_status",
+    "reviewer",
+    "reviewed_at",
+    "revision_history",
+    "review_comment",
+    "evaluation_version"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.1"
+    },
+    "record_type": {
+      "const": "condition_gold_review"
+    },
+    "data_kind": {
+      "const": "ACTUAL_SOURCE"
+    },
+    "dataset_split": {
+      "type": "string",
+      "enum": [
+        "DEVELOPMENT",
+        "EVALUATION"
+      ]
+    },
+    "notice_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_system": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_field": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_text": {
+      "type": "string"
+    },
+    "provided_text_scope": {
+      "type": "string",
+      "enum": [
+        "SAMPLED_CONDITION_TEXT_EXCERPT"
+      ]
+    },
+    "source_text_completeness": {
+      "type": "string",
+      "enum": [
+        "COMPLETE",
+        "PARTIAL",
+        "UNKNOWN"
+      ]
+    },
+    "whole_notice_conditions_complete": {
+      "const": false
+    },
+    "source_condition_status": {
+      "type": "string",
+      "enum": [
+        "AVAILABLE",
+        "NOT_COLLECTED",
+        "EMPTY",
+        "NOT_EXTRACTED",
+        "UNKNOWN"
+      ]
+    },
+    "evidence_reference": {
+      "type": "object",
+      "required": [
+        "source_field",
+        "start_char",
+        "end_char"
+      ],
+      "properties": {
+        "source_field": {
+          "type": "string"
+        },
+        "start_char": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end_char": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "gold_conditions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/goldCondition"
+      }
+    },
+    "missed_condition_candidates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/goldCondition"
+      }
+    },
+    "candidate_alignments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/candidateAlignment"
+      }
+    },
+    "review_status": {
+      "type": "string",
+      "enum": [
+        "UNREVIEWED",
+        "VERIFIED",
+        "NEEDS_REVIEW",
+        "REJECTED"
+      ]
+    },
+    "adjudication_status": {
+      "type": "string",
+      "enum": [
+        "PENDING",
+        "REVIEWED_COMPLETE",
+        "CONFIRMED_NONE_IN_PROVIDED_TEXT",
+        "UNDECIDABLE",
+        "EXCLUDED"
+      ]
+    },
+    "reviewer": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reviewed_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "revision_history": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "review_comment": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "existing_candidates": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "evaluation_version": {
+      "const": "1.1"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "dataset_split": {
+            "const": "DEVELOPMENT"
+          }
+        },
+        "required": [
+          "dataset_split"
+        ]
+      },
+      "then": {
+        "required": [
+          "existing_candidates"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "dataset_split": {
+            "const": "EVALUATION"
+          }
+        },
+        "required": [
+          "dataset_split"
+        ]
+      },
+      "then": {
+        "not": {
+          "required": [
+            "existing_candidates"
+          ]
+        },
+        "properties": {
+          "candidate_alignments": {
+            "maxItems": 0
+          },
+          "gold_conditions": {
+            "items": {
+              "properties": {
+                "matched_candidate_ids": {
+                  "maxItems": 0
+                }
+              }
+            }
+          },
+          "missed_condition_candidates": {
+            "items": {
+              "properties": {
+                "matched_candidate_ids": {
+                  "maxItems": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

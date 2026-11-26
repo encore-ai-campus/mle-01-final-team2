@@ -1,0 +1,16 @@
+{
+  "limit": 12,
+  "used": 2,
+  "attempts": [
+    {
+      "request_ordinal": 1,
+      "notice_id": "SYNTHETIC:STRUCTURED_JSON_PREFLIGHT",
+      "state": "RESERVED_BEFORE_API_CALL"
+    },
+    {
+      "request_ordinal": 2,
+      "notice_id": "BIZINFO:PBLN_000000000117168",
+      "state": "RESERVED_BEFORE_API_CALL"
+    }
+  ]
+}

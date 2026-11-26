@@ -1,0 +1,75 @@
+{
+  "baseline_name": "PRE_2_4_FROZEN",
+  "files": {
+    "extracted_conditions": {
+      "path": "data/condition_inputs/v1/20261125/extracted/improved/development_conditions.jsonl",
+      "sha256": "5585302b26de77d324cf93ec5e05c8b89459af9149d81c0306af09f8225399a0",
+      "record_count": 98
+    },
+    "notice_condition_sets": {
+      "path": "data/condition_inputs/v1/20261125/logic/notice_condition_sets.jsonl",
+      "sha256": "bf7b995b880c048f844a725920909d0a26e7cf362f2f0947c901844ba0e889dc",
+      "record_count": 80
+    },
+    "relation_review": {
+      "path": "data/condition_inputs/v1/20261125/logic/relation_review.jsonl",
+      "sha256": "4a0c0db8c9f5fdc0edebc4db37161a54f43c391145148fe9f500ea6357d256b9",
+      "record_count": 25
+    },
+    "qualifier_candidates": {
+      "path": "data/condition_inputs/v1/20261125/logic/qualifier_candidates.jsonl",
+      "sha256": "6076bd769c9eb856edff1e65ea4fab3596207a675761542078a4edfd94abb1db",
+      "record_count": 5
+    },
+    "run_report": {
+      "path": "data/condition_inputs/v1/20261125/logic/run_report.json",
+      "sha256": "9f80f9df83732619556a40204ec4a454984e0931cde6805e523fc44620367946",
+      "record": {
+        "development_notices": 80,
+        "source_condition_candidates": 98,
+        "conditions_in_sets": 98,
+        "condition_types": {
+          "ELIGIBILITY": 89,
+          "EXCLUSION": 6,
+          "PREFERENCE": 3
+        },
+        "source_condition_candidates_by_source": {
+          "BIZINFO": 37,
+          "KSTARTUP": 61
+        },
+        "condition_group_map_records": 98,
+        "notices_without_extracted_candidates": 26,
+        "logical_groups": 25,
+        "relation_candidates_by_operator": {
+          "AND": 2,
+          "OR": 5,
+          "UNRESOLVED": 18
+        },
+        "qualifier_candidates": 5,
+        "notice_review_queue_records": 80,
+        "human_review_packet_notices": 30,
+        "conflicting_candidate_groups": 0,
+        "all_decision_eligible_false": true,
+        "evaluation_records_used": false,
+        "g2b_conditions_generated": 0,
+        "schema_validation": "PASSED_ALL_80_RECORDS",
+        "human_review": "NOT_PERFORMED",
+        "elapsed_seconds": 0.51
+      }
+    }
+  },
+  "expected_counts": {
+    "development_notices": 80,
+    "condition_candidates": 98,
+    "eligibility": 89,
+    "exclusion": 6,
+    "preference": 3,
+    "no_extraction": 26,
+    "logic_groups": 25,
+    "and": 2,
+    "or": 5,
+    "unresolved": 18,
+    "qualifier_candidates": 5,
+    "tests_passed": 49
+  }
+}

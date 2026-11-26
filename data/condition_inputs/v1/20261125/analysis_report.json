@@ -1,0 +1,53 @@
+{
+  "seed": 25112026,
+  "snapshot": "20261125_g2b",
+  "counts": {
+    "all": 197180,
+    "extractable": 5116,
+    "deferred": 192064,
+    "g2b_deferred": 192064,
+    "inputs_by_source": {
+      "BIZINFO": 1294,
+      "KSTARTUP": 3822
+    },
+    "candidate_refs": 17211,
+    "samples": {
+      "BIZINFO:DEVELOPMENT": 40,
+      "BIZINFO:EVALUATION": 10,
+      "KSTARTUP:DEVELOPMENT": 40,
+      "KSTARTUP:EVALUATION": 10
+    }
+  },
+  "kstartup_candidate_notices": 3819,
+  "kstartup_missing_ids": 3,
+  "kstartup_missing_notice_ids": [
+    "KSTARTUP:171419",
+    "KSTARTUP:173424",
+    "KSTARTUP:175366"
+  ],
+  "kstartup_extra_notice_ids": [],
+  "kstartup_duplicate_ids": 0,
+  "kstartup_review_status_counts": {
+    "needs_review": 27945,
+    "not_found": 18231
+  },
+  "legacy_fact_rows": 5116,
+  "pattern_notice_counts": {
+    "and": 2043,
+    "or": 1402,
+    "not": 383,
+    "exception": 214,
+    "range": 2223,
+    "region": 1853,
+    "age": 1385,
+    "preference": 239
+  },
+  "input_sha256": "2cbcf09df66f8ba2c2c906451b228dad18ef0b562ed4ac9ad7e2d4042cc5a901",
+  "input_sha256_by_file": {
+    "notices": "2cbcf09df66f8ba2c2c906451b228dad18ef0b562ed4ac9ad7e2d4042cc5a901",
+    "chunks": "cdce6d9c01b4ad686adef0bbca0b7fcc9f2e27a8d552a70d6ba2ee36fda5abe7",
+    "facts": "c47bccc38ee373f756481a93e68e1a123a24d31f04ed1b4f198d3647930ac2e8",
+    "kstartup": "9651c99316cdde2b818a63edad016d281895e13583dd9d24ac950dce4e614a09"
+  },
+  "all_decision_eligible": false
+}

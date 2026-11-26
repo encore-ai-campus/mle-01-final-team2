@@ -1,0 +1,7 @@
+﻿priority,failure_type,failure_cause,failure_count,notice_count,condition_count,cause_status
+P1,FALSE_NEGATIVE,CONDITION_NOT_EXTRACTED,106,30,106,Observed matching/structural symptom; causal mechanism requires review
+P1,FALSE_POSITIVE,UNRESOLVED_OR_OVEREXTRACTION,36,21,36,Observed matching/structural symptom; causal mechanism requires review
+P1,LOGIC_FAILURE,UPSTREAM_CONDITION_MATCH_LIMIT,29,29,29,Observed matching/structural symptom; causal mechanism requires review
+P1,PARTIAL_MATCH,WRONG_EVIDENCE,9,9,9,Observed matching/structural symptom; causal mechanism requires review
+P1,PARTIAL_MATCH,WRONG_OPERATOR,3,3,3,Observed matching/structural symptom; causal mechanism requires review
+P1,PARTIAL_MATCH,WRONG_VALUE,6,6,6,Observed matching/structural symptom; causal mechanism requires review

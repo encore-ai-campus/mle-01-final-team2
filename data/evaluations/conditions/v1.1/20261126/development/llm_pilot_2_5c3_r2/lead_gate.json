@@ -1,0 +1,9 @@
+{
+  "status": "BLOCKED",
+  "notice_id": "BIZINFO:PBLN_000000000117168",
+  "request_ordinal": 2,
+  "reason": "TECHNICAL_OUTPUT_OR_EVIDENCE_VALIDATION_FAILED",
+  "condition_count": 0,
+  "schema_error_count": 0,
+  "held_review_queue": 1
+}

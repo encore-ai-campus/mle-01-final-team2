@@ -1,0 +1,18 @@
+{
+  "condition_schema_errors": 0,
+  "logic_schema_errors": 0,
+  "evidence_span_errors": 0,
+  "semantic_checks_passed": 17,
+  "semantic_checks_total": 17,
+  "review_status": "UNREVIEWED",
+  "adjudication_status": "PENDING",
+  "automatic_verified": 0,
+  "condition_counts": {
+    "KSTARTUP:177469": 3,
+    "KSTARTUP:176813": 6,
+    "BIZINFO:PBLN_000000000118927": 3,
+    "KSTARTUP:178507": 10,
+    "BIZINFO:PBLN_000000000118182": 11
+  },
+  "ingest_reviewed_records": 0
+}
