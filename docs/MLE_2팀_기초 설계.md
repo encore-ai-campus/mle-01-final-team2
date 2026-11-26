@@ -66,7 +66,7 @@
 | 법령 연결 | 창업기업·중소기업 같은 정의 조항으로 연결되는 요건이 있는 공고 |
 | 추출 방식 | 무작위 추출을 기본으로 하고, 기준별 최소 건수를 채우도록 층화한다(층별 건수 `[ ]`) |
 
-**시험용 초안:** 동료가 받은 API 샘플 중 기업마당 5건·K-Startup 5건을 손으로 정규화한 초안이 [SAMPLE_그래프관계_분석.md](SAMPLE_그래프관계_분석.md) §3에 있다(검수 전, 핵심 표본으로 확정하지 않음). 이 초안에서 `AT_LEAST`, `logic_basis`, 본문 우선 규칙 등 발견 사항 15건 중 스키마 보완분을 도출해 §4.2에 반영했다.
+**시험용 초안:** 동료가 받은 API 샘플 중 기업마당 5건·K-Startup 5건을 손으로 정규화한 초안이 [SAMPLE_그래프관계_분석.md](old/SAMPLE_그래프관계_분석.md) §3에 있다(검수 전, 핵심 표본으로 확정하지 않음). 이 초안에서 `AT_LEAST`, `logic_basis`, 본문 우선 규칙 등 발견 사항 15건 중 스키마 보완분을 도출해 §4.2에 반영했다.
 
 **교체 규칙(제안):** 표본을 바꾸거나 더하려면 ① 평가셋을 쓰다가 공고가 없어 질문을 풀 수 없거나 ② 첨부 파서 한계 등으로 추출이 불가능할 때만 허용한다. 이슈로 사유를 남기고, 공고 단위 hold-out과 베이스라인 재측정 필요 여부를 확인한다. 사람 두 명이 따로 정규화해 일치도를 본 뒤 정답 라벨로 쓴다.
 
@@ -463,7 +463,7 @@ Plan A는 **Vercel + AWS(API) + RunPod + Neo4j Aura + Supabase + 수집 배치**
 |---|---|
 | `Notice.apply_status` | 날짜로 읽히는 신청기간은 `open`/`closed`를 접수 종료일과 현재 시각으로 계산한다. "상시 접수"는 `always`, "예산 소진 시까지"는 `until_budget`이며 `apply_end`는 비운다. 원문 표기는 `apply_period_raw`에 보존한다(사전 확인 표본 15건 중 2건이 날짜가 아니었다) |
 | `Requirement.kind` | `ELIGIBILITY`(신청 자격), `EXCLUSION`(신청 제외), `PREFERENCE`(우대, **판정에 쓰지 않고 별도 표시**), `DOCUMENT`(제출 서류), `LIMIT`(지원 한도·횟수), `CRITERION`(평가·선정 기준). 판정 합성에는 `ELIGIBILITY`와 `EXCLUSION`만 쓴다 |
-| `Requirement.logic` | 요건 안의 조건끼리의 결합. `AND`/`OR`, 제외 요건은 `NONE_OF`(조건 중 하나라도 `SATISFIED`이면 제외에 해당). 사전 확인 표본에서 AND가 명시된 공고는 2건뿐이고 나머지는 조건을 나열만 했다. **명시가 없으면 나열을 `AND`로 읽는 것은 가정이며** 검수에서 확인한다(제안). 가정으로 읽은 요건은 `logic_basis=assumed`로 표시하고, 이런 요건이 결과를 `ELIGIBLE`로 만들면 검수 전까지 `NEEDS_CHECK`로 낮춘다. "N개 중 k개 이상 충족"은 `AT_LEAST`와 `min_count=k`로 둔다(샘플의 디캠프 공고 "5개 요건 중 3개 이상", [SAMPLE_그래프관계_분석.md](SAMPLE_그래프관계_분석.md) F1·F3) |
+| `Requirement.logic` | 요건 안의 조건끼리의 결합. `AND`/`OR`, 제외 요건은 `NONE_OF`(조건 중 하나라도 `SATISFIED`이면 제외에 해당). 사전 확인 표본에서 AND가 명시된 공고는 2건뿐이고 나머지는 조건을 나열만 했다. **명시가 없으면 나열을 `AND`로 읽는 것은 가정이며** 검수에서 확인한다(제안). 가정으로 읽은 요건은 `logic_basis=assumed`로 표시하고, 이런 요건이 결과를 `ELIGIBLE`로 만들면 검수 전까지 `NEEDS_CHECK`로 낮춘다. "N개 중 k개 이상 충족"은 `AT_LEAST`와 `min_count=k`로 둔다(샘플의 디캠프 공고 "5개 요건 중 3개 이상", [SAMPLE_그래프관계_분석.md](old/SAMPLE_그래프관계_분석.md) F1·F3) |
 | `Requirement.status` | `parsed`(자동 추출 성공), `unparsed`("공고문 참조" 등으로 읽지 못함, 사유 코드 `REQ_UNPARSED`), `reviewed`(사람 확인). `unparsed` 자격 요건이 있으면 **`ELIGIBLE`로 판정하지 않는다** |
 | `Condition.attribute` | 허용 값(최소): `region`, `zone`, `industry`, `applicant_type`, `business_age`(업력), `founder_age`, `company_size`, `revenue`, `employees`, `certification`, `prior_award`, `registration`, `other`. 목록 밖의 값은 적재를 거부하고 `other`로 보낸다 |
 | `Condition.operator` | 숫자·날짜는 `EQ/LT/LTE/GT/GTE/BETWEEN`, 개념은 `IN/WITHIN/IS_A`, 존재 여부는 `EXISTS`. `WITHIN`은 공간 포함, `IS_A`는 종류 |
@@ -496,7 +496,7 @@ Plan A는 **Vercel + AWS(API) + RunPod + Neo4j Aura + Supabase + 수집 배치**
 
 트랙(`Track`)이 있는 공고는 트랙별로 판정한 뒤 **하나라도 `ELIGIBLE`이면 `ELIGIBLE`(해당 트랙 표시)**, 모두 `NOT_ELIGIBLE`이면 `NOT_ELIGIBLE`, 그 외는 `NEEDS_CHECK`로 합성한다(제안).
 
-**구조화 필드와 본문이 충돌할 때(제안):** 본문에서 추출한 조건을 우선하고, 충돌 사실을 `source_conflict`로 기록해 설명에 표시한다. 구조화 필드는 후보 생성과 검증에 쓴다. 목록형 값(K-Startup `biz_enyy`, `biz_trgt_age`)이 전체 구간을 나열하면 **제한 없음**으로 읽고, 일부만 나열하면 OR 합집합으로 읽는다. 본문이 "등"으로 끝나는 열린 목록은 `open_ended`로 표시해 `ELIGIBLE`을 막는다. 근거는 [SAMPLE_그래프관계_분석.md](SAMPLE_그래프관계_분석.md) F4·F5·F12.
+**구조화 필드와 본문이 충돌할 때(제안):** 본문에서 추출한 조건을 우선하고, 충돌 사실을 `source_conflict`로 기록해 설명에 표시한다. 구조화 필드는 후보 생성과 검증에 쓴다. 목록형 값(K-Startup `biz_enyy`, `biz_trgt_age`)이 전체 구간을 나열하면 **제한 없음**으로 읽고, 일부만 나열하면 OR 합집합으로 읽는다. 본문이 "등"으로 끝나는 열린 목록은 `open_ended`로 표시해 `ELIGIBLE`을 막는다. 근거는 [SAMPLE_그래프관계_분석.md](old/SAMPLE_그래프관계_분석.md) F4·F5·F12.
 
 **스키마 설계 원칙**
 - **노드 키는 이름이 아니라 id**로 둔다(위 ID 규칙). 같은 이름의 지역·업종이 코드표 정정으로 바뀌어도 id가 유지되도록 코드를 쓴다.
