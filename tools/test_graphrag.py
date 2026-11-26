@@ -132,8 +132,8 @@ class ConceptsAndLawsTests(unittest.TestCase):
     def test_definitions_link_only_what_exists(self):
         self.assertEqual(len(self.dnodes), 16)  # v0.1 사전 6 + v0.3 추가 법령 10
         self.assertEqual(sum(e["type"] == "CITES_LAW" for e in self.dedges), 16)
-        self.assertEqual(sum(e["type"] == "DEFINED_BY" for e in self.dedges), 8)  # 청년창업기업·중장년창업기업·마을기업·어업인·농업인·자활기업·연구소기업·중소기업협동조합은 같은 이름의 개념이 없다
-        self.assertEqual(len(self.notes), 8)
+        self.assertEqual(sum(e["type"] == "DEFINED_BY" for e in self.dedges), 14)  # 청년창업기업·중장년창업기업은 같은 이름의 개념이 없다
+        self.assertEqual(len(self.notes), 2)
         self.assertTrue(all("rule_json" not in n for n in self.dnodes))  # 원문 확인 전에는 판정 기준을 만들지 않는다
 
     def test_v03_definitions_are_verbatim_clauses(self):
@@ -147,6 +147,14 @@ class ConceptsAndLawsTests(unittest.TestCase):
         self.assertNotIn("3의3.", defs["이노비즈"]["text"])  # 다음 호에서 멈춘다
         self.assertIn("나. 해당 기업에 고용된", defs["장애인기업"]["text"])  # 딸린 목은 포함
         self.assertNotIn("③", defs["자활기업"]["text"])
+
+    def test_v03_concepts_are_defined_by_law(self):
+        from graphrag import concepts_laws as C
+        defined = {e["from"] for e in self.dedges if e["type"] == "DEFINED_BY"}
+        for scheme, name, _, _ in C.LAW_CONCEPTS_V03:
+            self.assertEqual(self.by_label[name], f"{scheme}:{name}")
+            self.assertIn(f"{scheme}:{name}", defined)  # 새 개념은 모두 법령 정의에 이어진다
+        self.assertNotEqual(self.by_label["중소기업협동조합"], self.by_label["협동조합"])  # 협동조합 기본법의 협동조합과 다른 개념
 
     def test_citation_backlog_keeps_every_citing_notice(self):
         self.assertEqual(len(self.pending), 640)  # v0.1 543 + v0.2 추가 법령 인용 97

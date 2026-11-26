@@ -19,6 +19,16 @@ LAW_DIR = REPO / "data" / "지원사업_법령"
 
 CERT_FROM_TERMS = {"벤처기업", "사회적기업", "여성기업", "장애인기업"}
 CERT_EXTRA = [("이노비즈", "기술 혁신형 중소기업 확인"), ("메인비즈", "경영 혁신형 중소기업 확인"), ("소상공인확인", "소상공인 확인서")]
+# 데이터명세서 v0.3 추가 법령으로 정의가 생긴 신청자 유형(2026-11-26). (scheme, 이름, group, 메모)
+# 지정·인정·등록을 받아야 성립하는 지위는 O-07에 따라 CERTIFICATION, 정의 기준만으로 성립하는 것은 APPLICANT_TYPE에 둔다.
+LAW_CONCEPTS_V03 = [
+    ("CERTIFICATION", "마을기업", "CERTIFICATION", "마을기업법 제11조에 따른 지정이 있어야 성립"),
+    ("CERTIFICATION", "자활기업", "CERTIFICATION", "국민기초생활 보장법 제18조제2항에 따른 보장기관의 인정이 있어야 성립"),
+    ("CERTIFICATION", "연구소기업", "CERTIFICATION", "연구개발특구법 제9조의3제2항에 따른 등록이 있어야 성립"),
+    ("APPLICANT_TYPE", "어업인", "PERSON", "수산업ㆍ어촌 발전 기본법 제3조 제3호. 세부 기준은 시행령 제3조"),
+    ("APPLICANT_TYPE", "농업인", "PERSON", "농업ㆍ농촌 및 식품산업 기본법 제3조 제2호. 세부 기준은 시행령 제3조"),
+    ("APPLICANT_TYPE", "중소기업협동조합", "ORGANIZATION", "중소기업협동조합법 제3조의 조합·사업조합·연합회·중앙회. 협동조합 기본법의 `협동조합`과 다른 개념"),
+]
 
 
 def _jsonl(path: Path) -> list[dict]:
@@ -49,6 +59,11 @@ def concepts() -> tuple[list[dict], list[dict], dict[str, str]]:
         cid = f"CERTIFICATION:{name}"
         nodes.append({"label": "Concept", "concept_id": cid, "scheme": "CERTIFICATION", "name": name, "group": "CERTIFICATION", "reviewed": False,
                       "source": "설계서 4.3", "note": note})
+        by_label[name] = cid
+    for scheme, name, group, note in LAW_CONCEPTS_V03:
+        cid = f"{scheme}:{name}"
+        nodes.append({"label": "Concept", "concept_id": cid, "scheme": scheme, "name": name, "group": group, "reviewed": False,
+                      "source": "지원사업 법령 데이터명세서 v0.3", "note": note})
         by_label[name] = cid
     return nodes, edges, by_label
 
