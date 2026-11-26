@@ -93,9 +93,9 @@ flowchart LR
 
 | 노드 | 기본 키 (형식) | 주요 속성 | 원천 |
 |---|---|---|---|
-| `Notice` | `notice_id` = `{출처}:{원천 ID}` 예: `KSTARTUP:179814`, `BIZINFO:PBLN_000000000128083` | `title`, `source_system`, `detail_url`, `fetched_at`, `deadline`(68%), `is_open`, `apply_status_kind`, `text_requirements`(`unparsed`/`reviewed`) | 정리층 `data/cleaned/20261124` |
-| `Requirement` | `req_id` = `{notice_id}#R{n}` | `kind`(`ELIGIBILITY`), `logic`(`AND`/`OR`), `logic_basis`(`explicit`/`assumed`), `status`(`structured_only`), `extraction_method`(`rule`) | 공고 정형 필드 |
-| `Condition` | `cond_id` = `{notice_id}#C-{attribute}` | `cond_type`(`ATOM`), `attribute`, `operator`, `value`(JSON 문자열), `strength`(`hard`/`soft`), `evidence_source`, `reviewed`, `ref_date_kind`, `about_pending`, `about_unmapped`, `unknown_reason` | 정형 필드 규칙 추출 |
+| `Notice` | `notice_id` = `{출처}:{원천 ID}` 예: `KSTARTUP:179814`, `BIZINFO:PBLN_000000000128083` | `title`, `source_system`, `detail_url`, `fetched_at`, `deadline`(68%), `is_open`, `apply_status_kind`, `text_requirements`(`unparsed`/`partially_reviewed`/`reviewed`) | 정리층 `data/cleaned/20261124` |
+| `Requirement` | 정형: `req_id` = `{notice_id}#R{n}`. 검수: `{notice_id}#G{n}` | `kind`(`ELIGIBILITY`), `logic`(`AND`/`OR`, 검수 요건은 `NOT`·`UNRESOLVED`·`ATOM`도), `logic_basis`(`explicit`/`assumed`), `status`(`structured_only`/`reviewed_excerpt`), `extraction_method`(`rule`/`human_review`). 검수 요건만: `logic_tree`(JSON 문자열), `review_split`, `reviewed_at` | 공고 정형 필드, 검수 정답(§3.4) |
+| `Condition` | 정형: `cond_id` = `{notice_id}#C-{attribute}`. 검수: 정답 ID `GOLD:{24자}` | `cond_type`(`ATOM`), `attribute`, `operator`, `value`(JSON 문자열), `strength`(`hard`/`soft`), `evidence_source`(`API`/`NOTICE_TEXT`), `reviewed`, `ref_date_kind`, `about_pending`, `about_unmapped`, `unknown_reason`(`all_options`/`no_evaluation_rule`). 검수 조건만: `negate`(제외 조건) | 정형 필드 규칙 추출, 검수 정답(§3.4) |
 | `Concept` | `concept_id` = `{SCHEME}:{값}` 예: `APPLICANT_TYPE:중소기업`, `CERTIFICATION:벤처기업`, `SPECIAL_GROUP:청년` | `name`, `scheme` | 용어 표준 `data/ref/term_standard_v0.1.json` |
 | `Concept:Region` | `REGION:{법정동코드 10자리}`, 묶음은 `REGION_GROUP:{이름}`, 전국은 `REGION:NATIONWIDE` | `name`, `full_name`, `level`(`SIDO`/`SIGUNGU`/`GU`/`GROUP`/`NATIONWIDE`), `region_code`, `parent_region_id`, `status`(현행/폐지), `code_version` | 행정표준코드 `data/사전/지역_코드표.csv` |
 | `Definition` | `def_id` = `DEF:{용어}` | `term`, `basis_note`, `article_text_hash`, `needs_review`, (조문에서 잘라 온 17개) `legal_term`, `source` | 법령 조문 원문 |
@@ -125,6 +125,22 @@ flowchart LR
 | 보조 인덱스(`notice_source`, `notice_open`, `concept_scheme`) | 정의 | 없음 | §5.2 제안대로 생성 |
 | 공고 → 법령 직접 인용 `CITES` | 정의 | 없음(543건 보류 `data/graph/law_citations_pending.jsonl`) | 요건 노드에 붙일지 결정 후 적재 |
 
+### 3.4 검수 요건 (본문 발췌, 2026-11-26 추가)
+
+사람이 검수한 조건 정답(2-4 정답셋, `data/goldsets/conditions/v1/…/reviewed_condition_gold.jsonl`·`reviewed_logic_gold.jsonl`)을 `tools/graphrag/gold_bridge.py`가 요건·조건으로 바꿔 내보낸다(`build.py export`). **Aura에는 아직 0건이다**(검수 반영 0건).
+
+| 항목 | 규칙 |
+|---|---|
+| 옮기는 조건 | 조건별 `review_status=VERIFIED`이고 `condition_type`이 `ELIGIBILITY`·`EXCLUSION`인 것. 우대(`PREFERENCE`)·미분류(`UNCLASSIFIED`)는 옮기지 않는다 |
+| 속성 | `BUSINESS_AGE` → `business_age`, `REPRESENTATIVE_AGE` → `founder_age`(숫자 비교), `BUSINESS_LOCATION` → `region`(지역 개념으로 해소, `ABOUT` 간선). 그 밖의 필드는 소문자 이름으로 두고 `unknown_reason=no_evaluation_rule`(평가기 UNKNOWN) |
+| 제외 조건 | `negate=true`. 해당하면(SATISFIED) 요건 불충족 |
+| 요건 논리 | 검수된 논리 트리를 `logic_tree`에 그대로 두고 `logic_basis=explicit`. 논리 검수가 없거나 트리에 없는 조건은 AND 한 요건(`assumed`) |
+| 강도 | 모두 `soft`. 불충족이어도 NOT_ELIGIBLE이 아니다(팀 검토 D-2) |
+| 공고 상태 | 검수가 자격 문구 발췌라 `text_requirements=partially_reviewed`. 평가기는 계속 `REQ_UNPARSED`를 붙인다(팀 검토 D-1) |
+| 범위 | 개발용(development) 정답만. 평가용 20건은 넣지 않는다(팀 검토 D-3) |
+
+팀 검토 항목 D-1~D-5는 `docs/RULES_판정_정규화_검토목록_v0.1.md` §4에 있다.
+
 ---
 
 ## 4. 관계 정의 (피드백 ①: 스키마 매핑)
@@ -133,7 +149,7 @@ flowchart LR
 
 | 관계 | 출발 → 도착 | 의미 | 속성 | 건수 | 판정에 쓰나 |
 |---|---|---|---|---:|---|
-| `HAS_REQUIREMENT` | Notice → Requirement | 공고가 가진 자격 요건 묶음 | `evidence`, `source` | 5,900 | 예 |
+| `HAS_REQUIREMENT` | Notice → Requirement | 공고가 가진 자격 요건 묶음(정형 필드, 검수 정답) | `evidence`, `source` | 5,900 | 예 |
 | `HAS_CONDITION` | Requirement → Condition | 요건을 이루는 원자 조건(`logic`으로 결합) | `evidence`, `source` | 17,366 | 예 |
 | `ABOUT` | Condition → Concept / Region | 조건이 가리키는 개념 | `option`(원문 선택지) | 19,766 | 예 |
 | `WITHIN` | Region → Region | 행정 포함(구 → 시 → 도) | `basis` | 284 | 예 |
@@ -319,9 +335,9 @@ RETURN DISTINCT n.notice_id
 
 | 순서 | 조건 결과 | 판정 | 화면 |
 |---|---|---|---|
-| 1 | `hard` 조건 중 하나라도 `UNSATISFIED` | **NOT_ELIGIBLE** | 신청 불가 |
+| 1 | `hard` 조건(또는 hard 조건이 든 OR·검수 요건) 중 하나라도 `UNSATISFIED` | **NOT_ELIGIBLE** | 신청 불가 |
 | 2 | `soft` 조건 불충족, 또는 `UNKNOWN` 조건이 있음 | **NEEDS_CHECK** (사유: `SOFT_CONDITION_UNSATISFIED`, `UNKNOWN_CONDITION`) | 확인 필요 |
-| 3 | 본문 요건이 검수되지 않음(`text_requirements ≠ reviewed`) | **NEEDS_CHECK** (사유: `REQ_UNPARSED`) | 확인 필요 |
+| 3 | 본문 요건이 공고 전체로 검수되지 않음(`text_requirements ≠ reviewed`, 발췌 검수 `partially_reviewed` 포함) | **NEEDS_CHECK** (사유: `REQ_UNPARSED`) | 확인 필요 |
 | 4 | 위에 모두 해당 없음 | **ELIGIBLE** | 신청 가능(참고) |
 
 조건별 규칙 예시
@@ -337,6 +353,7 @@ RETURN DISTINCT n.notice_id
 
 - **"신청 가능"이 나오지 않는다.** 공고 5,116건 모두 `text_requirements=unparsed`라 규칙 3에서 멈춘다. 본문·첨부 요건을 검수하기 전에 "신청 가능"을 내지 않으려고 일부러 둔 안전장치다. 그래서 지금은 사실상 **신청 불가 / 확인 필요 2단**이다.
 - **요건 논리는 그래프와 평가기가 같다(2026-11-26).** 그래프는 "업력 N년 미만 **또는** 예비창업자"를 OR 요건(`#R2`, 조건 2개)으로 둔다(1,114건). 평가기도 같은 묶음 함수(`condition_schema.requirement_groups`)로 요건을 만들고, 요건마다 `logic`(AND/OR)으로 3값을 합친다. 내보내기와 평가기가 한 함수를 쓰므로 요건 수(AND 4,786·OR 1,114)와 조건 수(17,366)가 Aura와 같다. 바꾸기 전후 판정은 프로필 1,920개 × 공고 5,116건(9,822,720건)에서 모두 같았다. 예비창업자 여부를 입력하지 않고 업력만 입력한 프로필은 사업자가 있는 것으로 본다(바꾸기 전 평가기와 같은 해석).
+- **검수 요건도 같은 틀로 판정한다(2026-11-26).** 검수 요건(§3.4)은 `logic_tree`를 3값으로 계산하고(`AND`·`OR`는 요건 논리와 같고, `NOT`은 뒤집고, `UNRESOLVED`는 UNKNOWN) 요건 결과를 공고 판정에 넣는다. 검수 조건은 soft라 규칙 2로 가고, 발췌 검수라 규칙 3에서 멈춘다. 검수 반영이 0건이라 지금 판정은 바뀌지 않는다.
 - **검증 방법:** 정답셋으로 조건 단위·공고 단위 일치율을 잰다.
   - 정답셋은 파일럿 10건 × 프로필 3개로 시작하고, 이후 50건 이상으로 늘린다.
   - 목표: `hard` 조건 판정 오류 0. "신청 가능" 오판(정답은 불가 또는 확인 필요) 0.
@@ -442,8 +459,8 @@ E1~E3은 지금 데이터로 바로 할 수 있다. E4는 업종 코드표와 �
 |---|---|---|---|---|
 | P0 | 조건 검수 | 17,366개 모두 `reviewed=false` | 정답셋 파일럿(10건 × 프로필 3) 라벨 → 조건 규칙별 오류 확인 → 규칙 단위로 `reviewed=true` | 파일럿 hard 조건 오류 0 |
 | P0 | 정의 확대 (**완료 2026-11-26**) | 개념 21개 정의 연결, V17 = 2(연령형) | 수집된 조문으로 정의 7개 추가(소상공인, 중견기업, 벤처기업, 여성기업, 사회적기업, 협동조합, 1인 창조기업). 고아 정의 2개 연결 | 신청자 유형 개념 중 법령 정의가 있는 것 100% 연결 |
-| P0 | 정의 검수 | 6개 모두 `needs_review=true` | 조문 원문과 대조해 사람이 확인 | `needs_review=false` |
-| P1 | 본문 요건 | 공고 전부 `unparsed`. 중소기업 등 법령 정의 개념을 가리키는 조건 0개 | 본문·첨부 요건 추출 → 그룹 조건(`HAS_CHILD`) 적재 → 검수 | 검수한 공고에서 "신청 가능" 판정이 나옴. 중소기업기본법 제2조 경로(P4)가 0건을 벗어남 |
+| P0 | 정의 검수 | 23개 모두 `needs_review=true`. 검수 시트 `docs/REVIEW_법령정의_검수시트_v0.1.md`(중소기업 원문·법령 링크 수정 반영) | 시트로 조문 원문과 대조해 사람이 확인 | `needs_review=false` |
+| P1 | 본문 요건 | 공고 전부 `unparsed`. 중소기업 등 법령 정의 개념을 가리키는 조건 0개 | 검수 정답 → 요건 연결은 구현(§3.4). 남은 일: 검수 패킷 50건 검수, 공고 단위 "자격 조건 전체 확인" 항목(D-1) 결정, 검수 요건 Aura 적재 | 검수한 공고에서 "신청 가능" 판정이 나옴. 중소기업기본법 제2조 경로(P4)가 0건을 벗어남 |
 | P1 | 추가 법령 개념의 공고 연결 | 정의 10개·개념 6개 적재 완료(2026-11-26), V17 = 2. 공고 조건이 가리키는 개념은 `예비창업자`뿐 | 본문·첨부 요건에서 신청자 유형을 뽑아 `ABOUT`으로 새 개념에 연결 | 새 개념 중 1개 이상이 공고 조건과 이어짐 |
 | P1 | 미매핑 개념 | `일반기업` 546건 | 용어 표준에 `일반기업` 추가 여부 결정 | V9 = 0 |
 | P1 | 평가기와 그래프 요건 논리 일치 (**완료 2026-11-26**) | 평가기가 요건 단위로 AND/OR를 합친다 | 본문 요건의 그룹 조건(`HAS_CHILD`, NONE_OF·AT_LEAST)도 같은 방식으로 확장 | 전후 판정 9,822,720건 동일 |
