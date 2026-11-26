@@ -10,7 +10,7 @@
 <br/>
 
 ![team](https://img.shields.io/badge/team-geungeo--it_Team_2-1f6feb)
-![status](https://img.shields.io/badge/status-ontology_design_+_PoC-orange)
+![status](https://img.shields.io/badge/status-PoC-orange)
 ![python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
 ![neo4j](https://img.shields.io/badge/Neo4j-Aura-4581C3?logo=neo4j&logoColor=white)
 ![supabase](https://img.shields.io/badge/Supabase-Postgres-3ECF8E?logo=supabase&logoColor=white)
