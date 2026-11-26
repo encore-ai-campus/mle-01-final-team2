@@ -5,12 +5,15 @@
 - 판정은 모델이 아니라 이 코드가 한다.
 - strength=hard 조건이 UNSATISFIED일 때만 NOT_ELIGIBLE. soft 조건의 불충족은 NEEDS_CHECK(사유 기록).
 - 본문 요건이 추출되지 않은 공고(text_requirements=unparsed)는 ELIGIBLE을 만들지 않는다(REQ_UNPARSED).
+- 공고 판정은 그래프와 같은 요건 단위로 한다(`condition_schema.requirement_groups`). 요건마다 `logic`(AND/OR)으로 조건 결과를 합친다.
+  예: "예비창업자, 3년미만" 업력은 R2 = OR(업력 3년 미만, 예비창업자)이다.
 """
 from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
 
+from .condition_schema import requirement_groups
 from .regions import RegionGraph
 
 SAT, UNSAT, UNK = "SATISFIED", "UNSATISFIED", "UNKNOWN"
@@ -127,12 +130,56 @@ def evaluate_condition(cond: dict, prof: Profile, rg: RegionGraph) -> CondResult
     return CondResult(**base, status=UNK, reason=f"평가 규칙 없는 속성 {a}")
 
 
+def combine(logic: str, statuses: list[str]) -> str:
+    """조건 결과(3값)를 요건 논리로 합친다. 모르는 값은 결과를 확정하지 못할 때만 UNKNOWN으로 남는다."""
+    if not statuses:
+        return UNK
+    if logic == "AND":
+        return UNSAT if UNSAT in statuses else (SAT if all(s == SAT for s in statuses) else UNK)
+    if logic == "OR":
+        return SAT if SAT in statuses else (UNSAT if all(s == UNSAT for s in statuses) else UNK)
+    return UNK  # 규칙 없는 논리는 판정하지 않는다
+
+
+def _evaluate_in_group(cond: dict, logic: str, prof: Profile, rg: RegionGraph) -> CondResult:
+    """요건 안의 조건 하나. OR 요건(R2)에서는 업력과 예비창업자를 각각 따로 본다."""
+    if cond.get("pre_founder"):
+        base = dict(cond_id=cond["cond_id"], attribute="applicant_type", strength=cond.get("strength", "soft"), evidence=cond.get("evidence", ""))
+        if prof.pre_founder is True:
+            return CondResult(**base, status=SAT, reason="예비창업자")
+        if prof.pre_founder is False:
+            return CondResult(**base, status=UNSAT, reason="예비창업자 아님")
+        if prof.business_age_years is not None:  # 업력을 입력했으면 이미 사업자가 있다
+            return CondResult(**base, status=UNSAT, reason="업력 입력(사업자 있음)")
+        return CondResult(**base, status=UNK, reason="예비창업자 여부 미입력")
+    if logic == "OR" and cond["attribute"] == "business_age":
+        if prof.pre_founder is True:  # 예비창업자 허용은 같은 요건의 예비창업자 조건이 맡는다
+            return CondResult(cond_id=cond["cond_id"], attribute="business_age", strength=cond.get("strength", "soft"), evidence=cond.get("evidence", ""),
+                              status=UNSAT, reason="예비창업자라 업력 조건 대상 아님(같은 요건의 예비창업자 조건으로 판단)")
+    return evaluate_condition(cond, prof, rg)
+
+
 def evaluate_notice(notice: dict, prof: Profile, rg: RegionGraph) -> dict:
-    """공고 판정. 구조화 조건만 평가하며 본문 요건이 없으면 ELIGIBLE을 만들지 않는다."""
-    results = [evaluate_condition(c, prof, rg) for c in notice.get("conditions", [])]
-    hard_fail = [r for r in results if r.strength == "hard" and r.status == UNSAT]
-    soft_fail = [r for r in results if r.strength != "hard" and r.status == UNSAT]
-    unknown = [r for r in results if r.status == UNK]
+    """공고 판정. 구조화 조건만 평가하며 본문 요건이 없으면 ELIGIBLE을 만들지 않는다.
+
+    요건마다 조건 결과를 `logic`으로 합친다. AND 요건은 조건별 강도(hard/soft)를 그대로 보고, OR 요건은 합친 결과를 요건 강도로 본다
+    (요건 안 조건의 강도는 같다). OR 요건이 충족되면 그 안의 불충족 조건은 사유가 되지 않는다.
+    """
+    results, requirements = [], []
+    hard_fail, soft_fail, unknown = [], [], []
+    for req_id, logic, basis, conds in requirement_groups(notice["notice_id"], notice.get("conditions", [])):
+        rs = [_evaluate_in_group(c, logic, prof, rg) for c in conds]
+        results += rs
+        status = combine(logic, [r.status for r in rs])
+        requirements.append({"req_id": req_id, "logic": logic, "logic_basis": basis, "status": status, "cond_ids": [r.cond_id for r in rs]})
+        if logic == "AND":
+            hard_fail += [r for r in rs if r.strength == "hard" and r.status == UNSAT]
+            soft_fail += [r for r in rs if r.strength != "hard" and r.status == UNSAT]
+            unknown += [r for r in rs if r.status == UNK]
+        elif status == UNSAT:
+            (hard_fail if any(r.strength == "hard" for r in rs) else soft_fail).append(req_id)
+        elif status == UNK:
+            unknown.append(req_id)
     if hard_fail:
         structured, verdict = "FAIL", NOT_ELIGIBLE
     elif soft_fail or unknown:
@@ -149,4 +196,4 @@ def evaluate_notice(notice: dict, prof: Profile, rg: RegionGraph) -> dict:
     if verdict == NEEDS_CHECK and not reasons:
         verdict = ELIGIBLE
     return {"notice_id": notice["notice_id"], "verdict": verdict, "structured": structured, "reasons": reasons,
-            "conditions": results, "n_conditions": len(results)}
+            "conditions": results, "n_conditions": len(results), "requirements": requirements}

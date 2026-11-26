@@ -284,6 +284,44 @@ class NoticeTests(unittest.TestCase):
         self.assertEqual(evaluate_notice(n, Profile(business_age_years=1), RG)["verdict"], ELIGIBLE)
 
 
+class RequirementLogicTests(unittest.TestCase):
+    """평가기가 그래프와 같은 요건 단위(`requirement_groups`)로 AND/OR를 합친다."""
+
+    def notice(self, *conds, text="reviewed"):
+        return {"notice_id": "N", "conditions": list(conds), "text_requirements": text}
+
+    def test_pre_founder_age_option_becomes_or_requirement(self):
+        r = evaluate_notice(self.notice(region_cond("REGION:1100000000"), age_cond("예비창업자,3년미만")), Profile(pre_founder=True, region="REGION:1100000000"), RG)
+        self.assertEqual([(q["req_id"], q["logic"]) for q in r["requirements"]], [("N#R1", "AND"), ("N#R2", "OR")])
+        self.assertEqual(r["requirements"][1]["cond_ids"], ["c2", "N#C-pre_founder"])
+        self.assertEqual(r["requirements"][1]["status"], SAT)
+        self.assertEqual(r["verdict"], ELIGIBLE)  # 업력 조건이 불충족이어도 같은 OR 요건의 예비창업자가 충족하면 사유가 아니다
+
+    def test_or_requirement_outcomes(self):
+        n = self.notice(age_cond("예비창업자,3년미만"))
+        cases = [(Profile(business_age_years=1), ELIGIBLE),             # 업력 충족
+                 (Profile(business_age_years=9), NOT_ELIGIBLE),         # 업력 불충족, 업력이 있으니 예비창업자 아님
+                 (Profile(pre_founder=False, business_age_years=9), NOT_ELIGIBLE),
+                 (Profile(business_age_years=2.8), NEEDS_CHECK),        # 경계값 UNKNOWN OR 불충족 -> UNKNOWN
+                 (Profile(), NEEDS_CHECK)]                              # 아무것도 모르면 UNKNOWN
+        for prof, want in cases:
+            self.assertEqual(evaluate_notice(n, prof, RG)["verdict"], want, prof)
+
+    def test_age_without_pre_founder_option_stays_in_and_requirement(self):
+        r = evaluate_notice(self.notice(age_cond("3년미만")), Profile(pre_founder=True), RG)
+        self.assertEqual([q["logic"] for q in r["requirements"]], ["AND"])
+        self.assertEqual(r["verdict"], NOT_ELIGIBLE)
+
+    def test_combine_three_valued(self):
+        from graphrag.evaluator import combine
+        self.assertEqual(combine("AND", [SAT, UNK]), UNK)
+        self.assertEqual(combine("AND", [UNK, UNSAT]), UNSAT)
+        self.assertEqual(combine("OR", [UNSAT, UNK]), UNK)
+        self.assertEqual(combine("OR", [UNK, SAT]), SAT)
+        self.assertEqual(combine("OR", [UNSAT, UNSAT]), UNSAT)
+        self.assertEqual(combine("NONE_OF", [SAT]), UNK)  # 규칙 없는 논리는 판정하지 않는다
+
+
 class ChunkTests(unittest.TestCase):
     def test_short_and_redaction_only_chunks_are_dropped(self):
         self.assertEqual(_chunk("N", "S", "x", "API", "창업교육"), [])

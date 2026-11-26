@@ -21,7 +21,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from graphrag import concepts_laws  # noqa: E402
-from graphrag.condition_schema import PRE_FOUNDER, split_pre_founder, unify  # noqa: E402
+from graphrag.condition_schema import requirement_groups, unify  # noqa: E402
 from graphrag.engine import Engine  # noqa: E402
 from graphrag.evaluator import BOUNDARY_YEARS, NOT_ELIGIBLE, Profile, evaluate_notice  # noqa: E402
 
@@ -60,16 +60,8 @@ def export(e: Engine) -> dict:
             cid = cats.setdefault(f"{n['source']}|{n['category']}", f"CAT:{n['source']}:{hashlib.sha1(n['category'].encode()).hexdigest()[:10]}")
             edges.append({"type": "IN_SUPPORT_CATEGORY", "from": nid, "to": cid})
         if n["conditions"]:
-            rest, age = split_pre_founder(n["conditions"])
-            groups = []  # (req_id, logic, logic_basis, [조건 dict])
-            if rest:
-                groups.append((f"{nid}#R1", "AND", "assumed", rest))
-            if age:  # 예비창업자 허용 업력은 OR 요건으로 따로 둔다(설계서 4.3)
-                pre = {"cond_id": f"{nid}#C-pre_founder", "attribute": "applicant_type", "strength": age["strength"],
-                       "value": {"labels": [PRE_FOUNDER]}, "legacy": None, "source_field": age["source_field"], "evidence": age["evidence"],
-                       "unified": ("applicant_type", "IN", {"labels": [PRE_FOUNDER]})}
-                groups.append((f"{nid}#R2", "OR", "explicit", [age, pre]))
-            for rq, logic, basis, conds in groups:
+            # 예비창업자 허용 업력은 OR 요건으로 따로 둔다(설계서 4.3). 평가기도 같은 묶음을 쓴다
+            for rq, logic, basis, conds in requirement_groups(nid, n["conditions"]):
                 nodes.append({"label": "Requirement", "req_id": rq, "kind": "ELIGIBILITY", "logic": logic, "logic_basis": basis,
                               "status": "structured_only", "extraction_method": "rule"})
                 edges.append({"type": "HAS_REQUIREMENT", "from": nid, "to": rq, "evidence": "구조화 API 필드", "source": "api_structured"})
