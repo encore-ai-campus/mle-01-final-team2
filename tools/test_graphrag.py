@@ -124,8 +124,8 @@ class ConceptsAndLawsTests(unittest.TestCase):
     def test_law_counts_match_collected_data(self):
         from collections import Counter
         c = Counter(n["label"] for n in self.lnodes)
-        self.assertEqual((c["ExternalLaw"], c["LawArticle"], c["LawAppendix"]), (26, 1286, 40))
-        self.assertEqual(len(self.ledges), 1326)  # 조문·별표마다 PART_OF 하나
+        self.assertEqual((c["ExternalLaw"], c["LawArticle"], c["LawAppendix"]), (44, 2325, 59))
+        self.assertEqual(len(self.ledges), 2384)  # 조문·별표마다 PART_OF 하나
         ids = [n.get("article_id") or n.get("appendix_id") or n["law_id"] for n in self.lnodes]
         self.assertEqual(len(ids), len(set(ids)))  # 같은 번호의 별표가 있어도 ID는 유일
 
@@ -137,7 +137,7 @@ class ConceptsAndLawsTests(unittest.TestCase):
         self.assertTrue(all("rule_json" not in n for n in self.dnodes))  # 원문 확인 전에는 판정 기준을 만들지 않는다
 
     def test_citation_backlog_keeps_every_citing_notice(self):
-        self.assertEqual(len(self.pending), 543)
+        self.assertEqual(len(self.pending), 640)  # v0.1 543 + v0.2 추가 법령 인용 97
 
 
 class ConditionSchemaTests(unittest.TestCase):

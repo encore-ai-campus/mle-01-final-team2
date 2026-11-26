@@ -1,0 +1,152 @@
+{
+  "tables": {
+    "notice": 5116,
+    "requirement": 5900,
+    "condition": 17366,
+    "concept": 348,
+    "concept_edge": 321,
+    "condition_concept": 19766,
+    "definition": 6,
+    "concept_definition": 4,
+    "external_law": 26,
+    "law_article": 1286,
+    "definition_article": 6
+  },
+  "queries": {
+    "Q0": {
+      "title": "공고의 요건·조건 목록 (재귀 없음, 기준선)",
+      "where": "P-4 요건 트리, 판정 카드",
+      "inputs": 20,
+      "result_rows": 98,
+      "mismatched_inputs": 0,
+      "sql": {
+        "lines": 4,
+        "chars": 123,
+        "tokens": 32,
+        "joins_or_hops": 1,
+        "recursive_cte": 0
+      },
+      "cypher": {
+        "lines": 2,
+        "chars": 142,
+        "tokens": 40,
+        "joins_or_hops": 2,
+        "recursive_cte": 0
+      },
+      "ms_p50": {
+        "sqlite_local": 0.07,
+        "neo4j_roundtrip": 75.8
+      },
+      "sql_code": "SELECT r.req_id, c.cond_id, c.attribute\nFROM requirement r\nJOIN condition c ON c.req_id = r.req_id\nWHERE r.notice_id = :nid",
+      "cypher_code": "MATCH (n:Notice {notice_id: $nid})-[:HAS_REQUIREMENT]->(r:Requirement)-[:HAS_CONDITION]->(c:Condition)\nRETURN r.req_id, c.cond_id, c.attribute"
+    },
+    "Q1": {
+      "title": "사용자 지역으로 충족되는 공고 (지역 계층 ≤3 hop)",
+      "where": "CQ-01·04·17, search_candidates",
+      "inputs": 32,
+      "result_rows": 70531,
+      "mismatched_inputs": 0,
+      "sql": {
+        "lines": 12,
+        "chars": 383,
+        "tokens": 101,
+        "joins_or_hops": 4,
+        "recursive_cte": 1
+      },
+      "cypher": {
+        "lines": 3,
+        "chars": 209,
+        "tokens": 59,
+        "joins_or_hops": 4,
+        "recursive_cte": 0
+      },
+      "ms_p50": {
+        "sqlite_local": 29.01,
+        "neo4j_roundtrip": 431.0
+      },
+      "sql_code": "WITH RECURSIVE up(id, hops) AS (\n  SELECT :u, 0\n  UNION\n  SELECT e.parent, up.hops + 1\n  FROM concept_edge e JOIN up ON e.child = up.id\n  WHERE e.rel IN ('WITHIN', 'MEMBER_OF') AND up.hops < 3\n)\nSELECT DISTINCT r.notice_id\nFROM up\nJOIN condition_concept cc ON cc.concept_id = up.id\nJOIN condition c ON c.cond_id = cc.cond_id AND c.attribute = 'region'\nJOIN requirement r ON r.req_id = c.req_id",
+      "cypher_code": "MATCH (u:Concept {concept_id: $u})-[:WITHIN|MEMBER_OF*0..3]->(:Concept)\n      <-[:ABOUT]-(:Condition {attribute: 'region'})<-[:HAS_CONDITION]-(:Requirement)<-[:HAS_REQUIREMENT]-(n:Notice)\nRETURN DISTINCT n.notice_id"
+    },
+    "Q2": {
+      "title": "공고 조건의 개념 → 정의 → 조문 → 법령 (IS_A ≤2 hop)",
+      "where": "CQ-05, fetch_definition",
+      "inputs": 40,
+      "result_rows": 40,
+      "mismatched_inputs": 0,
+      "sql": {
+        "lines": 18,
+        "chars": 692,
+        "tokens": 174,
+        "joins_or_hops": 9,
+        "recursive_cte": 1
+      },
+      "cypher": {
+        "lines": 4,
+        "chars": 291,
+        "tokens": 90,
+        "joins_or_hops": 7,
+        "recursive_cte": 0
+      },
+      "ms_p50": {
+        "sqlite_local": 1.16,
+        "neo4j_roundtrip": 77.0
+      },
+      "sql_code": "WITH RECURSIVE sup(start, id, hops) AS (\n  SELECT concept_id, concept_id, 0 FROM concept\n  UNION\n  SELECT sup.start, e.parent, sup.hops + 1\n  FROM concept_edge e JOIN sup ON e.child = sup.id\n  WHERE e.rel = 'IS_A' AND sup.hops < 2\n)\nSELECT DISTINCT c.cond_id, d.term, l.name, a.article_no\nFROM requirement r\nJOIN condition c ON c.req_id = r.req_id\nJOIN condition_concept cc ON cc.cond_id = c.cond_id\nJOIN sup ON sup.start = cc.concept_id\nJOIN concept_definition kd ON kd.concept_id = sup.id\nJOIN definition d ON d.def_id = kd.def_id\nJOIN definition_article da ON da.def_id = d.def_id\nJOIN law_article a ON a.article_id = da.article_id\nJOIN external_law l ON l.law_id = a.law_id\nWHERE r.notice_id = :nid",
+      "cypher_code": "MATCH (:Notice {notice_id: $nid})-[:HAS_REQUIREMENT]->(:Requirement)-[:HAS_CONDITION]->(c:Condition)\n      -[:ABOUT]->(:Concept)-[:IS_A*0..2]->(:Concept)-[:DEFINED_BY]->(d:Definition)\n      -[:CITES_LAW]->(a:LawArticle)-[:PART_OF]->(l:ExternalLaw)\nRETURN DISTINCT c.cond_id, d.term, l.name, a.article_no"
+    },
+    "Q3": {
+      "title": "판정 근거 경로를 결과로 반환 (사용자 지역 → 조건 지역, 경로 노드 이름)",
+      "where": "trace_path, 화면 경로 표시",
+      "inputs": 40,
+      "result_rows": 47,
+      "mismatched_inputs": 0,
+      "sql": {
+        "lines": 14,
+        "chars": 543,
+        "tokens": 151,
+        "joins_or_hops": 5,
+        "recursive_cte": 1
+      },
+      "cypher": {
+        "lines": 3,
+        "chars": 263,
+        "tokens": 84,
+        "joins_or_hops": 4,
+        "recursive_cte": 0
+      },
+      "ms_p50": {
+        "sqlite_local": 0.14,
+        "neo4j_roundtrip": 99.8
+      },
+      "sql_code": "WITH RECURSIVE up(id, hops, path) AS (\n  SELECT k.concept_id, 0, k.name FROM concept k WHERE k.concept_id = :u\n  UNION ALL\n  SELECT e.parent, up.hops + 1, up.path || ' > ' || p.name\n  FROM concept_edge e JOIN up ON e.child = up.id\n  JOIN concept p ON p.concept_id = e.parent\n  WHERE e.rel IN ('WITHIN', 'MEMBER_OF') AND up.hops < 3\n)\nSELECT c.cond_id, up.path\nFROM requirement r\nJOIN condition c ON c.req_id = r.req_id AND c.attribute = 'region'\nJOIN condition_concept cc ON cc.cond_id = c.cond_id\nJOIN up ON up.id = cc.concept_id\nWHERE r.notice_id = :nid",
+      "cypher_code": "MATCH (:Notice {notice_id: $nid})-[:HAS_REQUIREMENT]->(:Requirement)-[:HAS_CONDITION]->(c:Condition {attribute: 'region'})-[:ABOUT]->(t:Concept)\nMATCH p = (:Concept {concept_id: $u})-[:WITHIN|MEMBER_OF*0..3]->(t)\nRETURN c.cond_id, [x IN nodes(p) | x.name] AS path"
+    },
+    "Q4": {
+      "title": "조문이 바뀌면 영향받는 공고 (조문 → 정의 → 개념 ← IS_A ← 조건 ← 공고)",
+      "where": "CQ-15, 법령 개정 영향 분석",
+      "inputs": 2,
+      "result_rows": 1252,
+      "mismatched_inputs": 0,
+      "sql": {
+        "lines": 14,
+        "chars": 462,
+        "tokens": 113,
+        "joins_or_hops": 5,
+        "recursive_cte": 1
+      },
+      "cypher": {
+        "lines": 3,
+        "chars": 233,
+        "tokens": 67,
+        "joins_or_hops": 6,
+        "recursive_cte": 0
+      },
+      "ms_p50": {
+        "sqlite_local": 16.79,
+        "neo4j_roundtrip": 345.9
+      },
+      "sql_code": "WITH RECURSIVE sub(id, hops) AS (\n  SELECT kd.concept_id, 0\n  FROM definition_article da JOIN concept_definition kd ON kd.def_id = da.def_id\n  WHERE da.article_id = :aid\n  UNION\n  SELECT e.child, sub.hops + 1\n  FROM concept_edge e JOIN sub ON e.parent = sub.id\n  WHERE e.rel = 'IS_A' AND sub.hops < 2\n)\nSELECT DISTINCT r.notice_id\nFROM sub\nJOIN condition_concept cc ON cc.concept_id = sub.id\nJOIN condition c ON c.cond_id = cc.cond_id\nJOIN requirement r ON r.req_id = c.req_id",
+      "cypher_code": "MATCH (:LawArticle {article_id: $aid})<-[:CITES_LAW]-(:Definition)<-[:DEFINED_BY]-(:Concept)<-[:IS_A*0..2]-(:Concept)\n      <-[:ABOUT]-(:Condition)<-[:HAS_CONDITION]-(:Requirement)<-[:HAS_REQUIREMENT]-(n:Notice)\nRETURN DISTINCT n.notice_id"
+    }
+  }
+}
