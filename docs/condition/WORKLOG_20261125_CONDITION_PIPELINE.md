@@ -75,19 +75,19 @@
 
 - `tests/test_condition_evaluation.py`: 평가 매칭, 지표, 논리 비교, 차단 및 split 안전성 단위 테스트.
 - `sample_data/conditions/condition-evaluation-synthetic-cases-v1.json`: 기대값을 정의한 합성 테스트 사례. 실제 공고 평가 결과로 해석하지 않는다.
-- `docs/CONDITION_EVALUATION_PROGRAM_V1.md`: 평가 방법, 지표, 명령과 제한 사항.
-- `docs/CONDITION_EVALUATION_STAGE_2_5_REPORT.md`: 2-5 구현·검증 결과와 실제 평가 선행 조건.
+- `docs/condition/CONDITION_EVALUATION_PROGRAM_V1.md`: 평가 방법, 지표, 명령과 제한 사항.
+- `docs/condition/CONDITION_EVALUATION_STAGE_2_5_REPORT.md`: 2-5 구현·검증 결과와 실제 평가 선행 조건.
 - `data/evaluations/conditions/v1/20261125/development/evaluation_summary.json`: 현재 정답셋 부재로 `BLOCKED` / `NOT_COMPUTED`인 실행 결과.
 - 같은 폴더의 `evaluation_report.md`, `condition_matches.jsonl`, `notice_details.jsonl`, `logic_details.jsonl`, `failures.jsonl`, `excluded_notices.json`, `not_evaluated_notices.json`: 평가 실행 시 생성하는 상세 결과 파일. 현재 성능 점수가 담긴 결과가 아니다.
 
 ### 단계별 보고서
 
-- `docs/CONDITION_INPUTS_STAGE_2_1_FINAL.md`: 입력 구성, 대상·보류 집계, 후보 참조 ID 충돌 수정 내역.
-- `docs/CONDITION_EXTRACTION_STAGE_2_2_REPORT.md`, `docs/CONDITION_EXTRACTION_QUALITY_STAGE_2_2.md`: 초기 추출기 및 품질 진단 결과.
-- `docs/CONDITION_LOGIC_STAGE_2_3_REPORT.md`, `docs/CONDITION_LOGIC_RULES_STAGE_2_3.md`: 논리 후보 생성 결과와 적용 규칙.
-- `docs/CONDITION_GOLDSET_STAGE_2_4_REPORT.md`, `docs/CONDITION_GOLDSET_REVIEW_GUIDE_V1.md`: 검수 패킷 구성, 상태, 사람 검수 기준.
-- `docs/CONDITION_SCHEMA_V1.md`: 공통 조건 스키마 설명.
-- `docs/G2B_SUPPORT_COMPATIBILITY_V1.md`: 나라장터 데이터의 호환성 및 원문 미확보 제한.
+- `docs/condition/CONDITION_INPUTS_STAGE_2_1_FINAL.md`: 입력 구성, 대상·보류 집계, 후보 참조 ID 충돌 수정 내역.
+- `docs/condition/CONDITION_EXTRACTION_STAGE_2_2_REPORT.md`, `docs/condition/CONDITION_EXTRACTION_QUALITY_STAGE_2_2.md`: 초기 추출기 및 품질 진단 결과.
+- `docs/condition/CONDITION_LOGIC_STAGE_2_3_REPORT.md`, `docs/condition/CONDITION_LOGIC_RULES_STAGE_2_3.md`: 논리 후보 생성 결과와 적용 규칙.
+- `docs/condition/CONDITION_GOLDSET_STAGE_2_4_REPORT.md`, `docs/CONDITION_GOLDSET_REVIEW_GUIDE_V1.md`: 검수 패킷 구성, 상태, 사람 검수 기준.
+- `docs/condition/CONDITION_SCHEMA_V1.md`: 공통 조건 스키마 설명.
+- `docs/data/G2B_SUPPORT_COMPATIBILITY_V1.md`: 나라장터 데이터의 호환성 및 원문 미확보 제한.
 
 ## 검증 결과와 다음 진행
 

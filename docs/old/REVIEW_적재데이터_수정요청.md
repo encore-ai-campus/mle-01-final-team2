@@ -2,7 +2,7 @@
 
 > 대상: `neo4j_import.json`(공고 15건, 관계 6종 129건), `supabase_public_notice_chunks.json`(청크 15건, 공고당 1청크)
 > 방법: 두 파일을 읽기 전용으로 점검했다. Neo4j·Supabase에 적재해 보지는 않았다.
-> 기준: [MLE_2팀_기초 설계.md](../MLE_2팀_기초%20설계.md) §4~5, [SAMPLE_그래프관계_분석.md](SAMPLE_그래프관계_분석.md)
+> 기준: [MLE_2팀_기초 설계.md](../plan/MLE_2팀_기초%20설계.md) §4~5, [SAMPLE_그래프관계_분석.md](SAMPLE_그래프관계_분석.md)
 
 ---
 

@@ -35,7 +35,7 @@
 
 - `tools/build_condition_logic.py`: 개발용 조건 후보 변환, 결정적 ID, 예외 후보 생성, 그래프 검증 및 검수 패킷 생성
 - `tests/test_condition_logic.py`: 스키마, 참조 무결성, 후보 보존, 중첩 논리 연산자, 개인정보 및 재생성 테스트
-- `docs/CONDITION_LOGIC_RULES_STAGE_2_3.md`: 관계 후보 생성과 검수 규칙
+- `docs/condition/CONDITION_LOGIC_RULES_STAGE_2_3.md`: 관계 후보 생성과 검수 규칙
 - `data/condition_inputs/v1/20261125/logic/notice_condition_sets.jsonl`: 공고별 80건
 - `data/condition_inputs/v1/20261125/logic/relation_review.jsonl`: AND/OR/UNRESOLVED 관계 그룹 후보 25건
 - `data/condition_inputs/v1/20261125/logic/unresolved_logic_review.jsonl`: 개발용 공고 80건 처리 상태

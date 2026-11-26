@@ -1,6 +1,6 @@
 # SQL 대 그래프 비교 측정 결과 (v0.1)
 
-> 지원각 · 근거 it(2팀) · 2026-11-25 · 측정 방법: [BASELINE_SQL_벡터RAG_측정방법_KPI산정근거_v0.1.md](BASELINE_SQL_벡터RAG_측정방법_KPI산정근거_v0.1.md) · 강사 피드백 ⑤ "SQL 대비 온톨로지 활용의 필요성 및 차별성"에 대응
+> 지원각 · 근거 it(2팀) · 2026-11-25 · 측정 방법: [BASELINE_SQL_벡터RAG_측정방법_KPI산정근거_v0.1.md](../BASELINE_SQL_벡터RAG_측정방법_KPI산정근거_v0.1.md) · 강사 피드백 ⑤ "SQL 대비 온톨로지 활용의 필요성 및 차별성"에 대응
 > 코드: `tools/graphrag/compare_neo4j.py` · 원자료: `data/eval/compare_sql_graph_20261125.json`
 > 이 문서는 **측정한 것만** 적는다. 측정하지 못한 것은 "측정 불가"로 적고 추정으로 채우지 않는다.
 
@@ -97,7 +97,7 @@
 | 토큰 수 | 539 | 300 |
 | 재귀 CTE | 4 | 0 |
 
-재귀 없는 단순 조회(Q0)는 차이가 없다(토큰 SQL 32, Cypher 40). 질문별 표와 해석은 `docs/SCHEMA_Neo4j_그래프스키마정의서_v0.1.md` §10.2에 있다. 재현은 `python tools/graphrag/compare_query_size.py`로 한다.
+재귀 없는 단순 조회(Q0)는 차이가 없다(토큰 SQL 32, Cypher 40). 질문별 표와 해석은 `docs/ontology/SCHEMA_Neo4j_그래프스키마정의서_v0.1.md` §10.2에 있다. 재현은 `python tools/graphrag/compare_query_size.py`로 한다.
 
 ## 4.1 한계 (이 결과를 과하게 읽지 않기 위해)
 

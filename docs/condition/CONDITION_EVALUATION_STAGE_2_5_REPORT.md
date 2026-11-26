@@ -9,7 +9,7 @@
 - `tools/evaluate_condition_pipeline.py`: 사전검증, 조건 매칭, 지표 산출, 논리 canonical 비교, 실패 분석, JSONL/JSON/Markdown 보고서 생성
 - `tests/test_condition_evaluation.py`: 합성 알고리즘, 차단 동작, one-to-one, AST, 예외/우대 및 분할 안전성 검증
 - `sample_data/conditions/condition-evaluation-synthetic-cases-v1.json`: 사람 검수 정답과 분리된 합성 기대값 사례
-- `docs/CONDITION_EVALUATION_PROGRAM_V1.md`: 평가 방법·명령·지표·한계 명세
+- `docs/condition/CONDITION_EVALUATION_PROGRAM_V1.md`: 평가 방법·명령·지표·한계 명세
 - `data/evaluations/conditions/v1/20261125/development/`: 정답 부재로 차단된 preflight 결과
 
 2-2 추출기, 2-3 논리 변환기, 2-4 골드셋 스키마와 평가 입력 형식은 재사용했다. 기존 2-2/2-3 기준선 파일은 변경하지 않았다. 개발용과 평가용 원문 ID를 교차 검사하고, 다른 split의 예측 ID가 섞이면 평가를 차단한다. 평가용 예측 파일은 생성하거나 읽지 않았다.
