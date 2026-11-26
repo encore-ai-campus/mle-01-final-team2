@@ -1,0 +1,37 @@
+# 로컬 데이터 없이 도는 도구 시험과 확실한 오류 검사. DB(Aura)나 비밀값은 쓰지 않는다.
+# tests/(팀원 코드)는 로컬 전용 데이터(data/condition_inputs/v1 등)가 없으면 실패해 아직 넣지 않았다.
+name: tools-tests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-tools.txt
+      - name: 의존성
+        run: |
+          python -m pip install -r requirements-tools.txt
+          python -m pip install "ruff==0.17.6"
+      - name: 문법 오류(전체)
+        run: ruff check . --select E9
+      - name: 확실한 오류(그래프 도구)
+        run: ruff check tools/graphrag tools/check_graph_neo4j.py tools/load_graph_partial.py tools/load_graph_neo4j.py tools/test_graphrag.py tools/test_graph_ops.py --select F,E9
+      - name: 도구 시험
+        run: |
+          for t in tools/test_*.py; do
+            echo "== $t"
+            python -m unittest "tools.$(basename "$t" .py)"
+          done
