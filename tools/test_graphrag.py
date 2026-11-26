@@ -130,23 +130,34 @@ class ConceptsAndLawsTests(unittest.TestCase):
         self.assertEqual(len(ids), len(set(ids)))  # 같은 번호의 별표가 있어도 ID는 유일
 
     def test_definitions_link_only_what_exists(self):
-        self.assertEqual(len(self.dnodes), 16)  # v0.1 사전 6 + v0.3 추가 법령 10
-        self.assertEqual(sum(e["type"] == "CITES_LAW" for e in self.dedges), 16)
-        self.assertEqual(sum(e["type"] == "DEFINED_BY" for e in self.dedges), 14)  # 청년창업기업·중장년창업기업은 같은 이름의 개념이 없다
+        self.assertEqual(len(self.dnodes), 23)  # v0.1 사전 6 + v0.2 법령 7 + v0.3 추가 법령 10
+        self.assertEqual(sum(e["type"] == "CITES_LAW" for e in self.dedges), 23)
+        self.assertEqual(sum(e["type"] == "DEFINED_BY" for e in self.dedges), 21)  # 청년창업기업·중장년창업기업은 같은 이름의 개념이 없다
         self.assertEqual(len(self.notes), 2)
         self.assertTrue(all("rule_json" not in n for n in self.dnodes))  # 원문 확인 전에는 판정 기준을 만들지 않는다
 
     def test_v03_definitions_are_verbatim_clauses(self):
         from graphrag import concepts_laws as C
         arts = {(r["doc_name"], str(r["article_no"])): r["text"] for r in C._jsonl(C.LAW_DIR / "조문.jsonl") if r.get("level") == "article"}
-        defs = C.law_definitions_v03()
-        self.assertEqual(len(defs), len(C.LAW_DEFS_V03))  # 원문에서 못 찾은 정의가 없어야 한다
-        for name, legal, law, art_no, _, _ in C.LAW_DEFS_V03:
+        defs = C.law_definitions()
+        self.assertEqual(len(defs), len(C.LAW_DEFS))  # 원문에서 못 찾은 정의가 없어야 한다
+        for name, legal, law, art_no, _, _ in C.LAW_DEFS:
             self.assertIn(defs[name]["text"], arts[(law, art_no)])  # 잘라 온 조항이 조문 원문 그대로다
             self.assertIn(legal, defs[name]["text"])
         self.assertNotIn("3의3.", defs["이노비즈"]["text"])  # 다음 호에서 멈춘다
         self.assertIn("나. 해당 기업에 고용된", defs["장애인기업"]["text"])  # 딸린 목은 포함
         self.assertNotIn("③", defs["자활기업"]["text"])
+        self.assertIn("3년간은 소상공인으로 본다", defs["소상공인"]["text"])  # 유예 조항(제2항)까지
+        self.assertIn("다. 그 밖에 지분 소유", defs["중견기업"]["text"])  # 번호 뒤 공백 없는 호도 찾는다
+        self.assertNotIn("중견기업 후보기업", defs["중견기업"]["text"])
+        self.assertNotIn("평가기준과 평가방법", defs["벤처기업"]["text"])  # 제2조의2 제2항은 빼고
+        self.assertNotIn("사회적협동조합", defs["협동조합"]["text"])
+        self.assertNotIn("청년 1인 창조기업", defs["1인 창조기업"]["text"])
+
+    def test_every_applicant_type_with_a_law_definition_is_linked(self):
+        defined = {e["from"] for e in self.dedges if e["type"] == "DEFINED_BY"}
+        for name in ("소상공인", "중견기업", "벤처기업", "여성기업", "사회적기업", "협동조합", "1인 창조기업"):
+            self.assertIn(self.by_label[name], defined)
 
     def test_v03_concepts_are_defined_by_law(self):
         from graphrag import concepts_laws as C

@@ -3,7 +3,7 @@
 - 개념: `data/ref/term_standard_v0.1.json`의 신청자 유형 24개. 인증·확인서를 발급받아야 성립하는 지위(벤처기업·사회적기업·여성기업·장애인기업)는
   `CERTIFICATION` scheme으로 옮기고(O-07) 이노비즈·메인비즈·소상공인확인을 더한다. `IS_A`는 법령 원문이 근거인 소기업·중기업 -> 중소기업만 만든다.
 - 법령: `data/지원사업_법령/`의 법령 26종·조문 1,286개·별표 40개. 조문·별표는 `PART_OF`로 법령에 속한다.
-- 정의: 용어 사전이 법령 원문을 그대로 인용한 6개. 개념이 있는 것만 `DEFINED_BY`로 잇고 `CITES_LAW`로 조문에 잇는다. `rule_json`은 만들지 않는다(원문 확인 전).
+- 정의: 용어 사전이 법령 원문을 그대로 인용한 6개와 수집 조문에서 잘라 온 17개(`LAW_DEFS`). 개념이 있는 것만 `DEFINED_BY`로 잇고 `CITES_LAW`로 조문에 잇는다. `rule_json`은 만들지 않는다(원문 확인 전).
 - 공고가 조문을 인용한 543건은 요건 노드가 본문에서 만들어진 뒤에 `CITES`로 이어야 하므로 지금은 보류 목록(`law_citations_pending.jsonl`)으로만 남긴다.
 """
 from __future__ import annotations
@@ -116,7 +116,20 @@ LAW_DEFS_V03 = [
     ("연구소기업", "연구소기업", "연구개발특구의 육성에 관한 특별법", "2", "6.", "제2조 제6호"),
     ("중소기업협동조합", "중소기업협동조합", "중소기업협동조합법", "3", "①", "제3조 제1항"),
 ]
-_ITEM = re.compile(r"^\d+(?:의\d+)?\.\s")
+# 데이터명세서 v0.2 법령(2026-11-26 보강). 용어 사전에 개념은 있었지만 정의 노드가 없던 7개.
+# 벤처기업은 제2조제1항이 제2조의2를 가리키기만 하므로 요건 조항(제2조의2제1항)을 정의로 쓴다.
+# 소상공인은 규모가 커진 뒤 3년간 소상공인으로 보는 제2항까지 판정에 필요해서 두 항을 함께 둔다.
+LAW_DEFS_V02 = [
+    ("소상공인", "소상공인", "소상공인기본법", "2", "①②", "제2조 제1항·제2항"),
+    ("중견기업", "중견기업", "중견기업 성장촉진 및 경쟁력 강화에 관한 특별법", "2", "1.", "제2조 제1호"),
+    ("벤처기업", "벤처기업", "벤처기업육성에 관한 특별법", "2의2", "①", "제2조의2 제1항"),
+    ("여성기업", "여성기업", "여성기업지원에 관한 법률", "2", "1.", "제2조 제1호"),
+    ("사회적기업", "사회적기업", "사회적기업 육성법", "2", "1.", "제2조 제1호"),
+    ("협동조합", "협동조합", "협동조합 기본법", "2", "1.", "제2조 제1호"),
+    ("1인 창조기업", "1인 창조기업", "1인 창조기업 육성에 관한 법률", "2", "1.", "제2조 제1호"),
+]
+LAW_DEFS = LAW_DEFS_V02 + LAW_DEFS_V03
+_ITEM = re.compile(r"^\d+(?:의\d+)?\.(?!\d)")  # 번호 뒤에 공백이 없는 원문도 있다(`1."중견기업"이란`)
 _PARA = "①②③④⑤⑥⑦⑧⑨⑩"
 
 
@@ -134,7 +147,7 @@ def clause_text(article_text: str, marker: str) -> str | None:
                 break
             out.append(l)
         return "\n".join(out).strip()
-    start = next((i for i, l in enumerate(lines) if l.startswith(marker + " ")), None)
+    start = next((i for i, l in enumerate(lines) if l.startswith(marker) and _ITEM.match(l) and _ITEM.match(l).group() == marker), None)
     if start is None:
         return None
     out = [lines[start]]
@@ -145,25 +158,27 @@ def clause_text(article_text: str, marker: str) -> str | None:
     return "\n".join(out).strip()
 
 
-def law_definitions_v03() -> dict[str, dict]:
-    """개념 이름 -> {law, article, text, legal_term}. 원문을 찾지 못한 정의는 넣지 않는다."""
+def law_definitions() -> dict[str, dict]:
+    """`LAW_DEFS`의 개념 이름 -> {law, article, text, legal_term, source}. 원문을 찾지 못한 정의는 넣지 않는다."""
     arts = {(r["doc_name"], str(r["article_no"])): r["text"] for r in _jsonl(LAW_DIR / "조문.jsonl") if r.get("level") == "article"}
     out = {}
-    for name, legal, law, art_no, marker, ref in LAW_DEFS_V03:
+    v02 = {d[0] for d in LAW_DEFS_V02}
+    for name, legal, law, art_no, marker, ref in LAW_DEFS:
         text = clause_text(arts.get((law, art_no), ""), marker)
         if text:
-            out[name] = {"law": law, "article": ref, "text": text, "legal_term": legal, "source": "data/지원사업_법령 v0.3"}
+            out[name] = {"law": law, "article": ref, "text": text, "legal_term": legal,
+                         "source": "data/지원사업_법령 v0.2" if name in v02 else "data/지원사업_법령 v0.3"}
     return out
 
 
 def definitions(by_label: dict[str, str], article_index: dict[tuple[str, str], str]) -> tuple[list[dict], list[dict], list[str]]:
     """(노드, 간선, 연결하지 못한 정의 설명). 법령 원문을 그대로 인용한 정의만 만든다.
 
-    v0.1 용어 사전의 정의 6개에 데이터명세서 v0.3 추가 법령의 정의 10개(`LAW_DEFS_V03`)를 더한다.
+    v0.1 용어 사전의 정의 6개에 수집 법령 조문에서 잘라 온 정의 17개(`LAW_DEFS`: v0.2 법령 7개, v0.3 추가 법령 10개)를 더한다.
     """
     terms = json.loads(TERMS.read_text(encoding="utf-8"))
     nodes, edges, notes = [], [], []
-    all_defs = {**terms["law_definitions_verbatim"], **law_definitions_v03()}
+    all_defs = {**terms["law_definitions_verbatim"], **law_definitions()}
     for term, d in all_defs.items():
         m = re.search(r"제\s*(\d+)\s*조(?:의\s*(\d+))?", d["article"])
         art_no = f"{m.group(1)}의{m.group(2)}" if m and m.group(2) else (m.group(1) if m else None)
