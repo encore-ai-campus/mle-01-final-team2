@@ -1,0 +1,16 @@
+# 수집·정규화·첨부 추출·문서 생성 도구(tools/)용. 서버 이미지에는 넣지 않는다.
+# 하한은 2026-11-25 팀 PC에서 동작을 확인한 버전 기준이다.
+requests>=2.31
+beautifulsoup4>=4.12
+jsonschema>=4.23
+referencing>=0.35
+neo4j>=5.20
+truststore>=0.10
+python-dotenv>=1.0
+openpyxl>=3.1
+python-docx>=1.1
+pymupdf>=1.24
+olefile>=0.47
+pillow>=10
+numpy>=2
+matplotlib>=3.9

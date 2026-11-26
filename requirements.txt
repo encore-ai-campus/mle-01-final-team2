@@ -1,0 +1,9 @@
+# API·에이전트 실행용(api/Dockerfile이 설치한다). 범위로 적고, 실제 설치된 버전은 requirements.lock.txt에 남긴다.
+fastapi>=0.115,<1
+uvicorn[standard]>=0.32,<1
+pydantic>=2.9,<3
+pydantic-settings>=2.6,<3
+langgraph>=1.0,<2
+neo4j>=5.20
+truststore>=0.10
+python-dotenv>=1.0
