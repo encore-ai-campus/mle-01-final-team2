@@ -58,7 +58,7 @@
 | 임베딩·하이브리드 검색·그래프 확장 | ⬜ 예정 | 모델 선정(KURE-v1 / bge-m3 / e5) 전 |
 | LangGraph 에이전트·가드레일 | ⬜ 예정 | |
 | QLoRA 학습·양자화·vLLM 서빙(RunPod) | ⬜ 예정 | 모델 크기·GPU는 학원 예산 확정 후 |
-| 웹 앱(Next.js)·API(FastAPI)·배포 | ⬜ 예정 | Vercel + Cloud Run |
+| 웹 앱(Next.js)·API(FastAPI)·배포 | ⬜ 예정 | Vercel + AWS CPU 서버 |
 | 평가셋·RAGAS·회귀 게이트 | ⬜ 예정 | 60문항 이상 |
 | Hugging Face 공개(필수 KPI) | ⬜ 예정 | 라이선스 점검 후 |
 
@@ -121,7 +121,7 @@ flowchart LR
   subgraph VC["Vercel"]
     W["Next.js 웹 앱<br/>질의 · 근거 · 경로 시각화"]
   end
-  subgraph GC["Google Cloud Run"]
+  subgraph GC["AWS CPU 서버"]
     A["FastAPI<br/>인증 · 역할 확인 · LangGraph"]
   end
   subgraph DB["데이터"]
@@ -241,9 +241,9 @@ python tools/check_neo4j.py
 
 - **LLM·RAG:** Qwen 소형 모델(QLoRA, AWQ/GPTQ 양자화 후보), vLLM(RunPod), LangGraph, 한국어 임베딩(KURE-v1 / bge-m3 / multilingual-e5 비교 후 선정), 벡터 + 전문(Kiwi 토큰) 하이브리드, Neo4j GraphRAG
 - **데이터·저장소:** Neo4j Aura, Supabase(Postgres, pgvector, Auth, RLS)
-- **프론트엔드·백엔드:** Next.js(Vercel), FastAPI(Docker, Google Cloud Run)
+- **프론트엔드·백엔드:** Next.js(Vercel), FastAPI(Docker, AWS CPU 서버)
 - **가드레일·관측·평가:** NeMo Guardrails(판정 전용), Langfuse, RAGAS, MLflow
-- **CI/CD:** GitHub Actions(PR = CI, main = CD), Artifact Registry, Secret Manager
+- **CI/CD:** GitHub Actions(PR = CI, main = CD), GHCR, SSH 배포(제안)
 - **현재 사용 중인 도구:** Python, `olefile`, `pymupdf`
 
 ## 한계

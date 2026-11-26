@@ -6,7 +6,7 @@
 > 기획서: [기획 보고서](%5B기획설계%5D%20MLE_기획보고서_2팀.md) — 서비스 정의, 사용자(지원자·운영자), 필수 준수사항(MR-N1~N5), 팀 결정 항목을 담는다.
 > 근거 자료: 사전 확인 [PRECHECK_공고주제_사전확인.md](old/PRECHECK_공고주제_사전확인.md)(2026-11-23: 공공데이터포털 API 명세, 기업마당 API 명세, robots.txt, 공고 15건 표본). **사전 확인 시점에는 API를 호출하지 않았고 표본은 작고 치우쳐 있었다.** 이후 2026-11-24에 두 API를 실제로 호출해 기업마당 1,294건(모집 중 스냅샷), K-Startup 전체 30,632건(접수 시작일 기준 최근 1년 3,819건)을 수집했고, 기업마당 첨부 1,294개를 내려받아 텍스트를 추출했다(§2 "전수 수집 결과").
 > 확인 상태: Cypher·SQL은 실행해 보지 않았다. 법령 내용은 원문 확인 전이다. `[ ]`는 팀 확정 또는 수집·측정 후 채운다. 모든 목표값은 `[첫 측정 후 확정]`이다.
-> 전제: LLM은 외부 API가 아니라 **Qwen 소형 모델을 QLoRA로 학습 → 양자화 → RunPod GPU에서 vLLM으로 직접 서빙**하고(§6), **자격 판정은 모델이 아니라 규칙 평가기(코드)가 한다**(§7). 프론트엔드는 **Next.js + Vercel**(§8), Python API는 **Google Cloud Run(Docker)**, 모델 서버는 **RunPod(vLLM)**이다(§3).
+> 전제: LLM은 외부 API가 아니라 **Qwen 소형 모델을 QLoRA로 학습 → 양자화 → RunPod GPU에서 vLLM으로 직접 서빙**하고(§6), **자격 판정은 모델이 아니라 규칙 평가기(코드)가 한다**(§7). 프론트엔드는 **Next.js + Vercel**(§8), Python API는 **AWS CPU 서버(Docker)**, 모델 서버는 **RunPod(vLLM)**이다(§3).
 
 ---
 
@@ -241,7 +241,7 @@ flowchart LR
     K["K-Startup 조회 서비스<br/>(공공데이터포털 15125364)"]
     BZ["기업마당 지원사업정보 API"]
   end
-  subgraph BATCH["수집 배치 (일 1회)<br/>GitHub Actions cron 또는 Cloud Run job"]
+  subgraph BATCH["수집 배치 (일 1회)<br/>GitHub Actions cron 또는 API 서버(AWS)의 cron"]
     I["ingest → normalize"] --> AE["attachment_extract<br/>HWPX · PDF · xlsx"]
     AE --> SR["split_requirements<br/>extract_conditions · resolve_concepts<br/>link_definitions"]
   end
@@ -257,7 +257,7 @@ flowchart LR
   E --> X["index<br/>임베딩 · 전문 인덱스"]
   X --> N
   subgraph SERVE["서비스"]
-    U["Next.js 프론트<br/>(Vercel)"] -->|SSE| API["FastAPI<br/>(Google Cloud Run)"]
+    U["Next.js 프론트<br/>(Vercel)"] -->|SSE| API["FastAPI<br/>(AWS CPU 서버)"]
     API --> S["LangGraph 에이전트<br/>질의 분류 · 후보 검색 · 계층 확장"]
     S --> RE["규칙 평가기 (코드)<br/>3값 판정 · 경로 구성"]
     RE --> N
@@ -293,25 +293,25 @@ flowchart LR
 | 구성요소 | 호스팅 | 배포 방식 | 접근 제어 |
 |---|---|---|---|
 | Next.js 프론트 | **Vercel** | GitHub 연동 자동 배포, PR별 Preview | 로그인 필요 화면은 Supabase Auth(Google)로 보호. 운영자 화면은 역할 확인 |
-| Python API (FastAPI) | **Google Cloud Run**(Docker 컨테이너, 팀 결정) | GitHub Actions: PR은 CI(테스트·이미지 빌드), main push는 CD. 이미지(커밋 sha 태그)를 **Artifact Registry**에 올려 Cloud Run **새 리비전**으로 배포(`gcloud run deploy`). GitHub→GCP 인증은 Workload Identity Federation 권장 | Supabase JWT 검증 + 역할(`user`/`admin`) 확인, 비밀 값은 Secret Manager 연동 |
-| **수집 배치(추가)** | GitHub Actions cron 또는 Cloud Run job(**택일은 미정**) | 같은 Docker 이미지에 배치 진입점을 두고 일 1회 실행. 실행 결과는 `ingest_runs`에 기록 | API 키(공공데이터포털 인증키, 기업마당 `crtfcKey`)는 Secret Manager 또는 GitHub Secrets. 저장소·로그에 값을 남기지 않는다 |
+| Python API (FastAPI) | **AWS CPU 서버**(Docker 컨테이너, 팀 결정 2026-11-25. 학원 지원 AWS 크레딧 100달러) | GitHub Actions: PR은 CI(테스트·이미지 빌드), main push는 CD. 이미지(커밋 sha 태그)를 **GHCR**에 올리고 SSH로 서버에서 `docker compose pull && docker compose up -d`(수업 배포 방식과 같음, 제안). 서비스 종류(EC2 등)·인스턴스 유형·리전은 미정 | Supabase JWT 검증 + 역할(`user`/`admin`) 확인, 비밀 값은 서버의 `.env`(권한 제한) 또는 AWS SSM Parameter Store(제안) |
+| **수집 배치(추가)** | GitHub Actions cron 또는 API 서버(AWS)의 cron(**택일은 미정**) | 같은 Docker 이미지에 배치 진입점을 두고 일 1회 실행. 실행 결과는 `ingest_runs`에 기록 | API 키(공공데이터포털 인증키, 기업마당 `crtfcKey`)는 GitHub Secrets 또는 서버의 `.env`. 저장소·로그에 값을 남기지 않는다 |
 | vLLM (Qwen) | **RunPod GPU Pod**(On-Demand, Secure Cloud) | `vllm/vllm-openai` 이미지 + 시작 명령. 가중치 보관(Network Volume 여부)은 §10 결정 | `--api-key`(`VLLM_API_KEY`), **API 서버와 수집 배치에서만 호출**, HTTPS 프록시 |
 | Neo4j | Aura (관리형) | — | 자격증명은 API 서버와 적재 배치에만 보관 |
 | Supabase | Supabase (관리형) | — | RLS, 서비스 키는 API 서버와 배치에만 보관 |
 
-요청 흐름: 브라우저 → Vercel(Next.js) → Google Cloud(Python API) → Neo4j Aura · Supabase · RunPod(vLLM). 수집 흐름: 수집 배치 → 공개 API → Supabase(원문) → (모델 호출은 RunPod) → 검수 → Neo4j.
+요청 흐름: 브라우저 → Vercel(Next.js) → AWS(Python API) → Neo4j Aura · Supabase · RunPod(vLLM). 수집 흐름: 수집 배치 → 공개 API → Supabase(원문) → (모델 호출은 RunPod) → 검수 → Neo4j.
 
-> **GCP 서비스 종류 — 팀 결정: Cloud Run.** 이전 주제와 같다. 수업의 배포 방식(Compute Engine VM + Docker Compose)과 달라지는 부분(이미지 저장소, `gcloud run deploy`, Secret Manager, 리비전 트래픽 전환, 로컬 볼륨 없음)은 **수업 정합을 다시 확인해야 한다.** 상태는 모두 Supabase에 둔다.
-> ⚠ **Cloud Run에서 확인할 설정(공식 문서·실측으로 확인):** ① 요청 타임아웃(SSE 스트리밍이 끝까지 가는 최대 시간) ② 최소 인스턴스(0이면 콜드스타트, 시연 때는 1 이상 고려) ③ 동시성과 인스턴스당 CPU·메모리 ④ CPU 할당 방식(응답 뒤 작업이 멈출 수 있음 → 응답 전에 저장하거나 "항상 CPU 할당") ⑤ 인증 방식 ⑥ 리전 ⑦ **Cloud Run job을 쓴다면** 작업 타임아웃·재시도 횟수·동시 실행 제한.
+> **API 호스팅 — 팀 결정(2026-11-25): AWS CPU 서버.** 이전 주제의 Google Cloud Run에서 바꿨다. 학원 지원 AWS 크레딧(100달러) 안에서 운영한다. 서버 한 대에 Docker Compose로 띄우는 방식은 수업의 배포 방식(VM + Docker Compose, GHCR + SSH)과 같아 수업 자료를 거의 그대로 쓸 수 있다. 상태는 모두 Supabase에 두고 서버 디스크에는 남기지 않는다.
+> ⚠ **AWS 서버에서 확인할 것(공식 문서·실측으로 확인):** ① **비용**: 서버는 항상 켜져 있으므로 인스턴스 시간·디스크·데이터 전송 요금으로 크레딧(100달러)이 언제 소진되는지 요금표로 계산하고 예산 경보를 건다 ② 크레딧 만료일과 적용되는 서비스 범위 ③ 메모리(판정 엔진이 공고·청크를 메모리에 올린다) ④ HTTPS(도메인·인증서, 역방향 프록시) ⑤ 역방향 프록시의 응답 시간 제한(SSE가 끝까지 가야 한다) ⑥ 보안 그룹(열 포트 최소화, SSH 접근 제한) ⑦ 리전(Neo4j Aura·Supabase·RunPod와의 지연).
 > ⚠ **RunPod 프록시의 연결 제한 시간**(이전 문서에 100초로 기록, 재확인 필요). API→vLLM 호출 타임아웃을 그보다 짧게 두고 긴 응답은 이벤트를 계속 흘려보낸다. 수집 배치의 추출 호출은 스트리밍이 필요 없으므로 요청 단위를 작게 쪼갠다.
-> ⚠ 질의 시 **임베딩을 어디서 계산할지**(Cloud Run CPU / RunPod)와 **임베딩 모델**(후보: KURE-v1, bge-m3, multilingual-e5)은 미정이다(§6.3).
+> ⚠ 질의 시 **임베딩을 어디서 계산할지**(AWS 서버 CPU / RunPod)와 **임베딩 모델**(후보: KURE-v1, bge-m3, multilingual-e5)은 미정이다(§6.3).
 
 ### 수집 배치 (추가)
 
 | 항목 | 설계안 |
 |---|---|
 | 주기 | 일 1회. 시각은 `[ ]`(공고 갱신 시각 확인 전. K-Startup 페이지는 "실시간"으로 표시, 기업마당은 미확인) |
-| 실행 환경 후보 | **GitHub Actions cron**: 저장소·시크릿 관리가 한 곳이다. 단 스케줄 지연 가능성, 활동이 없는 저장소의 스케줄 자동 비활성화 정책 여부는 [확인 필요]. **Cloud Run job**: API 서버와 같은 이미지·시크릿·리전을 쓴다. 비용·콜드스타트·타임아웃은 [확인 필요] |
+| 실행 환경 후보 | **GitHub Actions cron**: 저장소·시크릿 관리가 한 곳이다. 단 스케줄 지연 가능성, 활동이 없는 저장소의 스케줄 자동 비활성화 정책 여부는 [확인 필요]. **API 서버(AWS)의 cron**: API 서버와 같은 이미지·비밀 값을 쓰고 추가 비용이 없다. 단 서버가 멈추면 수집도 멈춘다 |
 | 분리 | `ingest`~`attachment_extract`(규칙 기반, GPU 불필요)는 매일 돌린다. `extract_conditions`의 모델 호출은 **내용이 바뀐 공고만** 대상이다(§5). GPU가 꺼져 있으면 대기열에 쌓아 두고 켜질 때 처리한다(NFR-N08: RunPod는 필요한 때만 가동) |
 | 상태 기록 | `ingest_runs`에 source, 시작 시각, 상태(`success`/`partial`/`failed`), 건수를 남긴다. 운영자 화면(FR-N17)에서 본다 |
 | 장애 시 | 수집이 실패하면 **전일 데이터로 서비스하고 수집 시각을 표시**한다(`STALE_DATA`). 수집 실패가 판정 기능을 멈추지 않는다 |
@@ -357,29 +357,29 @@ roles:
 
 **교체 절차(runbook, 제안)**
 1. **감지:** 오류율·첫 토큰 지연 경보 또는 회귀 게이트 실패. 수집 배치에서는 `extract` 실패율 급증(`ingest_runs`·`extraction_runs`)도 신호이다.
-2. **전환:** 자동은 서킷브레이커가 다음 fallback으로 넘긴다. 수동은 `models.yaml`의 primary나 `MODEL_PROFILE` 환경변수를 바꿔 Cloud Run 새 리비전으로 배포한다.
+2. **전환:** 자동은 서킷브레이커가 다음 fallback으로 넘긴다. 수동은 `models.yaml`의 primary나 `MODEL_PROFILE` 환경변수를 바꿔 API 서버에 다시 배포한다(컨테이너 재시작).
 3. **확인:** 스모크 평가(소수 문항)로 품질 하락폭을 본다. 허용폭을 넘으면 규칙 판정만 운영으로 낮춘다(§7.3).
 4. **기록:** 전환 시각·사유·provider를 `model_switch_log`(Supabase)와 ADR-10에 남긴다. `extract` 모델이 바뀌면 이후 `extraction_runs`에 새 모델이 기록되고, **이전 모델로 만든 정규화 결과는 재추출 대상이 아니라 diff 검수 대상**이다(§5).
 
 ### 배포 Plan B
 
-Plan A는 **Vercel + Cloud Run + RunPod + Neo4j Aura + Supabase + 수집 배치**이다. 구성요소별 대체 경로와 최후 수단을 미리 정한다. **모두 설계안이며 전환을 실습하지 않았다.** 소요 시간은 추정하지 않고 리허설에서 측정해 기록한다.
+Plan A는 **Vercel + AWS(API) + RunPod + Neo4j Aura + Supabase + 수집 배치**이다. 구성요소별 대체 경로와 최후 수단을 미리 정한다. **모두 설계안이며 전환을 실습하지 않았다.** 소요 시간은 추정하지 않고 리허설에서 측정해 기록한다.
 
 | 구성요소 | Plan A | 문제 상황 | Plan B | 사전 준비 |
 |---|---|---|---|---|
-| 프론트 | Vercel | 한도·인증·Preview 문제 | 같은 Next.js를 컨테이너로 만들어 Cloud Run에 배포(API와 같은 프로젝트) | Dockerfile, OAuth 리다이렉트 사전 등록 |
-| API | Cloud Run | 콜드스타트·타임아웃·GCP 크레딧·인증 문제 | 같은 Docker 이미지를 VM(Compute Engine + Docker Compose)이나 로컬 PC에서 `docker compose up`, 필요하면 터널로 공개 | `docker-compose.yml`, 이미지 로컬 보관, 환경변수 목록 |
+| 프론트 | Vercel | 한도·인증·Preview 문제 | 같은 Next.js를 컨테이너로 만들어 API와 같은 AWS 서버에 배포 | Dockerfile, OAuth 리다이렉트 사전 등록 |
+| API | AWS CPU 서버 | 크레딧 소진·서버 장애·인증서·보안 그룹 문제 | 같은 Docker 이미지를 로컬 PC(또는 다른 클라우드 VM)에서 `docker compose up`, 필요하면 터널로 공개 | `docker-compose.yml`, 이미지 로컬 보관, 환경변수 목록 |
 | 모델 | RunPod Pod | GPU 확보 실패·비용·프록시 연결 제한 | ① 같은 vLLM 이미지를 다른 Pod 사양·다른 GPU 공급자에 띄움 ② 더 작거나 양자화된 모델로 교체 ③ `base`로 복귀(§3 모델 교체 구조) ④ 외부 API(`extract`의 공개 공고 문장에 한해, 정책 게이트 안에서만) ⑤ **규칙 판정만 모드**(설명 없이 요건·판정 표시, §7.3) | 모델 가중치 HF Hub + 로컬 사본, 시작 명령 스크립트 |
 | 그래프 DB | Neo4j Aura | 일시중지·한도·장애 | 로컬 Docker Neo4j에 Supabase의 `notice_versions`·`concept_codes` 등 **승인된 정규화 결과로 재적재**(적재가 멱등이고 Neo4j는 재생성 가능한 파생물, ADR-2). Community 에디션은 NODE KEY가 없으므로 합성 `IS UNIQUE`를 쓴다(§4.4) | 적재 스크립트와 샘플 검증 질의(§4.6). Aura 덤프 내보내기 가능 여부는 **확인 필요** |
 | 시스템 DB·인증 | Supabase | 일시중지·장애 | 로컬 Postgres(+pgvector) Docker. 인증은 Supabase 로컬 스택 또는 **데모 전용 간이 인증**(허용 계정 JWT, 시연에만 사용) | 마이그레이션 파일(§15), 시연 계정 |
-| **수집 배치(추가)** | GitHub Actions cron 또는 Cloud Run job | 스케줄 미실행·API 키 만료·일 호출 한도·API 장애 | ① 두 실행 환경 사이 전환 ② 로컬에서 같은 이미지로 수동 실행 ③ **전일 데이터 + `STALE_DATA` 배너로 계속 운영** | 수동 실행 스크립트, 키 재발급 절차, 마지막 정상 수집분 `source_notices` 덤프 |
+| **수집 배치(추가)** | GitHub Actions cron 또는 API 서버(AWS)의 cron | 스케줄 미실행·API 키 만료·일 호출 한도·API 장애 | ① 두 실행 환경 사이 전환 ② 로컬에서 같은 이미지로 수동 실행 ③ **전일 데이터 + `STALE_DATA` 배너로 계속 운영** | 수동 실행 스크립트, 키 재발급 절차, 마지막 정상 수집분 `source_notices` 덤프 |
 | 최후 수단 | — | 위 대안으로도 라이브 시연 불가 | **데모 모드:** 사전 녹화 영상과 표본 공고에 대해 사전 계산한 규칙 판정 응답 캐시(`demo_cache.jsonl`)로 시연 질문 2개를 재생. UI에 "녹화·캐시 응답"을 표시하고 **평가 점수에는 쓰지 않는다** | 녹화본, `demo_cache.jsonl` |
 
 **운영 기준(제안)**
 - **전환 판단:** 시연 중 장애가 5분 안에 복구되지 않으면 Plan B로 전환한다. 리허설에서 이 기준이 맞는지 조정한다.
 - **리허설:** 발표 D-3에 전체 리허설, D-1에 Plan B 전환을 1회 실습한다(롤백 포함).
-- **가동 점검:** Aura(무질의 일시중지 정책, 기준은 확인 필요), RunPod 구동, Cloud Run 리비전, Supabase 상태, **마지막 수집 시각(`ingest_runs`)** 을 발표 전에 확인한다.
-- **백업:** 컨테이너 이미지(Artifact Registry + 로컬 보관), `source_notices` 덤프와 적재 스크립트, 개념 코드표(`concept_codes`), 모델 가중치(HF Hub), 시크릿 목록(`.env.example`, 값은 저장소에 넣지 않는다).
+- **가동 점검:** Aura(무질의 일시중지 정책, 기준은 확인 필요), RunPod 구동, AWS 서버 컨테이너 상태·남은 크레딧, Supabase 상태, **마지막 수집 시각(`ingest_runs`)** 을 발표 전에 확인한다.
+- **백업:** 컨테이너 이미지(GHCR + 로컬 보관), `source_notices` 덤프와 적재 스크립트, 개념 코드표(`concept_codes`), 모델 가중치(HF Hub), 시크릿 목록(`.env.example`, 값은 저장소에 넣지 않는다).
 
 ---
 
@@ -985,7 +985,7 @@ normalize → attachment_extract → split_requirements → extract_conditions(�
 | 접근 제어 | `--api-key`, API 서버에서만 호출 | 사용자·한도는 API 서버에서 관리(NFR-N07 비밀 값 서버 보관) |
 | 연결 | `https://<파드id>-8000.proxy.runpod.net/v1` + Bearer 키. **프록시는 100초 초과 시 끊김**(이전 문서 승계, 재확인 필요) | API 타임아웃 90초 |
 | 가중치 보관 | Network Volume 유지 vs 켤 때마다 HF에서 다운로드 | 콜드스타트·재생성 비용과 비교해 결정(§10) |
-| 임베딩 | 오픈 임베딩 모델. **후보를 비교해 선정**(ADR-1): `nlpai-lab/KURE-v1`, `BAAI/bge-m3`, `multilingual-e5`. **최종 선택은 미정** | 기준은 **우리 평가셋의 후보 검색 Recall@k, 입력 잘림 비율, 질의 지연**. 임베딩 대상은 공고 요약·요건 문장(`notice_chunks.embedding`). 질의 시 계산 위치(Cloud Run CPU / RunPod)는 미정 |
+| 임베딩 | 오픈 임베딩 모델. **후보를 비교해 선정**(ADR-1): `nlpai-lab/KURE-v1`, `BAAI/bge-m3`, `multilingual-e5`. **최종 선택은 미정** | 기준은 **우리 평가셋의 후보 검색 Recall@k, 입력 잘림 비율, 질의 지연**. 임베딩 대상은 공고 요약·요건 문장(`notice_chunks.embedding`). 질의 시 계산 위치(AWS 서버 CPU / RunPod)는 미정 |
 | 리랭커(선택) | `Qwen/Qwen3-Reranker-0.6B` 등 | 후보 수가 작으면 이득이 작을 수 있다. 평가셋으로 효과를 측정한 뒤 채택 |
 
 앱 코드는 **OpenAI 호환 클라이언트**를 쓰되 `base_url`만 RunPod 엔드포인트로 둔다. 베이스·LoRA·양자화 모델 교체는 설정만 바꾸면 되고, 역할(`extract`, `answer`)별 primary·fallback과 장애 시 전환은 [§3 모델 교체 구조](#모델-교체-구조-플러그인형-어댑터)를 따른다. 외부 API provider는 기본 비활성이다(허용 여부는 팀 결정).
@@ -1506,8 +1506,8 @@ revoke insert, update, delete on audit_logs, reason_events, ingest_runs, source_
 | 층 | 기술 | 책임 |
 |---|---|---|
 | 프론트 | Next.js(App Router) + TypeScript, Vercel 배포 | 화면, 로그인, SSE 중계, 그래프 시각화 |
-| API | Python FastAPI (Docker, **Google Cloud Run**) | LangGraph 에이전트, 규칙 평가기, Neo4j·Supabase 접근, vLLM 호출, Langfuse 기록 |
-| 수집 배치 | GitHub Actions cron 또는 Cloud Run job | 일 1회 K-Startup·기업마당 API 수집(`/admin/ingest`와 같은 파이프라인) |
+| API | Python FastAPI (Docker, **AWS CPU 서버**) | LangGraph 에이전트, 규칙 평가기, Neo4j·Supabase 접근, vLLM 호출, Langfuse 기록 |
+| 수집 배치 | GitHub Actions cron 또는 API 서버(AWS)의 cron | 일 1회 K-Startup·기업마당 API 수집(`/admin/ingest`와 같은 파이프라인) |
 | 데이터·모델 | Neo4j Aura, Supabase, RunPod vLLM | §3 참고 |
 
 **데이터 접근 원칙:** 브라우저는 **Supabase(로그인, RLS가 적용된 본인 테이블)**와 **Next.js 서버(Route Handler)**만 호출한다. Neo4j·vLLM·Python API·서비스 키·공공데이터포털/기업마당 인증키는 **서버 측에서만** 접근하며 브라우저로 노출하지 않는다.
@@ -1566,14 +1566,14 @@ Vercel AI SDK 사용은 선택이다. 이벤트 종류가 커스텀이라 직접
 |---|---|
 | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` | 브라우저 공개 가능(RLS로 보호) |
 | `API_BASE_URL`, `API_SHARED_SECRET` | **서버 전용** (`NEXT_PUBLIC_` 접두사 금지) |
-| Supabase 서비스 키, Neo4j 접속 정보, vLLM 키, 공공데이터포털(K-Startup) 서비스 키, 기업마당 `crtfcKey`, 관리자 허용 목록 | Python API·수집 배치 쪽에서만 보관. **Cloud Run에서는 Secret Manager를 서비스에 연결**하고 코드·이미지·Git에 포함하지 않는다. CI에는 테스트용 가짜 키만 둔다 |
+| Supabase 서비스 키, Neo4j 접속 정보, vLLM 키, 공공데이터포털(K-Startup) 서비스 키, 기업마당 `crtfcKey`, 관리자 허용 목록 | Python API·수집 배치 쪽에서만 보관. **AWS 서버에서는 실행할 때 환경변수로 주고**(서버의 `.env` 권한 제한 또는 SSM Parameter Store, 제안) 코드·이미지·Git에 포함하지 않는다. CI에는 테스트용 가짜 키만 둔다 |
 
 > ⚠ **확인 필요**
-> - **Vercel 함수 한도와 SSE:** `/api/chat`이 Vercel 함수로 SSE를 중계하면 함수 실행 시간 한도(플랜별)가 적용되어 긴 응답이 끊길 수 있다. 한도를 플랜 문서로 확인하고, 문제가 되면 브라우저가 Cloud Run API를 직접 호출(JWT 검증, CORS는 프론트 도메인만 허용)하는 방식으로 바꾼다. 이 경우 "브라우저는 Next 서버만 호출"이라는 원칙의 예외가 된다. 판정이 먼저 오므로 설명 구간이 끊겨도 판정은 남는다.
-> - **Cloud Run:** 요청 타임아웃·최소 인스턴스·CPU 할당·동시성은 §3의 ⚠ 항목에서 확인한다. 상태는 모두 Supabase에 둔다. RunPod 프록시의 시간 제한은 그대로 적용된다.
-> - **리전과 지연:** Cloud Run ↔ Neo4j Aura ↔ Supabase ↔ RunPod 사이 왕복이 응답 시간에 영향을 준다. 선택 가능한 리전은 확인이 필요하다.
+> - **Vercel 함수 한도와 SSE:** `/api/chat`이 Vercel 함수로 SSE를 중계하면 함수 실행 시간 한도(플랜별)가 적용되어 긴 응답이 끊길 수 있다. 한도를 플랜 문서로 확인하고, 문제가 되면 브라우저가 AWS의 API를 직접 호출(JWT 검증, CORS는 프론트 도메인만 허용)하는 방식으로 바꾼다. 이 경우 "브라우저는 Next 서버만 호출"이라는 원칙의 예외가 된다. 판정이 먼저 오므로 설명 구간이 끊겨도 판정은 남는다.
+> - **AWS 서버:** 역방향 프록시의 응답 시간 제한·HTTPS·메모리는 §3의 ⚠ 항목에서 확인한다. 상태는 모두 Supabase에 둔다. RunPod 프록시의 시간 제한은 그대로 적용된다.
+> - **리전과 지연:** AWS 서버 ↔ Neo4j Aura ↔ Supabase ↔ RunPod 사이 왕복이 응답 시간에 영향을 준다. 선택 가능한 리전은 확인이 필요하다.
 > - **수집 API 한도:** K-Startup 개발계정 트래픽 10,000(단위 미표기)과 기업마당 일 호출 한도는 인증키 발급 후 확인한다. 한도를 넘으면 일 1회 수집이 부분 성공(`partial`)이 된다.
-> - 가이드는 "Streamlit 또는 유사 대화형 웹 프레임워크"라고 하므로 Next.js도 충족 가능해 보이지만 **운영 매니저에게 확인**하는 것이 안전하다. **Docker 컨테이너화** 요건은 Python API(Cloud Run)와 vLLM(RunPod)에서 충족한다.
+> - 가이드는 "Streamlit 또는 유사 대화형 웹 프레임워크"라고 하므로 Next.js도 충족 가능해 보이지만 **운영 매니저에게 확인**하는 것이 안전하다. **Docker 컨테이너화** 요건은 Python API(AWS 서버의 Docker)와 vLLM(RunPod)에서 충족한다.
 
 ### 화면 설계 (IA·와이어프레임 초안)
 
@@ -1682,7 +1682,7 @@ Vercel AI SDK 사용은 선택이다. 이벤트 종류가 커스텀이라 직접
 | 에이전트 구성 비교(P2) | 단일 파이프라인 vs 역할 분리형 등. 같은 평가셋·모델·설정으로 반복. 시간이 남을 때만 | 선택 |
 | 안전 | **NeMo Guardrails를 판정 전용으로 쓴다**(`check_async`로 통과·차단만 정하고 답 생성은 LangGraph가 맡는다. 수업 정합 재확인 필요). **다층 방어:** 정규식(사업자등록번호·주민번호·연락처 형태, 금지 표현 사전) → 규칙·로컬 분류 → LLM self-check 순. 로컬 분류 모델은 한국어 성능이 보장되지 않아 단독 방어로 쓰지 않는다. ⚠ **NeMo와 자체 호스팅 Qwen의 연동, 소형 모델의 self-check 정확도는 검증하지 않았다.** PoC로 먼저 확인하고 실패하면 정규식·규칙 중심으로 구현한다 | 차단율·오차단율·새어 나감. KPI S-01, S-03, S-04, S-05, S-08. 규칙·케이스는 최적화용/확인용으로 분리 |
 | 관측 | Langfuse: 요청 단위 trace, `conversation_id`·버전 태그, 마스킹, 프롬프트 버전. 자체 호스팅 모델 단가는 직접 등록. 온라인 평가는 자체 설계 | NFR-N06 |
-| 배포 | 프론트: Vercel(Git 연동, PR별 Preview) / API: Docker → Cloud Run(GitHub Actions: 이미지 빌드 → Artifact Registry → 새 리비전 배포) / 수집 배치: GitHub Actions cron 또는 Cloud Run job / 모델: RunPod vLLM | 클라우드 배포·Docker·CI/CD 요건 |
+| 배포 | 프론트: Vercel(Git 연동, PR별 Preview) / API: Docker → AWS CPU 서버(GitHub Actions: 이미지 빌드 → GHCR → SSH로 `docker compose` 재배포, 제안) / 수집 배치: GitHub Actions cron 또는 API 서버(AWS)의 cron / 모델: RunPod vLLM | 클라우드 배포·Docker·CI/CD 요건 |
 
 ### 평가셋 구성
 
@@ -1737,7 +1737,7 @@ Vercel AI SDK 사용은 선택이다. 이벤트 종류가 커스텀이라 직접
 | 수집 실패·API 한도 초과 | `ingest_runs.status`가 `failed`/`partial` | 재시도, 전일 데이터 유지, 운영자 화면 경고 | `STALE_DATA` 배너와 마지막 수집 시각 |
 | Neo4j 장애 | 그래프 질의 실패 | 헬스체크 실패 시 일시 불가 안내. 그래프 없이 판정은 불가하므로 억지 판정 금지 | 일시 불가 안내(`failed`) |
 | Supabase 장애 | 로그인·이력 저장 실패 | 로그인 불가 안내. 이력 저장 실패는 응답을 막지 않고 기록만 건너뜀(정책은 팀 결정 [ ]) | 안내 문구 |
-| 배포 오류 | 새 리비전에서 오류 증가 | ① 이전 Cloud Run 리비전으로 트래픽 전환(`workflow_dispatch`로 리비전·커밋 sha 입력) → ② 수정 커밋 → ③ 같은 부하·같은 평가셋으로 재측정 | 일시 지연 |
+| 배포 오류 | 새 리비전에서 오류 증가 | ① 이전 커밋 sha 이미지로 다시 배포(`workflow_dispatch`로 sha 입력) → ② 수정 커밋 → ③ 같은 부하·같은 평가셋으로 재측정 | 일시 지연 |
 | 요건 정규화 오류 확산 | 정정 공고 후 판정이 갑자기 바뀜 | 검수 큐에서 해당 버전 되돌리기, 영향받은 판정 목록 확인(입수 시점 검증, P1) | 정정 반영 표시 |
 
 - 프롬프트의 가변 값(요청 시각 등)은 시스템 메시지 **맨 뒤**에 둔다(접두어 캐시가 깨지는 것을 피하기 위함, 효과는 측정 전).
@@ -1781,13 +1781,13 @@ Vercel AI SDK 사용은 선택이다. 이벤트 종류가 커스텀이라 직접
 | 14 | **운영자 모드를 최종 발표 필수로 두는가**(FR-N11·N12·N15) | 일정 | P1 필수, 일정 압박 시 입수 시점 검증을 축소 |
 | 15 | **수집 허용 범위와 이용약관**(두 포털의 약관, 첨부 재이용, 호출 간격) | 수집 방식, 공개 범위 | API만 사용(K-Startup HTML·첨부 수집 불가, 기업마당은 API 토큰 경로로 본문출력파일만, 403은 우회하지 않음). 한도 단위는 미확인. 외부 공개(Hugging Face) 전 이용 조건 확인 |
 | 16 | **공개 범위(Hugging Face)** | 필수 성과지표 | 베이스 모델·학습 데이터 **라이선스 확인 후** 어댑터·양자화 모델·데모 공개. 공고 원문 데이터셋은 이용 조건 확인 전 보류 |
-| 17 | Cloud Run 설정, RunPod 구동 방식, Aura·Supabase 플랜, Langfuse 호스팅 | 안정성·비용 | 이전 주제와 같은 항목이며 새 주제의 부하·질의 특성으로 다시 검토. 개발 중 RunPod은 필요 시에만 구동. Langfuse는 사용자 조건이 들어가므로 데이터 위치 확인 후 결정 |
+| 17 | AWS 인스턴스 유형·크레딧 소진 일정, RunPod 구동 방식, Aura·Supabase 플랜, Langfuse 호스팅 | 안정성·비용 | 이전 주제와 같은 항목이며 새 주제의 부하·질의 특성으로 다시 검토. 개발 중 RunPod은 필요 시에만 구동. Langfuse는 사용자 조건이 들어가므로 데이터 위치 확인 후 결정 |
 | 18 | **PoC 묶음:** vLLM 구조화 출력 / NeMo Guardrails↔vLLM / Aura 제약 / HWPX 추출 / 수집 API 시험 호출 | 설계 가정 검증 | 대부분 검증 전. 결과로 설계 결정 기록을 갱신. 실패 시 규칙 기반 대체 |
 | 19 | 서비스명, 팀원·역할 | 발표·R&R | 서비스명 "지원각", 팀명 "근거 it"은 확정(2026-11-25). 팀원·역할은 팀 확정 후 |
 | 20 | **사업장 분류용 `Concept` scheme 추가 여부**(대기오염 배출시설 종별 등. 표본의 김해 공고) | 합의된 scheme 7종에 자리가 없어 지금은 `attribute=other`로 두고 `확인 필요`가 됨(§4.2) | 이런 요건의 빈도를 표본 확대로 확인한 뒤 scheme 추가 또는 `other` 유지를 결정 |
 | 21 | **LLM 기반 평가(RAGAS 등)의 판사 모델 선택** | 평가 재현성·비용(§9) | 판사 모델 이름·버전을 기록하고 일부 표본은 사람이 확인. 외부 API 사용 여부는 #11과 함께 결정 |
-| 22 | **스트리밍(SSE) 중계 방식과 Vercel 함수 시간 한도**(§8) | 긴 응답 끊김 | 플랜별 한도를 문서로 확인하고, 문제가 되면 브라우저가 Cloud Run API를 직접 호출하는 방식(JWT 검증, CORS 제한)으로 변경 |
-| 23 | **수집 배치 실행 위치**(GitHub Actions 스케줄 / Cloud Run Job) | 비용·운영, 수집 실패 알림 방식 | 팀 결정 `[ ]`. §3의 수집 배치와 함께 확정 |
+| 22 | **스트리밍(SSE) 중계 방식과 Vercel 함수 시간 한도**(§8) | 긴 응답 끊김 | 플랜별 한도를 문서로 확인하고, 문제가 되면 브라우저가 AWS의 API를 직접 호출하는 방식(JWT 검증, CORS 제한)으로 변경 |
+| 23 | **수집 배치 실행 위치**(GitHub Actions 스케줄 / API 서버(AWS) cron) | 비용·운영, 수집 실패 알림 방식 | 팀 결정 `[ ]`. §3의 수집 배치와 함께 확정 |
 | 24 | **이번 판의 데이터 범위**(기업마당·K-Startup 두 출처, 나라장터 제외) | 요건 층 입력, 일정 | 두 출처만. 나라장터는 동료의 DS-10 명세서를 검토한 뒤 별도 결정(온톨로지 설계서 D-5) |
 | 25 | **K-Startup 첨부**(수집 안 함 / 사람이 소량 확인 / 운영기관 문의) | K-Startup 요건 층의 `NEEDS_CHECK` 비율 | 수집하지 않음(`robots.txt`). 비교 시트 10건을 사람이 확인한 결과로 필요성 판단(D-9) |
 | 26 | **기업마당 일반 첨부 1,360개 다운로드 범위** | 라벨링 입력 완전성 | 정답셋 후보 공고의 일반 첨부만 받아 원본 고정(D-10) |
@@ -1845,7 +1845,7 @@ Vercel AI SDK 사용은 선택이다. 이벤트 종류가 커스텀이라 직접
 | 5.1 | 평가셋 구축·SQL·벡터 베이스라인 측정(N-07) | 베이스라인 측정표 | 2.2, 4.2 | P0 | 미정 |
 | 5.2 | QLoRA(요건 추출) 학습·병합·양자화·비교 | 모델·데이터 카드 | 예산, 3.5 | P1 | 미정 |
 | 5.3 | Guardrails PoC·적용 | 규칙·검증 결과 | 4.3 | P1 | 미정 |
-| 5.4 | Docker·CI/CD·배포(Vercel·Google Cloud·RunPod) | 배포 환경 | 4.5, 4.6 | P1 | 미정 |
+| 5.4 | Docker·CI/CD·배포(Vercel·AWS·RunPod) | 배포 환경 | 4.5, 4.6 | P1 | 미정 |
 | 5.5 | Hugging Face 공개 | 모델·데모 | 5.2 | P1 | 미정 |
 | 5.6 | 성능 평가 보고서 | 보고서 | 5.1~5.3, 2.3 | P1 | 미정 |
 
@@ -1883,8 +1883,8 @@ Vercel AI SDK 사용은 선택이다. 이벤트 종류가 커스텀이라 직접
 | 가드레일 오차단으로 정상 질문이 막힘 | 오차단률 KPI(S-05), 재입력 안내가 있는 고정 응답, 문의 버튼(`reason_code`·시각만 저장, 본문 비저장), 규칙 튜닝 |
 | 사용자 개인정보 입력·장기 저장 오염 | 입력 정규식 필터, 범주형 우선, 조건 저장은 선택 동의, 사용자 삭제·끄기, 보존 기간, RLS + API에서 `user_id` 강제, Langfuse `mask` |
 | 판정 결과가 선정·수혜 보장으로 읽힘 | "신청 가능성이 있는 공고"로 표현, 금지 표현 사전 + 출력 가드레일(MR-N1, S-04), 모든 화면에 참고용 면책·출처·수집 시각 |
-| 키 유출·배포 인증 | `.env` 비추적, 서비스 키는 서버 한정, `NEXT_PUBLIC_` 접두사를 비밀 값에 붙이지 않음, GitHub→GCP는 Workload Identity Federation 권장, 런타임 비밀은 Secret Manager |
-| 클라우드 3곳(Vercel·Google Cloud·RunPod) 사이 지연·비용, Vercel 함수 실행 시간 한도, RunPod 프록시 시간 제한, Cloud Run 콜드스타트 | 에이전트 실행은 Google Cloud API에 두고 Vercel은 SSE 중계, 이벤트를 자주 보내 연결 유지, 최소 인스턴스·메모리 상향, 리전 정렬, Langfuse로 구간별 지연 측정 |
+| 키 유출·배포 인증 | `.env` 비추적, 서비스 키는 서버 한정, `NEXT_PUBLIC_` 접두사를 비밀 값에 붙이지 않음, 배포용 SSH 키는 GitHub Secrets에만 두고, 런타임 비밀은 서버의 `.env`(권한 제한) 또는 SSM Parameter Store |
+| 클라우드 3곳(Vercel·AWS·RunPod) 사이 지연·비용, Vercel 함수 실행 시간 한도, RunPod 프록시 시간 제한, AWS 크레딧(100달러) 소진 | 에이전트 실행은 AWS의 API에 두고 Vercel은 SSE 중계, 이벤트를 자주 보내 연결 유지, 예산 경보·인스턴스 유형 조정, 리전 정렬, Langfuse로 구간별 지연 측정 |
 | Aura 한도·휴면(Free 플랜의 무질의 일시중지)·GDS 제약 | 사전 확인, 데모 전 가동 점검, 필요 시 NetworkX 대체 |
 | 외부 서비스 중 하나가 시연 중 장애 | 구성요소별 Plan B, 리허설, 최후 수단 데모 모드(전환은 실습하지 않았다) |
 | Google 로그인이 Vercel Preview URL에서 동작하지 않음 | 리다이렉트 허용 범위 확인, Preview는 로그인 없이 확인 또는 고정 도메인 사용 |
@@ -1910,17 +1910,17 @@ train/                   QLoRA 학습·병합·양자화, vLLM 서빙 설정 (Ru
 config/                  모델 레지스트리(역할별 primary·fallbacks), 금지 표현 사전, 개념 코드 사전 원본, 스키마·프롬프트 버전
 data/                    원본 응답·첨부(표본), 변환 산출물, 정답 라벨. 대용량·약관 확인 전 데이터는 Git에서 제외(§15)
 supabase/migrations/     Supabase 스키마 마이그레이션(SQL): profiles, source_notices, notice_versions, attachments, ingest_runs, extraction_runs, review_queue, concept_codes, definition_links, user_conditions, conversations, messages, audit_logs, reason_events, eval_sets, eval_runs, notice_chunks(pgvector)
-deploy/                  Cloud Run 배포 설정(service.yaml 또는 gcloud 스크립트). Dockerfile은 api/
+deploy/                  AWS 서버 배포 설정(docker-compose.yml, 역방향 프록시 설정, 배포 스크립트). Dockerfile은 api/
 sample_data/             합성 샘플(스키마·규칙 평가기 단위 시험용). 실제 개인 정보 없음
 docs/                    본 문서와 설계 문서. 이전 주제 문서는 docs/old/
-.github/workflows/       ci.yml(PR·push: 테스트·이미지 빌드), cd.yml(main: Cloud Run 배포), rollback.yml(리비전 롤백), ingest.yml(일 1회 수집 스케줄: 실행 위치는 팀 결정, §3·§10 #23)
+.github/workflows/       ci.yml(PR·push: 테스트·이미지 빌드), cd.yml(main: GHCR 푸시 → SSH로 AWS 서버 재배포), rollback.yml(이전 sha 이미지로 재배포), ingest.yml(일 1회 수집 스케줄: 실행 위치는 팀 결정, §3·§10 #23)
 baselines/               baseline.json (평가 회귀 게이트 기준선)
 .env  /  .env.example
 ```
 
 - `rules/`는 모델·네트워크 호출 없이 입력(조건 트리, 사용자 조건, 개념 계층, 기준일)만으로 결과가 정해지는 순수 함수로 두어 단위 시험을 쉽게 한다(제안).
 - 파이프라인 단계와 폴더의 대응: `ingest`(수집) → `normalize`(`attachment_extract`·`split_requirements`·`extract_conditions`·`resolve_concepts`·`link_definitions`) → `review`(운영자 화면 + `review_queue`) → `graph`(`load_graph`) → `index`(임베딩, `notice_chunks`).
-- `ingest.yml`을 GitHub Actions 스케줄로 둘지 Cloud Run 작업(Job)으로 둘지는 `[ ]` 미정이다.
+- `ingest.yml`을 GitHub Actions 스케줄로 둘지 API 서버(AWS)의 cron으로 둘지는 `[ ]` 미정이다.
 
 ---
 
@@ -2001,13 +2001,13 @@ baselines/               baseline.json (평가 회귀 게이트 기준선)
 
 | 항목 | 규칙(제안) | 근거 |
 |---|---|---|
-| 비밀·환경 | `.gitignore`에 `.venv/`, `.env`, `.env.*`(단 `!.env.example`), `.streamlit/secrets.toml` 같은 비밀 파일. `.env.example`만 커밋. **공고 API 인증키(기업마당 `crtfcKey`, 공공데이터포털 서비스키)는 `.env`와 Secret Manager에만 둔다** | **수업**(이전 확인) + 이 주제의 키 추가 |
+| 비밀·환경 | `.gitignore`에 `.venv/`, `.env`, `.env.*`(단 `!.env.example`), `.streamlit/secrets.toml` 같은 비밀 파일. `.env.example`만 커밋. **공고 API 인증키(기업마당 `crtfcKey`, 공공데이터포털 서비스키)는 `.env`(로컬·서버)와 GitHub Secrets에만 둔다** | **수업**(이전 확인) + 이 주제의 키 추가 |
 | 의존성 고정 | `pyproject.toml` + `uv.lock` 쌍을 커밋하고 `uv sync --locked`로 설치 | **수업**(이전 확인) |
 | 브랜치 | `main`은 직접 push 금지, 작업은 `feature/<영역>-<설명>` 브랜치에서 PR로 병합 | 이름 형식은 **팀 합의** |
 | 병합 차단 | GitHub **Rulesets에서 필수 검사(CI)를 켜 실패한 PR의 병합을 막는다** | **수업**(이전 확인) |
 | CI/CD 트리거 | **PR은 CI만**(테스트 + 이미지 빌드, PR에서는 push하지 않음), **main push는 CI + CD**. 이미지 태그는 커밋 sha | **수업**(이전 확인) |
-| 비밀 변수 | GCP 인증은 **Workload Identity Federation 권장**, 키·시크릿은 `secrets`, 프로젝트·리전 등은 `vars`로 구분. `concurrency`로 동시 배포 방지 | secrets/vars 구분·concurrency·sha 태그는 **수업**, **GCP 인증은 수업에 없음** |
-| 롤백 | `rollback.yml`(`workflow_dispatch`)로 **이전 Cloud Run 리비전에 트래픽 전환** | **Cloud Run 방식은 수업에 없음**(이전 확인) |
+| 비밀 변수 | AWS 서버 배포용 **SSH 키는 `secrets`**에 두고, 키·시크릿은 `secrets`, 프로젝트·리전 등은 `vars`로 구분. `concurrency`로 동시 배포 방지 | secrets/vars 구분·concurrency·sha 태그는 **수업**, **SSH 배포는 수업과 같음** |
+| 롤백 | `rollback.yml`(`workflow_dispatch`)로 **이전 커밋 sha 이미지로 다시 배포** | 수업의 GHCR + compose 방식으로 가능(확인 필요) |
 | 평가 게이트 | pytest + 평가 기준선 회귀 게이트를 CI에 연결(§9). 규칙 평가기(`rules/`) 단위 시험은 모델 없이 CI에서 실행한다 | 회귀 게이트는 **수업**, 규칙 시험 분리는 **팀 합의** |
 | 리뷰 | PR마다 **1명 이상 승인** 후 병합, 작성자는 자기 PR을 승인하지 않음 | 수업에 없음 → **팀 합의** |
 | 커밋 메시지 | `feat:`, `fix:`, `docs:`, `data:`, `chore:` 접두사 + 한 줄 요약(한국어 가능) | 수업에 없음 → **팀 합의** |
@@ -2154,7 +2154,7 @@ KPI N-07(GraphRAG vs SQL 질문 유형별 비교)은 개별 요구사항이 아�
 | 관측·SLO | Langfuse(`CallbackHandler`, 세션·tags·mask), Prometheus 메트릭, SLO·에러 버짓 | §9 | **온라인 평가·자체 호스팅 단가 없음**, trajectory 지표 정의 없음(자체 정의) |
 | 지식그래프 | 온톨로지 단일 계약, 제약·인덱스, 구조화 출력 추출, 추출 품질 지표, ER 후보, 증분 적재, GDS | §4, §5, §7 | **Aura의 NODE KEY·APOC·GDS 실행 불확실**, 문서 개정·정정 반영 사례 없음, 한국어 요건 추출·소형 모델 추출 사례 없음 |
 | 파인튜닝 | Qwen3.5 소형 SFT·LoRA·QLoRA, 법령 QA 데이터 파이프라인 예제, 원래 정밀도 베이스에 병합 | §6 | **JSON 추출·판정 SFT 없음**, 4bit QLoRA는 수업에서 비권장, AWQ/GPTQ 변환 도구 없음 |
-| 서빙·배포 | `vllm serve` 옵션, `vllm bench serve`, FastAPI SSE, GHCR + SSH + compose, GCP Compute Engine VM(무료 등급), RunPod Pod | §3, §6, §8, §15 | **우리는 Cloud Run을 쓰므로 수업의 VM 배포를 그대로 쓰지 않는다.** Cloud Run·Artifact Registry·Secret Manager·리비전 롤백·GCP 인증은 수업에 없음. vLLM 구조화 출력·도구 호출 없음 |
+| 서빙·배포 | `vllm serve` 옵션, `vllm bench serve`, FastAPI SSE, GHCR + SSH + compose, GCP Compute Engine VM(무료 등급), RunPod Pod | §3, §6, §8, §15 | **API를 AWS CPU 서버에 Docker Compose로 띄우므로 수업의 VM 배포(GHCR + SSH + compose)를 거의 그대로 쓴다.** 수업은 GCP Compute Engine 기준이므로 AWS 쪽 서버 생성·보안 그룹·HTTPS는 따로 확인한다. vLLM 구조화 출력·도구 호출 없음 |
 | 데이터 분석·SQL | EDA 절차, 통계 검정, 토픽 모델링, Supabase pgvector HNSW + `match_*` rpc | §2, §8 | 수업은 768차원·anon + RLS인데 우리는 서비스 키 구조, RLS 정책 실습 없음. 임베딩 차원은 ADR-1 결정 뒤 확정 |
 | Git·기획 | `.gitignore`, `uv.lock`, PR 트리거 CI, Rulesets 필수 검사 | §15 | **브랜치·리뷰·커밋 규칙, 시장·사용자 분석 방법론은 수업에 없음** → 팀 합의·자체 가설 |
 
@@ -2197,10 +2197,10 @@ KPI N-07(GraphRAG vs SQL 질문 유형별 비교)은 개별 요구사항이 아�
 - **결과(다시 검토할 조건):** `base` / LoRA / QLoRA를 같은 평가셋으로 비교(KPI N-01)해 확정한다. QLoRA 이득이 없거나 JSON 스키마 준수율이 낮으면 프롬프트·제약 디코딩 중심으로 바꾼다. 정답 라벨이 학습에 충분하지 않으면 학습 대신 `base` + 규칙 보정으로 간다. Hugging Face 공개(성과지표)에 쓰는 데이터는 라이선스·약관 확인 후에만 쓴다.
 
 #### ADR-6 배포 토폴로지
-- **상태:** 확정(스택 승계: Cloud Run)
-- **맥락:** 프론트 Vercel, API는 Google Cloud Docker, vLLM은 RunPod. 수업은 GCP를 Compute Engine VM + Docker Compose로 가르쳤는데 무료 등급을 쓰기 위한 선택이었다(이전 확인). 이 주제에서는 일 1회 수집 배치가 추가된다.
-- **결정:** API = **Cloud Run**, 이미지 = Artifact Registry(커밋 sha 태그), 배포 = GitHub Actions(`gcloud run deploy`, Workload Identity Federation 권장), 비밀 = Secret Manager(공고 API 키 포함), 롤백 = 리비전 트래픽 전환, 모델 = RunPod **Pod**. 수집 배치의 실행 위치(Actions 스케줄 또는 Cloud Run Job)는 `[ ]` 미정.
-- **결과(다시 검토할 조건):** 요청 타임아웃이 긴 SSE 응답을 감당하지 못하거나, 콜드스타트·응답 후 CPU 제한이 사용성에 문제가 되면 최소 인스턴스·"항상 CPU 할당"을 조정하고, 그래도 안 되면 VM 방식을 재검토한다. 임베딩을 Cloud Run에서 계산하기 어려우면 RunPod로 옮긴다. 구성요소별 대체 경로는 §3 "배포 Plan B"(ADR-10).
+- **상태:** 확정(2026-11-25 변경: Cloud Run → AWS CPU 서버, 팀 결정)
+- **맥락:** 프론트 Vercel, vLLM은 RunPod. 이전 주제는 API를 Google Cloud Run에 두었다. 학원 지원으로 AWS 크레딧 100달러를 받아 API를 AWS CPU 서버로 옮긴다. 수업은 VM + Docker Compose(GHCR + SSH)로 배포를 가르쳤으므로 서버 한 대 방식이 수업과 맞는다. 이 주제에서는 일 1회 수집 배치가 추가된다.
+- **결정:** API = **AWS CPU 서버**(Docker Compose), 모델 = RunPod **Pod**. 제안: 이미지 = GHCR(커밋 sha 태그), 배포 = GitHub Actions(SSH로 `docker compose pull && up -d`), 비밀 = 서버 `.env`(권한 제한) 또는 SSM Parameter Store(공고 API 키 포함), 롤백 = 이전 sha 이미지 재배포. 서비스 종류(EC2 등)·인스턴스 유형·리전과 수집 배치의 실행 위치(Actions 스케줄 또는 서버 cron)는 `[ ]` 미정.
+- **결과(다시 검토할 조건):** 크레딧(100달러)이 최종 발표(2027-01-11) 전에 소진될 것으로 계산되면 인스턴스 유형을 낮추거나 개발 중에는 서버를 꺼 둔다. 메모리가 부족하면 판정 데이터를 Neo4j·Supabase 조회로 바꾸거나 유형을 올린다. 임베딩을 서버 CPU에서 계산하기 어려우면 RunPod로 옮긴다. 구성요소별 대체 경로는 §3 "배포 Plan B"(ADR-10).
 
 #### ADR-7 기억 구현 (사용자 조건 저장: 선택 동의)
 - **상태:** 제안(저장소·로그인 선택은 승계)
