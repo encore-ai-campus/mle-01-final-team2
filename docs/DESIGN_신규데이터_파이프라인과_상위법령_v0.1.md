@@ -5,7 +5,7 @@
 | 목적 | (1) 공고가 새로 들어오거나 바뀌었을 때 수집부터 Aura 반영까지 다시 도는 방법, (2) 법률 → 시행령 → 시행규칙 → 고시로 이어지는 상위 법령 구조와 개정 반영 방법을 정한다 |
 | 상태 | **설계안.** 코드는 아직 바꾸지 않았다. §5의 팀 결정 항목(F-1~F-8)은 팀이 정한다 |
 | 근거 | 2026-11-26 기준 코드 조사. 수집기·정리층·조건 추출·그래프 내보내기·적재 도구, 법령 수집기·`concepts_laws.py`·`definition_rules.py` |
-| 관련 문서 | 온톨로지 설계서 §9(변경 관리), 스키마 정의서 §11·§12, `docs/PREPROCESS_정리층_설계와_결과_v0.1.md`, `docs/GUIDE_도구_사용안내_v0.1.md`, `data/지원사업_법령/데이터명세서.md` §10 |
+| 관련 문서 | 온톨로지 설계서(`docs/ontology/`) §9(변경 관리), 스키마 정의서(`docs/ontology/`) §11·§12, `docs/data/PREPROCESS_정리층_설계와_결과_v0.1.md`, `docs/GUIDE_도구_사용안내_v0.1.md`, `data/지원사업_법령/데이터명세서.md` §10 |
 
 ---
 
@@ -177,7 +177,7 @@
 3. **참조가 없는 경우**: 조문 제목·용어가 겹치는 후보만 `basis='title_match'`, `confidence=low`로 두고 사람이 검수한다(정의 검수 시트의 "위임 기준" 칸과 합친다).
 4. **고시**: "고시하는" 위임은 행정규칙을 수집한 뒤 고시 제1조(목적)의 근거 조문으로 잇는다.
 
-옛 도구(`tools/old/convert_ibk.py`)의 위임 후보 추출을 참고하되, 새 도구는 `tools/graphrag/law_hierarchy.py`로 두고 결과를 `data/graph/law_delegations.jsonl`에 쓴다. 점검: V20 `DELEGATES_TO`의 시작은 상위 `law_kind`, 끝은 하위 `law_kind`(역방향 0), V21 `ENFORCES` 순환 0.
+새 도구는 `tools/graphrag/law_hierarchy.py`로 두고 결과를 `data/graph/law_delegations.jsonl`에 쓴다. 점검: V20 `DELEGATES_TO`의 시작은 상위 `law_kind`, 끝은 하위 `law_kind`(역방향 0), V21 `ENFORCES` 순환 0.
 
 ### 4.4 개정 반영 (법령 갱신 주기)
 
