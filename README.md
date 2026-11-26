@@ -9,8 +9,8 @@
 
 <br/>
 
-![team](https://img.shields.io/badge/team-%EA%B7%BC%EA%B1%B0it%202%ED%8C%80-1f6feb)
-![status](https://img.shields.io/badge/status-%EC%98%A8%ED%86%A8%EB%A1%9C%EC%A7%80%20%EC%84%A4%EA%B3%84%20%C2%B7%20PoC-orange)
+![team](https://img.shields.io/badge/team-geungeo--it%20%C2%B7%20Team%202-1f6feb)
+![status](https://img.shields.io/badge/status-ontology%20design%20%C2%B7%20PoC-orange)
 ![python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
 ![neo4j](https://img.shields.io/badge/Neo4j-Aura-4581C3?logo=neo4j&logoColor=white)
 ![supabase](https://img.shields.io/badge/Supabase-Postgres-3ECF8E?logo=supabase&logoColor=white)
