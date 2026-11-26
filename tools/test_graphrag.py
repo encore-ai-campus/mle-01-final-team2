@@ -404,6 +404,48 @@ class GoldBridgeTests(unittest.TestCase):
         self.assertEqual(gold_bridge.load(Path("does-not-exist")), {})
 
 
+class SmeRuleTests(unittest.TestCase):
+    """중소기업 판정 기준 초안: 별표 1·3을 수집 원문에서 행으로 풀었는지, 판정이 3값 원칙을 지키는지."""
+
+    @classmethod
+    def setUpClass(cls):
+        from graphrag import definition_rules as D
+        cls.D = D
+        cls.rule = D.sme_rule()
+
+    def test_appendix_rows_match_source(self):
+        size, small = self.rule["size_table"], self.rule["small_table"]
+        self.assertEqual((len(size), len(small)), (44, 43))
+        self.assertEqual([r["no"] for r in size], list(range(1, 45)))
+        lim = {r["ksic"]: r["max_avg_sales_eok"] for r in size}
+        self.assertEqual((lim["C17"], lim["C14"], lim["F"], lim["J"], lim["C11"], lim["M"], lim["I"], lim["N76"]), (1800, 1500, 1200, 1000, 800, 600, 400, 400))
+        self.assertEqual({r["ksic"]: r["max_avg_sales_eok"] for r in small}["G"], 60)
+        raw = self.D.appendix("0001")["text"]
+        for r in size:  # 행마다 업종 번호와 분류기호가 원문에 있다
+            self.assertIn(f"{r['no']}. ", raw)
+            self.assertIn(r["ksic"], raw)
+
+    def test_industry_matching_prefers_specific_code(self):
+        m = self.D.match_industry
+        self.assertEqual([r["no"] for r in m(self.rule["size_table"], "E3600")], [25])  # 수도업
+        self.assertEqual([r["no"] for r in m(self.rule["size_table"], "E3700")], [33])  # 수도업 제외 E
+        self.assertEqual([r["no"] for r in m(self.rule["size_table"], "N7610")], [43])  # 임대업
+        self.assertEqual([r["no"] for r in m(self.rule["size_table"], "J5821")], [27])
+        self.assertEqual(m(self.rule["size_table"], "O8411"), [])  # 공공행정: 별표에 없음
+
+    def test_evaluate_three_values(self):
+        ev = lambda **f: self.D.evaluate_sme(self.rule, f)["status"]
+        base = dict(main_industry_ksic="J5821", total_assets_eok=100, independence_ok=True, disclosure_group_member=False)
+        self.assertEqual(ev(avg_sales_eok=1000, **base), SAT)  # 정보통신업 1,000억원 이하(경계 포함)
+        self.assertEqual(ev(avg_sales_eok=1000.5, **base), UNSAT)
+        self.assertEqual(ev(avg_sales_eok=50), UNK)  # 자산·독립성 등 미입력은 충족으로 보지 않는다
+        self.assertEqual(ev(avg_sales_eok=50, **{**base, "total_assets_eok": 5000}), UNSAT)  # 5천억원 미만
+        self.assertEqual(ev(avg_sales_eok=50, **{**base, "disclosure_group_member": True}), UNSAT)
+        self.assertEqual(ev(avg_sales_eok=5000, in_grace_period=True, **base), UNK)  # 유예기간은 제외 사유 확인 전까지 UNKNOWN
+        self.assertEqual(ev(avg_sales_eok=10, **{**base, "main_industry_ksic": "C31202"}), UNK)  # 비고 2: 코드 일부만 기준이 다름
+        self.assertEqual(ev(avg_sales_eok=1400, **{**base, "main_industry_ksic": "C30393"}), SAT)  # 비고 2: 1,500억원
+
+
 class ChunkTests(unittest.TestCase):
     def test_short_and_redaction_only_chunks_are_dropped(self):
         self.assertEqual(_chunk("N", "S", "x", "API", "창업교육"), [])
