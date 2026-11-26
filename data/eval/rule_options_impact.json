@@ -1,0 +1,255 @@
+{
+ "open_notices": 1452,
+ "random_profiles": 300,
+ "pairs_random": 435600,
+ "default": {
+  "c1_pre_founder_not_in_options": "unsat",
+  "c2_business_age_all_options": "unknown",
+  "c3_age_all_options": "satisfied",
+  "c4_applicant_all_options": "satisfied",
+  "c6_bizinfo_org_region": "soft",
+  "a1_kstartup_region": "soft",
+  "a3_pre_founder_missing_with_age": "unsat",
+  "a6_unreviewed_group": "flag"
+ },
+ "options": [
+  {
+   "id": "C-1",
+   "field": "c1_pre_founder_not_in_options",
+   "choice": "unknown",
+   "random": {
+    "verdict_transitions": {
+     "NOT_ELIGIBLE → NEEDS_CHECK": 4040
+    },
+    "verdict_changed": 4040,
+    "notices_changed": 40,
+    "profiles_changed": 101,
+    "condition_changes": {
+     "business_age: UNSATISFIED → UNKNOWN": 4040
+    }
+   },
+   "named": {
+    "예비창업자·서울 성동구·28세": {
+     "NOT_ELIGIBLE → NEEDS_CHECK": 40
+    },
+    "업력 2년·대구·35세·일반기업": {},
+    "업력 12년·경기·45세·일반기업": {},
+    "업력 4년·광주 남구·예비창업 여부 미입력": {},
+    "대학생·부산·22세·예비창업자": {
+     "NOT_ELIGIBLE → NEEDS_CHECK": 40
+    },
+    "지역만 입력(세종)": {}
+   }
+  },
+  {
+   "id": "C-2",
+   "field": "c2_business_age_all_options",
+   "choice": "satisfied",
+   "random": {
+    "verdict_transitions": {},
+    "verdict_changed": 0,
+    "notices_changed": 0,
+    "profiles_changed": 0,
+    "condition_changes": {
+     "business_age: UNKNOWN → SATISFIED": 4347
+    }
+   },
+   "named": {
+    "예비창업자·서울 성동구·28세": {},
+    "업력 2년·대구·35세·일반기업": {},
+    "업력 12년·경기·45세·일반기업": {},
+    "업력 4년·광주 남구·예비창업 여부 미입력": {},
+    "대학생·부산·22세·예비창업자": {},
+    "지역만 입력(세종)": {}
+   }
+  },
+  {
+   "id": "C-2",
+   "field": "c2_business_age_all_options",
+   "choice": "drop",
+   "random": {
+    "verdict_transitions": {},
+    "verdict_changed": 0,
+    "notices_changed": 0,
+    "profiles_changed": 0,
+    "condition_changes": {
+     "조건 수 변화(drop)": 20700
+    }
+   },
+   "named": {
+    "예비창업자·서울 성동구·28세": {},
+    "업력 2년·대구·35세·일반기업": {},
+    "업력 12년·경기·45세·일반기업": {},
+    "업력 4년·광주 남구·예비창업 여부 미입력": {},
+    "대학생·부산·22세·예비창업자": {},
+    "지역만 입력(세종)": {}
+   }
+  },
+  {
+   "id": "C-3",
+   "field": "c3_age_all_options",
+   "choice": "unknown",
+   "random": {
+    "verdict_transitions": {},
+    "verdict_changed": 0,
+    "notices_changed": 0,
+    "profiles_changed": 0,
+    "condition_changes": {
+     "founder_age: SATISFIED → UNKNOWN": 23320
+    }
+   },
+   "named": {
+    "예비창업자·서울 성동구·28세": {},
+    "업력 2년·대구·35세·일반기업": {},
+    "업력 12년·경기·45세·일반기업": {},
+    "업력 4년·광주 남구·예비창업 여부 미입력": {},
+    "대학생·부산·22세·예비창업자": {},
+    "지역만 입력(세종)": {}
+   }
+  },
+  {
+   "id": "C-4",
+   "field": "c4_applicant_all_options",
+   "choice": "flag",
+   "random": {
+    "verdict_transitions": {},
+    "verdict_changed": 0,
+    "notices_changed": 0,
+    "profiles_changed": 0,
+    "condition_changes": {}
+   },
+   "named": {
+    "예비창업자·서울 성동구·28세": {},
+    "업력 2년·대구·35세·일반기업": {},
+    "업력 12년·경기·45세·일반기업": {},
+    "업력 4년·광주 남구·예비창업 여부 미입력": {},
+    "대학생·부산·22세·예비창업자": {},
+    "지역만 입력(세종)": {}
+   }
+  },
+  {
+   "id": "C-4",
+   "field": "c4_applicant_all_options",
+   "choice": "unknown",
+   "random": {
+    "verdict_transitions": {},
+    "verdict_changed": 0,
+    "notices_changed": 0,
+    "profiles_changed": 0,
+    "condition_changes": {
+     "applicant_type: SATISFIED → UNKNOWN": 14892
+    }
+   },
+   "named": {
+    "예비창업자·서울 성동구·28세": {},
+    "업력 2년·대구·35세·일반기업": {},
+    "업력 12년·경기·45세·일반기업": {},
+    "업력 4년·광주 남구·예비창업 여부 미입력": {},
+    "대학생·부산·22세·예비창업자": {},
+    "지역만 입력(세종)": {}
+   }
+  },
+  {
+   "id": "C-6",
+   "field": "c6_bizinfo_org_region",
+   "choice": "drop",
+   "random": {
+    "verdict_transitions": {},
+    "verdict_changed": 0,
+    "notices_changed": 0,
+    "profiles_changed": 0,
+    "condition_changes": {
+     "조건 수 변화(drop)": 289200
+    }
+   },
+   "named": {
+    "예비창업자·서울 성동구·28세": {},
+    "업력 2년·대구·35세·일반기업": {},
+    "업력 12년·경기·45세·일반기업": {},
+    "업력 4년·광주 남구·예비창업 여부 미입력": {},
+    "대학생·부산·22세·예비창업자": {},
+    "지역만 입력(세종)": {}
+   }
+  },
+  {
+   "id": "A-1",
+   "field": "a1_kstartup_region",
+   "choice": "hard",
+   "random": {
+    "verdict_transitions": {
+     "NEEDS_CHECK → NOT_ELIGIBLE": 13688
+    },
+    "verdict_changed": 13688,
+    "notices_changed": 65,
+    "profiles_changed": 298,
+    "condition_changes": {}
+   },
+   "named": {
+    "예비창업자·서울 성동구·28세": {
+     "NEEDS_CHECK → NOT_ELIGIBLE": 35
+    },
+    "업력 2년·대구·35세·일반기업": {
+     "NEEDS_CHECK → NOT_ELIGIBLE": 60
+    },
+    "업력 12년·경기·45세·일반기업": {
+     "NEEDS_CHECK → NOT_ELIGIBLE": 16
+    },
+    "업력 4년·광주 남구·예비창업 여부 미입력": {
+     "NEEDS_CHECK → NOT_ELIGIBLE": 54
+    },
+    "대학생·부산·22세·예비창업자": {
+     "NEEDS_CHECK → NOT_ELIGIBLE": 46
+    },
+    "지역만 입력(세종)": {
+     "NEEDS_CHECK → NOT_ELIGIBLE": 65
+    }
+   }
+  },
+  {
+   "id": "A-3",
+   "field": "a3_pre_founder_missing_with_age",
+   "choice": "unknown",
+   "random": {
+    "verdict_transitions": {
+     "NOT_ELIGIBLE → NEEDS_CHECK": 1895
+    },
+    "verdict_changed": 1895,
+    "notices_changed": 48,
+    "profiles_changed": 70,
+    "condition_changes": {
+     "applicant_type: UNSATISFIED → UNKNOWN": 4176
+    }
+   },
+   "named": {
+    "예비창업자·서울 성동구·28세": {},
+    "업력 2년·대구·35세·일반기업": {},
+    "업력 12년·경기·45세·일반기업": {},
+    "업력 4년·광주 남구·예비창업 여부 미입력": {
+     "NOT_ELIGIBLE → NEEDS_CHECK": 17
+    },
+    "대학생·부산·22세·예비창업자": {},
+    "지역만 입력(세종)": {}
+   }
+  },
+  {
+   "id": "A-6",
+   "field": "a6_unreviewed_group",
+   "choice": "unknown",
+   "random": {
+    "verdict_transitions": {},
+    "verdict_changed": 0,
+    "notices_changed": 0,
+    "profiles_changed": 0,
+    "condition_changes": {}
+   },
+   "named": {
+    "예비창업자·서울 성동구·28세": {},
+    "업력 2년·대구·35세·일반기업": {},
+    "업력 12년·경기·45세·일반기업": {},
+    "업력 4년·광주 남구·예비창업 여부 미입력": {},
+    "대학생·부산·22세·예비창업자": {},
+    "지역만 입력(세종)": {}
+   }
+  }
+ ]
+}
