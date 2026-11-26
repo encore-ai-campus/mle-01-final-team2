@@ -30,6 +30,30 @@ APPLICANT_OPTIONS = {"청소년", "대학생", "일반인", "대학", "연구기
 BOUNDARY_YEARS = 0.5  # 기준일(공고일·마감일·신청일)이 불명이라 임계값 ±0.5년은 UNKNOWN
 
 
+@dataclass(frozen=True)
+class RuleOptions:
+    """팀이 정할 판정 규칙의 선택지(`docs/MEETING_판정규칙_결정시트_2026-11-27.md`). 기본값은 지금 동작이다.
+
+    회의에서 정하면 기본값을 바꾸고 시험 사례를 넣는다. 선택지별 영향은 `tools/graphrag/rule_options_impact.py`로 잰다.
+    """
+    c1_pre_founder_not_in_options: str = "unsat"    # C-1 업력 옵션에 예비창업자가 없을 때 예비창업자: unsat | unknown
+    c2_business_age_all_options: str = "unknown"    # C-2 업력 옵션 전부 선택 + 상한 너머: unknown | satisfied(제한 없음) | drop(조건 없음)
+    c3_age_all_options: str = "satisfied"           # C-3 연령 옵션 전부 선택: satisfied | unknown
+    c4_applicant_all_options: str = "satisfied"     # C-4 신청 대상 옵션 전부 선택: satisfied | flag(충족 + all_options 표시) | unknown
+    c6_bizinfo_org_region: str = "soft"             # C-6 기업마당 소관 기관 시도 지역 조건: soft | drop
+    a1_kstartup_region: str = "soft"                # A-1 K-Startup 지원 지역 강도: soft | hard
+    a3_pre_founder_missing_with_age: str = "unsat"  # A-3 예비창업자 여부 미입력 + 업력 입력: unsat | unknown
+    a6_unreviewed_group: str = "flag"               # A-6 미검수 지역 묶음 충족: flag(충족 + 표시) | unknown
+
+
+DEFAULT_OPTIONS = RuleOptions()
+OPTION_CHOICES = {"c1_pre_founder_not_in_options": ("unsat", "unknown"), "c2_business_age_all_options": ("unknown", "satisfied", "drop"),
+                  "c3_age_all_options": ("satisfied", "unknown"), "c4_applicant_all_options": ("satisfied", "flag", "unknown"),
+                  "c6_bizinfo_org_region": ("soft", "drop"), "a1_kstartup_region": ("soft", "hard"),
+                  "a3_pre_founder_missing_with_age": ("unsat", "unknown"), "a6_unreviewed_group": ("flag", "unknown")}
+ALL_AGE_RANGES = sorted(AGE_OPTION_RANGES.values())
+
+
 @dataclass
 class Profile:
     """가상 신청자 프로필. None이면 입력하지 않은 값(UNKNOWN)."""
@@ -101,7 +125,7 @@ def region_match(region: str, targets: list[str], rg: RegionGraph) -> tuple[str,
     return UNSAT, None
 
 
-def evaluate_condition(cond: dict, prof: Profile, rg: RegionGraph) -> CondResult:
+def evaluate_condition(cond: dict, prof: Profile, rg: RegionGraph, opts: RuleOptions = DEFAULT_OPTIONS) -> CondResult:
     a = cond["attribute"]
     base = _base(cond)
     v = cond["value"]
@@ -113,6 +137,8 @@ def evaluate_condition(cond: dict, prof: Profile, rg: RegionGraph) -> CondResult
         if prof.region is None:
             return CondResult(**base, status=UNK, reason="사업장 소재지 미입력", flags=flags)
         status, hit = region_match(prof.region, [target], rg)
+        if status == SAT and flags and opts.a6_unreviewed_group == "unknown":
+            return CondResult(**base, status=UNK, reason=f"{rg.name(target)}은(는) 구성 검수 전 묶음이라 확정하지 않음(A-6)", flags=flags)
         if status == SAT:
             hops = rg.ancestors(prof.region)[target]
             return CondResult(**base, status=SAT, reason=f"{rg.name(prof.region)} → {rg.name(target)} ({hops} hop)",
@@ -125,7 +151,11 @@ def evaluate_condition(cond: dict, prof: Profile, rg: RegionGraph) -> CondResult
         if prof.pre_founder is True:
             if o["pre_founder_allowed"]:
                 return CondResult(**base, status=SAT, reason="예비창업자 허용")
+            if opts.c1_pre_founder_not_in_options == "unknown":
+                return CondResult(**base, status=UNK, reason="업력 옵션에 예비창업자가 없지만 사업자등록 전이라 업력을 판정하지 않음(C-1)")
             return CondResult(**base, status=UNSAT, reason="예비창업자 불가(업력 옵션에 예비창업자 없음)")
+        if o["all_options"] and opts.c2_business_age_all_options == "satisfied":
+            return CondResult(**base, status=SAT, reason="업력 옵션을 모두 골라 제한 없음으로 봄(C-2)", flags=["all_options"])
         age = prof.business_age_years
         if age is None:
             return CondResult(**base, status=UNK, reason="업력 미입력")
@@ -143,11 +173,17 @@ def evaluate_condition(cond: dict, prof: Profile, rg: RegionGraph) -> CondResult
     if a == "founder_age":
         if prof.founder_age is None:
             return CondResult(**base, status=UNK, reason="대표자 연령 미입력")
+        if sorted(map(tuple, v["ranges"])) == ALL_AGE_RANGES and opts.c3_age_all_options == "unknown":
+            return CondResult(**base, status=UNK, reason="연령 옵션을 모두 골라 필터가 정보를 주지 않음(C-3)", flags=["all_options"])
         ok = any(lo <= prof.founder_age < hi for lo, hi in v["ranges"])
         return CondResult(**base, status=SAT if ok else UNSAT, reason=f"연령 {prof.founder_age}세 " + ("허용 구간" if ok else "허용 구간 밖"))
     if a == "applicant_type":
         if prof.applicant_type is None:
             return CondResult(**base, status=UNK, reason="신청자 유형 미입력")
+        if set(v["options"]) == APPLICANT_OPTIONS and opts.c4_applicant_all_options != "satisfied":
+            if opts.c4_applicant_all_options == "unknown":
+                return CondResult(**base, status=UNK, reason="신청 대상 옵션을 모두 골라 필터가 정보를 주지 않음(C-4)", flags=["all_options"])
+            base["flags"] = ["all_options"]
         ok = prof.applicant_type in v["options"]
         return CondResult(**base, status=SAT if ok else UNSAT, reason=f"{prof.applicant_type} " + ("허용" if ok else "허용 목록에 없음"))
     return CondResult(**base, status=UNK, reason=f"평가 규칙 없는 속성 {a}")
@@ -238,7 +274,7 @@ def combine(logic: str, statuses: list[str]) -> str:
     return UNK  # 규칙 없는 논리는 판정하지 않는다
 
 
-def _evaluate_in_group(cond: dict, logic: str, prof: Profile, rg: RegionGraph) -> CondResult:
+def _evaluate_in_group(cond: dict, logic: str, prof: Profile, rg: RegionGraph, opts: RuleOptions = DEFAULT_OPTIONS) -> CondResult:
     """요건 안의 조건 하나. OR 요건(R2)에서는 업력과 예비창업자를 각각 따로 본다."""
     if cond.get("pre_founder"):
         base = _base(cond, attribute="applicant_type")
@@ -247,12 +283,32 @@ def _evaluate_in_group(cond: dict, logic: str, prof: Profile, rg: RegionGraph) -
         if prof.pre_founder is False:
             return CondResult(**base, status=UNSAT, reason="예비창업자 아님")
         if prof.business_age_years is not None:  # 업력을 입력했으면 이미 사업자가 있다
+            if opts.a3_pre_founder_missing_with_age == "unknown":
+                return CondResult(**base, status=UNK, reason="예비창업자 여부 미입력(A-3)")
             return CondResult(**base, status=UNSAT, reason="업력 입력(사업자 있음)")
         return CondResult(**base, status=UNK, reason="예비창업자 여부 미입력")
     if logic == "OR" and cond["attribute"] == "business_age":
         if prof.pre_founder is True:  # 예비창업자 허용은 같은 요건의 예비창업자 조건이 맡는다
             return CondResult(**_base(cond), status=UNSAT, reason="예비창업자라 업력 조건 대상 아님(같은 요건의 예비창업자 조건으로 판단)")
-    return evaluate_condition(cond, prof, rg)
+    return evaluate_condition(cond, prof, rg, opts)
+
+
+def apply_condition_options(notice: dict, opts: RuleOptions) -> list[dict]:
+    """조건 목록 단계에서 적용하는 선택지(C-2 drop, C-6 drop, A-1 hard). 해당 선택지가 기본값이면 원래 목록을 그대로 돌려준다."""
+    conds = notice.get("conditions", [])
+    if opts.c2_business_age_all_options != "drop" and opts.c6_bizinfo_org_region == "soft" and opts.a1_kstartup_region == "soft":
+        return conds
+    out, src = [], notice.get("source")
+    for c in conds:
+        a = c["attribute"]
+        if a == "business_age" and c["value"].get("all_options") and opts.c2_business_age_all_options == "drop":
+            continue
+        if a == "region" and src == "BIZINFO" and opts.c6_bizinfo_org_region == "drop":
+            continue
+        if a == "region" and src == "KSTARTUP" and opts.a1_kstartup_region == "hard":
+            c = {**c, "strength": "hard"}
+        out.append(c)
+    return out
 
 
 def _tally(req_id: str, status: str, rs: list[CondResult], hard_fail: list, soft_fail: list, unknown: list) -> None:
@@ -263,7 +319,7 @@ def _tally(req_id: str, status: str, rs: list[CondResult], hard_fail: list, soft
         unknown.append(req_id)
 
 
-def evaluate_notice(notice: dict, prof: Profile, rg: RegionGraph) -> dict:
+def evaluate_notice(notice: dict, prof: Profile, rg: RegionGraph, opts: RuleOptions = DEFAULT_OPTIONS) -> dict:
     """공고 판정. 구조화 조건만 평가하며 본문 요건이 없으면 ELIGIBLE을 만들지 않는다.
 
     요건마다 조건 결과를 `logic`으로 합친다. AND 요건은 조건별 강도(hard/soft)를 그대로 보고, OR 요건은 합친 결과를 요건 강도로 본다
@@ -271,8 +327,8 @@ def evaluate_notice(notice: dict, prof: Profile, rg: RegionGraph) -> dict:
     """
     results, requirements = [], []
     hard_fail, soft_fail, unknown = [], [], []
-    for req_id, logic, basis, conds in requirement_groups(notice["notice_id"], notice.get("conditions", [])):
-        rs = [_evaluate_in_group(c, logic, prof, rg) for c in conds]
+    for req_id, logic, basis, conds in requirement_groups(notice["notice_id"], apply_condition_options(notice, opts)):
+        rs = [_evaluate_in_group(c, logic, prof, rg, opts) for c in conds]
         results += rs
         status = combine(logic, [r.status for r in rs])
         requirements.append({"req_id": req_id, "logic": logic, "logic_basis": basis, "status": status, "cond_ids": [r.cond_id for r in rs]})
