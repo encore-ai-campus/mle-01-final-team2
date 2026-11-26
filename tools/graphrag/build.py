@@ -89,6 +89,24 @@ def export(e: Engine) -> dict:
                         node["about_pending"] = bool(missing)
                         if missing:
                             node["about_unmapped"] = missing
+        for g in n.get("gold_requirements", []):  # 사람이 검수한 본문 요건(gold_bridge). 발췌 검수라 공고 전체 요건은 아니다
+            rv = n["gold_review"]
+            nodes.append({"label": "Requirement", "req_id": g["req_id"], "kind": "ELIGIBILITY", "logic": g["logic_tree"].get("operator", "ATOM"),
+                          "logic_basis": g["logic_basis"], "logic_tree": json.dumps(g["logic_tree"], ensure_ascii=False), "status": "reviewed_excerpt",
+                          "extraction_method": "human_review", "review_split": rv["split"], "reviewed_at": rv["reviewed_at"]})
+            edges.append({"type": "HAS_REQUIREMENT", "from": nid, "to": g["req_id"], "evidence": "검수 정답(발췌)", "source": rv["source_field"]})
+            for c in g["conditions"]:
+                v = c["value"]
+                node = {"label": "Condition", "cond_id": c["cond_id"], "cond_type": "ATOM", "attribute": c["attribute"],
+                        "operator": None if v.get("unsupported") else c["operator"], "strength": c["strength"], "negate": c["negate"],
+                        "value": json.dumps(v if not v.get("unsupported") else c["raw_value"], ensure_ascii=False), "evidence_source": "NOTICE_TEXT",
+                        "reviewed": True, "ref_date_kind": c.get("reference_date_type") or "UNKNOWN"}
+                if v.get("unsupported"):
+                    node["unknown_reason"] = "no_evaluation_rule"
+                nodes.append(node)
+                edges.append({"type": "HAS_CONDITION", "from": g["req_id"], "to": c["cond_id"], "evidence": c["evidence"], "source": c["source_field"]})
+                for cid in v.get("concept_ids", []):
+                    edges.append({"type": "ABOUT", "from": c["cond_id"], "to": cid})
     l_nodes, l_edges, article_index, pending = concepts_laws.laws()
     d_nodes, d_edges, def_notes = concepts_laws.definitions(by_label, article_index)
     nodes += c_nodes + l_nodes + d_nodes
@@ -184,7 +202,7 @@ def compare(e: Engine, n_profiles: int = 300, seed: int = 20261124) -> dict:
                 examples.append({"profile": prof.__dict__, "only_graph": sorted(gh - sh)[:3], "only_sql": sorted(sh - gh)[:3]})
         for k, v in ev.items():
             for c in v["conditions"]:
-                if c.attribute == "region" and k in sr:
+                if c.attribute == "region" and "gold" not in c.flags and k in sr:  # SQL 기준선은 구조화 지역만 안다
                     checked_region += 1
                     if sr[k] != c.status:
                         diff_region += 1

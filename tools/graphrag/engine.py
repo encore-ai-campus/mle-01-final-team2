@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from collections import Counter
 
-from . import cleaned
+from . import cleaned, gold_bridge
 from .data import load_all
 from .evaluator import ELIGIBLE, NEEDS_CHECK, NOT_ELIGIBLE, Profile, evaluate_notice
 from .search import BM25
@@ -23,6 +23,8 @@ class Engine:
         self.input_layer = "cleaned" if use else "parsed"
 
         self.rg, self.notices, self.chunks, self.skipped = d["rg"], d["notices"], d["chunks"], d["skipped"]
+        # 사람이 검수한 본문 요건(2-4 정답셋)을 붙인다. 검수 반영 0건이면 아무것도 바뀌지 않는다
+        self.gold_notices = gold_bridge.attach(self.notices, gold_bridge.load())
         self.by_id = {n["notice_id"]: n for n in self.notices}
         self.bm25 = BM25(self.chunks)
 
