@@ -1,288 +1,249 @@
-# 📜 사규 준수 검토 서비스 (가칭)
+<div align="center">
 
-> 기업 내부 규정(사규)과 그 상위 국가 법령을 **지식 그래프**로 구조화해, "이 행동·사안이 어느 규정의 어느 조항에 해당하는가"를 **근거 조문과 인용·위임·예외를 따라간 추론 경로**와 함께 알려 주는 검토 보조 서비스입니다. 근거가 없으면 지어내지 않고 **"근거 없음"** 또는 `판단 불가`로 답합니다. ALIO에 공개된 IBK기업은행 사규 148종과 법제처 상위 법령 275건을 데이터로 씁니다.
+# 🧭 지원각
 
-- **현재 상태:** 데이터 수집·변환과 설계 문서가 완료됐고, **Neo4j T1 사규 그래프와 Supabase `baseline_chunks`를 실제 데이터로 적재했습니다.** Neo4j에는 사규 148종의 문서·장·조문·항과 참조를, Supabase에는 사규 조문 3,405건을 임베딩 없이 넣었습니다. 상위 법령 적재, 검수·평가 데이터, 검색·에이전트·서비스는 아직이며, 아래 목표 성능은 측정값이 아닌 설계입니다([구현 현황](#구현-현황)).
-- **문서:** [기초 설계서](docs/MLE_2팀_기초%20설계.md) · [기획서](docs/PROJECT_PLAN.md) · [기획 보고서](docs/[기획설계]%20MLE_기획보고서_2팀.md) · [온톨로지 설계서](docs/ONTOLOGY_DESIGN.md) · [도메인 온톨로지 설계서(양식)](docs/[도메인온톨로지]%20MLE_도메인_온톨로지_설계서_2팀.md) · [KPI 초안](docs/KPI_DRAFT.md) · [데이터 명세서](data/데이터_명세서.md) · [상위 법령 데이터 명세서](data/상위법령_데이터명세서.md) · [법령 수집 목록](docs/LAW_COLLECTION_LIST.md) · [아키텍처(확대·이동 가능)](docs/architecture.html) · [프로젝트 가이드 요약](docs/PROJECT_GUIDE_SUMMARY.md) · [프로젝트 요약본](docs/PROJECT_BRIEF.md) · [코칭 질의서](docs/COACHING_QUESTIONS.md)
-- 엔코아 AI 캠퍼스 MLE 1기 최종 프로젝트 2팀. 실제 IBK 사내 시스템이 아닌 **공개 규정을 쓰는 교육 프로젝트**이며, 징계·법적 판단을 대신하지 않습니다.
+### 내 조건으로 이 지원사업에 신청할 수 있을까?
 
-## 서비스 방식
+정부·지자체 지원사업 공고의 **신청 요건을 온톨로지로 정규화**하고,<br/>
+**신청 가능 · 신청 불가 · 확인 필요**를 공고 원문 근거와 함께 알려 주는 자격 판정 서비스
 
-같은 지식 그래프 위에서 **두 가지 모드**를 역할에 따라 제공합니다(설계).
+<br/>
 
-| | **사원 모드** | **인사 모드** |
+![team](https://img.shields.io/badge/team-근거it%20(2팀)-1f6feb)
+![status](https://img.shields.io/badge/status-온톨로지%20설계%20·%20PoC-orange)
+![python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
+![neo4j](https://img.shields.io/badge/Neo4j-Aura-018bff?logo=neo4j&logoColor=white)
+![supabase](https://img.shields.io/badge/Supabase-Postgres-3ECF8E?logo=supabase&logoColor=white)
+
+[문제](#-왜-필요한가) · [판정 방식](#-어떻게-판정하나) · [진행 현황](#-진행-현황) · [데이터](#-데이터) · [아키텍처](#-아키텍처-설계) · [빠른 시작](#-빠른-시작) · [문서](#-문서)
+
+</div>
+
+---
+
+> [!NOTE]
+> 엔코아 AI 캠퍼스 MLE 1기 최종 프로젝트입니다. 공개 API 데이터를 쓰는 **교육용 서비스**이며 실제 신청·접수 시스템이 아닙니다. 판정 결과는 참고용이고, 최종 자격은 공고 원문과 주관 기관 안내를 따릅니다.
+
+## 💡 왜 필요한가
+
+| 지금의 불편 | 지원각이 하는 일 |
+| --- | --- |
+| 공고가 **기업마당 · K-Startup** 등 여러 포털에 흩어져 있다 | 두 포털 공고를 **하나의 공통 스키마**로 모은다 |
+| 자격 요건이 **첨부 공고문**(HWP·PDF) 안에 길게 적혀 있다 | 첨부에서 자격·제외 구간을 읽어 **요건 → 조건 트리**로 정규화한다 |
+| "업력 7년 이내", "관내 소재", "중소기업" 같은 말의 **기준이 공고마다 다르다** | 기준일 · 지역 기준 · 법령 정의를 **표준 용어와 개념 계층**으로 맞춘다 |
+| 결국 공고를 하나씩 열어 직접 읽어야 한다 | 내 조건을 넣으면 공고별로 **3값 판정 + 근거 문장 + 추론 경로**를 보여 준다 |
+
+## 🔍 어떻게 판정하나
+
+**판정은 모델이 아니라 규칙 평가기(코드)가 합니다.** 모델은 요건 추출과 설명만 맡고, 모르는 것은 억지로 채우지 않고 `확인 필요`로 둡니다.
+
+```mermaid
+flowchart LR
+  P(["👤 내 조건<br/>지역 · 업력 · 대표자 나이 · 기업 유형"]) --> E
+  N["📄 공고"] --> R["요건<br/>자격 · 제외 · 우대"]
+  R --> C["조건 트리<br/>AND · OR · NONE_OF · AT_LEAST"]
+  C --> K["개념 계층<br/>지역 WITHIN · 유형 IS_A"]
+  K --> D["정의 → 법령<br/>중소기업기본법 등"]
+  C --> E{"⚖️ 규칙 평가기<br/>3값 판정"}
+  E -->|모두 충족| OK["✅ 신청 가능"]
+  E -->|하나라도 불충족| NO["❌ 신청 불가"]
+  E -->|모르는 조건이 남음| CK["⚠️ 확인 필요<br/>+ 물어볼 항목"]
+```
+
+<details>
+<summary><b>예시: 광주 남구 소상공인이 "[광주] 소상공인 홍보지원"에 신청할 수 있을까?</b></summary>
+
+<br/>
+
+| 조건 | 판정 | 근거 |
 | --- | --- | --- |
-| 대상 | 신입 사원을 비롯한 일반 사원 | 인사과 직원 |
-| 목적 | 내 행동·업무가 규정에 어긋나는지 확인·예방 | 사안이 어떤 조항에 해당할 수 있는지 검토 |
-| 출력 | 판정 + 근거 조문 + 예외 + 쉬운 설명 + 문의처 안내 | 조항 후보 + 요건별 충족 여부 + 상위 법령 + 징계·절차 규정 + 추가 확인 사항 |
-| 접근 | 로그인한 모든 사용자(Google) | 관리자가 지정한 인사과 역할만 |
-| 저장 | 대화·사용자 맥락(본인만 열람·삭제) | **사안 본문은 저장하지 않음**, 조회 이력만 감사 로그 |
+| 지역: 광주광역시 관내 | ✅ 충족 | 남구 → 광주(구) 묶음. 2026-07 개편으로 사라진 "광주광역시"를 지역 사전이 연결 |
+| 소상공인 | ✅ 충족 (정의 확인 필요) | 소상공인기본법 정의 연결 대상 |
+| 중소기업확인서 상 소상공인 | ❔ 미확인 | 확인서 보유 여부를 입력하지 않음 |
+| **공고 판정** | **⚠️ 확인 필요** | 불충족은 없지만 확인할 조건이 남음 → "중소기업확인서를 갖고 계신가요?" |
 
-"다른 사원의 법규 위반 검색"은 **사안 기반 검토**로 한정합니다. 직원 근태·메일 등을 연계한 자동 탐지는 데이터가 없고 개인정보·근로자 감시 문제가 있어 범위에서 제외했습니다. 결과는 "위반 가능성이 있는 조항 후보"로 표현하며 징계 여부·수위는 사람과 정해진 절차가 정합니다.
+평가는 손으로 계산한 설계 예시입니다(도메인 온톨로지 설계서 §7 시나리오 1).
 
-## 설계된 동작 (예시)
-
-실제 데이터(직원상벌규정 · 도로교통법)에서 확인한 구조를 바탕으로 한 **설계 예시**입니다. 구현 전이라 서비스로 실행되지는 않습니다.
-
-| 이렇게 물으면 | 이렇게 동작하도록 설계 |
-| --- | --- |
-| (인사) 음주운전을 한 직원에게 어떤 징계 조항과 법령이 적용될 수 있나? | 직원상벌규정 제9조(제12호)와 제14조를 근거 **조항 후보**로 제시하고, 인용을 따라 도로교통법 제44조까지 연결. 징계 수위가 적힌 [별표]는 수집하지 않아 `판단 불가`로 두고 확인을 안내 |
-| (사원) 거래처에서 받은 선물을 받아도 되나요? | 행동강령·이해충돌방지 조항과 예외, 상위 법령을 근거와 함께 제시 |
-| 규정에 없는 내용을 질문 | 지어내지 않고 **"근거 없음"**, 찾아본 것과 없던 것을 알려 줌 |
-| 정보가 부족한 사안 | 결론 대신 `판단 불가`와 추가 확인 사항 |
-| 일반 사원이 인사 모드 접근 | 역할 확인(DB·API 이중)에서 차단 |
-
-![인스턴스 예시: 직원상벌규정에서 도로교통법까지](docs/diagrams/ontology_instance.png)
-
-## 30초 요약
-
-| | |
-| --- | --- |
-| **문제** | 사규는 여러 문서에 흩어져 있고, 한 조문이 다른 규정·법령을 인용하거나 세부를 위임하며 단서(예외)가 붙는다. 키워드 검색이나 벡터 검색만으로는 조항 사이의 관계를 따라가지 못한다. 틀린 규정 안내는 답하지 않는 것보다 해롭다 |
-| **접근** | 사규·법령을 문서·조·항·참조·위임·단서·의무의 **온톨로지 그래프**(Neo4j)로 만들고, 하이브리드 검색 → 그래프 확장(Multi-hop) → 근거 평가(CRAG) → 근거 검증을 거쳐 답한다. 근거가 없으면 보류 |
-| **차별점** | 조문 하나가 아니라 **조문들 사이의 관계(인용·위임·예외)** 를 따라 근거 사슬을 보여준다. 자체 호스팅 소형 모델(QLoRA·양자화)로 규정·질의를 외부에 보내지 않는다 |
-| **안전** | 인사 모드 역할 접근·감사 로그·사안 비저장, "후보" 표현 강제, 개인정보 입력 필터, 판정 전용 NeMo Guardrails |
-| **현재 상태** | 데이터 수집·변환 완료, 설계 문서 완료. 적재·검색·에이전트·서비스는 구현 전 |
-
-## 구현 현황
-
-| 영역 | 상태 | 비고 |
-| --- | --- | --- |
-| IBK 사규 수집·변환 | ✅ 완료 | 148종 전체 변환 성공 ([tools/convert_ibk.py](tools/convert_ibk.py)) |
-| 상위 국가 법령 수집·변환 | ✅ 완료 | 275건(동료 수집). 가이드라인 3건은 수집 불가 |
-| 법령 수집 목록·인용 집계 | ✅ 완료 | [tools/make_law_list.py](tools/make_law_list.py) |
-| 기획서·설계서·온톨로지 설계·KPI·데이터 명세 | ✅ 초안 | 위 문서. 목표값은 모두 잠정 |
-| Neo4j T1 사규 그래프 적재 | ✅ 완료 | [tools/load_neo4j.py](tools/load_neo4j.py). 사규 148종 구조와 참조 적재, 9,720 노드·10,815 관계 확인 |
-| Supabase baseline schema·적재 | ✅ 완료 | [supabase/schema.sql](supabase/schema.sql), [tools/load_supabase.py](tools/load_supabase.py). 사규 조문 3,405건 적재, 임베딩은 미생성 |
-| 의무·예외 추출(모델 + 검수) | ⬜ 예정 | 핵심 문서 16개부터 |
-| 임베딩·하이브리드 검색·그래프 확장 | ⬜ 예정 | 모델 선정(KURE-v1 / bge-m3 / e5) 전 |
-| LangGraph 에이전트·가드레일 | ⬜ 예정 | |
-| QLoRA 학습·양자화·vLLM 서빙(RunPod) | ⬜ 예정 | 모델 크기·GPU는 학원 예산 확정 후 |
-| 웹 앱(Next.js)·API(FastAPI)·배포 | ⬜ 예정 | Vercel + AWS CPU 서버 |
-| 평가셋·RAGAS·회귀 게이트 | ⬜ 예정 | 60문항 이상 |
-| Hugging Face 공개(필수 KPI) | ⬜ 예정 | 라이선스 점검 후 |
-
-## 멘토링 반영 (2026-11-18)
-
-멘토링 의견 중 WBS·일정을 제외한 항목을 문서에 반영했습니다(팀 합의 전 제안 포함). 아래는 모두 **설계이며 구현·검증 전**입니다.
-
-| 의견 | 반영 | 위치 |
-| --- | --- | --- |
-| MVP·개발 우선순위 확정 | P0(중간 발표: 사원 모드 end-to-end 슬라이스) / P1(최종 필수: 인사 모드, QLoRA·HF 공개) / P2(여유 시) | [기획 보고서 §1.3](docs/[기획설계]%20MLE_기획보고서_2팀.md) |
-| 실무 검증 근거 | 주장별 근거 수준을 구분. 실무자 검증은 **아직 하지 않았음**을 명시 | 기획 보고서 §2.4 |
-| 시장 조사 출처·미확정 항목 | 참고 기사 URL·조사일(원문 대조 전), 미확정 항목 현황표 | 기획 보고서 §3.1·§3.3 |
-| 핵심 대상 문서 확정 | 사원·인사 16개(410조문) 확정 v1, 문서별 상위 법령 연결 현황, 변경 규칙 | [기초 설계서 §1](docs/MLE_2팀_기초%20설계.md) |
-| 상위 법령 연결·미해결 참조 처리 | 참조 상태 분류, `법` 정의 규칙, 끊긴 사슬 답변 처리, 합격 기준 | 기초 설계서 §4.7 |
-| KPI는 베이스라인 후 확정, 핵심 지표 중심 | 게이트 / 핵심 12개 / 보조 / 보고용 4층. 비교 실험은 **표준 지표 9개**(답변 정확도·Faithfulness·Evidence Coverage·입력 토큰·Latency·GPU Cost·Unauthorized Retrieval·Embedding Reconstruction Risk·Policy Violation)를 함께 측정하고, 근거 손실이나 정책 위반이 있으면 문맥 압축 같은 효율 개선을 인정하지 않음. 에이전트 구성 비교 A~E 포함 | [KPI 초안 §0.1·§0.2·§4.1](docs/KPI_DRAFT.md) |
-| 보안·윤리 필수 준수사항 | MR-01~05(인사 모드 접근 권한, 개인정보 비저장, 감사 로그, 판단 불가 처리, 징계 확정 표현 금지)를 게이트로 지정 | 기획 보고서 §4.4 |
-| 근거 부족·가드레일에 걸리는 질문 | 사유 코드 12종, 고정 응답, 처리 순서, 오차단 구제 | 기초 설계서 §7.3, 기획 보고서 §4.5 |
-| 배포 Plan B·모델 교체 | 구성요소별 대체 경로·데모 모드, 어댑터(플러그인)형 모델 교체와 데이터 정책 게이트 | 기초 설계서 §3, 기획 보고서 §4.6 |
-
-## 현재 확인된 데이터 수치
-
-2026-11-17에 파일을 직접 읽어 센 값입니다. 모델 성능 지표는 아직 없습니다.
-
-| 항목 | 값 |
-| --- | --- |
-| 사규 | 148종(HWP 140, PDF 8), 조문 3,532(삭제 127 포함), 항 6,878, 개정일 2005-01 ~ 2026-10 |
-| 상위 법령 | 275건(법률 105, 시행령 100, 시행규칙·부령 60, 고시 7, 세칙 3), 조문 25,945(삭제 1,832 포함) |
-| 사규의 외부 인용(「…」) | 1,012건. 사규 문서로 연결 293건(29%), 법령 정식명칭 일치 417건(41%), 나머지 302건은 약칭·ALIO에 없는 내규 |
-| 조 번호까지 적은 법령 인용 | 대상 조문이 실제로 존재하는 비율 97/104 (93%) |
-| 시행령·시행규칙 → 모법 | 157/157 이름 규칙으로 연결 가능 |
-| 미해결 참조 | 사규 323건, 법령 31,509건. ⚠ `to`의 문서 접두가 항상 출발 문서와 같아 **재해소가 필요** |
-| 시점 | 법령은 수집일(2026-11-17) 현행본이며 시행일이 그 이후인 문서 4건. 사규 개정일은 `YYYY-MM` 22건·없음 17건 |
-
-자세한 규칙과 알려진 문제: [데이터 명세서](data/데이터_명세서.md), [온톨로지 설계서 §2](docs/ONTOLOGY_DESIGN.md).
-
-## 데이터와 전처리
-
-| 항목 | 내용 |
-| --- | --- |
-| 사규 | [ALIO](https://www.alio.go.kr) 공시 IBK기업은행 규정을 수동 다운로드 → HWP5(olefile)·PDF(pymupdf)에서 원문 추출 → 조·항·호 구조, 내부·외부 참조, 단서·위임 후보 문장으로 구조화 |
-| 상위 법령 | 사규가 인용한 법령·감독규정을 법제처 국가법령정보센터 OPEN API로 수집(인용 집계 + 팀 요청 목록)해 사규와 같은 JSON 구조로 변환. 별표·서식은 미수집 |
-| 학습·평가 데이터(예정) | Hugging Face 한국어 법률 데이터를 SFT 형식으로 변환(근거 id·수치 대조·오염 점검·원문 단위 분할). 후보와 라이선스: [DATA_SOURCES.md](data/DATA_SOURCES.md) |
-| 샘플 | [sample_data/](sample_data/): 가상 법령 기반 합성 그래프·질의응답(실제 조문과 무관) |
-| 이용 조건 | 법령은 저작권법 제7조상 보호 대상이 아니며, ALIO 공개본의 재배포 조건과 HF 데이터셋 라이선스는 **확인 전**입니다. 외부 공개 전에 점검합니다 |
-
-## 온톨로지
+</details>
 
 ![온톨로지 개념 모델](docs/diagrams/ontology_concept.png)
 
-- **결정 층(파서가 만든다):** `Document`(사규·법령 공통) → `Chapter` → `Article` → `Clause`, 조문 참조(`REFERS_TO`), 문서 인용(`CITES`), 상하위 법령(`IMPLEMENTS`), 위임(`DELEGATES_TO`), 제정 근거(`BASED_ON`). 코퍼스에 없는 인용 대상은 `ExternalLaw` 스텁으로 두고 "미보유"로 표시합니다.
-- **추출 층(모델 + 검수):** `Obligation`(의무), `Exception`(단서), `Role`, `Concept`과 `STATES`·`EXCEPTS`·`APPLIES_TO`·`ABOUT`·`CONFLICTS_WITH`·`SANCTIONED_BY`. 추출 결과는 `staging → 검수 → 적재`를 거치고 모든 관계에 원문 근거(`evidence`)를 붙입니다.
-- **위계 통일:** 법령 `level`(1~5)과 사규를 하나의 `authority_rank`(법률 1 … 사규 세칙·지침 8)로 맞춰 "하위가 상위보다 완화적인가"를 판단합니다.
-- 설계 상세(식별자, 외부 참조 해소 규칙, 적재 단계, 임베딩, 검증): [온톨로지 설계서](docs/ONTOLOGY_DESIGN.md), 양식 버전: [도메인 온톨로지 설계서](docs/[도메인온톨로지]%20MLE_도메인_온톨로지_설계서_2팀.md)
+<details>
+<summary><b>조건 트리와 3값 합성 규칙 그림</b></summary>
 
-## 아키텍처 (설계)
+<br/>
+
+![조건 트리](docs/diagrams/ontology_condition_tree.png)
+
+![3값 합성 규칙](docs/diagrams/ontology_gate_rules.png)
+
+</details>
+
+## 📊 진행 현황
+
+| 영역 | 상태 | 내용 |
+| --- | :---: | --- |
+| 공고 수집 (기업마당 · K-Startup) | ✅ | 공식 API 실호출. 기업마당 1,294건, K-Startup 전체 30,632건 |
+| 첨부 공고문 텍스트 추출 | ✅ | 기업마당 본문출력파일 1,292 / 1,294건 (OCR 126건 포함) |
+| 정리층 · 공통 스키마 v1 | ✅ | 공고 5,116건, 검색 청크 32,947개 |
+| 값 정규화 후보 | ✅ | 업력 · 연령 · 지역 · 규모 · 인증 · 법령 인용 · 제외 17,211건 (검수 전) |
+| EDA · 용어 표준화 | ✅ | 결측 · 중복 · 요건 유형, 신청자 유형 24종, 기준일 · 지역 기준 표준 |
+| 지역 사전 | ✅ | 코드표 318행, 별칭 639개, 지역 표기 정확 연결 96.0% |
+| 판정용 법령 | ✅ | 법률 13 + 시행령 13 = 26문서, 조문 1,286개 |
+| 그래프 RAG 최소 구현 (1~3단계) | ✅ | 구조 조건 평가 · 지역 계층 확장 · 청크 검색 · 근거 출력 |
+| Neo4j Aura 적재 | ✅ | 노드 31,506 · 관계 55,903 · 유일 제약 10 (구조화 필드 요건까지, 본문 조건은 검수 후) |
+| SQL 대 그래프 비교 측정 | ✅ | 336,600쌍에서 판정 불일치 0, 속도는 SQL이 빠름 |
+| 조건 추출 · 논리 구조 파이프라인 | 🔄 | 조건 스키마 v1, 2-1 ~ 2-5단계 진행, 검수 정답 대기 |
+| API 뼈대 (FastAPI) | 🔄 | `GET /health`, `POST /api/eligibility` |
+| 도메인 온톨로지 설계 | 🔄 | 클래스 계층 · 조건 트리 · 3값 규칙 · Multi-hop 경로, 팀 검토 중 |
+| 정답셋 파일럿 | 🔄 | 후보 50건 선정, 파일럿 10건 수기 정규화 진행([수기 정규화 도우미](tools/labeler/)) |
+| 요건 추출 모델 (Qwen · QLoRA) | ⬜ | 정답셋 확정 후 |
+| 에이전트 · 웹 · 배포 | ⬜ | LangGraph · Next.js · AWS |
+| 나라장터 입찰공고 | ⏸️ | 1년치 수집 완료. 판정 범위 포함 여부는 추후 결정 |
+
+> [!IMPORTANT]
+> **그래프가 SQL보다 낫다고 주장하지 않습니다.** 모집 중 공고 1,122건 × 가상 프로필 300개(336,600쌍)로 지역 판정을 비교했더니 SQL(폐쇄 테이블 · 재귀 CTE)과 Neo4j가 기준 구현과 **한 쌍도 다르지 않았고**, 속도는 SQL이 빨랐습니다(중앙값 0.37ms 대 9.0ms). 확인된 것은 **계층 사전이 꼭 필요하다**는 점입니다. 계층 없는 SQL 필터는 상위 지역으로 올라가야 충족되는 24,759쌍을 하나도 찾지 못했습니다. → [비교 측정 결과](docs/BASELINE_SQL_그래프_비교측정결과_v0.1.md)
+
+## 🗂️ 데이터
+
+| 데이터 | 규모 | 위치 |
+| --- | --- | --- |
+| 기업마당 지원사업 공고 | 1,294건 (2026-11-24 모집 중 스냅샷) + 첨부 텍스트 | [`data/bizinfo/`](data/bizinfo/) |
+| K-Startup 공고 | 3,822건 (최근 1년 3,819 + 모집 중 3) | [`data/kstartup/`](data/kstartup/) |
+| 정리층 | 공고 5,116 · 청크 32,947 | [`data/cleaned/`](data/cleaned/) |
+| 값 정규화층 | 후보 17,211건 | [`data/normalized/`](data/normalized/) |
+| 지역 사전 | 코드표 318 · 별칭 639 · 묶음 5종 | [`data/사전/`](data/사전/) |
+| 판정용 법령 | 26문서 · 조문 1,286 · 별표 40 · 공고 인용 543건 | [`data/지원사업_법령/`](data/지원사업_법령/) |
+| 정답셋 후보 | 50건 (기업마당 25 · K-Startup 25) | [`data/goldset/`](data/goldset/) |
+| 나라장터 용역 공고 | 월별 분할 | [`data/g2b_monthly/`](data/g2b_monthly/) |
+
+<details>
+<summary><b>EDA로 확인한 것</b></summary>
+
+<br/>
+
+![요건 표현 유형별 비율](docs/figures/eda_reqtypes.png)
+
+- 기업마당은 API 자격 문구가 짧고(평균 83자) **요건이 첨부에 몰려 있습니다.** 제외 표현은 API 문구 6% → 첨부 71%.
+- K-Startup은 업력 · 연령 · 지역이 구조화 필드로 오지만 **제외 · 우대 필드는 전부 비어 있습니다.**
+- 업력 옵션을 전부 고른 공고 중 9.7%는 본문에 업력 상한이 있어, "전부 선택 = 제한 없음"으로 보지 않습니다.
+
+</details>
+
+## 🏗️ 아키텍처 (설계)
 
 ```mermaid
 flowchart LR
-  U(["사원 · 인사과<br/>브라우저"])
-  subgraph VC["Vercel"]
-    W["Next.js 웹 앱<br/>질의 · 근거 · 경로 시각화"]
+  subgraph SRC["공개 API"]
+    BZ["기업마당"]
+    KS["K-Startup"]
   end
-  subgraph GC["AWS CPU 서버"]
-    A["FastAPI<br/>인증 · 역할 확인 · LangGraph"]
+  subgraph BATCH["수집 배치 · 일 1회"]
+    I["수집 → 정리 → 정규화"] --> X["요건 추출<br/>모델 + 검수"]
   end
-  subgraph DB["데이터"]
-    N[("Neo4j Aura<br/>규정 지식 그래프 · 벡터·전문 인덱스")]
-    S[("Supabase<br/>Auth · 대화 · 감사 로그 · pgvector 베이스라인")]
+  SRC --> I
+  X --> SB[("Supabase<br/>원문 · 검수 · 로그")]
+  SB -->|승인분| NJ[("Neo4j Aura<br/>공고 · 요건 · 개념 그래프")]
+  subgraph SERVE["서비스"]
+    W["Next.js<br/>Vercel"] -->|SSE| A["FastAPI<br/>AWS CPU 서버"]
+    A --> AG["LangGraph 에이전트"]
+    AG --> EV["규칙 평가기<br/>3값 판정"]
+    AG --> LM["vLLM · Qwen<br/>RunPod"]
   end
-  subgraph RP["RunPod"]
-    V["vLLM<br/>Qwen 소형 + QLoRA · 양자화"]
-  end
-  L["Langfuse<br/>관측 · 마스킹"]
-  U --> W
-  W -->|"JWT"| A
-  A --> N
-  A --> S
-  A --> V
-  A -.-> L
+  EV --> NJ
+  AG --> SB
 ```
 
-- **저장소 역할:** Neo4j는 질의용 그래프(원본에서 재생성 가능한 파생물), Supabase는 시스템 기록(검수·대화·감사 로그·평가). pgvector는 "벡터 단독 RAG" 베이스라인용으로만 쓰고 GraphRAG 이득을 비교합니다.
-- **모델:** 상용 API 대신 Qwen 소형 모델에 법령 데이터로 QLoRA를 학습해 양자화하고 RunPod vLLM으로 서빙합니다. 규정과 질의가 외부 서비스로 나가지 않습니다. 모델 크기·GPU는 학원 예산 확정 후 정합니다.
-- **인증:** Supabase Auth(Google 로그인). 인사과 역할은 관리자가 지정하며 사용자가 스스로 고를 수 없습니다. API가 요청마다 JWT의 역할을 확인합니다.
-- 전체 구성과 결정 기록(ADR): [기초 설계서 §3](docs/MLE_2팀_기초%20설계.md), [architecture.html](docs/architecture.html)
-
-## 에이전트 구조 (설계)
-
-```mermaid
-flowchart LR
-  Q(["질문 · 사안"]) --> IN["입력 검사<br/>개인정보 필터 · 역할 확인"]
-  IN --> CL{"질의 분류<br/>+ 조건 추출"}
-  CL --> RT["하이브리드 검색<br/>벡터 + 전문(RRF)"]
-  RT --> GX["그래프 확장<br/>인용 · 위임 · 단서 (≤3 hop)"]
-  GX --> GR{"근거 평가<br/>CRAG"}
-  GR -->|"충분"| AN["근거로만 답<br/>조문 인용"]
-  GR -->|"부족"| RW["검색어 다시 쓰기"]
-  RW --> RT
-  GR -->|"다시 찾아도 없음"| UD["근거 없음 · 판단 불가<br/>확인 사항"]
-  AN --> VF{"근거 검증<br/>Reflection"}
-  VF -->|"통과"| OUT["출력 검사<br/>후보 표현 · 면책"]
-  VF -->|"불충분"| UD
-  UD --> OUT
-  OUT --> R(["답변 + 근거 + 경로"])
-```
-
-- 질의 유형(조회 / 조건 비교 / 충돌 점검 / 통계 / 사안 검토)에 따라 도구를 고르는 Planner/Supervisor 에이전트가 `hybrid_search`, `graph_expand`, `obligation_compare`, `analytics_query`, `law_lookup`을 호출합니다.
-- 수치·기한 비교는 모델이 옮기지 않고 규칙 코드가 합니다. 근거가 부족하면 억지 결론 대신 `판단 불가`와 확인 사항을 제시합니다.
-- 가드레일은 NeMo Guardrails를 **판정 전용**(`check_async`)으로 쓰고 답 생성은 LangGraph가 맡습니다. 상세: [기초 설계서 §7·§9](docs/MLE_2팀_기초%20설계.md)
-
-## 평가 계획과 KPI
-
-| 영역 | 지표(잠정 목표) |
+| 구성 | 선택 |
 | --- | --- |
-| 답변 품질 | Task Success Rate(사원 80% · 인사 70%), 근거 인용 포함률 95%, 범위 밖 거절률 90%·과잉 거절률 10%, RAGAS Faithfulness 0.85 |
-| 검색·추론 | 조항 후보 Recall@5 85%, 벡터 단독 대비 GraphRAG +10%p(Multi-hop 유형), Multi-hop 성공률 70% |
-| 온톨로지 | 외부 인용 연결률 75%, 조 지정 인용 연결 93% 유지, 구조 점검 0건, 적재 멱등성 |
-| 안전 | 비인가 접근 차단 100%, 확정적 징계 표현 0건 |
-| 모델 | `base` vs `qlora` vs `qlora_awq` 품질·지연·비용, 일반 능력 퇴행, MLflow 회귀 게이트 |
-| 성능 | 첫 토큰 p95 3초, 전체 p95 15초, 오류율 2% 이하 |
+| 판정 | 규칙 평가기(코드) · 3값 판정 · 근거 문장과 경로 출력 |
+| 지식 그래프 | Neo4j Aura (Supabase 원문에서 다시 만들 수 있는 파생물) |
+| 시스템 기록 | Supabase (원문 · 버전 · 검수 큐 · 대화 · 감사 로그 · 평가) |
+| 모델 | Qwen 소형 + QLoRA · 양자화 → RunPod vLLM 직접 서빙 |
+| 서비스 | Next.js(Vercel) · FastAPI(AWS CPU 서버, Docker) · LangGraph |
+| 평가 · 관측 | 정답셋 · RAGAS · Langfuse, SQL · 벡터 RAG 베이스라인 비교 |
 
-**목표값은 모두 측정 전의 잠정값**입니다. `base` 모델과 벡터 단독 검색으로 베이스라인을 먼저 재고 중간 발표 전에 확정합니다. 평가셋은 60문항 이상(최적화용 / 최종 확인용 분리), 인사 모드는 **가상 사안**만 씁니다. 전체 표와 근거: [KPI 초안](docs/KPI_DRAFT.md)
-
-## 프로젝트 구조
-
-```
-README.md
-data/
-  ibk기업/                   # IBK 사규 원본(HWP 140 · PDF 8)
-  ibk_converted/             # 사규 변환본: parsed/(JSON) · text/ · manifest
-  상위법령_변환/              # 상위 법령 변환본: 구조화/(JSON) · 텍스트/ · 목록
-  데이터_명세서.md            # 통합 데이터 명세서
-  상위법령_데이터명세서.md     # 상위 법령 세부 명세서
-  DATA_SOURCES.md            # 데이터 출처 탐색 기록(법령·HF·AI Hub)
-  law_collection_list.csv    # 코퍼스 밖 인용 대상 분류
-  상위법령_인용집계.csv · 팀_법령수집목록.txt
-sample_data/                 # 합성 샘플 그래프·질의응답·Cypher
-docs/
-  MLE_2팀_기초 설계.md        # 기초 설계서(아키텍처·데이터·AI·평가·요구사항·ADR)
-  PROJECT_PLAN.md            # 기획서(두 모드·요구사항·위험)
-  ONTOLOGY_DESIGN.md         # 온톨로지 상세 설계(적재 규칙·임베딩·검증)
-  KPI_DRAFT.md               # KPI 초안
-  [기획설계] ... / [도메인온톨로지] ...  # 양식 버전(md · docx)
-  diagrams/                  # 온톨로지 그림
-  architecture.html          # 아키텍처 확대·이동 보기
-tools/
-  convert_ibk.py             # 사규 HWP/PDF → JSON·텍스트
-  make_law_list.py           # 코퍼스 밖 인용 대상 집계
-  build_architecture_html.py # 설계서의 mermaid → architecture.html
-  check_neo4j.py             # Neo4j Aura 접속 점검(읽기 전용, .env 사용)
-  requirements.txt
-```
-
-## 실행 방법
-
-현재 실행 가능한 것은 데이터 변환·집계 도구입니다(서비스는 구현 전).
+## 🚀 빠른 시작
 
 ```bash
-pip install -r tools/requirements.txt
-
-# 사규 HWP/PDF 변환 (data/ibk기업 → data/ibk_converted)
-python tools/convert_ibk.py
-python tools/convert_ibk.py --src data/ibk기업 --out data/ibk_converted --force
-
-# 코퍼스 밖 인용 대상 목록 (docs/LAW_COLLECTION_LIST.md, data/law_collection_list.csv)
-python tools/make_law_list.py
-
-# 설계서의 다이어그램 보기 파일 다시 만들기
-python tools/build_architecture_html.py
-
-# Neo4j Aura 접속 점검 (.env 의 NEO4J_* 사용, 읽기 전용, 비밀번호 출력 없음)
-python tools/check_neo4j.py
+python -m venv .venv && .venv\Scripts\activate   # macOS·Linux: source .venv/bin/activate
+pip install -r requirements-dev.txt                  # 서버 + 도구 + 시험
+# .env 를 직접 만들어 채운다: BIZINFO_API_KEY · KSTARTUP_SERVICE_KEY · NEO4J_* · SUPABASE_* (커밋 금지)
 ```
 
-- HWP 5.x는 한컴 오피스 없이 `olefile`로 직접 읽습니다. 암호화·배포용 문서와 스캔 PDF는 실패로 기록하고 건너뜁니다(현재 실패 0건).
-- 상위 법령 수집 도구(`tools/upper_docs_collector.py`, `tools/convert_law.py`)와 수집 원본은 [상위 법령 데이터 명세서](data/상위법령_데이터명세서.md)에 설명되어 있으나 **이 저장소에는 아직 없습니다**. 법제처 인증값은 `.env` 또는 환경변수로만 쓰고 커밋하지 않습니다.
-- 환경변수(예정): `LLM_BASE_URL`, `LLM_API_KEY`, `LLM_MODEL`, `EMBED_MODEL`, `HF_TOKEN`, `NEO4J_URI`, `NEO4J_USERNAME`, `NEO4J_PASSWORD`, `SUPABASE_URL`, `SUPABASE_KEY`
+```bash
+# 1) 수집
+python tools/collect_bizinfo.py                 # 기업마당 전체
+python tools/collect_kstartup_full.py           # K-Startup 전체 + 최근 1년
 
-## 기술 스택 (설계)
+# 2) 정리 · 정규화
+python tools/preprocess_notices.py              # 정리층  → data/cleaned/<날짜>/
+python tools/normalize_values.py                # 값 정규화 → data/normalized/<날짜>/
 
-- **LLM·RAG:** Qwen 소형 모델(QLoRA, AWQ/GPTQ 양자화 후보), vLLM(RunPod), LangGraph, 한국어 임베딩(KURE-v1 / bge-m3 / multilingual-e5 비교 후 선정), 벡터 + 전문(Kiwi 토큰) 하이브리드, Neo4j GraphRAG
-- **데이터·저장소:** Neo4j Aura, Supabase(Postgres, pgvector, Auth, RLS)
-- **프론트엔드·백엔드:** Next.js(Vercel), FastAPI(Docker, AWS CPU 서버)
-- **가드레일·관측·평가:** NeMo Guardrails(판정 전용), Langfuse, RAGAS, MLflow
-- **CI/CD:** GitHub Actions(PR = CI, main = CD), GHCR, SSH 배포(제안)
-- **현재 사용 중인 도구:** Python, `olefile`, `pymupdf`
+# 3) 분석 · 그래프
+python tools/eda_domain.py                      # EDA 집계와 그림
+python tools/graphrag/build.py export           # Neo4j 적재용 노드 · 관계 파일
+python tools/graphrag/build.py compare          # 그래프 평가기 vs SQL 비교
 
-## 한계
+# 4) API 서버
+uvicorn api.main:app --reload                   # http://localhost:8000/docs
+```
 
-- **구현 전:** 이 저장소에는 아직 서비스도, 측정한 성능도 없습니다. 목표값은 모두 잠정입니다.
-- **데이터:** 사규는 버전 1개(개정 이력 비교 불가)이고 일부 개정일이 없습니다. 법령은 현행본뿐이라 오래된 사규와 비교하면 위반처럼 보일 수 있어 답변에 기준일을 표시합니다. 별표(징계 수위 등)와 가이드라인 3건은 수집하지 못했습니다. 코퍼스 밖 인용(사규 인용의 약 30%)은 "미보유"로 표시합니다.
-- **소형 모델:** 긴 규정 판정과 정밀 추출은 상용 대형 모델보다 약할 수 있어, 규칙 비교·사람 검수·근거 검증·`판단 불가`로 보완합니다. LoRA로 "판단" 능력이 크게 오르지 않을 수 있다는 점을 전제로 합니다.
-- **평가:** 인사 모드 평가셋은 가상 사안이라 실제 난이도를 대표하지 못할 수 있고, 60문항에서는 1문항이 1.7%p입니다.
-- **법적 판단 아님:** 위계 해석(감독규정과 시행규칙의 우열 등)과 개인정보·근로자 권리 문제는 법률 검토가 필요하며 멘토 확인 대상입니다.
-- 전체 위험과 미결 항목: [기초 설계서 §10·§12](docs/MLE_2팀_기초%20설계.md), [기획서 §10](docs/PROJECT_PLAN.md)
+> [!WARNING]
+> API 키와 `.env`는 저장소에 올리지 않습니다(`.gitignore`). 공유 Neo4j Aura에는 함부로 쓰지 말고, 실험은 로컬 Neo4j에서 합니다.
 
-## 일정
+## 📚 문서
 
-| 단계 | 기간 | 내용 |
-| --- | --- | --- |
-| 1주차 | 2026.11.17.~11.20. | 기획(기획 보고서) |
-| 2주차 | 2026.11.23.~11.27. | 온톨로지 설계 |
-| 3~4주차 | | 추출·적재, PoC·중간 발표(사원 모드 기본 질의응답) |
-| 5~6주차 | | 검색·추론 엔진, 인사 모드 |
-| 7~8주차 | | 평가·배포 |
-| 최종 발표 | 2027.01.11. | 사원·인사 모드 통합 시연 |
-
-세부 일정과 담당은 발표일·인원 확정 후 채웁니다.
-
-## 팀과 역할
-
-| 팀원 | 담당 |
+| 구분 | 문서 |
 | --- | --- |
-| [ ] | PM·기획·설계 |
-| [ ] | 상위 법령 수집·변환 |
-| [ ] | 온톨로지 적재·검증 |
-| [ ] | 모델·에이전트·백엔드 |
-| [ ] | 프론트·평가·배포 |
+| 기획 | [기획 보고서](docs/[기획설계]%20MLE_기획보고서_2팀.md) · [기초 설계서](docs/MLE_2팀_기초%20설계.md) · [KPI 초안](docs/KPI_DRAFT.md) |
+| 기획 · 화면 | [화면설계서 v3.5](docs/design/MLE_2팀_화면설계서_v3.5_와이어프레임.pdf) · [WBS](docs/design/MLE_2팀_WBS.xlsx) |
+| 온톨로지 | [도메인 온톨로지 설계서](docs/[도메인온톨로지]%20MLE_도메인_온톨로지_설계서_2팀.md) · [온톨로지 필요성](docs/ONTOLOGY_NECESSITY.md) · [제출 파일](docs/submission/ontology/) |
+| 데이터 | [기업마당 명세서](docs/DATA_SPEC_기업마당_v0.1.md) · [EDA · 용어 표준화](docs/DOMAIN_ANALYSIS_EDA_용어표준화_v0.1.md) · [정리층](docs/PREPROCESS_정리층_설계와_결과_v0.1.md) · [값 정규화](docs/NORMALIZE_값정규화층과_첨부_읽기_v0.1.md) · [공통 스키마 v1](docs/SUPPORT_DATA_NORMALIZATION_V1.md) |
+| 그래프 · 평가 | [그래프 RAG 1~3단계 결과](docs/GRAPHRAG_구성가능성과_1-3단계_결과_v0.1.md) · [Neo4j 적재 기록](docs/LOAD_Neo4j_적재기록_v0.1.md) · [SQL 대 그래프 비교 결과](docs/BASELINE_SQL_그래프_비교측정결과_v0.1.md) · [베이스라인 측정 방법](docs/BASELINE_SQL_벡터RAG_측정방법_KPI산정근거_v0.1.md) |
+| 조건 추출 | [조건 스키마 v1](docs/CONDITION_SCHEMA_V1.md) · [조건 평가기 v1](docs/CONDITION_EVALUATION_PROGRAM_V1.md) · [작업 기록](docs/WORKLOG_20261125_CONDITION_PIPELINE.md) |
+| API | [API 뼈대 안내](api/README.md) |
+| 정답셋 | [라벨링 가이드](docs/GOLDSET_라벨링_가이드_v0.1.md) · [수기 정규화 작업 안내](docs/PILOT_수기정규화_작업안내_v0.1.md) · [첨부 공고문 추출 가이드](docs/GUIDE_첨부_공고문_추출_가이드_v0.1.md) |
 
-역할 분담은 팀 확정 후 채웁니다([기획 보고서 §7](docs/[기획설계]%20MLE_기획보고서_2팀.md)). 문서와 일부 코드는 AI 코딩 도구(Claude Code)와 함께 작성했고, 수치는 데이터 파일을 직접 읽어 확인했습니다.
+## 🗺️ 저장소 구조
 
-## 데이터 출처와 라이선스
+```
+data/
+  bizinfo/ · kstartup/        # 포털별 원본 수집본
+  cleaned/ · normalized/      # 정리층 · 값 정규화층
+  사전/                        # 지역 코드표 · 별칭 · 묶음 사전
+  지원사업_법령/                # 판정용 법령 조문 · 별표
+  goldset/                    # 정답셋 후보 · 파일럿
+  g2b_monthly/                # 나라장터 용역 공고(월별)
+api/                          # FastAPI 서버 (routers · schemas · services)
+docs/                         # 기획 · 설계 · 데이터 · 평가 문서, design/ · diagrams/ · figures/ · submission/
+tests/                        # API · 조건 스키마 · 정규화 시험
+tools/
+  collect_* · preprocess_* · normalize_*   # 수집 · 정리 · 정규화
+  graphrag/                   # 조건 생성 · 지역 계층 · 평가기 · 검색 · SQL 비교
+  *condition*                 # 조건 추출 · 논리 구조 · 정답 검수 파이프라인
+  load_graph_neo4j.py         # Neo4j 적재 (MERGE, 기본 dry-run)
+  labeler/                    # 파일럿 수기 정규화 도우미 (브라우저 HTML)
+  test_*.py                   # 단위 시험
+```
 
-- 사규: [ALIO](https://www.alio.go.kr) 공시 IBK기업은행 규정(수동 다운로드). 재배포 조건은 **확인 전**입니다.
-- 상위 법령: [법제처 국가법령정보센터 OPEN API](https://open.law.go.kr). 법령·고시 등은 저작권법 제7조상 보호 대상이 아니며, API 이용약관은 공개 전에 확인합니다.
-- 학습 후보 데이터: Hugging Face 공개 데이터셋(각 라이선스를 선정 후 개별 확인, 비상업 라이선스 포함 — [DATA_SOURCES.md](data/DATA_SOURCES.md)).
-- 저장소에는 API 키와 `.env`가 없습니다(`.gitignore`). 코드 라이선스 파일은 아직 정하지 않았습니다.
+## 📅 일정
+
+| 기간 | 단계 |
+| --- | --- |
+| 11.17 ~ 11.20 | 기획 |
+| 11.23 ~ 11.27 | 데이터 수집 · 정리, 도메인 온톨로지 설계 |
+| 3 ~ 4주차 | 요건 추출 · 적재, PoC · 중간 발표 |
+| 5 ~ 6주차 | 검색 · 추론 엔진, 서비스 화면 |
+| 7 ~ 8주차 | 평가 · 배포 |
+| 2027.01.11 | 최종 발표 |
+
+## ⚖️ 데이터 출처와 고지
+
+- 기업마당 지원사업정보 API, K-Startup 조회 서비스(공공데이터포털), 법제처 국가법령정보 OPEN API, 행정안전부 법정동코드.
+- K-Startup 공고 페이지와 첨부는 robots.txt가 수집을 금지해 받지 않습니다. 기업마당 첨부 원본은 로컬에만 두고 저장소에 올리지 않습니다.
+- 판정 결과는 참고용입니다. 법적 · 세무 자문이나 선정 가능성 예측을 하지 않습니다.
+
+<div align="center">
+<sub>근거it · 엔코아 AI 캠퍼스 MLE 1기 2팀</sub>
+</div>
