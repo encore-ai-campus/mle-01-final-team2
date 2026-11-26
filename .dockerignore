@@ -1,0 +1,19 @@
+# 이미지 빌드 문맥에서 뺀다. 비밀 값·원문 데이터·대용량 파일이 Docker로 넘어가지 않게 한다.
+.env
+.env.*
+!.env.example
+data/
+share/
+docs/
+.git/
+.github/
+.claude/
+.omc/
+.venv/
+venv/
+**/__pycache__/
+**/*.pyc
+*.png
+*.docx
+*.zip
+tests/

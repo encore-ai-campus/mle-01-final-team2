@@ -45,6 +45,12 @@ class NoticeVerdict(BaseModel):
     reasons: list[str]
     conditions: list[ConditionResult]
     score: float | None = None
+    # 출처·수집 시각(근거 표시 의무, N-05). 엔진 공고 정보에서 채운다
+    title: str | None = None
+    source: str | None = None
+    detail_url: str | None = None
+    fetched_at: str | None = None
+    deadline: str | None = None
 
 
 class EligibilityResponse(BaseModel):
