@@ -9,7 +9,7 @@ from collections import Counter
 
 from . import cleaned, gold_bridge
 from .data import load_all
-from .evaluator import NOT_ELIGIBLE, Profile, evaluate_notice
+from .evaluator import DEFAULT_OPTIONS, NOT_ELIGIBLE, Profile, RuleOptions, evaluate_notice
 from .search import BM25
 
 TODAY = "2026-11-24"
@@ -33,12 +33,12 @@ class Engine:
             return False
         return not (n.get("deadline") and n["apply_status_kind"] == "DATE_RANGE" and n["deadline"] < TODAY)
 
-    def evaluate_all(self, prof: Profile, include_closed: bool = False) -> list[dict]:
+    def evaluate_all(self, prof: Profile, include_closed: bool = False, opts: RuleOptions = DEFAULT_OPTIONS) -> list[dict]:
         out = []
         for n in self.notices:
             if not include_closed and not self.is_open(n):
                 continue
-            out.append(evaluate_notice(n, prof, self.rg))
+            out.append(evaluate_notice(n, prof, self.rg, opts))
         return out
 
     def query(self, prof: Profile, question: str = "", top: int = 10, include_closed: bool = False, source: str | None = None) -> dict:

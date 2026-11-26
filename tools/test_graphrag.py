@@ -476,6 +476,68 @@ class SmeEngineTests(unittest.TestCase):
         self.assertEqual(self.status("중소기업", big, ctype="EXCLUSION")[0].status, SAT)  # 제외 조건: 중소기업이 아니면 충족
 
 
+class RuleOptionTests(unittest.TestCase):
+    """팀 결정 전 선택지 스위치(RuleOptions). 기본값은 지금 동작이고, 선택지마다 결정 시트대로 바뀌는지 본다."""
+
+    def ev(self, notice, prof, **opt):
+        from dataclasses import replace
+        from graphrag.evaluator import DEFAULT_OPTIONS
+        return evaluate_notice(notice, prof, RG, replace(DEFAULT_OPTIONS, **opt))
+
+    def n(self, *conds, source="KSTARTUP"):
+        return {"notice_id": "N", "source": source, "conditions": list(conds), "text_requirements": "reviewed"}
+
+    def test_c1_pre_founder_without_option(self):
+        n = self.n(age_cond("1년미만,3년미만"))
+        self.assertEqual(self.ev(n, Profile(pre_founder=True))["verdict"], NOT_ELIGIBLE)
+        self.assertEqual(self.ev(n, Profile(pre_founder=True), c1_pre_founder_not_in_options="unknown")["verdict"], NEEDS_CHECK)
+
+    def test_c2_all_business_age_options(self):
+        n = self.n(age_cond("예비창업자,1년미만,2년미만,3년미만,5년미만,7년미만,10년미만"))
+        self.assertEqual(self.ev(n, Profile(business_age_years=20))["conditions"][0].status, UNK)
+        self.assertEqual(self.ev(n, Profile(business_age_years=20), c2_business_age_all_options="satisfied")["verdict"], ELIGIBLE)
+        r = self.ev(n, Profile(business_age_years=20), c2_business_age_all_options="drop")
+        self.assertEqual(r["n_conditions"], 0)
+
+    def test_c3_c4_all_options(self):
+        from graphrag.evaluator import parse_age_options, parse_applicant_options
+        age = {"cond_id": "a", "attribute": "founder_age", "strength": "soft",
+               "value": {"ranges": parse_age_options("만 20세 미만,만 20세 이상 ~ 만 39세 이하,만 40세 이상")}}
+        app = {"cond_id": "b", "attribute": "applicant_type", "strength": "soft",
+               "value": {"options": parse_applicant_options("청소년,대학생,일반인,대학,연구기관,일반기업,1인 창조기업")}}
+        prof = Profile(founder_age=30, applicant_type="일반인")
+        self.assertEqual([c.status for c in self.ev(self.n(age, app), prof)["conditions"]], [SAT, SAT])
+        self.assertEqual(self.ev(self.n(age), prof, c3_age_all_options="unknown")["conditions"][0].status, UNK)
+        r = self.ev(self.n(app), prof, c4_applicant_all_options="flag")["conditions"][0]
+        self.assertEqual((r.status, r.flags), (SAT, ["all_options"]))
+        self.assertEqual(self.ev(self.n(app), prof, c4_applicant_all_options="unknown")["conditions"][0].status, UNK)
+
+    def test_c6_a1_region_by_source(self):
+        busan = region_cond("REGION:2600000000")
+        seoul = Profile(region="REGION:1100000000")
+        self.assertEqual(self.ev(self.n(busan, source="BIZINFO"), seoul)["verdict"], NEEDS_CHECK)
+        self.assertEqual(self.ev(self.n(busan, source="BIZINFO"), seoul, c6_bizinfo_org_region="drop")["verdict"], ELIGIBLE)
+        self.assertEqual(self.ev(self.n(busan, source="KSTARTUP"), seoul, c6_bizinfo_org_region="drop")["verdict"], NEEDS_CHECK)
+        self.assertEqual(self.ev(self.n(busan), seoul, a1_kstartup_region="hard")["verdict"], NOT_ELIGIBLE)
+        self.assertEqual(self.ev(self.n(busan, source="BIZINFO"), seoul, a1_kstartup_region="hard")["verdict"], NEEDS_CHECK)
+
+    def test_a3_and_a6(self):
+        n = self.n(age_cond("예비창업자,1년미만,3년미만"))
+        self.assertEqual(self.ev(n, Profile(business_age_years=8))["verdict"], NOT_ELIGIBLE)
+        self.assertEqual(self.ev(n, Profile(business_age_years=8), a3_pre_founder_missing_with_age="unknown")["verdict"], NEEDS_CHECK)
+        g = self.n(region_cond("REGION_GROUP:GWANGJU_OLD"))
+        south = Profile(region="REGION:1227000000")
+        self.assertEqual(self.ev(g, south)["conditions"][0].status, SAT)
+        self.assertEqual(self.ev(g, south, a6_unreviewed_group="unknown")["conditions"][0].status, UNK)
+
+    def test_option_choices_cover_defaults(self):
+        from dataclasses import fields
+        from graphrag.evaluator import DEFAULT_OPTIONS, OPTION_CHOICES
+        self.assertEqual({f.name for f in fields(DEFAULT_OPTIONS)}, set(OPTION_CHOICES))
+        for f, choices in OPTION_CHOICES.items():
+            self.assertEqual(getattr(DEFAULT_OPTIONS, f), choices[0])  # 첫 선택지가 지금 동작
+
+
 class ChunkTests(unittest.TestCase):
     def test_short_and_redaction_only_chunks_are_dropped(self):
         self.assertEqual(_chunk("N", "S", "x", "API", "창업교육"), [])
