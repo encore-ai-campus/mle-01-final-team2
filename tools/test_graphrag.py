@@ -153,6 +153,15 @@ class ConceptsAndLawsTests(unittest.TestCase):
         self.assertNotIn("평가기준과 평가방법", defs["벤처기업"]["text"])  # 제2조의2 제2항은 빼고
         self.assertNotIn("사회적협동조합", defs["협동조합"]["text"])
         self.assertNotIn("청년 1인 창조기업", defs["1인 창조기업"]["text"])
+        sme = defs["중소기업"]["text"]  # 용어 사전의 `[중략]` 문장 대신 조문 원문
+        self.assertNotIn("[중략]", sme)
+        self.assertIn("5. 「중소기업협동조합법」", sme)
+        self.assertIn("5년간은 중소기업으로 본다", sme)
+        self.assertNotIn("④", sme)
+
+    def test_law_source_url_opens_collected_version(self):
+        laws = [n for n in self.lnodes if n["label"] == "ExternalLaw"]
+        self.assertTrue(all(n["source_url"] == f"https://www.law.go.kr/lsInfoP.do?lsiSeq={n['law_id'].split(':')[1]}" for n in laws))
 
     def test_every_applicant_type_with_a_law_definition_is_linked(self):
         defined = {e["from"] for e in self.dedges if e["type"] == "DEFINED_BY"}

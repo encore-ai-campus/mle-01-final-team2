@@ -3,7 +3,7 @@
 - 개념: `data/ref/term_standard_v0.1.json`의 신청자 유형 24개. 인증·확인서를 발급받아야 성립하는 지위(벤처기업·사회적기업·여성기업·장애인기업)는
   `CERTIFICATION` scheme으로 옮기고(O-07) 이노비즈·메인비즈·소상공인확인을 더한다. `IS_A`는 법령 원문이 근거인 소기업·중기업 -> 중소기업만 만든다.
 - 법령: `data/지원사업_법령/`의 법령 26종·조문 1,286개·별표 40개. 조문·별표는 `PART_OF`로 법령에 속한다.
-- 정의: 용어 사전이 법령 원문을 그대로 인용한 6개와 수집 조문에서 잘라 온 17개(`LAW_DEFS`). 개념이 있는 것만 `DEFINED_BY`로 잇고 `CITES_LAW`로 조문에 잇는다. `rule_json`은 만들지 않는다(원문 확인 전).
+- 정의: 용어 사전이 법령 원문을 그대로 인용한 6개와 수집 조문에서 잘라 온 17개(`LAW_DEFS`). 중소기업은 사전 문장 대신 조문 원문을 쓴다. 개념이 있는 것만 `DEFINED_BY`로 잇고 `CITES_LAW`로 조문에 잇는다. `rule_json`은 만들지 않는다(원문 확인 전).
 - 공고가 조문을 인용한 543건은 요건 노드가 본문에서 만들어진 뒤에 `CITES`로 이어야 하므로 지금은 보류 목록(`law_citations_pending.jsonl`)으로만 남긴다.
 """
 from __future__ import annotations
@@ -68,6 +68,11 @@ def concepts() -> tuple[list[dict], list[dict], dict[str, str]]:
     return nodes, edges, by_label
 
 
+def law_url(doc_id: str) -> str:
+    """국가법령정보센터에서 수집한 버전(법령일련번호)의 본문 주소. 수집 데이터의 `source`(`law.go.kr/law/{번호}`)는 식별자라 그대로 열리지 않는다."""
+    return f"https://www.law.go.kr/lsInfoP.do?lsiSeq={doc_id}"
+
+
 def laws() -> tuple[list[dict], list[dict], dict[tuple[str, str], str], list[dict]]:
     """(노드, 간선, (법령 이름, 조 번호) -> article_id, 공고 인용 보류 목록)."""
     articles = _jsonl(LAW_DIR / "조문.jsonl")
@@ -78,7 +83,7 @@ def laws() -> tuple[list[dict], list[dict], dict[tuple[str, str], str], list[dic
         if r.get("level") == "law":
             law_id[r["doc_id"]] = f"LAW:{r['doc_id']}"
             nodes.append({"label": "ExternalLaw", "law_id": law_id[r["doc_id"]], "name": r["doc_name"], "doc_kind": r["doc_kind"],
-                          "effective_date": r["effective"], "org": r["org"], "source_url": "https://www." + r["source"], "priority": r["priority"]})
+                          "effective_date": r["effective"], "org": r["org"], "source_url": law_url(r["doc_id"]), "priority": r["priority"]})
             for nid in r.get("cited_by") or []:  # 조문 번호 없이 법령만 인용한 공고
                 pending.append({"notice_id": nid, "law_id": law_id[r["doc_id"]]})
     for r in articles:
@@ -120,6 +125,8 @@ LAW_DEFS_V03 = [
 # 벤처기업은 제2조제1항이 제2조의2를 가리키기만 하므로 요건 조항(제2조의2제1항)을 정의로 쓴다.
 # 소상공인은 규모가 커진 뒤 3년간 소상공인으로 보는 제2항까지 판정에 필요해서 두 항을 함께 둔다.
 LAW_DEFS_V02 = [
+    # 중소기업은 v0.1 용어 사전 문장이 제1항 각 호를 `[중략]`으로 줄이고 제3항(5년 유예)을 뺐다. 조문에서 제1항~제3항을 다시 잘라 사전 문장을 대신한다.
+    ("중소기업", "중소기업", "중소기업기본법", "2", "①②③", "제2조 제1항~제3항"),
     ("소상공인", "소상공인", "소상공인기본법", "2", "①②", "제2조 제1항·제2항"),
     ("중견기업", "중견기업", "중견기업 성장촉진 및 경쟁력 강화에 관한 특별법", "2", "1.", "제2조 제1호"),
     ("벤처기업", "벤처기업", "벤처기업육성에 관한 특별법", "2의2", "①", "제2조의2 제1항"),
@@ -175,6 +182,7 @@ def definitions(by_label: dict[str, str], article_index: dict[tuple[str, str], s
     """(노드, 간선, 연결하지 못한 정의 설명). 법령 원문을 그대로 인용한 정의만 만든다.
 
     v0.1 용어 사전의 정의 6개에 수집 법령 조문에서 잘라 온 정의 17개(`LAW_DEFS`: v0.2 법령 7개, v0.3 추가 법령 10개)를 더한다.
+    `LAW_DEFS`에 사전과 같은 용어가 있으면 사전 문장 대신 조문 원문을 쓴다(중소기업).
     """
     terms = json.loads(TERMS.read_text(encoding="utf-8"))
     nodes, edges, notes = [], [], []
