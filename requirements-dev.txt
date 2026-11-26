@@ -1,0 +1,4 @@
+# 개발·시험용: 서버 + 도구 + 시험 도구
+-r requirements.txt
+-r requirements-tools.txt
+httpx>=0.27
