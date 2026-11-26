@@ -38,6 +38,7 @@ class Profile:
     pre_founder: bool | None = None       # 사업자등록 전 예비창업자
     founder_age: int | None = None
     applicant_type: str | None = None     # K-Startup 신청 대상 값 중 하나
+    sme_facts: dict | None = None         # 중소기업 판정 입력(definition_rules.evaluate_sme의 facts). 입력 항목은 팀 검토 E-5
 
 
 @dataclass
@@ -80,9 +81,29 @@ def parse_applicant_options(raw: str | None) -> list[str] | None:
     return opts if opts and all(o in APPLICANT_OPTIONS for o in opts) else None
 
 
+H3_REASON = "입력한 지역이 조건 지역보다 상위라 하위 조건 충족 여부를 알 수 없음(H3)"
+
+
+def _base(cond: dict, attribute: str | None = None, **extra) -> dict:
+    """CondResult 공통 필드."""
+    return dict(cond_id=cond["cond_id"], attribute=attribute or cond["attribute"], strength=cond.get("strength", "soft"),
+                evidence=cond.get("evidence", ""), **extra)
+
+
+def region_match(region: str, targets: list[str], rg: RegionGraph) -> tuple[str, str | None]:
+    """사용자 지역이 조건 지역 중 하나에 속하는지. (SAT, 맞은 지역) / (UNK, None: 사용자 지역이 더 상위, H3) / (UNSAT, None)."""
+    anc = rg.ancestors(region)
+    hit = next((t for t in targets if t in anc or t == "REGION:NATIONWIDE"), None)
+    if hit:
+        return SAT, hit
+    if any(region in rg.ancestors(t) for t in targets):
+        return UNK, None
+    return UNSAT, None
+
+
 def evaluate_condition(cond: dict, prof: Profile, rg: RegionGraph) -> CondResult:
-    a, strength = cond["attribute"], cond.get("strength", "soft")
-    base = dict(cond_id=cond["cond_id"], attribute=a, strength=strength, evidence=cond.get("evidence", ""))
+    a = cond["attribute"]
+    base = _base(cond)
     v = cond["value"]
     if a == "region":
         target = v["concept_id"]
@@ -91,12 +112,13 @@ def evaluate_condition(cond: dict, prof: Profile, rg: RegionGraph) -> CondResult
             return CondResult(**base, status=SAT, reason="전국 대상", flags=flags)
         if prof.region is None:
             return CondResult(**base, status=UNK, reason="사업장 소재지 미입력", flags=flags)
-        anc = rg.ancestors(prof.region)
-        if target in anc:
-            return CondResult(**base, status=SAT, reason=f"{rg.name(prof.region)} → {rg.name(target)} ({anc[target]} hop)",
+        status, hit = region_match(prof.region, [target], rg)
+        if status == SAT:
+            hops = rg.ancestors(prof.region)[target]
+            return CondResult(**base, status=SAT, reason=f"{rg.name(prof.region)} → {rg.name(target)} ({hops} hop)",
                               path=rg.path(prof.region, target), flags=flags)
-        if prof.region in rg.ancestors(target):
-            return CondResult(**base, status=UNK, reason="입력한 지역이 조건 지역보다 상위라 하위 조건 충족 여부를 알 수 없음(H3)", flags=flags)
+        if status == UNK:
+            return CondResult(**base, status=UNK, reason=H3_REASON, flags=flags)
         return CondResult(**base, status=UNSAT, reason=f"{rg.name(prof.region)} → {rg.name(target)} 경로 없음(속하지 않음)", flags=flags)
     if a == "business_age":
         o = v
@@ -138,7 +160,7 @@ INVERT = {SAT: UNSAT, UNSAT: SAT, UNK: UNK}
 def evaluate_gold_condition(cond: dict, prof: Profile, rg: RegionGraph) -> CondResult:
     """검수 정답에서 온 조건(`gold_bridge.to_condition`). 제외 조건(negate)은 '해당함'을 요건 불충족으로 뒤집는다."""
     a, v = cond["attribute"], cond["value"]
-    base = dict(cond_id=cond["cond_id"], attribute=a, strength=cond.get("strength", "soft"), evidence=cond.get("evidence", ""), flags=["gold"])
+    base = _base(cond, flags=["gold"])
     status, reason, path = UNK, f"평가 규칙 없는 속성 {a}", None
     if v.get("unsupported"):
         pass
@@ -153,23 +175,46 @@ def evaluate_gold_condition(cond: dict, prof: Profile, rg: RegionGraph) -> CondR
         else:
             ok = CMP[v["op"]](x, v["value"])
             status, reason = (SAT if ok else UNSAT), f"{x:g} {v['op']} {v['value']:g}: " + ("충족" if ok else "불충족")
+    elif a == "business_type" and v.get("labels"):
+        status, reason, extra = _business_type(v["labels"], prof)
+        base["flags"] = base["flags"] + extra
     elif a == "region":
         if v["unresolved"] or not v["concept_ids"]:
             reason = f"지역 표기를 개념으로 확정하지 못함({', '.join(v['unresolved']) or '없음'})"
         elif prof.region is None:
             reason = "사업장 소재지 미입력"
         else:
-            anc = rg.ancestors(prof.region)
-            hit = next((t for t in v["concept_ids"] if t in anc or t == "REGION:NATIONWIDE"), None)
+            status, hit = region_match(prof.region, v["concept_ids"], rg)
             if hit:
-                status, reason, path = SAT, f"{rg.name(prof.region)} → {rg.name(hit)}", rg.path(prof.region, hit) if hit in anc else None
-            elif any(prof.region in rg.ancestors(t) for t in v["concept_ids"]):
-                reason = "입력한 지역이 조건 지역보다 상위라 하위 조건 충족 여부를 알 수 없음(H3)"
+                path = rg.path(prof.region, hit) if hit in rg.ancestors(prof.region) else None
+                reason = f"{rg.name(prof.region)} → {rg.name(hit)}"
             else:
-                status, reason = UNSAT, f"{rg.name(prof.region)}은(는) {', '.join(v['labels'])}에 속하지 않음"
+                reason = H3_REASON if status == UNK else f"{rg.name(prof.region)}은(는) {', '.join(v['labels'])}에 속하지 않음"
     if cond.get("negate"):
         status, reason = INVERT[status], "제외 조건: " + reason
     return CondResult(**base, status=status, reason=reason, path=path)
+
+
+SME_LABEL = "중소기업"
+
+
+def _business_type(labels: list[str], prof: Profile) -> tuple[str, str, list[str]]:
+    """기업 유형 조건. 법령 판정 기준(rule_json)이 있는 중소기업만 판정하고 나머지 유형은 UNKNOWN이다.
+    여러 유형 중 하나(IN)면 중소기업 충족일 때만 충족이고, 불충족이어도 다른 유형을 몰라 UNKNOWN이다."""
+    if SME_LABEL not in labels:
+        return UNK, f"판정 기준이 없는 기업 유형({', '.join(labels)})", []
+    from .definition_rules import evaluate_sme, load_rule
+    rule = load_rule()
+    if rule is None:
+        return UNK, "중소기업 판정 기준 파일 없음", []
+    if not prof.sme_facts:
+        return UNK, "중소기업 판정 입력(업종·매출·자산 등) 없음", []
+    r = evaluate_sme(rule, prof.sme_facts)
+    detail = "; ".join(f"{s['id']} {s['status']}" for s in r["steps"])
+    flags = ["draft_rule"] if rule.get("status") == "draft" else []
+    if r["status"] == UNSAT and len(labels) > 1:
+        return UNK, f"중소기업 아님({detail}). 다른 유형({', '.join(x for x in labels if x != SME_LABEL)})은 판정 기준 없음", flags
+    return r["status"], f"중소기업 판정 {r['status']} ({r['rule_id']}: {detail})", flags
 
 
 def evaluate_tree(node: dict, by_id: dict[str, str]) -> str:
@@ -196,7 +241,7 @@ def combine(logic: str, statuses: list[str]) -> str:
 def _evaluate_in_group(cond: dict, logic: str, prof: Profile, rg: RegionGraph) -> CondResult:
     """요건 안의 조건 하나. OR 요건(R2)에서는 업력과 예비창업자를 각각 따로 본다."""
     if cond.get("pre_founder"):
-        base = dict(cond_id=cond["cond_id"], attribute="applicant_type", strength=cond.get("strength", "soft"), evidence=cond.get("evidence", ""))
+        base = _base(cond, attribute="applicant_type")
         if prof.pre_founder is True:
             return CondResult(**base, status=SAT, reason="예비창업자")
         if prof.pre_founder is False:
@@ -206,9 +251,16 @@ def _evaluate_in_group(cond: dict, logic: str, prof: Profile, rg: RegionGraph) -
         return CondResult(**base, status=UNK, reason="예비창업자 여부 미입력")
     if logic == "OR" and cond["attribute"] == "business_age":
         if prof.pre_founder is True:  # 예비창업자 허용은 같은 요건의 예비창업자 조건이 맡는다
-            return CondResult(cond_id=cond["cond_id"], attribute="business_age", strength=cond.get("strength", "soft"), evidence=cond.get("evidence", ""),
-                              status=UNSAT, reason="예비창업자라 업력 조건 대상 아님(같은 요건의 예비창업자 조건으로 판단)")
+            return CondResult(**_base(cond), status=UNSAT, reason="예비창업자라 업력 조건 대상 아님(같은 요건의 예비창업자 조건으로 판단)")
     return evaluate_condition(cond, prof, rg)
+
+
+def _tally(req_id: str, status: str, rs: list[CondResult], hard_fail: list, soft_fail: list, unknown: list) -> None:
+    """요건 단위로 합친 결과를 사유 목록에 넣는다. 요건 안에 hard 조건이 있으면 hard 불충족이다."""
+    if status == UNSAT:
+        (hard_fail if any(r.strength == "hard" for r in rs) else soft_fail).append(req_id)
+    elif status == UNK:
+        unknown.append(req_id)
 
 
 def evaluate_notice(notice: dict, prof: Profile, rg: RegionGraph) -> dict:
@@ -228,20 +280,15 @@ def evaluate_notice(notice: dict, prof: Profile, rg: RegionGraph) -> dict:
             hard_fail += [r for r in rs if r.strength == "hard" and r.status == UNSAT]
             soft_fail += [r for r in rs if r.strength != "hard" and r.status == UNSAT]
             unknown += [r for r in rs if r.status == UNK]
-        elif status == UNSAT:
-            (hard_fail if any(r.strength == "hard" for r in rs) else soft_fail).append(req_id)
-        elif status == UNK:
-            unknown.append(req_id)
+        else:
+            _tally(req_id, status, rs, hard_fail, soft_fail, unknown)
     for g in notice.get("gold_requirements", []):  # 사람이 검수한 본문 요건(gold_bridge). 요건 단위로 합친다
         rs = [evaluate_gold_condition(c, prof, rg) for c in g["conditions"]]
         results += rs
         status = evaluate_tree(g["logic_tree"], {r.cond_id: r.status for r in rs})
         requirements.append({"req_id": g["req_id"], "logic": g["logic_tree"].get("operator", "ATOM"), "logic_basis": g["logic_basis"],
                              "status": status, "cond_ids": [r.cond_id for r in rs], "source": "gold"})
-        if status == UNSAT:
-            (hard_fail if any(r.strength == "hard" for r in rs) else soft_fail).append(g["req_id"])
-        elif status == UNK:
-            unknown.append(g["req_id"])
+        _tally(g["req_id"], status, rs, hard_fail, soft_fail, unknown)
     if hard_fail:
         structured, verdict = "FAIL", NOT_ELIGIBLE
     elif soft_fail or unknown:

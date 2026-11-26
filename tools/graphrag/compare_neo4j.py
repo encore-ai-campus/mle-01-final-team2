@@ -167,7 +167,6 @@ def to_status(universe, sat, unk):
 
 # ----------------------------------------------------------------------------- 정의→법령 경로(definition)
 def definition_paths(nodes, edges, session):
-    by = {n.get("concept_id") or n.get("def_id") or n.get("article_id") or n.get("law_id"): n for n in nodes}
     db = sqlite3.connect(":memory:")
     db.executescript("CREATE TABLE defined_by(concept TEXT, def TEXT); CREATE TABLE cites(def TEXT, article TEXT); CREATE TABLE part_of(article TEXT, law TEXT);"
                      "CREATE TABLE article(id TEXT, no TEXT); CREATE TABLE law(id TEXT, name TEXT); CREATE TABLE concept(id TEXT, name TEXT);")

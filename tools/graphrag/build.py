@@ -16,6 +16,7 @@ import sqlite3
 import sys
 import time
 from collections import Counter
+from datetime import date
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -120,8 +121,10 @@ def export(e: Engine) -> dict:
         nodes.append({"label": "SupportCategory", "category_id": v, "name": name, "source_system": s})
     for fn, rows in (("nodes.jsonl", nodes), ("edges.jsonl", edges)):
         (OUT / fn).write_text("\n".join(json.dumps(r, ensure_ascii=False) for r in rows) + "\n", encoding="utf-8")
-    man = {"built": "2026-11-24", "nodes": Counter(n["label"] for n in nodes), "edges": Counter(x["type"] for x in edges),
-           "skipped": e.skipped, "note": "구조화 조건만 포함(본문 요건 미추출). Neo4j에는 적재하지 않았다."}
+    gold = sum(1 for n in nodes if n["label"] == "Requirement" and n.get("status") == "reviewed_excerpt")
+    man = {"built": date.today().isoformat(), "nodes": Counter(n["label"] for n in nodes), "edges": Counter(x["type"] for x in edges),
+           "skipped": e.skipped, "gold_requirements": gold,
+           "note": "구조화 필드 조건과 사람이 검수한 본문 요건(발췌)만 담는다. Aura 적재 여부는 docs/LOAD_Neo4j_적재기록_v0.1.md를 본다."}
     (OUT / "manifest.json").write_text(json.dumps(man, ensure_ascii=False, indent=1, default=dict), encoding="utf-8")
     return man
 
@@ -184,7 +187,7 @@ def compare(e: Engine, n_profiles: int = 300, seed: int = 20261124) -> dict:
     diff_hard = diff_region = 0
     checked_region = 0
     examples = []
-    for i in range(n_profiles):
+    for _ in range(n_profiles):
         prof = Profile(region=rng.choice(regions + [None]), business_age_years=rng.choice([None, 0.5, 1, 2.8, 3, 5, 8, 12, 20]),
                        pre_founder=rng.choice([None, True, False]), founder_age=rng.choice([None, 18, 30, 45]),
                        applicant_type=rng.choice([None, "일반인", "일반기업"]))

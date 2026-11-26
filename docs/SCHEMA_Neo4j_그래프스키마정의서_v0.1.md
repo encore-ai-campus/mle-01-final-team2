@@ -240,10 +240,10 @@ CREATE INDEX concept_scheme      IF NOT EXISTS FOR (k:Concept)   ON (k.scheme);
 | V14 | 법령에 안 붙은 조문 | 0 | 정상 |
 | V9 | 개념형 조건(`applicant_type`)인데 `ABOUT` 없음 | **546** | 확인 필요: 모두 `일반기업` 선택지. 개념 사전에 `일반기업`이 없다 |
 | V15 | 요건이 하나도 없는 공고 | **330** | 확인 필요: 모두 기업마당 모집 중 공고. 정형 필드에 판정 조건이 없는 공고 |
-| V16 | 상위(`WITHIN`)가 없는 비시도 지역 | **34** | 31개는 폐지된 시군구(`SUCCEEDED_BY`로만 연결, 검수 전), 3개는 권역 묶음(정상) |
+| V16 | 상위(`WITHIN`)가 없는 비시도 지역 | **34** | 31개는 폐지된 시군구(`SUCCEEDED_BY`로만 연결, 검수 전), 3개는 권역 묶음(정상). 현행 시군구·구만 보면 0 |
 | V17 | 개념에 안 붙은 정의 | **2** | `청년창업기업`·`중장년창업기업` 정의는 있는데 대응 개념이 없다(연령 조건으로 다룸). 2026-11-26 추가 정의 17개는 모두 개념에 연결 |
 
-점검 쿼리 원문은 `docs/submission/ontology/schema.cypher`의 V1~V10에 있고, V11~V17은 이번에 추가한다(부록 A).
+점검 쿼리 원문은 `docs/submission/ontology/schema.cypher`의 V1~V10에 있고, V11~V17은 이번에 추가한다(부록 A). 전부 `python tools/check_graph_neo4j.py`로 한 번에 돌린다(읽기 전용).
 
 ---
 
@@ -482,8 +482,8 @@ MATCH (c:Condition {attribute: 'region'})-[:ABOUT]->(k) WHERE NOT k:Region RETUR
 MATCH (a:LawArticle) WHERE NOT (a)-[:PART_OF]->(:ExternalLaw) RETURN count(a) AS orphan_articles;
 // V15 요건 없는 공고
 MATCH (n:Notice) WHERE NOT (n)-[:HAS_REQUIREMENT]->() RETURN count(n) AS notices_without_requirement;
-// V16 상위 없는 비시도 지역(현행)
-MATCH (a:Region) WHERE a.level IN ['SIGUNGU', 'GU'] AND a.status <> '폐지' AND NOT (a)-[:WITHIN]->() RETURN count(a) AS rootless_regions;
+// V16 상위 없는 비시도 지역(폐지·권역 포함 34). 현행 시군구·구만 보는 쿼리는 tools/check_graph_neo4j.py의 V16(0이어야 함)
+MATCH (a:Region) WHERE NOT a.level IN ['SIDO', 'NATIONWIDE'] AND NOT (a)-[:WITHIN]->() RETURN count(a) AS rootless_regions;
 // V17 개념에 안 붙은 정의
 MATCH (d:Definition) WHERE NOT ()-[:DEFINED_BY]->(d) RETURN count(d) AS orphan_definitions;
 ```
@@ -493,6 +493,8 @@ MATCH (d:Definition) WHERE NOT ()-[:DEFINED_BY]->(d) RETURN count(d) AS orphan_d
 | 무엇 | 명령 |
 |---|---|
 | 적재 | `python tools/load_graph_neo4j.py` (적재 담당자만, 쓰기) |
+| 일부 적재(dry-run 비교 먼저) | `python tools/load_graph_partial.py --select laws\|gold\|sme-rule\|ids` |
+| 점검(읽기 전용) | `python tools/check_graph_neo4j.py` |
 | 질의 코드량 비교 | `python tools/graphrag/compare_query_size.py` |
 | SQL·그래프 정확도·속도 비교 | `python tools/graphrag/compare_neo4j.py` |
 | API에서 경로 확인 | `GET /api/graph/path?notice_id=KSTARTUP:179814&region=REGION:1123000000` |

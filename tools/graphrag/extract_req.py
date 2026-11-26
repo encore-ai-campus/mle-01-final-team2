@@ -174,7 +174,6 @@ def run() -> dict:
     notices_by_src = {"BIZINFO": len({k[0] for k in texts if k[0].startswith("BIZINFO")}), "KSTARTUP": len(kst)}
     with_c = {s: len({c["notice_id"] for c in cands if c["source"] == s}) for s in notices_by_src}
     by_attr = Counter((c["source"], c["attribute"]) for c in cands)
-    by_origin = Counter((c["source"], c["evidence_origin"], c["attribute"]) for c in cands if c["attribute"] in ("business_age", "region", "law_reference", "exclusion"))
     conflicts = kstartup_conflicts(kst, cands)
     rep = {"candidates": len(cands), "evidence_not_found": bad, "notices": notices_by_src, "notices_with_candidate": with_c,
            "by_source_attribute": {f"{k[0]}:{k[1]}": v for k, v in sorted(by_attr.items())},

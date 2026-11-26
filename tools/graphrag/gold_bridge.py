@@ -40,10 +40,13 @@ def to_condition(g: dict, notice_id: str, resolve_region) -> dict | None:
             "review_comment": g.get("review_comment")}
     if attr in ("business_age", "founder_age") and op in NUMERIC and isinstance(val, (int, float)) and not isinstance(val, bool):
         cond["value"] = {"op": op, "value": float(val), "unit": g.get("unit") or "YEAR"}
+    elif attr == "business_type" and op in ("EQ", "IN") and val:
+        labels = val if isinstance(val, list) else [val]
+        cond["value"] = {"labels": [str(x).strip() for x in labels]}  # 판정 기준이 있는 유형(중소기업)만 평가기가 본다
     elif attr == "region" and op in ("EQ", "IN") and val:
         labels = val if isinstance(val, list) else [val]
         ids = [resolve_region(str(x))[0] for x in labels]
-        cond["value"] = {"concept_ids": [i for i in ids if i], "labels": [str(x) for x in labels], "unresolved": [str(x) for x, i in zip(labels, ids) if not i]}
+        cond["value"] = {"concept_ids": [i for i in ids if i], "labels": [str(x) for x in labels], "unresolved": [str(x) for x, i in zip(labels, ids, strict=True) if not i]}
     else:
         cond["value"] = {"unsupported": True}  # 평가 규칙이 없거나 값 모양이 다르다 → 평가기에서 UNKNOWN
     return cond

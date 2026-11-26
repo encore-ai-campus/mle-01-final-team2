@@ -4,7 +4,8 @@
 (`data/지원사업_법령/별표.jsonl`, 중소기업기본법 시행령 별표 1·3)의 표를 행으로 풀어 만들고, 근거 조문은 원문 해시와 함께 남긴다.
 
 초안이다(`status=draft`, `needs_review=true`). 판정 해석은 팀이 정한다(`docs/RULES_판정_정규화_검토목록_v0.1.md` §5 E-1~E-5).
-평가기(`evaluator.py`)의 공고 판정에는 아직 쓰지 않는다. 중소기업을 가리키는 공고 조건이 0개이고 프로필에 업종·매출·자산 입력이 없다.
+평가기는 검수 정답의 기업 유형 조건(`business_type` = 중소기업)에만 이 기준을 쓴다. 프로필에 `sme_facts`가 없으면 UNKNOWN이다.
+검수 조건은 soft라 불충족이어도 NOT_ELIGIBLE을 만들지 않는다. 구조화 필드 조건 중 중소기업을 가리키는 것은 0개다.
 
 사용: python tools/graphrag/definition_rules.py   -> data/graph/definition_rules.json (기준 초안과 별표 행 점검 결과)
 """
@@ -169,6 +170,18 @@ def evaluate_sme(rule: dict, facts: dict) -> dict:
     if status == UNSAT and facts.get("in_grace_period") is True and not facts.get("disclosure_group_member"):
         status, steps = UNK, steps + [("GRACE", UNK, "유예기간(법 제2조제3항) 입력. 시행령 제9조 제외 사유 확인 필요")]
     return {"status": status, "steps": [{"id": i, "status": s, "reason": r} for i, s, r in steps], "rule_id": rule["rule_id"]}
+
+
+RULES_FILE = Path(__file__).resolve().parents[2] / "data" / "graph" / "definition_rules.json"
+_CACHE: dict[str, dict] = {}
+
+
+def load_rule(def_id: str = "DEF:중소기업", path: Path = RULES_FILE) -> dict | None:
+    """저장한 판정 기준(`run()`이 만든 파일)을 읽는다. 별표 원문 없이도 평가할 수 있게 파일을 쓴다. 없으면 None."""
+    if def_id not in _CACHE:
+        rules = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+        _CACHE[def_id] = rules.get(def_id)
+    return _CACHE[def_id]
 
 
 def run() -> dict:
