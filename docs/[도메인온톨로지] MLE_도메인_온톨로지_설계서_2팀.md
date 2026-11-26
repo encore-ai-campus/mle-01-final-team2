@@ -823,6 +823,22 @@ Neo4j 속성은 맵을 직접 담지 못해 `Condition.value`는 JSON 문자열�
 
 품질 지표 예시: 요건·조건 추출 Precision/Recall, 개념 연결(`ABOUT`) 정확도, 판정 정확도(질문 유형별), 근거 추적률, CQ 충족률, SQL 베이스라인 대비 성능(KPI N-07). 목표값은 샘플 적재 후 팀이 정하며 **합격선은 결과를 보기 전에 정한다.**
 
+### 9.1 신규 데이터 갱신과 상위 법령 (설계안, 2026-11-26)
+
+자세한 설계는 `docs/DESIGN_신규데이터_파이프라인과_상위법령_v0.1.md`이다. 코드는 아직 바꾸지 않았고 F-1~F-8은 팀 결정 항목이다.
+
+| 구분 | 설계 요지 |
+|---|---|
+| 스냅숏 | 실행마다 새 폴더와 `LATEST` 포인터. 스냅숏은 고치지 않고, 실패하면 `LATEST`를 옮기지 않는다 |
+| 차이 계산 | 앞 스냅숏과 `content_hash`를 비교해 `NEW·CHANGED·UNCHANGED·CLOSED·DISAPPEARED·REOPENED`. 비싼 단계(첨부 OCR, 조건 추출, 검수)는 NEW·CHANGED만 |
+| 버전 | 같은 공고 ID의 내용이 바뀌면 `version+1`. 이전 요건은 `is_current=false`로 남기고 새 요건이 이전 요건을 `SUPERSEDES`로 가리킨다. 재공고·연장처럼 원천이 새 ID를 준 경우는 §5의 Notice → Notice `SUPERSEDES`(사람이 확인한 묶음만) |
+| 검수 정답 | 원문이 바뀐 공고의 정답은 `STALE`로 표시하고 재검수 대기열에 넣는다. 평가용 정답은 고정 |
+| 적재 | 공용 DB라 지우지 않고 상태 속성으로 표시. 파이프라인은 보고서(판정 변화 포함)까지 만들고, 적재는 승인 뒤 `load_graph_partial.py --select delta` |
+| 법령 계층 | `law_kind`(ACT·DECREE·RULE·ADMIN_RULE·ORDINANCE), 하위 → 상위 `ENFORCES`, 위임 조문 `DELEGATES_TO`, 판 사이 `SUPERSEDES`, 정의 근거 `CITES_LAW {role: basis·criteria·exception}` |
+| 개정 | 월 1회 법령일련번호 비교 → 새 판 노드, 조문 해시 비교로 영향 정의·규칙·조건을 찾아 `needs_review`를 되돌린다 |
+| 적용 판 | 공고 기준일에 시행 중인 판으로 판정. 그 판이 없으면 UNKNOWN + `law_version_unavailable`(VAL-07) |
+| 역할 | 공고가 자격을 정하고 법령은 용어의 뜻을 정한다. 하위·상위 법령 충돌은 평가기가 판단하지 않고 검수 대상으로만 표시 |
+
 ## 10. 작성·제출 체크리스트
 
 - ■ 도메인 범위·이해관계자·제외 범위 정의
