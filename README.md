@@ -9,10 +9,10 @@
 
 <br/>
 
-![team](https://img.shields.io/badge/team-근거it%20(2팀)-1f6feb)
-![status](https://img.shields.io/badge/status-온톨로지%20설계%20·%20PoC-orange)
+![team](https://img.shields.io/badge/team-%EA%B7%BC%EA%B1%B0it%202%ED%8C%80-1f6feb)
+![status](https://img.shields.io/badge/status-%EC%98%A8%ED%86%A8%EB%A1%9C%EC%A7%80%20%EC%84%A4%EA%B3%84%20%C2%B7%20PoC-orange)
 ![python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
-![neo4j](https://img.shields.io/badge/Neo4j-Aura-018bff?logo=neo4j&logoColor=white)
+![neo4j](https://img.shields.io/badge/Neo4j-Aura-4581C3?logo=neo4j&logoColor=white)
 ![supabase](https://img.shields.io/badge/Supabase-Postgres-3ECF8E?logo=supabase&logoColor=white)
 
 [문제](#-왜-필요한가) · [판정 방식](#-어떻게-판정하나) · [진행 현황](#-진행-현황) · [데이터](#-데이터) · [아키텍처](#-아키텍처-설계) · [빠른 시작](#-빠른-시작) · [문서](#-문서)
