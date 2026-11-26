@@ -209,7 +209,7 @@ python tools/check_graph_neo4j.py --compare before.json                     # �
 
 | 항목 | 값 |
 |---|---|
-| 원인 | 정의 검수 시트(`docs/REVIEW_법령정의_검수시트_v0.1.md`)를 만들며 찾은 두 문제. ① 중소기업 정의가 v0.1 용어 사전 문장이라 제2조 제1항 각 호(1~5호)가 `[중략]`이고 제3항(5년 유예)이 없었다. ② `ExternalLaw.source_url`이 `https://www.law.go.kr/law/{번호}` 형식이라 44개 모두 404였다 |
+| 원인 | 정의 검수 시트(`docs/ontology/REVIEW_법령정의_검수시트_v0.1.md`)를 만들며 찾은 두 문제. ① 중소기업 정의가 v0.1 용어 사전 문장이라 제2조 제1항 각 호(1~5호)가 `[중략]`이고 제3항(5년 유예)이 없었다. ② `ExternalLaw.source_url`이 `https://www.law.go.kr/law/{번호}` 형식이라 44개 모두 404였다 |
 | 수정 | ① `concepts_laws.LAW_DEFS_V02`에 중소기업(제2조 제1항~제3항)을 넣어 조문에서 글자 그대로 자른다. ② `concepts_laws.law_url()`이 `https://www.law.go.kr/lsInfoP.do?lsiSeq={법령일련번호}`를 만든다(44개 모두 열림 확인) |
 | 사전 점검 | 새 ID 0(같은 `def_id`·`law_id`만 MERGE), 파일 검증 문제 0, ExternalLaw DB 44 = 파일 44 |
 | 적재 | `Definition` 1(원문 해시 `d5159658…` → `62c13e88…`, `basis_note`·`legal_term`·`source` 갱신), `CITES_LAW` 1(`article_ref` 제2조 제1항·제2항 → 제1항~제3항), `ExternalLaw` 44(`source_url`) (MERGE) |

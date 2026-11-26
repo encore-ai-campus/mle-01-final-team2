@@ -390,6 +390,6 @@ hard 조건이나 hard 요건 중 하나라도 불충족이면 `NOT_ELIGIBLE`이
 ## 출처
 
 - 코드: `tools/graphrag/evaluator.py`, `gold_bridge.py`, `definition_rules.py`, `cleaned.py`, `condition_schema.py`, `regions.py`, `label_eval.py`, `tools/normalize_values.py`
-- 설계서: `docs/[도메인온톨로지] MLE_도메인_온톨로지_설계서_2팀.md` §4.2~4.4, §7 판정 규칙, 부록 A
+- 설계서: `docs/ontology/[도메인온톨로지] MLE_도메인_온톨로지_설계서_2팀.md` §4.2~4.4, §7 판정 규칙, 부록 A
 - 정규화: `docs/SUPPORT_DATA_NORMALIZATION_V1.md`
 - 건수: 정리층 공고 5,116건에서 직접 셌다(2026-11-26). EDA 수치(131건·23건·기준일 분포 등)는 설계서에서 인용했다
