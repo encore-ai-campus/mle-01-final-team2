@@ -5,6 +5,7 @@
 - 판정은 모델이 아니라 이 코드가 한다.
 - strength=hard 조건이 UNSATISFIED일 때만 NOT_ELIGIBLE. soft 조건의 불충족은 NEEDS_CHECK(사유 기록).
 - 본문 요건이 추출되지 않은 공고(text_requirements=unparsed)는 ELIGIBLE을 만들지 않는다(REQ_UNPARSED).
+- 사람이 검수한 본문 요건(`gold_bridge`)은 `gold_requirements`로 들어오며 정답 논리 트리로 합친다. 발췌 검수라 ELIGIBLE을 풀지 않는다.
 - 공고 판정은 그래프와 같은 요건 단위로 한다(`condition_schema.requirement_groups`). 요건마다 `logic`(AND/OR)으로 조건 결과를 합친다.
   예: "예비창업자, 3년미만" 업력은 R2 = OR(업력 3년 미만, 예비창업자)이다.
 """
@@ -130,6 +131,57 @@ def evaluate_condition(cond: dict, prof: Profile, rg: RegionGraph) -> CondResult
     return CondResult(**base, status=UNK, reason=f"평가 규칙 없는 속성 {a}")
 
 
+CMP = {"LT": lambda a, b: a < b, "LTE": lambda a, b: a <= b, "GT": lambda a, b: a > b, "GTE": lambda a, b: a >= b, "EQ": lambda a, b: a == b}
+INVERT = {SAT: UNSAT, UNSAT: SAT, UNK: UNK}
+
+
+def evaluate_gold_condition(cond: dict, prof: Profile, rg: RegionGraph) -> CondResult:
+    """검수 정답에서 온 조건(`gold_bridge.to_condition`). 제외 조건(negate)은 '해당함'을 요건 불충족으로 뒤집는다."""
+    a, v = cond["attribute"], cond["value"]
+    base = dict(cond_id=cond["cond_id"], attribute=a, strength=cond.get("strength", "soft"), evidence=cond.get("evidence", ""), flags=["gold"])
+    status, reason, path = UNK, f"평가 규칙 없는 속성 {a}", None
+    if v.get("unsupported"):
+        pass
+    elif a in ("business_age", "founder_age"):
+        x = prof.business_age_years if a == "business_age" else prof.founder_age
+        if a == "business_age" and prof.pre_founder is True:
+            reason = "예비창업자의 업력 조건 해석은 미정(팀 검토 D-4)"
+        elif x is None:
+            reason = "업력 미입력" if a == "business_age" else "대표자 연령 미입력"
+        elif a == "business_age" and abs(x - v["value"]) < BOUNDARY_YEARS:
+            reason = f"업력 {x:g}년이 {v['value']:g}년 경계 근처이고 기준일을 알 수 없음"
+        else:
+            ok = CMP[v["op"]](x, v["value"])
+            status, reason = (SAT if ok else UNSAT), f"{x:g} {v['op']} {v['value']:g}: " + ("충족" if ok else "불충족")
+    elif a == "region":
+        if v["unresolved"] or not v["concept_ids"]:
+            reason = f"지역 표기를 개념으로 확정하지 못함({', '.join(v['unresolved']) or '없음'})"
+        elif prof.region is None:
+            reason = "사업장 소재지 미입력"
+        else:
+            anc = rg.ancestors(prof.region)
+            hit = next((t for t in v["concept_ids"] if t in anc or t == "REGION:NATIONWIDE"), None)
+            if hit:
+                status, reason, path = SAT, f"{rg.name(prof.region)} → {rg.name(hit)}", rg.path(prof.region, hit) if hit in anc else None
+            elif any(prof.region in rg.ancestors(t) for t in v["concept_ids"]):
+                reason = "입력한 지역이 조건 지역보다 상위라 하위 조건 충족 여부를 알 수 없음(H3)"
+            else:
+                status, reason = UNSAT, f"{rg.name(prof.region)}은(는) {', '.join(v['labels'])}에 속하지 않음"
+    if cond.get("negate"):
+        status, reason = INVERT[status], "제외 조건: " + reason
+    return CondResult(**base, status=status, reason=reason, path=path)
+
+
+def evaluate_tree(node: dict, by_id: dict[str, str]) -> str:
+    """정답 논리 트리(AND/OR/NOT/UNRESOLVED)를 3값으로 계산한다. UNRESOLVED는 판정하지 않는다."""
+    if node["node_type"] == "CONDITION_REF":
+        return by_id.get(node["condition_id"], UNK)
+    kids = [evaluate_tree(c, by_id) for c in node["children"]]
+    if node["operator"] == "NOT":
+        return INVERT[kids[0]]
+    return combine(node["operator"], kids)
+
+
 def combine(logic: str, statuses: list[str]) -> str:
     """조건 결과(3값)를 요건 논리로 합친다. 모르는 값은 결과를 확정하지 못할 때만 UNKNOWN으로 남는다."""
     if not statuses:
@@ -180,6 +232,16 @@ def evaluate_notice(notice: dict, prof: Profile, rg: RegionGraph) -> dict:
             (hard_fail if any(r.strength == "hard" for r in rs) else soft_fail).append(req_id)
         elif status == UNK:
             unknown.append(req_id)
+    for g in notice.get("gold_requirements", []):  # 사람이 검수한 본문 요건(gold_bridge). 요건 단위로 합친다
+        rs = [evaluate_gold_condition(c, prof, rg) for c in g["conditions"]]
+        results += rs
+        status = evaluate_tree(g["logic_tree"], {r.cond_id: r.status for r in rs})
+        requirements.append({"req_id": g["req_id"], "logic": g["logic_tree"].get("operator", "ATOM"), "logic_basis": g["logic_basis"],
+                             "status": status, "cond_ids": [r.cond_id for r in rs], "source": "gold"})
+        if status == UNSAT:
+            (hard_fail if any(r.strength == "hard" for r in rs) else soft_fail).append(g["req_id"])
+        elif status == UNK:
+            unknown.append(g["req_id"])
     if hard_fail:
         structured, verdict = "FAIL", NOT_ELIGIBLE
     elif soft_fail or unknown:

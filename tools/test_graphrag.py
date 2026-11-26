@@ -331,6 +331,79 @@ class RequirementLogicTests(unittest.TestCase):
         self.assertEqual(combine("NONE_OF", [SAT]), UNK)  # 규칙 없는 논리는 판정하지 않는다
 
 
+def gold(gid, ctype, field, op, value, raw, unit=None, status="VERIFIED"):
+    return {"gold_condition_id": gid, "condition_type": ctype, "category": field, "field": field, "applicability_scope": None,
+            "operator": op, "value": value, "value_type": "NUMBER" if isinstance(value, (int, float)) else "STRING", "unit": unit,
+            "reference_date": None, "reference_date_type": "UNKNOWN", "raw_text": raw, "source_field": "condition_texts.eligibility.text",
+            "evidence_reference": {"start_char": 0, "end_char": len(raw)}, "source_completeness": "PARTIAL", "decision_possible": True,
+            "review_status": status, "review_comment": None, "matched_candidate_ids": []}
+
+
+def ref(gid):
+    return {"node_type": "CONDITION_REF", "condition_id": gid}
+
+
+class GoldBridgeTests(unittest.TestCase):
+    """합성 검수 정답(실제 검수 결과 아님)으로 정답 -> 요건·조건 -> 평가기 연결을 확인한다."""
+
+    NID = "BIZINFO:TEST"
+
+    def write(self, root, conds, roots=None):
+        import json
+        d = root / "development"
+        d.mkdir(parents=True)
+        row = {"notice_id": self.NID, "gold_conditions": conds, "missed_condition_candidates": [], "reviewer": "합성", "reviewed_at": "2026-11-26T00:00:00Z",
+               "adjudication_status": "REVIEWED_COMPLETE", "source_field": "condition_texts.eligibility.text", "whole_notice_conditions_complete": False}
+        (d / "reviewed_condition_gold.jsonl").write_text(json.dumps(row, ensure_ascii=False) + "\n", encoding="utf-8")
+        logic = [{"notice_id": self.NID, "gold_logic_roots": roots}] if roots is not None else []
+        (d / "reviewed_logic_gold.jsonl").write_text("".join(json.dumps(x, ensure_ascii=False) + "\n" for x in logic), encoding="utf-8")
+
+    def notice(self, conds, roots=None):
+        import tempfile
+        from graphrag import gold_bridge
+        with tempfile.TemporaryDirectory() as t:
+            self.write(Path(t), conds, roots)
+            g = gold_bridge.load(Path(t))
+        n = {"notice_id": self.NID, "conditions": [], "text_requirements": "unparsed"}
+        self.assertEqual(gold_bridge.attach([n], g), 1)
+        return n
+
+    def test_or_logic_and_partial_review_never_eligible(self):
+        conds = [gold("GOLD:A", "ELIGIBILITY", "BUSINESS_AGE", "LT", 7, "업력 7년 미만", "YEAR"),
+                 gold("GOLD:B", "ELIGIBILITY", "BUSINESS_LOCATION", "EQ", "대구", "대구")]
+        n = self.notice(conds, [{"node_type": "LOGICAL_GROUP", "group_id": "g1", "operator": "OR", "children": [ref("GOLD:A"), ref("GOLD:B")],
+                                 "review_status": "VERIFIED", "evidence": None}])
+        self.assertEqual(n["text_requirements"], "partially_reviewed")
+        r = evaluate_notice(n, Profile(business_age_years=10, region="REGION:2700000000"), RG)
+        self.assertEqual(r["requirements"][0]["status"], SAT)  # 업력은 불충족이지만 대구라 OR 충족
+        self.assertEqual(r["verdict"], NEEDS_CHECK)  # 발췌 검수라 ELIGIBLE을 풀지 않는다
+        self.assertIn("REQ_UNPARSED", r["reasons"])
+
+    def test_unsatisfied_gold_is_soft_and_exclusion_negates(self):
+        n = self.notice([gold("GOLD:A", "ELIGIBILITY", "BUSINESS_AGE", "LTE", 3, "창업 3년 이내", "YEAR"),
+                         gold("GOLD:X", "EXCLUSION", "BUSINESS_LOCATION", "EQ", "서울특별시", "서울특별시")])
+        self.assertEqual(n["gold_requirements"][0]["logic_basis"], "assumed")  # 논리 검수 없음 -> AND 가정
+        r = evaluate_notice(n, Profile(business_age_years=10, region=RG.find_by_name("성동구")[0]), RG)
+        st = {c.cond_id: c.status for c in r["conditions"]}
+        self.assertEqual(st, {"GOLD:A": UNSAT, "GOLD:X": UNSAT})  # 서울 소재 -> 제외 조건에 해당 -> 요건 불충족
+        self.assertEqual(r["verdict"], NEEDS_CHECK)  # 검수 조건은 soft라 NOT_ELIGIBLE을 만들지 않는다
+        self.assertIn("SOFT_CONDITION_UNSATISFIED", r["reasons"])
+
+    def test_skips_unverified_preference_and_keeps_unsupported_unknown(self):
+        n = self.notice([gold("GOLD:P", "PREFERENCE", "BUSINESS_TYPE", "EQ", "여성기업", "여성기업 우대"),
+                         gold("GOLD:U", "ELIGIBILITY", "BUSINESS_AGE", "LT", 5, "5년 미만", "YEAR", status="NEEDS_REVIEW"),
+                         gold("GOLD:R", "ELIGIBILITY", "REVENUE_FINANCIAL", "LT", 100, "매출 100억 미만", "억원"),
+                         gold("GOLD:D", "ELIGIBILITY", "BUSINESS_LOCATION", "EQ", "동구", "동구")])
+        ids = [c["cond_id"] for g in n["gold_requirements"] for c in g["conditions"]]
+        self.assertEqual(ids, ["GOLD:R", "GOLD:D"])  # 우대·미검수는 옮기지 않는다
+        r = evaluate_notice(n, Profile(region="REGION:2700000000"), RG)
+        self.assertEqual({c.cond_id: c.status for c in r["conditions"]}, {"GOLD:R": UNK, "GOLD:D": UNK})  # 매출 규칙 없음, 동구는 모호
+
+    def test_no_reviewed_gold_changes_nothing(self):
+        from graphrag import gold_bridge
+        self.assertEqual(gold_bridge.load(Path("does-not-exist")), {})
+
+
 class ChunkTests(unittest.TestCase):
     def test_short_and_redaction_only_chunks_are_dropped(self):
         self.assertEqual(_chunk("N", "S", "x", "API", "창업교육"), [])
