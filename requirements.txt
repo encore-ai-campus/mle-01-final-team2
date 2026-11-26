@@ -7,3 +7,5 @@ langgraph>=1.0,<2
 neo4j>=5.20
 truststore>=0.10
 python-dotenv>=1.0
+openai>=1.60,<3        # vLLM·대역 서버를 OpenAI 호환 API로 부른다(agent/llm)
+PyYAML>=6.0            # config/models.yaml

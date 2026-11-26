@@ -1,0 +1,42 @@
+# 모델 레지스트리(기초 설계서 §3 "모델 교체 구조"). 코드 수정 없이 이 파일과 환경변수로 모델을 바꾼다.
+#
+# - 값은 직접 적지 않고 환경변수 이름(*_env)으로 가리킨다. 비밀 값(API 키)은 이 파일에 쓰지 않는다.
+# - base_url·model 환경변수가 비어 있으면 그 provider는 꺼진 것으로 본다(측정하지 않은 provider는 켜지 않는다).
+# - 판정은 역할이 아니다. 규칙 평가기(코드)가 한다(ADR-12). 모델은 answer(설명)·extract(요건 추출)만 맡는다.
+# - 지금(2026-11-26)은 로컬 LLM이 준비되지 않아 VLLM_BASE_URL을 대역 서버(deploy/mock_vllm)에 둔다.
+#   RunPod vLLM이 뜨면 VLLM_BASE_URL·VLLM_MODEL만 바꾼다(OpenAI 호환 API라 코드는 같다).
+
+providers:
+  vllm_primary:
+    type: openai_compat
+    base_url_env: VLLM_BASE_URL       # 예: https://<pod-id>-8000.proxy.runpod.net/v1, 로컬 대역: http://localhost:8001/v1
+    model_env: VLLM_MODEL
+    api_key_env: VLLM_API_KEY
+    timeout_s_env: VLLM_TIMEOUT_S
+    data_policy: self_hosted
+    capabilities:
+      json_schema: false              # vLLM 구조화 출력은 PoC 전(§6.4). false면 프롬프트 JSON + Pydantic 검증 + 1회 재시도
+  vllm_alt:
+    type: openai_compat
+    base_url_env: VLLM_ALT_BASE_URL   # 대체 호스트(Plan B). 비워 두면 꺼짐
+    model_env: VLLM_ALT_MODEL
+    api_key_env: VLLM_ALT_API_KEY
+    timeout_s_env: VLLM_TIMEOUT_S
+    data_policy: self_hosted
+    capabilities:
+      json_schema: false
+  rule_template:
+    type: template                    # 모델 없이 판정·요건 목록만(설명 없음, outcome=degraded)
+    data_policy: self_hosted
+
+roles:
+  answer:
+    primary: vllm_primary
+    fallbacks: [vllm_alt, rule_template]
+  extract:
+    primary: vllm_primary
+    fallbacks: [vllm_alt]
+
+circuit_breaker:
+  failures: 3        # 연속 실패가 이만큼이면 차단
+  cooldown_s: 30     # 차단 뒤 이 시간이 지나면 한 건씩 다시 시도
