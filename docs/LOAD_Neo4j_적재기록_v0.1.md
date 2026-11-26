@@ -55,6 +55,19 @@ python tools/load_graph_neo4j.py --stage requirements --apply --allow-existing -
 - 적재 후 건수 일치와 점검 쿼리 V2(순환)·V4(고아 조건)·V8(행정 상위 중복)을 자동으로 확인하고, 문제가 있으면 종료 코드 5로 끝난다.
 - 노드를 모두 올린 뒤 관계를 올린다. 노드는 `MERGE (n:레이블 {키: ...})`로, 지역 개념에는 보조 레이블 `Region`을 붙인다.
 
+### 이미 적재된 DB를 점검하거나 일부만 고칠 때 (2026-11-26 추가)
+
+```powershell
+python tools/check_graph_neo4j.py --save before.json --check-definitions   # 읽기 전용 점검 + 스냅숏 저장
+python tools/load_graph_partial.py --select gold --show-changes            # dry-run: DB와 비교한 변경 내역(새로·바뀜·같음)
+python tools/load_graph_partial.py --select gold --apply --confirm-host <호스트>
+python tools/check_graph_neo4j.py --compare before.json                     # 적재 전후 차이
+```
+
+- `check_graph_neo4j.py`는 쓰지 않는다. 레이블·관계 건수, V0~V17, 정의·법령 점검(D1 조문 없는 정의, D2 옛 형식 링크), 개념 → 정의 → 조문 → 법령 경로 수를 본다. 0이어야 하는 점검이 실패하면 종료 코드 1이고, 알려진 값(V9 546, V15 330, V16a 34, V17 2)이 바뀌면 경고만 한다.
+- `load_graph_partial.py`의 선택은 `laws`(법령·조문·별표·정의), `gold`(검수 요건 `reviewed_excerpt`와 그 조건), `sme-rule`(중소기업 `rule_json`을 기존 정의 노드에 속성으로만 붙인다. 노드가 없으면 만들지 않고 멈춘다), `ids`(정규식)다. 같은 ID를 다른 레이블이 쓰거나 관계 끝점이 선택에도 DB에도 없으면 쓰지 않는다. 지우기는 없다.
+- 2026-11-26 dry-run에서 찾은 차이: 처음 적재한 정의 5개(창업기업·예비창업자·초기창업기업·청년창업기업·중장년창업기업)에 `source` 속성이 없다(파일은 `local_law_text`). `--select laws`로 맞출 수 있다(승인 전).
+
 ## 5. 적재 결과
 
 노드 31,506개

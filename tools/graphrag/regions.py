@@ -32,7 +32,9 @@ def _norm_id(value: str | None) -> str:
 def _read_table(path: Path) -> tuple[list[dict], list[dict]]:
     """CSV 코드표 -> (존재하는 지역, 폐지 지역). ID는 팀 형식으로 바꾼다."""
     active, retired = [], []
-    for row in csv.DictReader(path.open(encoding="utf-8-sig")):
+    with path.open(encoding="utf-8-sig") as f:
+        rows = list(csv.DictReader(f))
+    for row in rows:
         rec = {"region_id": _norm_id(row["region_id"]), "region_code": row["region_code"] or None, "level": row["level"],
                "name": row["name"], "parent_region_id": _norm_id(row["parent_region_id"]) or None,
                "code_source": row["code_source"], "code_version": row["code_version"], "status": row["status"] or "존재"}

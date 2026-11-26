@@ -9,7 +9,7 @@ from collections import Counter
 
 from . import cleaned, gold_bridge
 from .data import load_all
-from .evaluator import ELIGIBLE, NEEDS_CHECK, NOT_ELIGIBLE, Profile, evaluate_notice
+from .evaluator import NOT_ELIGIBLE, Profile, evaluate_notice
 from .search import BM25
 
 TODAY = "2026-11-24"
@@ -61,7 +61,7 @@ class Engine:
             for nid, (s, cs) in ordered:
                 ranked.append({"score": round(s, 2), "chunks": cs, **cand[nid]})
         else:
-            for nid, e in list(cand.items())[:top]:
+            for e in list(cand.values())[:top]:
                 ranked.append({"score": None, "chunks": [], **e})
         return {"counts": dict(counts), "evaluated": len(ev), "candidates": len(cand), "results": ranked}
 

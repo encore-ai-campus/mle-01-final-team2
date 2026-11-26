@@ -34,7 +34,8 @@ def norm(name: str) -> str:
 
 def load_laws() -> dict[str, dict]:
     laws = {}
-    rows = list(csv.DictReader(open(LAWDIR / "목록.csv", encoding="utf-8-sig")))
+    with open(LAWDIR / "목록.csv", encoding="utf-8-sig") as f:
+        rows = list(csv.DictReader(f))
     for r in rows:
         txt = LAWDIR / "텍스트" / f"{r['id']}.txt"
         if not txt.exists():
@@ -102,7 +103,7 @@ def run() -> dict:
         elif c["attribute"] == "law_reference":
             by_line[k]["laws"].append(c["value"])
     chain, pair_counts, defs = Counter(), Counter(), {}
-    for (nid, ev), v in by_line.items():
+    for (nid, _ev), v in by_line.items():
         for term in v["terms"]:
             if not v["laws"]:
                 chain["no_citation_in_sentence"] += 1

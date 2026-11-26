@@ -1,14 +1,14 @@
 {
- "built": "2026-11-24",
+ "built": "2026-11-26",
  "nodes": {
-  "Concept": 348,
+  "Concept": 354,
   "Notice": 5116,
   "Requirement": 5900,
   "Condition": 17366,
-  "ExternalLaw": 26,
-  "LawArticle": 1286,
-  "LawAppendix": 40,
-  "Definition": 6,
+  "ExternalLaw": 44,
+  "LawArticle": 2325,
+  "LawAppendix": 59,
+  "Definition": 23,
   "Organization": 1399,
   "SupportCategory": 19
  },
@@ -23,12 +23,13 @@
   "HAS_CONDITION": 17366,
   "ABOUT": 19766,
   "IS_A": 2,
-  "PART_OF": 1326,
-  "CITES_LAW": 6,
-  "DEFINED_BY": 4
+  "PART_OF": 2384,
+  "CITES_LAW": 23,
+  "DEFINED_BY": 21
  },
  "skipped": {
   "bizinfo_no_region_condition": 330
  },
- "note": "구조화 조건만 포함(본문 요건 미추출). Neo4j에는 적재하지 않았다."
+ "gold_requirements": 0,
+ "note": "구조화 필드 조건과 사람이 검수한 본문 요건(발췌)만 담는다. Aura 적재 여부는 docs/LOAD_Neo4j_적재기록_v0.1.md를 본다."
 }

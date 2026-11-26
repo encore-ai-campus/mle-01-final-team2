@@ -446,6 +446,36 @@ class SmeRuleTests(unittest.TestCase):
         self.assertEqual(ev(avg_sales_eok=1400, **{**base, "main_industry_ksic": "C30393"}), SAT)  # 비고 2: 1,500억원
 
 
+class SmeEngineTests(unittest.TestCase):
+    """검수 정답의 기업 유형 조건(중소기업)을 판정 기준 파일(definition_rules.json)로 평가한다."""
+
+    NID, write, notice = GoldBridgeTests.NID, GoldBridgeTests.write, GoldBridgeTests.notice
+
+    FACTS = dict(main_industry_ksic="J5821", avg_sales_eok=50, total_assets_eok=100, independence_ok=True, disclosure_group_member=False)
+
+    def status(self, value, prof, ctype="ELIGIBILITY"):
+        n = self.notice([gold("GOLD:S", ctype, "BUSINESS_TYPE", "EQ" if isinstance(value, str) else "IN", value, "중소기업")])
+        r = evaluate_notice(n, prof, RG)
+        return r["conditions"][0], r
+
+    def test_sme_condition_uses_rule_and_stays_soft(self):
+        c, _ = self.status("중소기업", Profile(sme_facts=self.FACTS))
+        self.assertEqual(c.status, SAT)
+        self.assertIn("draft_rule", c.flags)
+        c, r = self.status("중소기업", Profile(sme_facts={**self.FACTS, "total_assets_eok": 6000}))
+        self.assertEqual(c.status, UNSAT)
+        self.assertEqual(r["verdict"], NEEDS_CHECK)  # 검수 조건은 soft라 NOT_ELIGIBLE이 아니다
+        self.assertEqual(self.status("중소기업", Profile())[0].status, UNK)  # 입력 없음은 충족이 아니다
+        self.assertEqual(self.status("중소기업", Profile(sme_facts={"avg_sales_eok": 50}))[0].status, UNK)
+
+    def test_other_types_and_mixed_lists_stay_unknown(self):
+        self.assertEqual(self.status("소상공인", Profile(sme_facts=self.FACTS))[0].status, UNK)  # 판정 기준 없음
+        big = Profile(sme_facts={**self.FACTS, "total_assets_eok": 6000})
+        self.assertEqual(self.status(["중소기업", "중견기업"], big)[0].status, UNK)  # 중견기업일 수 있다
+        self.assertEqual(self.status(["중소기업", "중견기업"], Profile(sme_facts=self.FACTS))[0].status, SAT)
+        self.assertEqual(self.status("중소기업", big, ctype="EXCLUSION")[0].status, SAT)  # 제외 조건: 중소기업이 아니면 충족
+
+
 class ChunkTests(unittest.TestCase):
     def test_short_and_redaction_only_chunks_are_dropped(self):
         self.assertEqual(_chunk("N", "S", "x", "API", "창업교육"), [])
