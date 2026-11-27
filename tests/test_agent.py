@@ -275,6 +275,47 @@ class TestGraphRag(unittest.TestCase):
         ev = run(self.build(None), question="서울 공고", profile={"region": "KR-11-680"})
         self.assertEqual([e["source"] for e in ev if e["type"] == "path"], ["evaluator"])
 
+    def test_evidence_card_is_one_graph_call_for_paths_and_definitions(self):
+        g = EvidenceGraph()
+        ev = run(self.build(g), question="서울 공고", profile={"region": "KR-11-680"})
+        self.assertEqual([c[0] for c in g.calls], ["evidence"])  # 경로·정의를 따로 묻지 않는다
+        paths = [e for e in ev if e["type"] == "path"]
+        self.assertEqual([(p["source"], p["reached"], [n["name"] for n in p["nodes"]]) for p in paths],
+                         [("neo4j", True, ["강남구", "서울특별시"])])
+        defs = [e for e in ev if e["type"] == "definition"]
+        self.assertEqual([(d["term"], d["article_no"], d["broken"]) for d in defs],
+                         [("1인 창조기업", "2", False), ("1인 창조기업", "[별표 1]", False)])  # 같은 정의라도 조문·별표는 따로 보인다
+
+    def test_evidence_without_region_still_gives_definitions(self):
+        g = EvidenceGraph()
+        ev = run(self.build(g), question="서울 공고", profile={"business_age_years": 2})
+        self.assertEqual(g.calls, [("evidence", ("KSTARTUP:1",), None)])
+        self.assertEqual([e["source"] for e in ev if e["type"] == "path"], ["evaluator"])  # 사용자 지역이 없으면 평가기 경로
+        self.assertEqual(len([e for e in ev if e["type"] == "definition"]), 2)
+
+    def test_evidence_failure_falls_back_to_evaluator_path(self):
+        ev = run(self.build(EvidenceGraph(fail=True)), question="서울 공고", profile={"region": "KR-11-680"})
+        self.assertIn("GRAPH_UNAVAILABLE", [e.get("code") for e in ev if e["type"] == "banner"])
+        self.assertEqual([e["source"] for e in ev if e["type"] == "path"], ["evaluator"])
+        self.assertEqual(ev[-1]["type"], "done")
+
+
+class EvidenceGraph(FakeGraph):
+    """근거 카드(evidence)를 가진 저장소. 정의는 조문 하나·별표 하나를 인용한다."""
+
+    def evidence(self, notice_ids, region):
+        self.calls.append(("evidence", tuple(notice_ids), region))
+        if self.fail:
+            raise ConnectionError("down")
+        base = {"def_id": "DEF:1인 창조기업", "term": "1인 창조기업", "defined_concept": "1인 창조기업", "needs_review": False,
+                "law_name": "1인 창조기업 육성에 관한 법률", "law_url": None}
+        reached = region == "KR-11-680"
+        return [{"notice_id": notice_ids[0], "cond_id": "KSTARTUP:1#region", "attribute": "region", "target": "KR-11",
+                 "concept": "서울특별시", "nodes": [{"id": "KR-11-680", "name": "강남구"}, {"id": "KR-11", "name": "서울특별시"}] if reached else None,
+                 "rels": ["WITHIN"] if reached else None,
+                 "basis": [{**base, "provision_kind": "LawArticle", "article_id": "A2", "article_no": "2", "article_title": "정의"},
+                           {**base, "provision_kind": "LawAppendix", "article_id": "T1", "article_no": "[별표 1]", "article_title": "제외 업종"}]}]
+
 
 @unittest.skipUnless(HAS_DEPS, "openai·langgraph·fastapi·httpx·pyyaml이 필요하다")
 class TestGraphApi(unittest.TestCase):
