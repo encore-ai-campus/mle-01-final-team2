@@ -9,9 +9,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import goldset_judge_llm as J  # noqa: E402
 
 NID = "KSTARTUP:171725"
+HAS_PACKET = (J.G.PILOT / "packets" / "KSTARTUP_171725.txt").exists()  # 원문 패킷은 로컬 전용(git 제외)
 
 
 class JudgeTests(unittest.TestCase):
+    @unittest.skipUnless(HAS_PACKET, "원문 패킷 없음(로컬 전용)")
     def test_prompt_has_packet_and_profiles_not_human_labels(self):
         profs, assign = J.G.profiles(), J.assigned_profiles()
         u = J.user_prompt(NID, "B", profs, assign[NID])
