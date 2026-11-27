@@ -21,6 +21,28 @@ class Fixture(unittest.TestCase):
         self.assertEqual(s3["Q1"]["before_change"], [("N1",), ("N4",)])  # 대신된 N1이 남는다
 
 
+class LocalNeo4j(unittest.TestCase):
+    def test_only_local_uri_is_accepted(self):
+        self.assertEqual(E.local_only("bolt://localhost:7688"), "bolt://localhost:7688")
+        self.assertEqual(E.local_only("neo4j://127.0.0.1:7687"), "neo4j://127.0.0.1:7687")
+        with self.assertRaises(SystemExit):
+            E.local_only("neo4j+s://abcd1234.databases.neo4j.io")
+
+    def test_cypher_fixture_has_same_ids_as_sql_fixture(self):
+        import re
+        ids = lambda s: set(re.findall(r"'((?:N\d|R:|T:|KSIC:|D1|L1|A2)[^']*)'", s))  # noqa: E731
+        sql = ids(E.FIXTURE) | {i for x in E.EXTRA.values() for i in ids(x)}
+        cy = ids(E.CY_FIXTURE) | {i for x in E.CY_EXTRA.values() for i in ids(x)}
+        self.assertEqual(sql, cy)
+
+    def test_cypher_check_uses_given_runners(self):
+        calls = []
+        out = E.check_fixture_cypher("S3", calls.append, lambda q, **p: [("N4",)])
+        self.assertEqual(calls[0], "MATCH (n) DETACH DELETE n")
+        self.assertIn("SUPERSEDES", calls[1])
+        self.assertTrue(all(c["ok"] for c in out))
+
+
 class Cost(unittest.TestCase):
     def test_counts_and_criterion(self):
         c = {n: E.cost(sc) for n, sc in E.SCENARIOS.items()}

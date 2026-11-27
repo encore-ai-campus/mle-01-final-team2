@@ -422,6 +422,194 @@
   "graph_less_in": 2,
   "criterion_met": true,
   "fixture_all_ok": true,
+  "fixture_cypher": {
+    "neo4j": "5.26.32",
+    "all_ok": true,
+    "scenarios": {
+      "S1": [
+        {
+          "query": "Q5",
+          "input": {
+            "k": "KSIC:C1011"
+          },
+          "ok": true,
+          "got": [
+            [
+              "N5"
+            ]
+          ],
+          "before_change": null
+        },
+        {
+          "query": "Q5",
+          "input": {
+            "k": "KSIC:C"
+          },
+          "ok": true,
+          "got": [],
+          "before_change": null
+        }
+      ],
+      "S2": [
+        {
+          "query": "Q0",
+          "input": {
+            "nid": "N2"
+          },
+          "ok": true,
+          "got": [
+            [
+              "N2#R",
+              "N2#C2a",
+              "region"
+            ],
+            [
+              "N2#R",
+              "N2#C2b",
+              "applicant_type"
+            ],
+            [
+              "N2#R",
+              "N2#G",
+              "group"
+            ]
+          ],
+          "before_change": [
+            [
+              "N2#R",
+              "N2#G",
+              "group"
+            ]
+          ]
+        },
+        {
+          "query": "Q1",
+          "input": {
+            "u": "R:GANGNAM"
+          },
+          "ok": true,
+          "got": [
+            [
+              "N1"
+            ],
+            [
+              "N2"
+            ],
+            [
+              "N4"
+            ]
+          ],
+          "before_change": [
+            [
+              "N1"
+            ],
+            [
+              "N4"
+            ]
+          ]
+        },
+        {
+          "query": "Q2",
+          "input": {
+            "nid": "N2"
+          },
+          "ok": true,
+          "got": [
+            [
+              "N2#C2b",
+              "중소기업",
+              "중소기업기본법",
+              "제2조"
+            ]
+          ],
+          "before_change": []
+        },
+        {
+          "query": "Q3",
+          "input": {
+            "nid": "N2",
+            "u": "R:GANGNAM"
+          },
+          "ok": true,
+          "got": [
+            [
+              "N2#C2a",
+              "강남구 > 서울"
+            ]
+          ],
+          "before_change": []
+        },
+        {
+          "query": "Q4",
+          "input": {
+            "aid": "A2"
+          },
+          "ok": true,
+          "got": [
+            [
+              "N1"
+            ],
+            [
+              "N2"
+            ],
+            [
+              "N4"
+            ]
+          ],
+          "before_change": [
+            [
+              "N1"
+            ],
+            [
+              "N4"
+            ]
+          ]
+        }
+      ],
+      "S3": [
+        {
+          "query": "Q1",
+          "input": {
+            "u": "R:GANGNAM"
+          },
+          "ok": true,
+          "got": [
+            [
+              "N4"
+            ]
+          ],
+          "before_change": [
+            [
+              "N1"
+            ],
+            [
+              "N4"
+            ]
+          ]
+        },
+        {
+          "query": "Q4",
+          "input": {
+            "aid": "A2"
+          },
+          "ok": true,
+          "got": [
+            [
+              "N4"
+            ]
+          ],
+          "before_change": [
+            [
+              "N1"
+            ],
+            [
+              "N4"
+            ]
+          ]
+        }
+      ]
+    }
+  },
   "regression_on_aura": {
     "neo4j_host": "4fcaaade.databases.neo4j.io",
     "S1": {

@@ -15,11 +15,14 @@
 정확성 확인
 - 합성 자료(SQLite): 바꾼 SQL 질의가 새 구조에서 기대한 답을 내는지, 예전 질의는 무엇을 놓치는지.
 - 실제 자료(Aura, 읽기 전용): 새 구조가 아직 없는 지금 자료에서 바꾼 질의가 예전 질의와 같은 답을 내는지(뒤로 호환).
-  SQL은 Aura에서 내려받은 같은 자료로 만든 SQLite에서 같은 검사를 한다. 바꾼 Cypher가 새 구조(합성 자료)에서 맞는지는
-  쓰기가 필요해 여기서 하지 않는다(로컬 Neo4j가 있을 때 할 일, 문서에 적는다).
+  SQL은 Aura에서 내려받은 같은 자료로 만든 SQLite에서 같은 검사를 한다.
+- 합성 자료(로컬 Neo4j, --local-uri): 같은 합성 자료를 그래프로 넣고 바꾼 Cypher가 SQL과 같은 기대 답을 내는지.
+  DB를 비우고 쓰므로 localhost만 받는다. 공유 Aura에는 쓰지 않는다.
 
 사용: python tools/graphrag/compare_schema_change.py            (Aura 읽기 전용, .env의 NEO4J_*)
       python tools/graphrag/compare_schema_change.py --offline  (비용과 합성 자료 검사만, DB 접속 없음)
+      python tools/graphrag/compare_schema_change.py --local-uri bolt://localhost:7688   (위에 더해 로컬 Neo4j 검사)
+        로컬 Neo4j 예: docker run -d --rm --name e2-neo4j -p 127.0.0.1:7688:7687 -e NEO4J_AUTH=neo4j/e2-local-test neo4j:5.26-community
 결과: data/eval/compare_schema_change.json
 """
 from __future__ import annotations
@@ -274,6 +277,59 @@ def check_fixture(name: str) -> list[dict]:
     return out
 
 
+# ----------------------------------------------------------------------------- 합성 자료(로컬 Neo4j)
+# FIXTURE·EXTRA와 같은 자료를 그래프로. 바꾼 Cypher가 새 구조 위에서 맞는지 본다. 쓰기가 필요해 로컬 DB에서만 한다
+CY_FIXTURE = """
+CREATE (n1:Notice {notice_id: 'N1'}), (n2:Notice {notice_id: 'N2'}), (n4:Notice {notice_id: 'N4'}), (n5:Notice {notice_id: 'N5'}),
+  (r1:Requirement {req_id: 'N1#R'}), (r2:Requirement {req_id: 'N2#R'}), (r4:Requirement {req_id: 'N4#R'}), (r5:Requirement {req_id: 'N5#R'}),
+  (n1)-[:HAS_REQUIREMENT]->(r1), (n2)-[:HAS_REQUIREMENT]->(r2), (n4)-[:HAS_REQUIREMENT]->(r4), (n5)-[:HAS_REQUIREMENT]->(r5),
+  (c11:Condition {cond_id: 'N1#C1', attribute: 'region'}), (c12:Condition {cond_id: 'N1#C2', attribute: 'applicant_type'}),
+  (c41:Condition {cond_id: 'N4#C1', attribute: 'region'}), (c42:Condition {cond_id: 'N4#C2', attribute: 'applicant_type'}),
+  (c51:Condition {cond_id: 'N5#C1', attribute: 'industry'}),
+  (r1)-[:HAS_CONDITION]->(c11), (r1)-[:HAS_CONDITION]->(c12), (r4)-[:HAS_CONDITION]->(c41), (r4)-[:HAS_CONDITION]->(c42),
+  (r5)-[:HAS_CONDITION]->(c51),
+  (seoul:Concept {concept_id: 'R:SEOUL', name: '서울'}), (gangnam:Concept {concept_id: 'R:GANGNAM', name: '강남구'}),
+  (solo:Concept {concept_id: 'T:SOLO', name: '1인 창조기업'}), (sme:Concept {concept_id: 'T:SME', name: '중소기업'}),
+  (kc:Concept {concept_id: 'KSIC:C', name: '제조업'}), (k10:Concept {concept_id: 'KSIC:C10', name: '식료품'}),
+  (k101:Concept {concept_id: 'KSIC:C101', name: '도축·육류'}), (k1011:Concept {concept_id: 'KSIC:C1011', name: '도축업'}),
+  (gangnam)-[:WITHIN]->(seoul), (solo)-[:IS_A]->(sme),
+  (c11)-[:ABOUT]->(gangnam), (c12)-[:ABOUT]->(solo), (c41)-[:ABOUT]->(seoul), (c42)-[:ABOUT]->(solo), (c51)-[:ABOUT]->(k10),
+  (d1:Definition {def_id: 'D1', term: '중소기업'}), (l1:ExternalLaw {law_id: 'L1', name: '중소기업기본법'}),
+  (a2:LawArticle {article_id: 'A2', article_no: '제2조'}),
+  (sme)-[:DEFINED_BY]->(d1), (d1)-[:CITES_LAW]->(a2), (a2)-[:PART_OF]->(l1)
+"""
+CY_EXTRA = {
+    "S1": "CREATE (k1011)-[:SUBCLASS_OF]->(k101), (k101)-[:SUBCLASS_OF]->(k10), (k10)-[:SUBCLASS_OF]->(kc)",
+    "S2": "CREATE (g:Condition {cond_id: 'N2#G', attribute: 'group'}), (r2)-[:HAS_CONDITION]->(g),\n"
+          "  (c2a:Condition {cond_id: 'N2#C2a', attribute: 'region'}), (c2b:Condition {cond_id: 'N2#C2b', attribute: 'applicant_type'}),\n"
+          "  (g)-[:HAS_CHILD]->(c2a), (g)-[:HAS_CHILD]->(c2b), (c2a)-[:ABOUT]->(seoul), (c2b)-[:ABOUT]->(solo)",
+    "S3": "CREATE (n4)-[:SUPERSEDES]->(n1)",
+}
+
+
+def local_only(uri: str) -> str:
+    """합성 자료를 넣으려고 DB를 비우므로 이 컴퓨터의 DB만 받는다(공유 Aura를 지우지 않게)."""
+    from urllib.parse import urlparse
+    host = urlparse(uri).hostname
+    if host not in ("localhost", "127.0.0.1", "::1"):
+        raise SystemExit(f"--local-uri는 이 컴퓨터의 Neo4j만 받습니다: {host}")
+    return uri
+
+
+def check_fixture_cypher(name: str, write, read) -> list[dict]:
+    """로컬 Neo4j를 비우고 합성 자료를 넣은 뒤 바꾼 Cypher가 기대한 답(SQL과 같은 CHECKS)을 내는지 본다.
+    write(query)는 쓰기, read(query, **params) -> list[tuple]은 읽기."""
+    sc = SCENARIOS[name]
+    write("MATCH (n) DETACH DELETE n")
+    write(CY_FIXTURE + CY_EXTRA[name])
+    out = []
+    for qid, p, want in CHECKS[name]:
+        got = norm_rows(read(sc["cypher"]["queries"][qid], **p))
+        before = norm_rows(read(BASE_CY[qid], **p)) if qid in BASE_CY else None
+        out.append({"query": qid, "input": p, "ok": got == want, "got": sorted(got), "before_change": None if before is None else sorted(before)})
+    return out
+
+
 # ----------------------------------------------------------------------------- 실제 자료(뒤로 호환)
 def export_db(read, ddl: str, export: dict) -> sqlite3.Connection:
     db = sqlite3.connect(":memory:")
@@ -333,6 +389,8 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="E2 스키마 변경 비용 비교")
     ap.add_argument("--offline", action="store_true", help="DB 없이 비용·합성 자료 검사만")
     ap.add_argument("--out", type=Path, default=OUT)
+    ap.add_argument("--local-uri", help="바꾼 Cypher를 합성 자료로 시험할 로컬 Neo4j(예: bolt://localhost:7687). DB를 비운다")
+    ap.add_argument("--local-auth", default="neo4j:e2-local-test", help="로컬 Neo4j 사용자:비밀번호(일회용 컨테이너)")
     args = ap.parse_args(argv)
 
     report: dict = {"criterion": "시나리오 3개 중 2개 이상에서 그래프 수정 줄 수가 적다", "scenarios": {}}
@@ -342,6 +400,21 @@ def main(argv: list[str] | None = None) -> int:
     report["graph_less_in"] = wins
     report["criterion_met"] = wins >= 2
     report["fixture_all_ok"] = all(c["ok"] for r in report["scenarios"].values() for c in r["fixture"])
+
+    if args.local_uri:
+        from neo4j import GraphDatabase
+        logging.getLogger("neo4j").setLevel(logging.ERROR)
+        user, pw = args.local_auth.split(":", 1)
+        with GraphDatabase.driver(local_only(args.local_uri), auth=(user, pw)) as drv, drv.session() as sess:
+            def lw(query):
+                sess.run(query).consume()
+
+            def lr(query, **params):
+                return [tuple(r.values()) for r in sess.run(query, **params)]
+            version = lr("CALL dbms.components() YIELD versions RETURN versions[0]")[0][0]
+            cy = {name: check_fixture_cypher(name, lw, lr) for name in SCENARIOS}
+            lw("MATCH (n) DETACH DELETE n")
+        report["fixture_cypher"] = {"neo4j": version, "all_ok": all(c["ok"] for v in cy.values() for c in v), "scenarios": cy}
 
     if not args.offline:
         from neo4j import READ_ACCESS
@@ -374,7 +447,10 @@ def main(argv: list[str] | None = None) -> int:
     if "regression_on_aura" in report:
         print("뒤로 호환(Aura):", {k: v for k, v in report["regression_on_aura"].items() if k != "neo4j_host"})
     print("저장:", args.out)
-    ok = report["fixture_all_ok"] and all(
+    if "fixture_cypher" in report:
+        fc = report["fixture_cypher"]
+        print(f"바꾼 Cypher 합성 자료 검사(로컬 Neo4j {fc['neo4j']}): {'통과' if fc['all_ok'] else '실패'}")
+    ok = report["fixture_all_ok"] and report.get("fixture_cypher", {}).get("all_ok", True) and all(
         v["sql_changed_vs_before"] == v["cypher_changed_vs_before"] == v["sql_vs_cypher"] == 0
         for k, v in report.get("regression_on_aura", {}).items() if k != "neo4j_host")
     return 0 if ok else 1
