@@ -1,0 +1,92 @@
+{
+  "L0": {
+    "semantic_scores": "NOT_MEASURED_NO_NEW_SEMANTIC_CRITERION",
+    "preserved_exceptions": 5,
+    "preserved_unresolved_relations": 7,
+    "unexecutable_proposal_groups": 0,
+    "completeness_records_preserved": 9,
+    "phase_annotated_sections_preserved": 11,
+    "unsupported_object_count_scope": "Metric CSV counts exception + unresolved-relation objects only; completeness and phase metadata overlap and are listed separately.",
+    "items": [
+      "Exception effects",
+      "Exception scope correctness",
+      "Unresolved relation meaning",
+      "Logical completeness correctness",
+      "Phase-dependent logical change"
+    ],
+    "legacy_exception_diagnostics": "Existing evaluator values retained in detailed evaluation but not treated as new semantic measurements",
+    "rule_comparison_limit": null
+  },
+  "L1": {
+    "semantic_scores": "NOT_MEASURED_NO_NEW_SEMANTIC_CRITERION",
+    "preserved_exceptions": 5,
+    "preserved_unresolved_relations": 7,
+    "unexecutable_proposal_groups": 5,
+    "completeness_records_preserved": 9,
+    "phase_annotated_sections_preserved": 11,
+    "unsupported_object_count_scope": "Metric CSV counts exception + unresolved-relation objects only; completeness and phase metadata overlap and are listed separately.",
+    "items": [
+      "Exception effects",
+      "Exception scope correctness",
+      "Unresolved relation meaning",
+      "Logical completeness correctness",
+      "Phase-dependent logical change"
+    ],
+    "legacy_exception_diagnostics": "Existing evaluator values retained in detailed evaluation but not treated as new semantic measurements",
+    "rule_comparison_limit": null
+  },
+  "L2": {
+    "semantic_scores": "NOT_MEASURED_NO_NEW_SEMANTIC_CRITERION",
+    "preserved_exceptions": 5,
+    "preserved_unresolved_relations": 7,
+    "unexecutable_proposal_groups": 5,
+    "completeness_records_preserved": 9,
+    "phase_annotated_sections_preserved": 11,
+    "unsupported_object_count_scope": "Metric CSV counts exception + unresolved-relation objects only; completeness and phase metadata overlap and are listed separately.",
+    "items": [
+      "Exception effects",
+      "Exception scope correctness",
+      "Unresolved relation meaning",
+      "Logical completeness correctness",
+      "Phase-dependent logical change"
+    ],
+    "legacy_exception_diagnostics": "Existing evaluator values retained in detailed evaluation but not treated as new semantic measurements",
+    "rule_comparison_limit": null
+  },
+  "RULE_V1": {
+    "semantic_scores": "NOT_MEASURED_NO_NEW_SEMANTIC_CRITERION",
+    "preserved_exceptions": 0,
+    "preserved_unresolved_relations": 0,
+    "unexecutable_proposal_groups": 0,
+    "completeness_records_preserved": 0,
+    "phase_annotated_sections_preserved": 0,
+    "unsupported_object_count_scope": "Metric CSV counts exception + unresolved-relation objects only; completeness and phase metadata overlap and are listed separately.",
+    "items": [
+      "Exception effects",
+      "Exception scope correctness",
+      "Unresolved relation meaning",
+      "Logical completeness correctness",
+      "Phase-dependent logical change"
+    ],
+    "legacy_exception_diagnostics": "Existing evaluator values retained in detailed evaluation but not treated as new semantic measurements",
+    "rule_comparison_limit": "v1 trees support structural comparison; v1.1 effect/phase/proposal provenance missing for rules"
+  },
+  "RULE_E": {
+    "semantic_scores": "NOT_MEASURED_NO_NEW_SEMANTIC_CRITERION",
+    "preserved_exceptions": 0,
+    "preserved_unresolved_relations": 0,
+    "unexecutable_proposal_groups": 0,
+    "completeness_records_preserved": 0,
+    "phase_annotated_sections_preserved": 0,
+    "unsupported_object_count_scope": "Metric CSV counts exception + unresolved-relation objects only; completeness and phase metadata overlap and are listed separately.",
+    "items": [
+      "Exception effects",
+      "Exception scope correctness",
+      "Unresolved relation meaning",
+      "Logical completeness correctness",
+      "Phase-dependent logical change"
+    ],
+    "legacy_exception_diagnostics": "Existing evaluator values retained in detailed evaluation but not treated as new semantic measurements",
+    "rule_comparison_limit": "v1 trees support structural comparison; v1.1 effect/phase/proposal provenance missing for rules"
+  }
+}

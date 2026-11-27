@@ -1,0 +1,148 @@
+{
+  "version": "value-normalization-contract-v1-draft",
+  "status": "DRAFT_NOT_DEPLOYED",
+  "provenance_required": [
+    "original_field",
+    "original_value",
+    "original_unit",
+    "original_operator",
+    "rule_id",
+    "rule_version",
+    "reason",
+    "mapping_status",
+    "source_evidence"
+  ],
+  "unit_aliases": {
+    "년": "YEAR",
+    "YEAR": "YEAR",
+    "개월": "MONTH",
+    "MONTH": "MONTH",
+    "일": "DAY",
+    "DAY": "DAY",
+    "%": "PERCENT",
+    "PERCENT": "PERCENT",
+    "명": "PERSON",
+    "PERSON": "PERSON"
+  },
+  "context_unit_aliases": {
+    "세": {
+      "target": "YEAR",
+      "require": "Explicit person age"
+    },
+    "월": {
+      "target": "MONTH",
+      "require": "Explicit duration, not calendar month"
+    },
+    "개": {
+      "target": "COUNT",
+      "require": "Explicit counted entity subtype"
+    },
+    "달러": {
+      "target": "USD",
+      "require": "Explicit US dollars; no assumed currency"
+    }
+  },
+  "money_units": {
+    "원": {
+      "target": "KRW",
+      "multiplier": "1"
+    },
+    "천원": {
+      "target": "KRW",
+      "multiplier": "1000"
+    },
+    "만원": {
+      "target": "KRW",
+      "multiplier": "10000"
+    },
+    "억원": {
+      "target": "KRW",
+      "multiplier": "100000000"
+    },
+    "KRW": {
+      "target": "KRW",
+      "multiplier": "1"
+    },
+    "USD": {
+      "target": "USD",
+      "multiplier": "1"
+    }
+  },
+  "numeric_policy": {
+    "arithmetic": "exact decimal; no float rounding",
+    "bool_is_number": false,
+    "commas": "only well-formed thousands grouping",
+    "percent_scale": "15 percent stays 15 PERCENT; 0.15 is not multiplied without explicit ratio convention",
+    "cross_dimension_conversion": false,
+    "year_month_conversion": "No automatic conversion: calendar/age conventions differ",
+    "currency_conversion": "No exchange-rate conversion; currency must be explicit"
+  },
+  "unit_state": {
+    "NONE": "Dimensionless categorical/existence condition",
+    "UNKNOWN": "Dimension expected but not identified",
+    "KNOWN": "Explicit supported unit",
+    "transport": "Current unit:null cannot encode NONE vs UNKNOWN alone; keep sidecar provenance. New persisted state field needs schema approval."
+  },
+  "range": {
+    "canonical_operator": "BETWEEN",
+    "canonical_value_type": "RANGE",
+    "canonical_shape": {
+      "lower": {
+        "value": 3,
+        "inclusive": true
+      },
+      "upper": {
+        "value": 8,
+        "inclusive": false
+      }
+    },
+    "legacy_conversion": "minimum/maximum or min/max may convert ONLY when both boundary flags and metric/unit/basis are explicit and identical",
+    "missing_flags": "HOLD_FOR_REVIEW; no default inclusive boundary",
+    "unbounded": "Use explicit GT/GTE/LT/LTE for one-sided ranges; no invented bound",
+    "boundary_tokens": {
+      "이상": "GTE",
+      "이하": "LTE",
+      "초과": "GT",
+      "미만": "LT",
+      "이내": "LTE_ONLY_WHEN_DURATION_CONTEXT_EXPLICIT"
+    }
+  },
+  "categorical": {
+    "single": "EQ/NEQ scalar string; preserve original label",
+    "multiple": "IN/NOT_IN nonempty alternatives, not arbitrary comma-splitting",
+    "array_logic": "IN alternatives only when source establishes OR membership; separate requirements require explicit AST",
+    "codes": "Namespace/version/source label required; no guessed code",
+    "status_boolean": "EQ true/false is distinct from EXISTS/NOT_EXISTS; never coerce EXISTS true to null automatically"
+  },
+  "region": {
+    "canonical_level": "Explicit administrative level and authoritative namespace/version if available",
+    "person_site_roles": [
+      "APPLICANT_ADDRESS",
+      "BUSINESS_LOCATION",
+      "HEADQUARTERS_ROLE",
+      "BRANCH_ROLE"
+    ],
+    "exact_alias_candidate": "Only validated unambiguous geographic ID; short city label alone may be ambiguous",
+    "context_required": [
+      "도내",
+      "관내",
+      "본사",
+      "지점"
+    ],
+    "NO_RESTRICTION": "Explicit absence of geographic requirement; retain as source assertion sidecar, not a positive region condition or UNKNOWN",
+    "UNKNOWN": "Geographic restriction cannot be established; distinct from NO_RESTRICTION",
+    "NATIONWIDE": "Explicit scope is not necessarily absence of all geographic requirements",
+    "transport": "No new runtime enum is introduced; novel source assertions need downstream versioned contract approval"
+  },
+  "temporal": {
+    "date": "YYYY-MM-DD with real calendar validation, original precision retained",
+    "reference": "Existing reference_date/date_type and temporal_constraint anchor must be preserved",
+    "relative": "offset_value/offset_unit/operator/inclusive/applies_to/anchor_date_known preserved",
+    "unknown_anchor": "Never substitute current date, publication date, or collection time",
+    "application_date": "APPLICATION temporal anchor is distinct from APPLICATION_START reference date; require explicit basis",
+    "phases": "evaluation_phase/fulfillment_phase/requirement_kind remain independent; do not flatten future obligations to current facts"
+  },
+  "operator_contract": "operator_value_compatibility_v1.csv",
+  "attribute_contract": "attribute_semantic_contract_v1.json",
+  "schema_compatibility": "Existing range structure retained. New unit_status/region assertion states are sidecar draft only."
+}

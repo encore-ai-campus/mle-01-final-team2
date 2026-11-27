@@ -1,0 +1,86 @@
+{
+  "version": "safe-condition-normalization-subset-v1",
+  "status": "EXPERIMENT_ONLY_NOT_DEPLOYED",
+  "experiments": {
+    "N0": [],
+    "N1": [
+      "UNIT"
+    ],
+    "N2": [
+      "NUMERIC",
+      "MONEY"
+    ],
+    "N3": [
+      "RANGE"
+    ],
+    "N4": [],
+    "N5": [
+      "UNIT",
+      "NUMERIC",
+      "MONEY",
+      "RANGE"
+    ]
+  },
+  "order": [
+    "UNIT",
+    "NUMERIC",
+    "MONEY",
+    "RANGE",
+    "SHARED_ATTRIBUTE_NORMALIZATION_V2"
+  ],
+  "unit_aliases": {
+    "년": "YEAR",
+    "YEAR": "YEAR",
+    "개월": "MONTH",
+    "MONTH": "MONTH",
+    "일": "DAY",
+    "DAY": "DAY",
+    "%": "PERCENT",
+    "PERCENT": "PERCENT",
+    "명": "PERSON",
+    "PERSON": "PERSON"
+  },
+  "money_units": {
+    "원": {
+      "target": "KRW",
+      "multiplier": "1"
+    },
+    "천원": {
+      "target": "KRW",
+      "multiplier": "1000"
+    },
+    "만원": {
+      "target": "KRW",
+      "multiplier": "10000"
+    },
+    "억원": {
+      "target": "KRW",
+      "multiplier": "100000000"
+    },
+    "KRW": {
+      "target": "KRW",
+      "multiplier": "1"
+    },
+    "USD": {
+      "target": "USD",
+      "multiplier": "1"
+    }
+  },
+  "range": "Explicit flags and source inequalities only; no inferred boundaries",
+  "N4": "NO_CHANGE: all EXACT_ALIAS already handled by existing attribute-normalization-v2",
+  "excluded": [
+    "Semantic field mapping",
+    "Region/category rewrites",
+    "Boundary invention",
+    "UNKNOWN operator repair",
+    "Case-specific rules",
+    "Currency FX",
+    "Categorical code guessing"
+  ],
+  "input_scope": "LLM intermediate schema, not legacy GraphRAG containers",
+  "contract_hashes": {
+    "attribute_semantic_contract_v1.json": "f8eb52e9f7b2043976568b51fb577cbbefaa7d20d8d1beede8c28902760d136a",
+    "value_normalization_contract_v1.json": "418af3ae43dccb0930996afcf388f67c9852574bfb0ab0d0991cfa230cc4f7ae",
+    "attribute_mapping_policy_v1.csv": "5b234d78ff8a9a5d12859f60c7582f51a2ad3372d76ec05944dad8888ac03f0a"
+  }
+}

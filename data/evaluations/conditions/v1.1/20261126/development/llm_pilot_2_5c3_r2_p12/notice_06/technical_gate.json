@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "api_response_present": true,
+  "json_parse_and_execution_ok": true,
+  "all_proposals_accounted": true,
+  "valid_candidate_count": 2,
+  "held_count": 0,
+  "rejected_count": 4,
+  "extraction_quality_state": "CANDIDATES_AVAILABLE",
+  "extraction_quality_gate": "UNREVIEWED_CANDIDATES",
+  "evidence_ok": true,
+  "date_temporal_preserved": true,
+  "schema_error_count": 0,
+  "incomplete_logic_preserved": true,
+  "logic_structure_checks": {
+    "proposed_logic_sections": true,
+    "logic_sections": true,
+    "exceptions": true,
+    "exception_resolution": true,
+    "unresolved_relations": true,
+    "unresolved_condition_indexes": true,
+    "unreferenced_unresolved_condition_indexes": true,
+    "invalid_reference_indexes": true,
+    "logical_completeness": true,
+    "proposal_validation_states": true
+  },
+  "decision_eligible_true_count": 0,
+  "decision_eligible": false,
+  "reason": null
+}

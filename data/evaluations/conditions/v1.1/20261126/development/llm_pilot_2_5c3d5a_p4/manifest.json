@@ -1,0 +1,127 @@
+{
+  "run_id": "llm_pilot_2_5c3d5a_p4",
+  "source_run_id": "llm_pilot_2_5c3_r2_p12",
+  "status": "IN_PROGRESS",
+  "fingerprint": {
+    "run_id": "llm_pilot_2_5c3d5a_p4",
+    "source_run_id": "llm_pilot_2_5c3_r2_p12",
+    "notice_ids": [
+      "BIZINFO:PBLN_000000000117168",
+      "BIZINFO:PBLN_000000000118182",
+      "BIZINFO:PBLN_000000000119490",
+      "BIZINFO:PBLN_000000000126490",
+      "BIZINFO:PBLN_000000000128028",
+      "KSTARTUP:176001",
+      "KSTARTUP:176813",
+      "KSTARTUP:177447",
+      "KSTARTUP:178507",
+      "KSTARTUP:179386"
+    ],
+    "settings": {
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "max_completion_tokens": 8192,
+      "timeout_seconds": 180,
+      "sdk_max_retries": 0,
+      "response_format": "json_schema_strict"
+    },
+    "policy_version": "condition-next-extraction-policy-v1",
+    "policy_module_sha256": "3466e95ad31f768ee07a2645ab10d6e164b5d87c03853b9501a7d294d737a34b",
+    "prompt_sha256": "be06f59055efb78e0b04baa2ced1fb108f638579ff967b537f7990808cf1f981",
+    "provider_schema_sha256": "59789b0eaca9dbe1f32c97973c8ccd1866853a1f0a40014fdb6ddc997074b00e",
+    "internal_schema_sha256": "62e4674a14a756021160e3d516cacf52cfa255b6a22695072ae7c66f9dc61a84",
+    "attribute_contract_sha256": "f8eb52e9f7b2043976568b51fb577cbbefaa7d20d8d1beede8c28902760d136a",
+    "normalization_version": "safe-condition-normalization-subset-v1:N1",
+    "normalization_module_sha256": "40fff563ad8596e044ad17b1c893b8f8a65edadb5448ef52876439c83ce9c42d",
+    "logic_adapter_version": "condition-logic-evaluation-adapter-v1",
+    "strict_evaluator_sha256": "7e41d2fb1393d4a99e89f16b7f08b128e9c8e3e6c00cc57f7d4c0ebbb5d0da07",
+    "condition_evaluator_sha256": "f59d38477794aaf259e67ee4115b606ec50663d6afbac7f3222b14866a9d32b4",
+    "runner_sha256": "2225bebeb66b9b1db4a6506d0ad1b51805fad966efd95319fff8b83d9c875768",
+    "files": {
+      "data/condition_inputs/v1/20261125/extracted/improved/development_conditions.jsonl": "5585302b26de77d324cf93ec5e05c8b89459af9149d81c0306af09f8225399a0",
+      "data/condition_inputs/v1/20261125/extraction_inputs.jsonl": "14e4f7dd74d71046555998ebdcee93e39ed62f5725cfb9f0dc7091f0328023d1",
+      "data/condition_inputs/v1/20261125/logic/notice_condition_sets.jsonl": "bf7b995b880c048f844a725920909d0a26e7cf362f2f0947c901844ba0e889dc",
+      "data/evaluations/conditions/v1.1/20261126/development/llm_next_policy_2_5c3d4_v1/internal_output_schema.json": "62e4674a14a756021160e3d516cacf52cfa255b6a22695072ae7c66f9dc61a84",
+      "data/evaluations/conditions/v1.1/20261126/development/llm_next_policy_2_5c3d4_v1/P4_prompt.txt": "be06f59055efb78e0b04baa2ced1fb108f638579ff967b537f7990808cf1f981",
+      "data/evaluations/conditions/v1.1/20261126/development/llm_next_policy_2_5c3d4_v1/provider_output_schema.json": "59789b0eaca9dbe1f32c97973c8ccd1866853a1f0a40014fdb6ddc997074b00e",
+      "data/evaluations/conditions/v1.1/20261126/development/llm_pilot_2_5c3_r2_p12/manifest.json": "19fb8fa96bc0de2032309e423abd3f14d40b0385b1f835e038a4c3e21fecc60f",
+      "data/evaluations/conditions/v1.1/20261126/development/llm_pilot_2_5c3_r2_p12/request_ledger.json": "693d21e334481910e7c9d9f27d8fba4caf0c255ce028e2bfe3e5f0c726a73c3a",
+      "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/development_conditions.jsonl": "b8a304f8a081d255d9fe2a9fb43fbbd98593fec52e81b8678886abd85022295a",
+      "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/logic/notice_condition_sets.jsonl": "e3a7cf1f7b65e2d88011478b4e69d08a6b58b5c9d05579b07516655aa823535c",
+      "data/evaluations/conditions/v1.1/20261126/llm_pilot_preparation/development/pilot_manifest.json": "a3ee3339f539899c44897833627bb17fa45d7981d2e3bbd81dd4753a493467a5",
+      "data/evaluations/conditions/v1.1/20261126/llm_pilot_preparation/development/pilot_notice_ids.json": "1162d9092614610358277614b17735d22febfdc99bcd8d6f6fcc0711b3ed1a2d",
+      "data/goldsets/conditions/v1.1/20261126/final30/development/manifest.json": "9bdaa9597615885209b353417a33b34d5c976544831a6bae8ced4295542bf725",
+      "data/goldsets/conditions/v1.1/20261126/final30/development/reviewed_condition_gold.jsonl": "8450df33455daced4c5e95ca2a51ca262e88c53476c7a8a18e38b3164a52ee76",
+      "data/goldsets/conditions/v1.1/20261126/final30/development/reviewed_logic_gold.jsonl": "e74adee73086cf1304ecee9d06f988c0f6af86c4149a9c7eb439e6a9509e08e3",
+      "schemas/conditions/contracts/draft-v1/attribute_semantic_contract_v1.json": "f8eb52e9f7b2043976568b51fb577cbbefaa7d20d8d1beede8c28902760d136a",
+      "schemas/conditions/contracts/draft-v1/value_normalization_contract_v1.json": "418af3ae43dccb0930996afcf388f67c9852574bfb0ab0d0991cfa230cc4f7ae",
+      "tools/condition_llm_next_policy.py": "3466e95ad31f768ee07a2645ab10d6e164b5d87c03853b9501a7d294d737a34b",
+      "tools/condition_logic_evaluation_adapter.py": "3a069e37cbb42e9323171850a48c2a137e71a35701d1d1b6d12bff409b6125a1",
+      "tools/evaluate_condition_pipeline.py": "f59d38477794aaf259e67ee4115b606ec50663d6afbac7f3222b14866a9d32b4",
+      "tools/evaluate_condition_pipeline_v11.py": "7e41d2fb1393d4a99e89f16b7f08b128e9c8e3e6c00cc57f7d4c0ebbb5d0da07",
+      "tools/extract_condition_candidates_llm.py": "573953c98856e19bc9af3126ac33a2e751832b92da09b414ba3df03572bf6679",
+      "tools/run_condition_llm_openai_pilot.py": "9772fc57745455089d0f1558006d5084b38a47fe491d9e79d49c22893156b061",
+      "tools/run_condition_llm_p4_pilot.py": "2225bebeb66b9b1db4a6506d0ad1b51805fad966efd95319fff8b83d9c875768"
+    },
+    "fixed_counts": {
+      "notices": 10,
+      "gold_conditions": 62,
+      "gold_logic_groups": 24,
+      "gold_logic_relations": 71
+    },
+    "input_order": [
+      "BIZINFO:PBLN_000000000117168",
+      "BIZINFO:PBLN_000000000118182",
+      "BIZINFO:PBLN_000000000119490",
+      "BIZINFO:PBLN_000000000126490",
+      "BIZINFO:PBLN_000000000128028",
+      "KSTARTUP:176001",
+      "KSTARTUP:176813",
+      "KSTARTUP:177447",
+      "KSTARTUP:178507",
+      "KSTARTUP:179386"
+    ],
+    "decision_eligible": false
+  },
+  "request_limit": 10,
+  "budget_status": "APPROVED_UNUSED",
+  "api_call_count": 3,
+  "cumulative_used": 3,
+  "remaining_request_count": 7,
+  "prepared_first_notice_id": "BIZINFO:PBLN_000000000117168",
+  "prepared_remaining_notice_ids": [
+    "BIZINFO:PBLN_000000000118182",
+    "BIZINFO:PBLN_000000000119490",
+    "BIZINFO:PBLN_000000000126490",
+    "BIZINFO:PBLN_000000000128028",
+    "KSTARTUP:176001",
+    "KSTARTUP:176813",
+    "KSTARTUP:177447",
+    "KSTARTUP:178507",
+    "KSTARTUP:179386"
+  ],
+  "response_received_notice_ids": [
+    "BIZINFO:PBLN_000000000117168",
+    "BIZINFO:PBLN_000000000118182",
+    "BIZINFO:PBLN_000000000119490"
+  ],
+  "technical_pass_notice_ids": [
+    "BIZINFO:PBLN_000000000117168",
+    "BIZINFO:PBLN_000000000118182"
+  ],
+  "technical_block_notice_ids": [
+    "BIZINFO:PBLN_000000000119490"
+  ],
+  "evaluation_eligible_notice_ids": [
+    "BIZINFO:PBLN_000000000117168",
+    "BIZINFO:PBLN_000000000118182"
+  ],
+  "evaluation_ready": false,
+  "decision_eligible": false,
+  "budget_approval": {
+    "approved_limit": 10,
+    "approval_reference": "2026-11-27 P4 통합 개선 파일럿 10회 승인",
+    "approved_at_utc": "2026-11-27T05:31:59.135676+00:00",
+    "explicit_confirmation_token": "APPROVE_P4_10_REQUESTS"
+  }
+}

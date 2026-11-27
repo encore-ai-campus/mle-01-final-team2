@@ -1,0 +1,25 @@
+{
+  "status": "OFFLINE_REPLAY_COMPLETE",
+  "notice_id": "KSTARTUP:176001",
+  "proposal_count": 4,
+  "accepted_unreviewed_count": 4,
+  "held_for_review_count": 0,
+  "rejected_count": 0,
+  "v11_schema_error_count": 0,
+  "incomplete_logic": false,
+  "decision_eligible_true_count": 0,
+  "api_call_count": 0,
+  "goldset_read": false,
+  "evaluation_data_read": false,
+  "source_response_sha256": "31f5675806cf795b90287717984af56d8d39fb2008857fd27d706cdedf6ae88b",
+  "intermediate_response_sha256": "31f5675806cf795b90287717984af56d8d39fb2008857fd27d706cdedf6ae88b",
+  "output_hashes": {
+    "attribute_normalization.jsonl": "bb592123ba1e85e5b495413d5231982141d2ff624fc1843cc10183774553d603",
+    "predictions_before_validation.jsonl": "5621ddd73775a724dd3c5fcd2bf0f20ce28f5cf0b57bb2d86929d18bb81989a4",
+    "predictions_after_validation.jsonl": "aa11068f41ceb33222c29264236812676dbea2bdcdc4449fa27f344828cc7c9c",
+    "validation_details.jsonl": "2e9226c8b198f31a5f0a51fad9b7809b92448ccf642c0172497e313e52f01002",
+    "rejected_candidates.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "review_queue.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "logic_proposals.jsonl": "8698b212a77fd4344430b40dd2b40f1bdb46e7e580f609182f3d84588f60aca6"
+  }
+}

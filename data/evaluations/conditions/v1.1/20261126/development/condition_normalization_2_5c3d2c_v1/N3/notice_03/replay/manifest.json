@@ -1,0 +1,51 @@
+{
+  "replay_id": "replay",
+  "source_run_id": "llm_pilot_2_5c3_r2",
+  "source_notice_id": "BIZINFO:PBLN_000000000126490",
+  "source_file": "data\\evaluations\\conditions\\v1.1\\20261126\\development\\condition_normalization_2_5c3d2c_v1\\N3\\notice_03\\normalization_input.jsonl",
+  "source_response_sha256": "9d9f3a663899f71c5cacdcb44c32dcb33c5c3344a329d6034a4eb7cc1bcfeb33",
+  "prior_r2_manifest_sha256": "05036b2bf6c6af87a518097281528797666ceb94d6dab45460e16dddd56a79f5",
+  "prior_r2_manifest_sha256_after": "05036b2bf6c6af87a518097281528797666ceb94d6dab45460e16dddd56a79f5",
+  "prior_failed_artifact_sha256": {
+    "manifest.json": "05036b2bf6c6af87a518097281528797666ceb94d6dab45460e16dddd56a79f5",
+    "request_ledger.json": "2189bdc54400b13bc3438646917ed0f61d1fdaf051ea1d575b98d8e601aba46a",
+    "lead_retry_gate.json": "bd62dc11a156d18d2752d1942b23cd1d589e509482f1c0e53a86b48d1457b948",
+    "lead_retry/raw_llm_responses.jsonl": "6d00ec152c1fe5c515db6eb5ae0694934571f7162d12bbccf1e53e604e09a12e",
+    "lead_retry/intermediate_responses.jsonl": "276bce191d030cd66989aa39fe005668ee5269d40f81fee34ad31f089d733b3c",
+    "lead_retry/predictions_before_validation.jsonl": "8428f3bf70490fa0ab1d995c2cd4dc8912b6222d5161edee0633b0be8e5e7652",
+    "lead_retry/validation_details.jsonl": "9600ac571194d4d66298af644772d66f4b8e81bb3e852dfa939d3d1eb2697ab4",
+    "lead_retry/rejected_candidates.jsonl": "2c3594308431f5ffff99fff6c3ac598c92d89378bb0f051651d4b48024b409eb",
+    "lead_retry/review_queue.jsonl": "a282fb8f447143c4a3ba366f57580a4eec588f42236f0e6a26b4344beb5bf7e2",
+    "lead_retry/logic_proposals.jsonl": "4f76364ca4a2fdae0078e1852eb2dd679edebecaa6b8b44b93f858434cce8ee2",
+    "lead_retry/run_report.json": "aa8afa3108b50c501c51552deffd9548ef42e7c384aa1436e08fa7d16d831b46"
+  },
+  "normalization_rules_version": "attribute-normalization-v2",
+  "normalization_rules_sha256": "6b3eb67f083657b0581251526a6ca5955ee0a708b4d077fb675cf03a9ce22f43",
+  "extractor_sha256_before_p3": "7d04ff05e165dc88e4ccd1994eb9efbf7c752c3085aa68a701acace200ec995a",
+  "extractor_sha256_after_p3": "573953c98856e19bc9af3126ac33a2e751832b92da09b414ba3df03572bf6679",
+  "extractor_sha256_before_normalization_v2": "0ba4640d939994207a2e39588a282ee35a9beba78ab8ca0333ea46b98ce65141",
+  "extractor_sha256_after_normalization_v2": "573953c98856e19bc9af3126ac33a2e751832b92da09b414ba3df03572bf6679",
+  "source_r2_fingerprint_extractor_sha256": "ff0a76cdc977166091ee704cd9997160252bbd5be0ac1fddb47e2101d3e4b242",
+  "replay_tool_sha256": "a4124472cc00cb3d6680fd3c926f86d32534010b8b6906767bd476cf7df6696f",
+  "prompt_sha256": "0f3477e5239e4e36212f7a25f8e71e8b55982f81fec6b831e8f6cdb681b0047a",
+  "fixed_inputs": {
+    "extraction_inputs_sha256": "14e4f7dd74d71046555998ebdcee93e39ed62f5725cfb9f0dc7091f0328023d1",
+    "representative_samples_sha256": "a2aefa309b93bd1ea7070ac1c46412d03b0d140c0ce0997de6c10b1dcffa8b22"
+  },
+  "api_call_count": 0,
+  "request_ledger_sha256_before": "2189bdc54400b13bc3438646917ed0f61d1fdaf051ea1d575b98d8e601aba46a",
+  "request_ledger_sha256_after": "2189bdc54400b13bc3438646917ed0f61d1fdaf051ea1d575b98d8e601aba46a",
+  "request_ledger_modified": false,
+  "output_hashes": {
+    "attribute_normalization.jsonl": "8dc11d34a4b6c0447aa38f5fe889e553147d09f2821a817d94901b751e92fb40",
+    "predictions_before_validation.jsonl": "86a195bd81a4fd1f948b291a158a839fc8242242cd7a7b0643bebf18f0657496",
+    "predictions_after_validation.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "validation_details.jsonl": "324dd4325c513b652269546a4857da8a395508faf6b1ea912f82ba77afa6bd1c",
+    "rejected_candidates.jsonl": "a631706872f63924d29e9f29ae54287ff40a0ef711870506bf4db55b558e33fd",
+    "review_queue.jsonl": "03432fb8eee94aae92ff47eeb8ba57be6b519cfb0602094b9b25c1001e270c12",
+    "logic_proposals.jsonl": "a06b1d24f01911c01e379b7d3304488c283176f84ec9deb9b771190b2e4f01fd",
+    "replay_report.json": "708a9f4be8e815462ff93377bb56d1fdca56fc716355de846692beb2de236d56"
+  },
+  "review_status": "UNREVIEWED",
+  "decision_eligible": false
+}

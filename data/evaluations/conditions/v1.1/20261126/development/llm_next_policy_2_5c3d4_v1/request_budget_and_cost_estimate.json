@@ -1,0 +1,90 @@
+{
+  "status": "PROPOSAL_ONLY_NO_ACTIVE_BUDGET",
+  "historical_used": 13,
+  "historical_limit": 13,
+  "historical_remaining": 0,
+  "new_budget_allocated": false,
+  "live_execution_available": false,
+  "rates": {
+    "model": "gpt-5.6-luna",
+    "input_usd_per_million": 0.2,
+    "output_usd_per_million": 1.2,
+    "cached_input_usd_per_million": 0.02,
+    "cached_discount_assumed": false,
+    "source": "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
+    "checked_date": "2026-11-27"
+  },
+  "token_estimate_limitations": "No tiktoken installed. UTF8 byte/6--byte/2 proxy plus assumed 1000 notice tokens. Not a guaranteed token or billing bound; wire framing and actual model usage can differ.",
+  "formula": "USD = input_tokens*0.20/1e6 + output_tokens_including_reasoning*1.20/1e6; no cache/batch discount",
+  "experiments": [
+    {
+      "experiment": "P0",
+      "proposed_requests": 0,
+      "approved_requests": 0,
+      "response_format": "BASELINE_REUSE",
+      "input_token_planning_low": 2084,
+      "input_token_planning_high": 4252,
+      "notice_tokens_assumed": 1000,
+      "output_tokens_scenario_low": 3000,
+      "output_tokens_cap": 8192,
+      "estimated_usd_scenario_low": 0.0,
+      "estimated_usd_scenario_high": 0.0
+    },
+    {
+      "experiment": "P1",
+      "proposed_requests": 10,
+      "approved_requests": 0,
+      "response_format": "json_object",
+      "input_token_planning_low": 4634,
+      "input_token_planning_high": 11902,
+      "notice_tokens_assumed": 1000,
+      "output_tokens_scenario_low": 3000,
+      "output_tokens_cap": 8192,
+      "estimated_usd_scenario_low": 0.045268,
+      "estimated_usd_scenario_high": 0.122108
+    },
+    {
+      "experiment": "P2",
+      "proposed_requests": 10,
+      "approved_requests": 0,
+      "response_format": "json_schema",
+      "input_token_planning_low": 4631,
+      "input_token_planning_high": 11892,
+      "notice_tokens_assumed": 1000,
+      "output_tokens_scenario_low": 3000,
+      "output_tokens_cap": 8192,
+      "estimated_usd_scenario_low": 0.045262,
+      "estimated_usd_scenario_high": 0.122088
+    },
+    {
+      "experiment": "P3",
+      "proposed_requests": 10,
+      "approved_requests": 0,
+      "response_format": "json_object",
+      "input_token_planning_low": 4901,
+      "input_token_planning_high": 12701,
+      "notice_tokens_assumed": 1000,
+      "output_tokens_scenario_low": 3000,
+      "output_tokens_cap": 8192,
+      "estimated_usd_scenario_low": 0.045802,
+      "estimated_usd_scenario_high": 0.123706
+    },
+    {
+      "experiment": "P4",
+      "proposed_requests": 10,
+      "approved_requests": 0,
+      "response_format": "json_schema",
+      "input_token_planning_low": 4897,
+      "input_token_planning_high": 12690,
+      "notice_tokens_assumed": 1000,
+      "output_tokens_scenario_low": 3000,
+      "output_tokens_cap": 8192,
+      "estimated_usd_scenario_low": 0.045794,
+      "estimated_usd_scenario_high": 0.123684
+    }
+  ],
+  "recommended": "P4 only: 2 authorized lead notices then 8; total proposal 10, no automatic retries, no new reserves",
+  "full_factorial_proposed_requests": 40,
+  "full_factorial_usd_low": 0.182126,
+  "full_factorial_usd_high": 0.491586
+}

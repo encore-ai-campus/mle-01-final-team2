@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "L0_reproduced": true,
+  "P12_condition_metrics_preserved": true,
+  "N1_condition_metrics_preserved": true,
+  "repeat_evaluation_identical": true,
+  "source_hashes_preserved": true,
+  "reference_integrity_errors": 0,
+  "api_calls": 0,
+  "logic_generation_modified": false,
+  "strict_evaluator_modified": false,
+  "alignment_note": "Existing match_notice maps exact and partial condition pairs; adapter does not alter that policy.",
+  "synthetic_test_count": 19,
+  "related_regression_test_count": 133,
+  "all_tests_passed": true,
+  "original_AST_operators_and_children_identical_for_actual_inputs": true,
+  "no_conditions_or_logic_regenerated_by_adapter": true,
+  "unsupported_semantics_not_scored": true
+}

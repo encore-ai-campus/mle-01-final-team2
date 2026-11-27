@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import base64
+import copy
 import hashlib
 import inspect
 import json
@@ -51,6 +52,104 @@ ATTRIBUTE_CATALOG = {
     "FINANCIAL_CAPACITY", "DUPLICATE_OCCUPANCY", "QUALITATIVE_QUALIFICATION",
     "UNCLASSIFIED",
 }
+
+ATTRIBUTE_NORMALIZATION_RULES_VERSION = "attribute-normalization-v2"
+EXPLICIT_ATTRIBUTE_ALIASES = {
+    "applicant_address": ("APPLICANT_ADDRESS", "FIELD_ALIAS_APPLICANT_ADDRESS_V1"),
+    "business_location": ("BUSINESS_LOCATION", "FIELD_ALIAS_BUSINESS_LOCATION_V1"),
+}
+AMBIGUOUS_APPLICANT_TYPE_TERMS = (
+    "소상공인", "소기업", "중소기업", "중기업", "대기업", "small business", "sme", "enterprise size",
+)
+_CATALOG_CASEFOLD = {field.casefold(): field for field in ATTRIBUTE_CATALOG}
+ATTRIBUTE_NORMALIZATION_RULES = {
+    "version": ATTRIBUTE_NORMALIZATION_RULES_VERSION,
+    "explicit_field_aliases": {key: value[0] for key, value in EXPLICIT_ATTRIBUTE_ALIASES.items()},
+    "case_only_canonicalization": "casefold match to exactly one ATTRIBUTE_CATALOG field",
+    "semantic_ambiguity": {
+        "field": "APPLICANT_TYPE", "terms": list(AMBIGUOUS_APPLICANT_TYPE_TERMS),
+        "action": "after canonicalization, hold only when value/evidence includes ambiguous business-size language; never infer BUSINESS_TYPE",
+    },
+    "field_category_consistency": "non-null canonical field must equal category_id",
+}
+ATTRIBUTE_NORMALIZATION_RULES_SHA256 = hashlib.sha256(
+    json.dumps(ATTRIBUTE_NORMALIZATION_RULES, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+).hexdigest()
+
+
+def normalize_condition_attribute(condition: dict[str, Any], proposal_index: int | None = None
+                                  ) -> tuple[dict[str, Any], dict[str, Any], str | None]:
+    """Normalize only explicit field aliases/case; leave semantic ambiguity for review."""
+    normalized = copy.deepcopy(condition)
+    original_field = condition.get("field")
+    original_category = condition.get("category_id")
+    is_catalog_field = isinstance(original_field, str) and original_field in ATTRIBUTE_CATALOG
+    result = {
+        "proposal_index": proposal_index,
+        "original_field": original_field,
+        "normalized_field": original_field,
+        "original_category_id": original_category,
+        "original_value": copy.deepcopy(condition.get("value")),
+        "original_evidence_quotes": copy.deepcopy(condition.get("evidence_quotes", [])),
+        "mapping_rule_id": "IDENTITY_CATALOG_FIELD_V1" if is_catalog_field else None,
+        "mapping_rule_version": ATTRIBUTE_NORMALIZATION_RULES_VERSION,
+        "normalization_reason": "already canonical" if is_catalog_field else None,
+        "mapping_status": "IDENTITY" if is_catalog_field else "NOT_APPLICABLE",
+    }
+    if original_field is None:
+        result["mapping_status"] = "NOT_APPLICABLE"
+        result["normalization_reason"] = "null field is permitted for unclassified conditions"
+        return normalized, result, None
+
+    if not isinstance(original_field, str):
+        result.update(mapping_status="UNMAPPED", normalization_reason="field is not a string")
+        return normalized, result, "UNSUPPORTED_ATTRIBUTE"
+
+    alias = EXPLICIT_ATTRIBUTE_ALIASES.get(original_field)
+    if alias:
+        canonical, rule_id = alias
+        result.update(normalized_field=canonical, mapping_rule_id=rule_id, mapping_status="NORMALIZED",
+                      normalization_reason="explicit lowercase alias has the same defined attribute meaning")
+        normalized["field"] = canonical
+    elif original_field not in ATTRIBUTE_CATALOG:
+        canonical = _CATALOG_CASEFOLD.get(original_field.casefold())
+        if canonical is None:
+            result.update(mapping_status="UNMAPPED", normalization_reason="no exact catalog or approved alias match")
+            return normalized, result, "UNSUPPORTED_ATTRIBUTE"
+        result.update(normalized_field=canonical, mapping_rule_id="CASE_ONLY_CATALOG_MATCH_V1",
+                      mapping_status="NORMALIZED", normalization_reason="only letter case differs from one catalog field")
+        normalized["field"] = canonical
+
+    canonical_field = normalized.get("field")
+    if canonical_field is not None and canonical_field in ATTRIBUTE_CATALOG:
+        if original_category not in ATTRIBUTE_CATALOG:
+            result.update(mapping_status="CATEGORY_UNSUPPORTED",
+                          normalization_reason="field normalized but category_id is not in ATTRIBUTE_CATALOG")
+            return normalized, result, "UNSUPPORTED_CATEGORY"
+        if canonical_field != original_category:
+            result.update(mapping_status="FIELD_CATEGORY_MISMATCH",
+                          normalization_reason="normalized field and category_id identify different attributes")
+            return normalized, result, "ATTRIBUTE_CATEGORY_MISMATCH"
+        semantic_text = " ".join(str(condition.get(k) or "") for k in ("value", "evidence_quotes"))
+        if (canonical_field == "APPLICANT_TYPE"
+                and any(term.casefold() in semantic_text.casefold() for term in AMBIGUOUS_APPLICANT_TYPE_TERMS)):
+            result.update(normalized_field=None, mapping_rule_id="SEMANTIC_AMBIGUITY_APPLICANT_TYPE_V2",
+                          mapping_status="AMBIGUOUS", normalization_reason=
+                          "APPLICANT_TYPE is canonically valid, but the value/evidence can mean business size; no target attribute inferred")
+            return normalized, result, "ATTRIBUTE_SEMANTIC_AMBIGUITY"
+    return normalized, result, None
+
+
+def normalize_response_attributes(response: dict[str, Any]) -> tuple[dict[str, Any], list[dict[str, Any]], list[str | None]]:
+    normalized = copy.deepcopy(response)
+    records: list[dict[str, Any]] = []
+    reasons: list[str | None] = []
+    for index, condition in enumerate(response.get("conditions", [])):
+        normalized_condition, record, reason = normalize_condition_attribute(condition, index)
+        normalized["conditions"][index] = normalized_condition
+        records.append(record)
+        reasons.append(reason)
+    return normalized, records, reasons
 
 INTERMEDIATE_SCHEMA: dict[str, Any] = {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -157,6 +256,20 @@ INTERMEDIATE_SCHEMA: dict[str, Any] = {
 INTERMEDIATE_VALIDATOR = Draft202012Validator(INTERMEDIATE_SCHEMA)
 
 
+def intermediate_schema_diagnostics(notice_id: str, text: str) -> list[dict[str, Any]]:
+    """Reproduce intermediate errors without repairing or converting the response."""
+    parsed = json.loads(text)
+    response_hash = hashlib.sha256(text.encode("utf-8")).hexdigest()
+    return [{"notice_id": notice_id, "schema_name": INTERMEDIATE_SCHEMA["title"],
+             "schema_version": "1", "schema_dialect": INTERMEDIATE_SCHEMA["$schema"],
+             "validation_stage": "INTERMEDIATE_RESPONSE", "json_path": list(error.absolute_path),
+             "actual_value": error.instance, "violated_rule": error.validator,
+             "expected": error.validator_value, "source_response_sha256": response_hash,
+             "error_reproduced": True}
+            for error in sorted(INTERMEDIATE_VALIDATOR.iter_errors(parsed),
+                                key=lambda error: str(list(error.absolute_path)))]
+
+
 class LLMProvider(Protocol):
     name: str
     model: str | None
@@ -169,7 +282,8 @@ class OpenAIDirectProvider:
     name = "openai_direct"
 
     def __init__(self, *, api_key: str, model: str, timeout_s: float = 60,
-                 max_completion_tokens: int = 800, reasoning_effort: str | None = None):
+                 max_completion_tokens: int = 800, reasoning_effort: str | None = None,
+                 http_client: Any | None = None):
         try:
             from openai import AsyncOpenAI
         except ImportError as exc:
@@ -179,8 +293,48 @@ class OpenAIDirectProvider:
         self.reasoning_effort = reasoning_effort
         self.last_response: dict[str, Any] = {}
         self.last_error: dict[str, Any] = {}
+        self._closed = False
         # No custom base URL: use the official SDK's OpenAI endpoint.
-        self.client = AsyncOpenAI(api_key=api_key, timeout=timeout_s, max_retries=0)
+        client_options = {"api_key": api_key, "timeout": timeout_s, "max_retries": 0}
+        if http_client is not None:
+            client_options["http_client"] = http_client
+        self.client = AsyncOpenAI(**client_options)
+
+    async def aclose(self) -> None:
+        """Close the owned SDK client once, on the event loop that used it."""
+        if not self._closed:
+            self._closed = True
+            await self.client.close()
+
+    async def __aenter__(self) -> "OpenAIDirectProvider":
+        if self._closed:
+            raise RuntimeError("OpenAI provider is closed")
+        return self
+
+    async def __aexit__(self, exc_type, exc, traceback) -> None:
+        await self.aclose()
+
+    @staticmethod
+    def _safe_diagnostic_code(exc: BaseException) -> str:
+        chain = _exception_chain(exc)
+        if any(isinstance(item, socket.gaierror) for item in chain):
+            return "DNS_ERROR"
+        if any(isinstance(item, ssl.SSLError) for item in chain):
+            return "TLS_ERROR"
+        if any(isinstance(item, (TimeoutError, asyncio.TimeoutError)) for item in chain):
+            return "CONNECTION_TIMEOUT"
+        if any(isinstance(item, ConnectionResetError) for item in chain):
+            return "CONNECTION_RESET"
+        # Inspect text only for strict classification; never persist exception text.
+        for item in chain:
+            message = str(item).casefold()
+            if "event loop is closed" in message:
+                return "EVENT_LOOP_CLOSED"
+            if "client has been closed" in message or "client is closed" in message:
+                return "HTTP_CLIENT_CLOSED"
+            if isinstance(item, RuntimeError):
+                return "UNKNOWN_RUNTIME_ERROR"
+        return "UNKNOWN_CONNECTION_ERROR"
 
     async def verify_model(self, request_budget: "RequestBudget") -> dict[str, Any]:
         if not request_budget.consume():
@@ -227,6 +381,7 @@ class OpenAIDirectProvider:
             self.last_error = {
                 "exception_type": kind,
                 "cause_classes": causes,
+                "diagnostic_code": self._safe_diagnostic_code(exc),
                 "dns_error": any(isinstance(x, socket.gaierror) for x in _exception_chain(exc)),
                 "tls_error": any(isinstance(x, ssl.SSLError) for x in _exception_chain(exc)),
                 "connection_timeout": any(isinstance(x, (TimeoutError, asyncio.TimeoutError)) for x in _exception_chain(exc)),
@@ -286,11 +441,13 @@ class RequestBudget:
     def __init__(self, limit: int = MAX_API_REQUESTS):
         self.limit = limit
         self.used = 0
+        self.last_request_ordinal: int | None = None
 
     def consume(self) -> bool:
         if self.used >= self.limit:
             return False
         self.used += 1
+        self.last_request_ordinal = self.used
         return True
 
 
@@ -315,6 +472,18 @@ def _write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
     with Path(path).open("w", encoding="utf-8", newline="\n") as stream:
         for row in rows:
             stream.write(json.dumps(row, ensure_ascii=False, separators=(",", ":"), allow_nan=False) + "\n")
+
+
+async def _run_pilot_with_owned_provider(notice_ids: list[str], output_dir: Path,
+                                        provider_override: str | None = None) -> dict[str, Any]:
+    """Create, use, and close the configured provider on one event loop."""
+    provider = configured_provider(provider_override=provider_override)
+    try:
+        return await run_pilot(provider, notice_ids, output_dir=output_dir)
+    finally:
+        close = getattr(provider, "aclose", None)
+        if close is not None:
+            await close()
 
 
 def _sha256(path: Path) -> str:
@@ -552,6 +721,8 @@ def _check_value_shape(c: dict[str, Any]) -> str | None:
         return "UNSUPPORTED_ATTRIBUTE"
     if c["category_id"] not in ATTRIBUTE_CATALOG:
         return "UNSUPPORTED_CATEGORY"
+    if c["field"] is not None and c["field"] != c["category_id"]:
+        return "ATTRIBUTE_CATEGORY_MISMATCH"
     if unit is not None and not isinstance(unit, str):
         return "INVALID_UNIT"
     if op in {"EXISTS", "NOT_EXISTS"} and (value is not None or vt != "UNKNOWN"):
@@ -684,6 +855,63 @@ def _deduplicate(candidates: list[dict[str, Any]], interpretations: list[dict[st
     return final, final_interp, held
 
 
+def preserve_logic_references(response: dict[str, Any], index_map: dict[int, str]) -> dict[str, Any]:
+    """Keep proposal-index provenance separately from executable candidate refs."""
+    count = len(response["conditions"])
+    referenced: set[int] = set()
+    invalid: set[int] = set()
+    def indexes(node):
+        found = set()
+        if isinstance(node, dict):
+            for key, value in node.items():
+                if key in {"condition_indexes", "target_condition_indexes"}:
+                    for index in value:
+                        if type(index) is int and 0 <= index < count:
+                            found.add(index)
+                        elif type(index) is int:
+                            invalid.add(index)
+                elif isinstance(value, (dict, list)):
+                    found.update(indexes(value))
+        elif isinstance(node, list):
+            for child in node:
+                found.update(indexes(child))
+        return found
+    for key in ("logic_sections", "exceptions", "unresolved_relations"):
+        referenced.update(indexes(response.get(key, [])))
+    missing = set(range(count)) - set(index_map)
+    effective = copy.deepcopy(response["logic_sections"])
+    def mark(node):
+        if isinstance(node, dict):
+            if indexes(node) & missing and "operator" in node:
+                node["operator"] = "UNRESOLVED"
+            for value in node.values():
+                if isinstance(value, (dict, list)):
+                    mark(value)
+        elif isinstance(node, list):
+            for child in node:
+                mark(child)
+    mark(effective)
+    exceptions = []
+    for original in response["exceptions"]:
+        targets = original["target_condition_indexes"]
+        unresolved = sorted(set(targets) - set(index_map))
+        exceptions.append({"original_exception": copy.deepcopy(original),
+            "original_target_condition_indexes": copy.deepcopy(targets),
+            "target_validation_status": {str(i): "VALID" if i in index_map else "UNRESOLVED" for i in targets},
+            "unresolved_target_indexes": unresolved,
+            "application_status": "BLOCKED_UNRESOLVED_TARGET" if unresolved else "PROPOSAL_ONLY",
+            "application_allowed": False,
+            "reason": "TARGET_NOT_VALIDATED" if unresolved else "UNREVIEWED_EXCEPTION"})
+    return {"proposed_logic_sections": copy.deepcopy(response["logic_sections"]),
+        "logic_sections": effective, "exceptions": copy.deepcopy(response["exceptions"]),
+        "exception_resolution": exceptions,
+        "unresolved_relations": copy.deepcopy(response["unresolved_relations"]),
+        "unresolved_condition_indexes": sorted(missing),
+        "unreferenced_unresolved_condition_indexes": sorted(missing - referenced),
+        "invalid_reference_indexes": sorted(invalid),
+        "logical_completeness": "INCOMPLETE" if missing or invalid else "PROPOSAL_ONLY"}
+
+
 def _response_to_artifacts(row: dict[str, Any], response: dict[str, Any]) -> dict[str, Any]:
     if response["status"] == "UNABLE_TO_EXTRACT":
         raise ExtractionFailure("UNABLE_TO_EXTRACT", "MODEL_MARKED_UNABLE")
@@ -691,12 +919,20 @@ def _response_to_artifacts(row: dict[str, Any], response: dict[str, Any]) -> dic
         raise ExtractionFailure("INVALID_RESPONSE", "NO_CONDITION_STATUS_WITH_NONEMPTY_CONDITIONS")
     if response["status"] == "CONDITIONS_FOUND" and not response["conditions"]:
         raise ExtractionFailure("INVALID_RESPONSE", "CONDITIONS_FOUND_WITH_EMPTY_CONDITIONS")
+    normalized_response, normalization_records, normalization_reasons = normalize_response_attributes(response)
     candidates, interpretations, held = [], [], []
-    for condition in response["conditions"]:
-        candidate, interpretation, reason = _make_candidate(row, condition, source_completeness=row.get("completeness_status", "UNKNOWN"))
+    for index, condition in enumerate(normalized_response["conditions"]):
+        reason = normalization_reasons[index]
+        if reason is None:
+            candidate, interpretation, reason = _make_candidate(
+                row, condition, source_completeness=row.get("completeness_status", "UNKNOWN"))
+        else:
+            candidate, interpretation = None, None
         if reason:
             held.append({"notice_id": row["notice_id"], "status": reason, "review_status": "NEEDS_REVIEW", "decision_eligible": False,
-                         "field": condition.get("field"), "condition_type": condition.get("condition_type"),
+                         "proposal_index": index, "field": response["conditions"][index].get("field"),
+                         "normalized_field": normalization_records[index].get("normalized_field"),
+                         "condition_type": condition.get("condition_type"),
                          "evidence_quotes": condition.get("evidence_quotes", [])})
         else:
             candidates.append(candidate); interpretations.append(interpretation)
@@ -717,23 +953,56 @@ def _response_to_artifacts(row: dict[str, Any], response: dict[str, Any]) -> dic
                 index_errors.append({"notice_id": row["notice_id"], "status": "CONDITION_INDEX_OUT_OF_RANGE", "source_item": key,
                                      "review_status": "NEEDS_REVIEW", "decision_eligible": False})
     held.extend(index_errors)
-    id_by_index = {i: c["condition_id"] for i, c in enumerate(candidates)}
     # Duplicates/held proposals can make indexes non-contiguous; keep raw response indexes only where the candidate survived.
     # Recompute a best-effort index map from the original response to the emitted stable candidates.
     response_index_to_id = {}
-    for idx, raw_condition in enumerate(response["conditions"]):
+    surviving_candidate_ids = {candidate["condition_id"] for candidate in candidates}
+    for idx, raw_condition in enumerate(normalized_response["conditions"]):
+        if normalization_reasons[idx] is not None:
+            continue
         probe, _, reason = _make_candidate(row, raw_condition, source_completeness=row.get("completeness_status", "UNKNOWN"))
-        if not reason and probe:
+        if not reason and probe and probe["condition_id"] in surviving_candidate_ids:
             response_index_to_id[idx] = probe["condition_id"]
-    set_record = build_notice_set(row, candidates, response, response_index_to_id) if candidates else None
+
+    reference_state = preserve_logic_references(response, response_index_to_id)
+    effective_logic_sections = reference_state["logic_sections"]
+    incomplete_logic_indexes = set(reference_state["unresolved_condition_indexes"])
+    if incomplete_logic_indexes:
+        held.append({"notice_id": row["notice_id"], "status": "INCOMPLETE_LOGIC_DUE_TO_HELD_CONDITIONS",
+                     "unresolved_condition_indexes": sorted(incomplete_logic_indexes),
+                     "review_status": "NEEDS_REVIEW", "decision_eligible": False})
+
+    set_response = copy.deepcopy(normalized_response)
+    set_response["logic_sections"] = effective_logic_sections
+    set_record = build_notice_set(row, candidates, set_response, response_index_to_id) if candidates else None
+    if set_record is not None and incomplete_logic_indexes:
+        set_record["decision_readiness"]["limiting_reasons"].append("INCOMPLETE_LOGIC_DUE_TO_HELD_CONDITIONS")
     proposals = {
         "notice_id": row["notice_id"],
-        "logic_sections": response["logic_sections"],
+        "proposed_logic_sections": response["logic_sections"],
+        "logic_sections": effective_logic_sections,
         "exceptions": response["exceptions"],
         "unresolved_relations": response["unresolved_relations"],
         "index_to_condition_id": response_index_to_id,
+        "logical_completeness": "INCOMPLETE" if incomplete_logic_indexes else "PROPOSAL_ONLY",
+        "unresolved_condition_indexes": sorted(incomplete_logic_indexes),
         "review_status": "UNREVIEWED", "decision_eligible": False,
     }
+    proposals.update(reference_state)
+    proposal_validation_states = {}
+    for index in range(len(response["conditions"])):
+        if index in response_index_to_id:
+            state = "ACCEPTED_UNREVIEWED"
+        elif normalization_reasons[index] == "ATTRIBUTE_SEMANTIC_AMBIGUITY":
+            state = "HELD_FOR_REVIEW"
+        else:
+            state = "REJECTED_OR_DEDUPLICATED"
+        proposal_validation_states[str(index)] = state
+    proposals["proposal_validation_states"] = proposal_validation_states
+    for exception in proposals["exception_resolution"]:
+        exception["target_candidate_validation_states"] = {
+            str(index): proposal_validation_states.get(str(index), "INVALID_INDEX")
+            for index in exception["original_target_condition_indexes"]}
     review = None
     if response["status"] == "NO_CONDITIONS_FOUND" or held:
         review = {"notice_id": row["notice_id"], "source_system": row["source_system"],
@@ -741,7 +1010,10 @@ def _response_to_artifacts(row: dict[str, Any], response: dict[str, Any]) -> dic
                   "held_count": len(held), "held_items": held, "source_completeness": row.get("completeness_status", "UNKNOWN"),
                   "review_status": "NEEDS_REVIEW", "decision_eligible": False}
     return {"conditions": candidates, "interpretations": interpretations, "notice_set": set_record,
-            "logic_proposal": proposals, "review_queue": review, "held": held}
+            "logic_proposal": proposals, "review_queue": review, "held": held,
+            "normalized_response": normalized_response,
+            "attribute_normalization": normalization_records,
+            "attribute_normalization_reasons": normalization_reasons}
 
 
 def _condition_ref(condition_id: str) -> dict[str, Any]:
@@ -889,12 +1161,14 @@ async def extract_notice(row: dict[str, Any], provider: LLMProvider,
             provider, row, request_budget=request_budget, max_format_attempts=max_format_attempts)
         artifacts = _response_to_artifacts(row, response)
         return {"notice_id": row["notice_id"], "status": "COMPLETED", "attempts": attempts,
+                "request_ordinal": getattr(request_budget, "last_request_ordinal", None),
                 "duration_ms": round((time.monotonic() - start) * 1000), "usage": usage,
                 "response": response, "raw_response_attempts": raw_attempts,
                 "provider_metadata": getattr(provider, "last_response", {}), "provider_error": {},
                 "artifacts": artifacts, "error_code": None}
     except ExtractionFailure as exc:
         return {"notice_id": row.get("notice_id"), "status": exc.status,
+                "request_ordinal": getattr(request_budget, "last_request_ordinal", None),
                 "attempts": exc.attempts, "duration_ms": round((time.monotonic() - start) * 1000),
                 "duration_ms_precise": round((time.monotonic() - start) * 1000, 3),
                 "usage": exc.usage, "response": response,
@@ -925,7 +1199,7 @@ async def run_pilot(provider: LLMProvider, notice_ids: list[str], *, output_dir:
     results = []
     for nid in notice_ids:
         results.append(await extract_notice(inputs[nid], provider, budget, max_format_attempts))
-    condition_rows, interpretation_rows, sets, logic_rows, queue = [], [], [], [], []
+    condition_rows, interpretation_rows, sets, logic_rows, queue, attribute_normalization_rows = [], [], [], [], [], []
     for result in results:
         if result["artifacts"]:
             artifacts = result["artifacts"]
@@ -934,6 +1208,8 @@ async def run_pilot(provider: LLMProvider, notice_ids: list[str], *, output_dir:
             if artifacts["notice_set"]:
                 sets.append(artifacts["notice_set"])
             logic_rows.append(artifacts["logic_proposal"])
+            attribute_normalization_rows.extend({"notice_id": result["notice_id"], **record}
+                                               for record in artifacts["attribute_normalization"])
             if artifacts["review_queue"]:
                 queue.append(artifacts["review_queue"])
         else:
@@ -942,7 +1218,7 @@ async def run_pilot(provider: LLMProvider, notice_ids: list[str], *, output_dir:
     intermediate_rows = [{"notice_id": r["notice_id"], "intermediate_response": r["response"],
                           "review_status": "UNREVIEWED", "decision_eligible": False}
                          for r in results if r.get("response") is not None]
-    ordinals = {a["notice_id"]: a["request_ordinal"] for a in getattr(budget, "attempts", [])}
+    ordinals = {r["notice_id"]: r.get("request_ordinal") for r in results}
     raw_rows = [{"notice_id": r["notice_id"], "response_attempts": r["raw_response_attempts"],
                  "accepted": r["status"] == "COMPLETED", "attempts": r["attempts"],
                  "provider_metadata": r.get("provider_metadata", {}), "provider_error": r.get("provider_error", {}),
@@ -960,18 +1236,34 @@ async def run_pilot(provider: LLMProvider, notice_ids: list[str], *, output_dir:
         accepted_ids = accepted_by_notice.get(result["notice_id"], set())
         # Re-run deterministic source checks solely to expose per-proposal decisions.
         source_row = inputs[result["notice_id"]]
+        artifacts = result["artifacts"]
+        normalized_response = artifacts["normalized_response"]
+        normalization_reasons = artifacts["attribute_normalization_reasons"]
         for index, proposed in enumerate(response.get("conditions", [])):
-            candidate, _, reason = _make_candidate(source_row, proposed, source_completeness=source_row.get("completeness_status", "UNKNOWN"))
+            normalized_proposal = normalized_response["conditions"][index]
+            reason = normalization_reasons[index]
+            if reason is None:
+                candidate, _, reason = _make_candidate(source_row, normalized_proposal,
+                    source_completeness=source_row.get("completeness_status", "UNKNOWN"))
+            else:
+                candidate = None
             candidate_id = candidate["condition_id"] if candidate else None
-            after_status = "ACCEPTED" if candidate_id in accepted_ids else "REJECTED_OR_DEDUPLICATED"
+            after_status = ("ACCEPTED" if candidate_id in accepted_ids else
+                            "HELD_FOR_REVIEW" if reason == "ATTRIBUTE_SEMANTIC_AMBIGUITY" else
+                            "REJECTED_OR_DEDUPLICATED")
             before_validation_rows.append({"notice_id": result["notice_id"], "proposal_index": index,
                                            "proposal": proposed, "validation_status": "PENDING"})
             detail = {"notice_id": result["notice_id"], "proposal_index": index,
                       "candidate_id": candidate_id, "status": after_status,
+                      "original_field": proposed.get("field"),
+                      "normalized_field": artifacts["attribute_normalization"][index].get("normalized_field"),
+                      "mapping_status": artifacts["attribute_normalization"][index]["mapping_status"],
+                      "value_operator_validation": "PASS" if reason is None else
+                          "BLOCKED" if reason == "ATTRIBUTE_SEMANTIC_AMBIGUITY" else "FAIL",
                       "reason": reason if reason else (None if after_status == "ACCEPTED" else "DUPLICATE_OR_CONFLICT"),
                       "review_status": "UNREVIEWED", "decision_eligible": False}
             validation_rows.append(detail)
-            if after_status != "ACCEPTED":
+            if after_status == "REJECTED_OR_DEDUPLICATED":
                 rejected_rows.append({**detail, "proposal": proposed})
     execution_rows = [{"notice_id": r["notice_id"], "status": r["status"], "attempts": r["attempts"],
                        "duration_ms": r["duration_ms"], "usage": r["usage"], "error_code": r["error_code"],
@@ -980,10 +1272,17 @@ async def run_pilot(provider: LLMProvider, notice_ids: list[str], *, output_dir:
                       | {"request_ordinal": ordinals.get(r["notice_id"]), "model_id": getattr(provider, "model", None)}
                       for r in results]
     output_dir = Path(output_dir)
+    intermediate_errors = []
+    for result in results:
+        if result.get("status") == "SCHEMA_VALIDATION_ERROR" and result.get("raw_response_attempts"):
+            intermediate_errors.extend(intermediate_schema_diagnostics(
+                result["notice_id"], result["raw_response_attempts"][-1]))
+    _write_jsonl(output_dir / "intermediate_schema_errors.jsonl", intermediate_errors)
     _write_jsonl(output_dir / "llm_condition_predictions.jsonl", condition_rows)
     _write_jsonl(output_dir / "condition_interpretations.jsonl", interpretation_rows)
     _write_jsonl(output_dir / "notice_condition_sets.jsonl", sets)
     _write_jsonl(output_dir / "logic_proposals.jsonl", logic_rows)
+    _write_jsonl(output_dir / "attribute_normalization.jsonl", attribute_normalization_rows)
     _write_jsonl(output_dir / "intermediate_responses.jsonl", intermediate_rows)
     _write_jsonl(output_dir / "raw_model_responses.jsonl", raw_rows)
     _write_jsonl(output_dir / "raw_llm_responses.jsonl", raw_rows)
@@ -1011,14 +1310,18 @@ async def run_pilot(provider: LLMProvider, notice_ids: list[str], *, output_dir:
         "usage": dict(usage), "api_request_count": budget.used, "api_request_limit": budget.limit,
         "retry_count": sum(max(0, r["attempts"] - 1) for r in results),
         "failure_count": sum(r["status"] != "COMPLETED" for r in results),
+        "intermediate_schema_error_count": len(intermediate_errors),
+        "final_artifact_schema_error_count": len(schema_errors),
         "prompt_version": PROMPT_VERSION,
         "prompt_sha256": hashlib.sha256(system_prompt().encode("utf-8")).hexdigest(),
+        "attribute_normalization_rules_version": ATTRIBUTE_NORMALIZATION_RULES_VERSION,
+        "attribute_normalization_rules_sha256": ATTRIBUTE_NORMALIZATION_RULES_SHA256,
         "evaluation_split_used": False, "gold_data_read": False,
         "review_status": "UNREVIEWED", "decision_eligible": False,
         "artifact_hashes": {},
     }
     artifact_names = ("llm_condition_predictions.jsonl", "condition_interpretations.jsonl", "notice_condition_sets.jsonl",
-                      "logic_proposals.jsonl", "intermediate_responses.jsonl", "raw_model_responses.jsonl",
+                      "logic_proposals.jsonl", "attribute_normalization.jsonl", "intermediate_responses.jsonl", "raw_model_responses.jsonl",
                       "raw_llm_responses.jsonl", "predictions_before_validation.jsonl", "validation_details.jsonl",
                       "predictions_after_validation.jsonl", "rejected_candidates.jsonl", "per_notice_execution.jsonl", "review_queue.jsonl", "schema_errors.jsonl")
     for name in artifact_names:
@@ -1065,8 +1368,7 @@ def main() -> int:
     if not isinstance(ids, list) or len(ids) != MAX_PILOT_NOTICES or not all(isinstance(n, str) for n in ids):
         parser.error(f"notice ID file must contain exactly {MAX_PILOT_NOTICES} DEVELOPMENT IDs as a JSON string array")
     try:
-        provider = configured_provider(provider_override=args.provider)
-        report = asyncio.run(run_pilot(provider, ids, output_dir=args.output_dir))
+        report = asyncio.run(_run_pilot_with_owned_provider(ids, args.output_dir, args.provider))
     except ExtractionFailure as exc:
         print(json.dumps({"status": exc.status, "error_code": exc.detail_code, "review_status": "NEEDS_REVIEW", "decision_eligible": False}, ensure_ascii=False, indent=2))
         return 2

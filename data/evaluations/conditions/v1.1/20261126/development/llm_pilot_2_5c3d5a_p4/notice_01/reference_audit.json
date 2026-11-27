@@ -1,0 +1,32 @@
+{
+  "adapter_version": "condition-logic-evaluation-adapter-v1",
+  "root_selection": "EXISTING_LOGIC_SECTIONS_ROOTS",
+  "integrity_status": "PASS",
+  "errors": [],
+  "warnings": [],
+  "group_definitions": 0,
+  "used_group_ids": [],
+  "source_sections": [],
+  "source_roots": [],
+  "evaluation_counts": {
+    "groups": 0,
+    "edges": 0,
+    "nested_groups": 0,
+    "condition_reference_occurrences": 0,
+    "root_count": 0
+  },
+  "source_proposal": {},
+  "unresolved_condition_indexes": [],
+  "unexecutable_groups": [],
+  "exceptions": [],
+  "unresolved_relations": [],
+  "logical_completeness": "NOT_AVAILABLE_IN_SOURCE",
+  "unsupported_semantics": {
+    "exception_effects": "NOT_MEASURED_UNSUPPORTED",
+    "exception_scope": "PRESERVED_NOT_SCORED",
+    "unresolved_relation_meaning": "NOT_MEASURED_UNSUPPORTED",
+    "completeness": "PRESERVED_NOT_SCORED",
+    "phase_dependent_logic": "NOT_MEASURED_UNSUPPORTED"
+  },
+  "decision_eligible": false
+}

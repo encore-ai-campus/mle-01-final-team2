@@ -1,0 +1,289 @@
+{
+  "status": "PREPARED_NO_API_CALLS",
+  "api_call_count": 0,
+  "responses_reused": 7,
+  "requests_used": 10,
+  "request_limit": 13,
+  "remaining": 3,
+  "comparison": [
+    {
+      "notice_id": "BIZINFO:PBLN_000000000117168",
+      "proposal_count": 5,
+      "accepted": 4,
+      "held": 1,
+      "rejected": 0,
+      "candidates_identical": true,
+      "gate": {
+        "status": "PASS",
+        "decision_eligible": false,
+        "valid_candidate_count": 4,
+        "held_count": 1,
+        "proposals_accounted": true
+      },
+      "changed_files": [
+        "logic_proposals.jsonl",
+        "manifest.json",
+        "replay_report.json"
+      ]
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000118182",
+      "proposal_count": 10,
+      "accepted": 10,
+      "held": 0,
+      "rejected": 0,
+      "candidates_identical": true,
+      "gate": {
+        "status": "PASS",
+        "api_response_present": true,
+        "json_parse_and_execution_ok": true,
+        "all_proposals_accounted": true,
+        "valid_candidate_count": 10,
+        "held_count": 0,
+        "rejected_count": 0,
+        "extraction_quality_state": "CANDIDATES_AVAILABLE",
+        "extraction_quality_gate": "UNREVIEWED_CANDIDATES",
+        "evidence_ok": true,
+        "date_temporal_preserved": true,
+        "schema_error_count": 0,
+        "incomplete_logic_preserved": true,
+        "logic_structure_checks": {
+          "proposed_logic_sections": true,
+          "logic_sections": true,
+          "exceptions": true,
+          "exception_resolution": true,
+          "unresolved_relations": true,
+          "unresolved_condition_indexes": true,
+          "unreferenced_unresolved_condition_indexes": true,
+          "invalid_reference_indexes": true,
+          "logical_completeness": true,
+          "proposal_validation_states": true
+        },
+        "decision_eligible_true_count": 0,
+        "decision_eligible": false,
+        "reason": null
+      },
+      "changed_files": [
+        "logic_proposals.jsonl",
+        "manifest.json",
+        "replay_report.json"
+      ]
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000119490",
+      "proposal_count": 6,
+      "accepted": 4,
+      "held": 0,
+      "rejected": 2,
+      "candidates_identical": true,
+      "gate": {
+        "status": "PASS",
+        "api_response_present": true,
+        "json_parse_and_execution_ok": true,
+        "all_proposals_accounted": true,
+        "valid_candidate_count": 4,
+        "held_count": 0,
+        "rejected_count": 2,
+        "extraction_quality_state": "CANDIDATES_AVAILABLE",
+        "extraction_quality_gate": "UNREVIEWED_CANDIDATES",
+        "evidence_ok": true,
+        "date_temporal_preserved": true,
+        "schema_error_count": 0,
+        "incomplete_logic_preserved": true,
+        "logic_structure_checks": {
+          "proposed_logic_sections": true,
+          "logic_sections": true,
+          "exceptions": true,
+          "exception_resolution": true,
+          "unresolved_relations": true,
+          "unresolved_condition_indexes": true,
+          "unreferenced_unresolved_condition_indexes": true,
+          "invalid_reference_indexes": true,
+          "logical_completeness": true,
+          "proposal_validation_states": true
+        },
+        "decision_eligible_true_count": 0,
+        "decision_eligible": false,
+        "reason": null
+      },
+      "changed_files": [
+        "logic_proposals.jsonl",
+        "manifest.json",
+        "replay_report.json"
+      ]
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000126490",
+      "proposal_count": 3,
+      "accepted": 0,
+      "held": 0,
+      "rejected": 3,
+      "candidates_identical": true,
+      "gate": {
+        "status": "PASS",
+        "api_response_present": true,
+        "json_parse_and_execution_ok": true,
+        "all_proposals_accounted": true,
+        "valid_candidate_count": 0,
+        "held_count": 0,
+        "rejected_count": 3,
+        "extraction_quality_state": "ZERO_VALID_CANDIDATES",
+        "extraction_quality_gate": "REVIEW_REQUIRED",
+        "evidence_ok": true,
+        "date_temporal_preserved": true,
+        "schema_error_count": 0,
+        "incomplete_logic_preserved": true,
+        "logic_structure_checks": {
+          "proposed_logic_sections": true,
+          "logic_sections": true,
+          "exceptions": true,
+          "exception_resolution": true,
+          "unresolved_relations": true,
+          "unresolved_condition_indexes": true,
+          "unreferenced_unresolved_condition_indexes": true,
+          "invalid_reference_indexes": true,
+          "logical_completeness": true,
+          "proposal_validation_states": true
+        },
+        "decision_eligible_true_count": 0,
+        "decision_eligible": false,
+        "reason": null
+      },
+      "changed_files": [
+        "logic_proposals.jsonl",
+        "manifest.json",
+        "replay_report.json"
+      ]
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000128028",
+      "proposal_count": 5,
+      "accepted": 5,
+      "held": 0,
+      "rejected": 0,
+      "candidates_identical": true,
+      "gate": {
+        "status": "PASS",
+        "api_response_present": true,
+        "json_parse_and_execution_ok": true,
+        "all_proposals_accounted": true,
+        "valid_candidate_count": 5,
+        "held_count": 0,
+        "rejected_count": 0,
+        "extraction_quality_state": "CANDIDATES_AVAILABLE",
+        "extraction_quality_gate": "UNREVIEWED_CANDIDATES",
+        "evidence_ok": true,
+        "date_temporal_preserved": true,
+        "schema_error_count": 0,
+        "incomplete_logic_preserved": true,
+        "logic_structure_checks": {
+          "proposed_logic_sections": true,
+          "logic_sections": true,
+          "exceptions": true,
+          "exception_resolution": true,
+          "unresolved_relations": true,
+          "unresolved_condition_indexes": true,
+          "unreferenced_unresolved_condition_indexes": true,
+          "invalid_reference_indexes": true,
+          "logical_completeness": true,
+          "proposal_validation_states": true
+        },
+        "decision_eligible_true_count": 0,
+        "decision_eligible": false,
+        "reason": null
+      },
+      "changed_files": [
+        "logic_proposals.jsonl",
+        "manifest.json",
+        "replay_report.json"
+      ]
+    },
+    {
+      "notice_id": "KSTARTUP:176001",
+      "proposal_count": 4,
+      "accepted": 4,
+      "held": 0,
+      "rejected": 0,
+      "candidates_identical": true,
+      "gate": {
+        "status": "PASS",
+        "api_response_present": true,
+        "json_parse_and_execution_ok": true,
+        "all_proposals_accounted": true,
+        "valid_candidate_count": 4,
+        "held_count": 0,
+        "rejected_count": 0,
+        "extraction_quality_state": "CANDIDATES_AVAILABLE",
+        "extraction_quality_gate": "UNREVIEWED_CANDIDATES",
+        "evidence_ok": true,
+        "date_temporal_preserved": true,
+        "schema_error_count": 0,
+        "incomplete_logic_preserved": true,
+        "logic_structure_checks": {
+          "proposed_logic_sections": true,
+          "logic_sections": true,
+          "exceptions": true,
+          "exception_resolution": true,
+          "unresolved_relations": true,
+          "unresolved_condition_indexes": true,
+          "unreferenced_unresolved_condition_indexes": true,
+          "invalid_reference_indexes": true,
+          "logical_completeness": true,
+          "proposal_validation_states": true
+        },
+        "decision_eligible_true_count": 0,
+        "decision_eligible": false,
+        "reason": null
+      },
+      "changed_files": [
+        "logic_proposals.jsonl",
+        "manifest.json",
+        "replay_report.json"
+      ]
+    },
+    {
+      "notice_id": "KSTARTUP:176813",
+      "proposal_count": 6,
+      "accepted": 2,
+      "held": 0,
+      "rejected": 4,
+      "candidates_identical": true,
+      "gate": {
+        "status": "PASS",
+        "api_response_present": true,
+        "json_parse_and_execution_ok": true,
+        "all_proposals_accounted": true,
+        "valid_candidate_count": 2,
+        "held_count": 0,
+        "rejected_count": 4,
+        "extraction_quality_state": "CANDIDATES_AVAILABLE",
+        "extraction_quality_gate": "UNREVIEWED_CANDIDATES",
+        "evidence_ok": true,
+        "date_temporal_preserved": true,
+        "schema_error_count": 0,
+        "incomplete_logic_preserved": true,
+        "logic_structure_checks": {
+          "proposed_logic_sections": true,
+          "logic_sections": true,
+          "exceptions": true,
+          "exception_resolution": true,
+          "unresolved_relations": true,
+          "unresolved_condition_indexes": true,
+          "unreferenced_unresolved_condition_indexes": true,
+          "invalid_reference_indexes": true,
+          "logical_completeness": true,
+          "proposal_validation_states": true
+        },
+        "decision_eligible_true_count": 0,
+        "decision_eligible": false,
+        "reason": null
+      },
+      "changed_files": [
+        "logic_proposals.jsonl",
+        "manifest.json",
+        "replay_report.json",
+        "review_queue.jsonl"
+      ]
+    }
+  ]
+}

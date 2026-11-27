@@ -1,0 +1,1320 @@
+{
+  "contract_version": "attribute-semantic-contract-v1-draft",
+  "status": "DRAFT_NOT_DEPLOYED",
+  "canonical_authority": "Existing 22-member LLM catalog retained; schema category is open vocabulary",
+  "existing_catalog_count": 22,
+  "attributes": [
+    {
+      "canonical_field": "BUSINESS_TYPE",
+      "category_id": "BUSINESS_TYPE",
+      "description_ko": "사업체의 규모·법적/조직적 형태·사업 단계 유형",
+      "description_en": "Business classification by size, organization or business stage",
+      "entity_scope": "BUSINESS",
+      "allowed_condition_types": [
+        "ELIGIBILITY",
+        "EXCLUSION",
+        "PREFERENCE"
+      ],
+      "allowed_operators": [
+        "EQ",
+        "NEQ",
+        "IN",
+        "NOT_IN"
+      ],
+      "allowed_value_types": [
+        "STRING",
+        "ARRAY"
+      ],
+      "allowed_units": [],
+      "value_profile": "categorical",
+      "aliases": [
+        "business_type"
+      ],
+      "normalization_policy": {
+        "automatic_candidate": "EXACT_CASE_ONLY",
+        "field_category_must_agree": true,
+        "value_normalization_contract": "value_normalization_contract_v1.json",
+        "scope_preservation": true,
+        "null_field_allowed": false
+      },
+      "ambiguity_policy": {
+        "action": "HOLD_FOR_REVIEW",
+        "reason_ko": "예비창업자 포함 여부는 사업 단계/신청 주체 문맥 검수 필요",
+        "never_infer_from_gold": true
+      },
+      "examples": [
+        {
+          "text": "중소기업",
+          "kind": "SYNTHETIC_CONCEPT_EXAMPLE_NOT_OPERATIONAL_PREDICTION"
+        }
+      ],
+      "counterexamples": [
+        "개인 신청자 여부"
+      ],
+      "definition_source": [
+        "tools/extract_condition_candidates_llm.py:ATTRIBUTE_CATALOG",
+        "docs/condition/CONDITION_SCHEMA_V1.md:initial categories",
+        "schemas/conditions/condition-common-v1.1.schema.json#/$defs/condition"
+      ],
+      "definition_status": "DRAFT_INTERPRETATION_REQUIRES_REVIEW",
+      "compatibility_note": "Per-field restrictions are proposed semantic intersections, not existing schema enforcement."
+    },
+    {
+      "canonical_field": "APPLICANT_TYPE",
+      "category_id": "APPLICANT_TYPE",
+      "description_ko": "신청 주체의 자격상 유형 및 법적 주체",
+      "description_en": "Legal or participation type of the applicant entity",
+      "entity_scope": "APPLICANT",
+      "allowed_condition_types": [
+        "ELIGIBILITY",
+        "EXCLUSION",
+        "PREFERENCE"
+      ],
+      "allowed_operators": [
+        "EQ",
+        "NEQ",
+        "IN",
+        "NOT_IN"
+      ],
+      "allowed_value_types": [
+        "STRING",
+        "ARRAY"
+      ],
+      "allowed_units": [],
+      "value_profile": "categorical",
+      "aliases": [
+        "applicant_type"
+      ],
+      "normalization_policy": {
+        "automatic_candidate": "EXACT_CASE_ONLY",
+        "field_category_must_agree": true,
+        "value_normalization_contract": "value_normalization_contract_v1.json",
+        "scope_preservation": true,
+        "null_field_allowed": false
+      },
+      "ambiguity_policy": {
+        "action": "HOLD_FOR_REVIEW",
+        "reason_ko": "기업 규모·사업체 유형과 혼동 시 보류; 예비창업자 전역 BUSINESS_TYPE 치환 금지",
+        "never_infer_from_gold": true
+      },
+      "examples": [
+        {
+          "text": "연구기관",
+          "kind": "SYNTHETIC_CONCEPT_EXAMPLE_NOT_OPERATIONAL_PREDICTION"
+        }
+      ],
+      "counterexamples": [
+        "소상공인 규모 분류"
+      ],
+      "definition_source": [
+        "tools/extract_condition_candidates_llm.py:ATTRIBUTE_CATALOG",
+        "docs/condition/CONDITION_SCHEMA_V1.md:initial categories",
+        "schemas/conditions/condition-common-v1.1.schema.json#/$defs/condition"
+      ],
+      "definition_status": "DRAFT_INTERPRETATION_REQUIRES_REVIEW",
+      "compatibility_note": "Per-field restrictions are proposed semantic intersections, not existing schema enforcement."
+    },
+    {
+      "canonical_field": "APPLICANT_ADDRESS",
+      "category_id": "APPLICANT_ADDRESS",
+      "description_ko": "신청자 개인의 주소·거주 요건",
+      "description_en": "Address or residence requirement of the applicant person",
+      "entity_scope": "APPLICANT_PERSON",
+      "allowed_condition_types": [
+        "ELIGIBILITY",
+        "EXCLUSION",
+        "PREFERENCE"
+      ],
+      "allowed_operators": [
+        "EQ",
+        "NEQ",
+        "IN",
+        "NOT_IN"
+      ],
+      "allowed_value_types": [
+        "STRING",
+        "ARRAY"
+      ],
+      "allowed_units": [],
+      "value_profile": "region",
+      "aliases": [
+        "applicant_address"
+      ],
+      "normalization_policy": {
+        "automatic_candidate": "EXACT_CASE_ONLY",
+        "field_category_must_agree": true,
+        "value_normalization_contract": "value_normalization_contract_v1.json",
+        "scope_preservation": true,
+        "null_field_allowed": false
+      },
+      "ambiguity_policy": {
+        "action": "HOLD_FOR_REVIEW",
+        "reason_ko": "대표자 주소인지 신청자 주소인지 역할을 명시",
+        "never_infer_from_gold": true
+      },
+      "examples": [
+        {
+          "text": "신청자 주소가 부산광역시",
+          "kind": "SYNTHETIC_CONCEPT_EXAMPLE_NOT_OPERATIONAL_PREDICTION"
+        }
+      ],
+      "counterexamples": [
+        "사업장 부산 소재"
+      ],
+      "definition_source": [
+        "tools/extract_condition_candidates_llm.py:ATTRIBUTE_CATALOG",
+        "docs/condition/CONDITION_SCHEMA_V1.md:initial categories",
+        "schemas/conditions/condition-common-v1.1.schema.json#/$defs/condition"
+      ],
+      "definition_status": "DRAFT_INTERPRETATION_REQUIRES_REVIEW",
+      "compatibility_note": "Per-field restrictions are proposed semantic intersections, not existing schema enforcement."
+    },
+    {
+      "canonical_field": "BUSINESS_LOCATION",
+      "category_id": "BUSINESS_LOCATION",
+      "description_ko": "명시된 사업장 소재지 요건",
+      "description_en": "Location of an explicitly identified business site",
+      "entity_scope": "BUSINESS_SITE",
+      "allowed_condition_types": [
+        "ELIGIBILITY",
+        "EXCLUSION",
+        "PREFERENCE"
+      ],
+      "allowed_operators": [
+        "EQ",
+        "NEQ",
+        "IN",
+        "NOT_IN"
+      ],
+      "allowed_value_types": [
+        "STRING",
+        "ARRAY"
+      ],
+      "allowed_units": [],
+      "value_profile": "region",
+      "aliases": [
+        "business_location"
+      ],
+      "normalization_policy": {
+        "automatic_candidate": "EXACT_CASE_ONLY",
+        "field_category_must_agree": true,
+        "value_normalization_contract": "value_normalization_contract_v1.json",
+        "scope_preservation": true,
+        "null_field_allowed": false
+      },
+      "ambiguity_policy": {
+        "action": "HOLD_FOR_REVIEW",
+        "reason_ko": "본사/지점/사업장 entity role 보존; 도내/관내 문맥 미확인 시 보류",
+        "never_infer_from_gold": true
+      },
+      "examples": [
+        {
+          "text": "사업장이 부산광역시에 소재",
+          "kind": "SYNTHETIC_CONCEPT_EXAMPLE_NOT_OPERATIONAL_PREDICTION"
+        }
+      ],
+      "counterexamples": [
+        "신청자 거주 부산"
+      ],
+      "definition_source": [
+        "tools/extract_condition_candidates_llm.py:ATTRIBUTE_CATALOG",
+        "docs/condition/CONDITION_SCHEMA_V1.md:initial categories",
+        "schemas/conditions/condition-common-v1.1.schema.json#/$defs/condition"
+      ],
+      "definition_status": "DRAFT_INTERPRETATION_REQUIRES_REVIEW",
+      "compatibility_note": "Per-field restrictions are proposed semantic intersections, not existing schema enforcement."
+    },
+    {
+      "canonical_field": "BUSINESS_AGE",
+      "category_id": "BUSINESS_AGE",
+      "description_ko": "사업 개시 후 경과 업력",
+      "description_en": "Elapsed duration since business commencement",
+      "entity_scope": "BUSINESS",
+      "allowed_condition_types": [
+        "ELIGIBILITY",
+        "EXCLUSION",
+        "PREFERENCE"
+      ],
+      "allowed_operators": [
+        "EQ",
+        "NEQ",
+        "GT",
+        "GTE",
+        "LT",
+        "LTE",
+        "BETWEEN"
+      ],
+      "allowed_value_types": [
+        "NUMBER",
+        "RANGE"
+      ],
+      "allowed_units": [
+        "DAY",
+        "MONTH",
+        "YEAR"
+      ],
+      "value_profile": "duration",
+      "aliases": [
+        "business_age"
+      ],
+      "normalization_policy": {
+        "automatic_candidate": "EXACT_CASE_ONLY",
+        "field_category_must_agree": true,
+        "value_normalization_contract": "value_normalization_contract_v1.json",
+        "scope_preservation": true,
+        "null_field_allowed": false
+      },
+      "ambiguity_policy": {
+        "action": "HOLD_FOR_REVIEW",
+        "reason_ko": "기준시점·사업개시일 종류·예비창업자 분기 보존",
+        "never_infer_from_gold": true
+      },
+      "examples": [
+        {
+          "text": "사업 개시 후 4년 미만",
+          "kind": "SYNTHETIC_CONCEPT_EXAMPLE_NOT_OPERATIONAL_PREDICTION"
+        }
+      ],
+      "counterexamples": [
+        "대표자 나이 40세"
+      ],
+      "definition_source": [
+        "tools/extract_condition_candidates_llm.py:ATTRIBUTE_CATALOG",
+        "docs/condition/CONDITION_SCHEMA_V1.md:initial categories",
+        "schemas/conditions/condition-common-v1.1.schema.json#/$defs/condition"
+      ],
+      "definition_status": "DRAFT_INTERPRETATION_REQUIRES_REVIEW",
+      "compatibility_note": "Per-field restrictions are proposed semantic intersections, not existing schema enforcement."
+    },
+    {
+      "canonical_field": "REPRESENTATIVE_AGE",
+      "category_id": "REPRESENTATIVE_AGE",
+      "description_ko": "대표자로 지정된 개인의 연령",
+      "description_en": "Age of a person explicitly acting as representative",
+      "entity_scope": "REPRESENTATIVE_PERSON",
+      "allowed_condition_types": [
+        "ELIGIBILITY",
+        "EXCLUSION",
+        "PREFERENCE"
+      ],
+      "allowed_operators": [
+        "EQ",
+        "NEQ",
+        "GT",
+        "GTE",
+        "LT",
+        "LTE",
+        "BETWEEN"
+      ],
+      "allowed_value_types": [
+        "NUMBER",
+        "RANGE"
+      ],
+      "allowed_units": [
+        "YEAR"
+      ],
+      "value_profile": "age",
+      "aliases": [
+        "representative_age"
+      ],
+      "normalization_policy": {
+        "automatic_candidate": "EXACT_CASE_ONLY",
+        "field_category_must_agree": true,
+        "value_normalization_contract": "value_normalization_contract_v1.json",
+        "scope_preservation": true,
+        "null_field_allowed": false
+      },
+      "ambiguity_policy": {
+        "action": "HOLD_FOR_REVIEW",
+        "reason_ko": "대표자와 신청자 동일인인지 추정하지 않음",
+        "never_infer_from_gold": true
+      },
+      "examples": [
+        {
+          "text": "대표자 만 25세 이상",
+          "kind": "SYNTHETIC_CONCEPT_EXAMPLE_NOT_OPERATIONAL_PREDICTION"
+        }
+      ],
+      "counterexamples": [
+        "팀원 만 25세 이상"
+      ],
+      "definition_source": [
+        "tools/extract_condition_candidates_llm.py:ATTRIBUTE_CATALOG",
+        "docs/condition/CONDITION_SCHEMA_V1.md:initial categories",
+        "schemas/conditions/condition-common-v1.1.schema.json#/$defs/condition"
+      ],
+      "definition_status": "DRAFT_INTERPRETATION_REQUIRES_REVIEW",
+      "compatibility_note": "Per-field restrictions are proposed semantic intersections, not existing schema enforcement."
+    },
+    {
+      "canonical_field": "APPLICANT_AGE",
+      "category_id": "APPLICANT_AGE",
+      "description_ko": "신청자·참가자로 지정된 개인의 연령",
+      "description_en": "Age of an explicitly identified applicant or participant",
+      "entity_scope": "APPLICANT_PERSON",
+      "allowed_condition_types": [
+        "ELIGIBILITY",
+        "EXCLUSION",
+        "PREFERENCE"
+      ],
+      "allowed_operators": [
+        "EQ",
+        "NEQ",
+        "GT",
+        "GTE",
+        "LT",
+        "LTE",
+        "BETWEEN"
+      ],
+      "allowed_value_types": [
+        "NUMBER",
+        "RANGE"
+      ],
+      "allowed_units": [
+        "YEAR"
+      ],
+      "value_profile": "age",
+      "aliases": [
+        "applicant_age"
+      ],
+      "normalization_policy": {
+        "automatic_candidate": "EXACT_CASE_ONLY",
+        "field_category_must_agree": true,
+        "value_normalization_contract": "value_normalization_contract_v1.json",
+        "scope_preservation": true,
+        "null_field_allowed": false
+      },
+      "ambiguity_policy": {
+        "action": "HOLD_FOR_REVIEW",
+        "reason_ko": "역할별 주어/수량사 보존; 팀원까지 자동 확장 금지",
+        "never_infer_from_gold": true
+      },
+      "examples": [
+        {
+          "text": "참가자 만 25세 이상",
+          "kind": "SYNTHETIC_CONCEPT_EXAMPLE_NOT_OPERATIONAL_PREDICTION"
+        }
+      ],
+      "counterexamples": [
+        "대표자와 팀원 모두의 나이"
+      ],
+      "definition_source": [
+        "tools/extract_condition_candidates_llm.py:ATTRIBUTE_CATALOG",
+        "docs/condition/CONDITION_SCHEMA_V1.md:initial categories",
+        "schemas/conditions/condition-common-v1.1.schema.json#/$defs/condition"
+      ],
+      "definition_status": "DRAFT_INTERPRETATION_REQUIRES_REVIEW",
+      "compatibility_note": "Per-field restrictions are proposed semantic intersections, not existing schema enforcement."
+    },
+    {
+      "canonical_field": "INDUSTRY",
+      "category_id": "INDUSTRY",
+      "description_ko": "요구되는 사업 분야·업종",
+      "description_en": "Required industry or business sector",
+      "entity_scope": "BUSINESS",
+      "allowed_condition_types": [
+        "ELIGIBILITY",
+        "EXCLUSION",
+        "PREFERENCE"
+      ],
+      "allowed_operators": [
+        "EQ",
+        "NEQ",
+        "IN",
+        "NOT_IN"
+      ],
+      "allowed_value_types": [
+        "STRING",
+        "ARRAY"
+      ],
+      "allowed_units": [],
+      "value_profile": "categorical",
+      "aliases": [
+        "industry"
+      ],
+      "normalization_policy": {
+        "automatic_candidate": "EXACT_CASE_ONLY",
+        "field_category_must_agree": true,
+        "value_normalization_contract": "value_normalization_contract_v1.json",
+        "scope_preservation": true,
+        "null_field_allowed": false
+      },
+      "ambiguity_policy": {
+        "action": "HOLD_FOR_REVIEW",
+        "reason_ko": "코드 체계·버전 미확인 시 원문 라벨 유지",
+        "never_infer_from_gold": true
+      },
+      "examples": [
+        {
+          "text": "제조업 또는 정보통신업",
+          "kind": "SYNTHETIC_CONCEPT_EXAMPLE_NOT_OPERATIONAL_PREDICTION"
+        }
+      ],
+      "counterexamples": [
+        "산업 매출액 비중"
+      ],
+      "definition_source": [
+        "tools/extract_condition_candidates_llm.py:ATTRIBUTE_CATALOG",
+        "docs/condition/CONDITION_SCHEMA_V1.md:initial categories",
+        "schemas/conditions/condition-common-v1.1.schema.json#/$defs/condition"
+      ],
+      "definition_status": "DRAFT_INTERPRETATION_REQUIRES_REVIEW",
+      "compatibility_note": "Per-field restrictions are proposed semantic intersections, not existing schema enforcement."
+    },
+    {
+      "canonical_field": "REVENUE",
+      "category_id": "REVENUE",
+      "description_ko": "기간과 회계 기준이 명시된 매출액",
+      "description_en": "Revenue amount with period and accounting basis",
+      "entity_scope": "BUSINESS",
+      "allowed_condition_types": [
+        "ELIGIBILITY",
+        "EXCLUSION",
+        "PREFERENCE"
+      ],
+      "allowed_operators": [
+        "EQ",
+        "NEQ",
+        "GT",
+        "GTE",
+        "LT",
+        "LTE",
+        "BETWEEN"
+      ],
+      "allowed_value_types": [
+        "NUMBER",
+        "RANGE"
+      ],
+      "allowed_units": [
+        "KRW",
+        "USD"
+      ],
+      "value_profile": "money",
+      "aliases": [
+        "revenue"
+      ],
+      "normalization_policy": {
+        "automatic_candidate": "EXACT_CASE_ONLY",
+        "field_category_must_agree": true,
+        "value_normalization_contract": "value_normalization_contract_v1.json",
+        "scope_preservation": true,
+        "null_field_allowed": false
+      },
+      "ambiguity_policy": {
+        "action": "HOLD_FOR_REVIEW",
+        "reason_ko": "결산기간·개별/연결·부가세 기준 추정 금지",
+        "never_infer_from_gold": true
+      },
+      "examples": [
+        {
+          "text": "전년도 매출 2억원 이상",
+          "kind": "SYNTHETIC_CONCEPT_EXAMPLE_NOT_OPERATIONAL_PREDICTION"
+        }
+      ],
+      "counterexamples": [
+        "투자유치 2억원"
+      ],
+      "definition_source": [
+        "tools/extract_condition_candidates_llm.py:ATTRIBUTE_CATALOG",
+        "docs/condition/CONDITION_SCHEMA_V1.md:initial categories",
+        "schemas/conditions/condition-common-v1.1.schema.json#/$defs/condition"
+      ],
+      "definition_status": "DRAFT_INTERPRETATION_REQUIRES_REVIEW",
+      "compatibility_note": "Per-field restrictions are proposed semantic intersections, not existing schema enforcement."
+    },
+    {
+      "canonical_field": "REVENUE_FINANCIAL",
+      "category_id": "REVENUE_FINANCIAL",
+      "description_ko": "구 규칙의 매출·재무 계열 식별자; 의미 범위 미확정",
+      "description_en": "Legacy revenue/financial identifier with unresolved semantic breadth",
+      "entity_scope": "BUSINESS",
+      "allowed_condition_types": [
+        "ELIGIBILITY",
+        "EXCLUSION",
+        "PREFERENCE"
+      ],
+      "allowed_operators": [
+        "EQ",
+        "NEQ",
+        "GT",
+        "GTE",
+        "LT",
+        "LTE",
+        "BETWEEN"
+      ],
+      "allowed_value_types": [
+        "NUMBER",
+        "RANGE"
+      ],
+      "allowed_units": [
+        "KRW",
+        "USD"
+      ],
+      "value_profile": "money",
+      "aliases": [
+        "revenue_financial"
+      ],
+      "normalization_policy": {
+        "automatic_candidate": "EXACT_CASE_ONLY",
+        "field_category_must_agree": true,
+        "value_normalization_contract": "value_normalization_contract_v1.json",
+        "scope_preservation": true,
+        "null_field_allowed": false
+      },
+      "ambiguity_policy": {
+        "action": "HOLD_FOR_REVIEW",
+        "reason_ko": "현재 카탈로그 유지; REVENUE 전역 alias 금지, 원문이 매출액임을 확인해야 함",
+        "never_infer_from_gold": true
+      },
+      "examples": [
+        {
+          "text": "구 규칙 매출액 2억원",
+          "kind": "SYNTHETIC_CONCEPT_EXAMPLE_NOT_OPERATIONAL_PREDICTION"
+        }
+      ],
+      "counterexamples": [
+        "총자산 2억원을 매출로 간주"
+      ],
+      "definition_source": [
+        "tools/extract_condition_candidates_llm.py:ATTRIBUTE_CATALOG",
+        "docs/condition/CONDITION_SCHEMA_V1.md:initial categories",
+        "schemas/conditions/condition-common-v1.1.schema.json#/$defs/condition"
+      ],
+      "definition_status": "DRAFT_INTERPRETATION_REQUIRES_REVIEW",
+      "compatibility_note": "Per-field restrictions are proposed semantic intersections, not existing schema enforcement."
+    },
+    {
+      "canonical_field": "INDUSTRY_REVENUE_SHARE",
+      "category_id": "INDUSTRY_REVENUE_SHARE",
+      "description_ko": "특정 업종 매출이 전체 매출에서 차지하는 비중",
+      "description_en": "Share of total revenue attributable to an industry",
+      "entity_scope": "BUSINESS",
+      "allowed_condition_types": [
+        "ELIGIBILITY",
+        "EXCLUSION",
+        "PREFERENCE"
+      ],
+      "allowed_operators": [
+        "EQ",
+        "NEQ",
+        "GT",
+        "GTE",
+        "LT",
+        "LTE",
+        "BETWEEN"
+      ],
+      "allowed_value_types": [
+        "NUMBER",
+        "RANGE"
+      ],
+      "allowed_units": [
+        "PERCENT"
+      ],
+      "value_profile": "percent",
+      "aliases": [
+        "industry_revenue_share"
+      ],
+      "normalization_policy": {
+        "automatic_candidate": "EXACT_CASE_ONLY",
+        "field_category_must_agree": true,
+        "value_normalization_contract": "value_normalization_contract_v1.json",
+        "scope_preservation": true,
+        "null_field_allowed": false
+      },
+      "ambiguity_policy": {
+        "action": "HOLD_FOR_REVIEW",
+        "reason_ko": "분자 업종·분모 전체매출·기간 보존",
+        "never_infer_from_gold": true
+      },
+      "examples": [
+        {
+          "text": "매출 중 제조업 비중 15% 이상",
+          "kind": "SYNTHETIC_CONCEPT_EXAMPLE_NOT_OPERATIONAL_PREDICTION"
+        }
+      ],
+      "counterexamples": [
+        "수익률 15%"
+      ],
+      "definition_source": [
+        "tools/extract_condition_candidates_llm.py:ATTRIBUTE_CATALOG",
+        "docs/condition/CONDITION_SCHEMA_V1.md:initial categories",
+        "schemas/conditions/condition-common-v1.1.schema.json#/$defs/condition"
+      ],
+      "definition_status": "DRAFT_INTERPRETATION_REQUIRES_REVIEW",
+      "compatibility_note": "Per-field restrictions are proposed semantic intersections, not existing schema enforcement."
+    },
+    {
+      "canonical_field": "EMPLOYEE_COUNT",
+      "category_id": "EMPLOYEE_COUNT",
+      "description_ko": "요건에 지정된 고용인원 수",
+      "description_en": "Count of employees under an explicit counting basis",
+      "entity_scope": "BUSINESS_EMPLOYMENT",
+      "allowed_condition_types": [
+        "ELIGIBILITY",
+        "EXCLUSION",
+        "PREFERENCE"
+      ],
+      "allowed_operators": [
+        "EQ",
+        "NEQ",
+        "GT",
+        "GTE",
+        "LT",
+        "LTE",
+        "BETWEEN"
+      ],
+      "allowed_value_types": [
+        "NUMBER",
+        "RANGE"
+      ],
+      "allowed_units": [
+        "PERSON"
+      ],
+      "value_profile": "persons",
+      "aliases": [
+        "employee_count"
+      ],
+      "normalization_policy": {
+        "automatic_candidate": "EXACT_CASE_ONLY",
+        "field_category_must_agree": true,
+        "value_normalization_contract": "value_normalization_contract_v1.json",
+        "scope_preservation": true,
+        "null_field_allowed": false
+      },
+      "ambiguity_policy": {
+        "action": "HOLD_FOR_REVIEW",
+        "reason_ko": "현재 인원/신규채용 인원/기간 평균 및 포함 범위 구분",
+        "never_infer_from_gold": true
+      },
+      "examples": [
+        {
+          "text": "상시근로자 8명 이상",
+          "kind": "SYNTHETIC_CONCEPT_EXAMPLE_NOT_OPERATIONAL_PREDICTION"
+        }
+      ],
+      "counterexamples": [
+        "향후 채용 대상 청년"
+      ],
+      "definition_source": [
+        "tools/extract_condition_candidates_llm.py:ATTRIBUTE_CATALOG",
+        "docs/condition/CONDITION_SCHEMA_V1.md:initial categories",
+        "schemas/conditions/condition-common-v1.1.schema.json#/$defs/condition"
+      ],
+      "definition_status": "DRAFT_INTERPRETATION_REQUIRES_REVIEW",
+      "compatibility_note": "Per-field restrictions are proposed semantic intersections, not existing schema enforcement."
+    },
+    {
+      "canonical_field": "CERTIFICATION",
+      "category_id": "CERTIFICATION",
+      "description_ko": "확인된 인증 자격·인증 상태",
+      "description_en": "Certification designation or certification status",
+      "entity_scope": "BUSINESS_OR_APPLICANT",
+      "allowed_condition_types": [
+        "ELIGIBILITY",
+        "EXCLUSION",
+        "PREFERENCE"
+      ],
+      "allowed_operators": [
+        "EQ",
+        "NEQ",
+        "IN",
+        "NOT_IN",
+        "EXISTS",
+        "NOT_EXISTS"
+      ],
+      "allowed_value_types": [
+        "STRING",
+        "BOOLEAN",
+        "ARRAY",
+        "UNKNOWN"
+      ],
+      "allowed_units": [],
+      "value_profile": "status",
+      "aliases": [
+        "certification"
+      ],
+      "normalization_policy": {
+        "automatic_candidate": "EXACT_CASE_ONLY",
+        "field_category_must_agree": true,
+        "value_normalization_contract": "value_normalization_contract_v1.json",
+        "scope_preservation": true,
+        "null_field_allowed": false
+      },
+      "ambiguity_policy": {
+        "action": "HOLD_FOR_REVIEW",
+        "reason_ko": "인증·면허·특허권은 별개; 인증명과 유효성/발급기관 범위 유지",
+        "never_infer_from_gold": true
+      },
+      "examples": [
+        {
+          "text": "환경 인증 보유",
+          "kind": "SYNTHETIC_CONCEPT_EXAMPLE_NOT_OPERATIONAL_PREDICTION"
+        }
+      ],
+      "counterexamples": [
+        "지식재산권 보유"
+      ],
+      "definition_source": [
+        "tools/extract_condition_candidates_llm.py:ATTRIBUTE_CATALOG",
+        "docs/condition/CONDITION_SCHEMA_V1.md:initial categories",
+        "schemas/conditions/condition-common-v1.1.schema.json#/$defs/condition"
+      ],
+      "definition_status": "DRAFT_INTERPRETATION_REQUIRES_REVIEW",
+      "compatibility_note": "Per-field restrictions are proposed semantic intersections, not existing schema enforcement."
+    },
+    {
+      "canonical_field": "LICENSE_STATUS",
+      "category_id": "LICENSE_STATUS",
+      "description_ko": "면허·허가 보유 또는 상태",
+      "description_en": "License or permit possession and status",
+      "entity_scope": "BUSINESS_OR_APPLICANT",
+      "allowed_condition_types": [
+        "ELIGIBILITY",
+        "EXCLUSION",
+        "PREFERENCE"
+      ],
+      "allowed_operators": [
+        "EQ",
+        "NEQ",
+        "IN",
+        "NOT_IN",
+        "EXISTS",
+        "NOT_EXISTS"
+      ],
+      "allowed_value_types": [
+        "STRING",
+        "BOOLEAN",
+        "ARRAY",
+        "UNKNOWN"
+      ],
+      "allowed_units": [],
+      "value_profile": "status",
+      "aliases": [
+        "license_status"
+      ],
+      "normalization_policy": {
+        "automatic_candidate": "EXACT_CASE_ONLY",
+        "field_category_must_agree": true,
+        "value_normalization_contract": "value_normalization_contract_v1.json",
+        "scope_preservation": true,
+        "null_field_allowed": false
+      },
+      "ambiguity_policy": {
+        "action": "HOLD_FOR_REVIEW",
+        "reason_ko": "면허 종류·허가·등록 구분; 무효/취소/기한 유지",
+        "never_infer_from_gold": true
+      },
+      "examples": [
+        {
+          "text": "영업허가 보유",
+          "kind": "SYNTHETIC_CONCEPT_EXAMPLE_NOT_OPERATIONAL_PREDICTION"
+        }
+      ],
+      "counterexamples": [
+        "사업자등록 완료"
+      ],
+      "definition_source": [
+        "tools/extract_condition_candidates_llm.py:ATTRIBUTE_CATALOG",
+        "docs/condition/CONDITION_SCHEMA_V1.md:initial categories",
+        "schemas/conditions/condition-common-v1.1.schema.json#/$defs/condition"
+      ],
+      "definition_status": "DRAFT_INTERPRETATION_REQUIRES_REVIEW",
+      "compatibility_note": "Per-field restrictions are proposed semantic intersections, not existing schema enforcement."
+    },
+    {
+      "canonical_field": "BUSINESS_REGISTRATION",
+      "category_id": "BUSINESS_REGISTRATION",
+      "description_ko": "사업자등록 사건 또는 요구 행위",
+      "description_en": "Business registration event or required registration action",
+      "entity_scope": "BUSINESS",
+      "allowed_condition_types": [
+        "ELIGIBILITY",
+        "EXCLUSION",
+        "PREFERENCE"
+      ],
+      "allowed_operators": [
+        "EQ",
+        "NEQ",
+        "IN",
+        "NOT_IN",
+        "EXISTS",
+        "NOT_EXISTS"
+      ],
+      "allowed_value_types": [
+        "STRING",
+        "BOOLEAN",
+        "ARRAY",
+        "UNKNOWN"
+      ],
+      "allowed_units": [],
+      "value_profile": "status",
+      "aliases": [
+        "business_registration"
+      ],
+      "normalization_policy": {
+        "automatic_candidate": "EXACT_CASE_ONLY",
+        "field_category_must_agree": true,
+        "value_normalization_contract": "value_normalization_contract_v1.json",
+        "scope_preservation": true,
+        "null_field_allowed": false
+      },
+      "ambiguity_policy": {
+        "action": "HOLD_FOR_REVIEW",
+        "reason_ko": "미래 가능/이행 의무/현재 사건은 phase/requirement_kind로 구분",
+        "never_infer_from_gold": true
+      },
+      "examples": [
+        {
+          "text": "선정 후 2개월 이내 사업자등록",
+          "kind": "SYNTHETIC_CONCEPT_EXAMPLE_NOT_OPERATIONAL_PREDICTION"
+        }
+      ],
+      "counterexamples": [
+        "현재 사업자등록 완료 여부"
+      ],
+      "definition_source": [
+        "tools/extract_condition_candidates_llm.py:ATTRIBUTE_CATALOG",
+        "docs/condition/CONDITION_SCHEMA_V1.md:initial categories",
+        "schemas/conditions/condition-common-v1.1.schema.json#/$defs/condition"
+      ],
+      "definition_status": "DRAFT_INTERPRETATION_REQUIRES_REVIEW",
+      "compatibility_note": "Per-field restrictions are proposed semantic intersections, not existing schema enforcement."
+    },
+    {
+      "canonical_field": "BUSINESS_REGISTRATION_STATUS",
+      "category_id": "BUSINESS_REGISTRATION_STATUS",
+      "description_ko": "기준 시점의 사업자등록 상태",
+      "description_en": "Business registration status at a reference time",
+      "entity_scope": "BUSINESS",
+      "allowed_condition_types": [
+        "ELIGIBILITY",
+        "EXCLUSION",
+        "PREFERENCE"
+      ],
+      "allowed_operators": [
+        "EQ",
+        "NEQ",
+        "IN",
+        "NOT_IN",
+        "EXISTS",
+        "NOT_EXISTS"
+      ],
+      "allowed_value_types": [
+        "STRING",
+        "BOOLEAN",
+        "ARRAY",
+        "UNKNOWN"
+      ],
+      "allowed_units": [],
+      "value_profile": "status",
+      "aliases": [
+        "business_registration_status"
+      ],
+      "normalization_policy": {
+        "automatic_candidate": "EXACT_CASE_ONLY",
+        "field_category_must_agree": true,
+        "value_normalization_contract": "value_normalization_contract_v1.json",
+        "scope_preservation": true,
+        "null_field_allowed": false
+      },
+      "ambiguity_policy": {
+        "action": "HOLD_FOR_REVIEW",
+        "reason_ko": "사업자등록과 상태는 맥락에 따라 구분; completed 라벨은 코드 승인 전 원문 보존",
+        "never_infer_from_gold": true
+      },
+      "examples": [
+        {
+          "text": "신청일 현재 사업자등록 완료",
+          "kind": "SYNTHETIC_CONCEPT_EXAMPLE_NOT_OPERATIONAL_PREDICTION"
+        }
+      ],
+      "counterexamples": [
+        "선정 후 등록 가능한 자"
+      ],
+      "definition_source": [
+        "tools/extract_condition_candidates_llm.py:ATTRIBUTE_CATALOG",
+        "docs/condition/CONDITION_SCHEMA_V1.md:initial categories",
+        "schemas/conditions/condition-common-v1.1.schema.json#/$defs/condition"
+      ],
+      "definition_status": "DRAFT_INTERPRETATION_REQUIRES_REVIEW",
+      "compatibility_note": "Per-field restrictions are proposed semantic intersections, not existing schema enforcement."
+    },
+    {
+      "canonical_field": "PROGRAM_PARTICIPATION",
+      "category_id": "PROGRAM_PARTICIPATION",
+      "description_ko": "지원·보육 등 사업 참여 사실 또는 이력",
+      "description_en": "Participation in a program including past participation",
+      "entity_scope": "APPLICANT_OR_BUSINESS",
+      "allowed_condition_types": [
+        "ELIGIBILITY",
+        "EXCLUSION",
+        "PREFERENCE"
+      ],
+      "allowed_operators": [
+        "EQ",
+        "NEQ",
+        "IN",
+        "NOT_IN",
+        "EXISTS",
+        "NOT_EXISTS"
+      ],
+      "allowed_value_types": [
+        "STRING",
+        "BOOLEAN",
+        "ARRAY",
+        "UNKNOWN"
+      ],
+      "allowed_units": [],
+      "value_profile": "status",
+      "aliases": [
+        "program_participation"
+      ],
+      "normalization_policy": {
+        "automatic_candidate": "EXACT_CASE_ONLY",
+        "field_category_must_agree": true,
+        "value_normalization_contract": "value_normalization_contract_v1.json",
+        "scope_preservation": true,
+        "null_field_allowed": false
+      },
+      "ambiguity_policy": {
+        "action": "HOLD_FOR_REVIEW",
+        "reason_ko": "사업 유형·지원 주체·과거/현재·횟수·제외 범위 보존",
+        "never_infer_from_gold": true
+      },
+      "examples": [
+        {
+          "text": "공공 보육사업 참여 이력",
+          "kind": "SYNTHETIC_CONCEPT_EXAMPLE_NOT_OPERATIONAL_PREDICTION"
+        }
+      ],
+      "counterexamples": [
+        "특정 기관과 기술이전 가능"
+      ],
+      "definition_source": [
+        "tools/extract_condition_candidates_llm.py:ATTRIBUTE_CATALOG",
+        "docs/condition/CONDITION_SCHEMA_V1.md:initial categories",
+        "schemas/conditions/condition-common-v1.1.schema.json#/$defs/condition"
+      ],
+      "definition_status": "DRAFT_INTERPRETATION_REQUIRES_REVIEW",
+      "compatibility_note": "Per-field restrictions are proposed semantic intersections, not existing schema enforcement."
+    },
+    {
+      "canonical_field": "DOCUMENT_SUBMISSION",
+      "category_id": "DOCUMENT_SUBMISSION",
+      "description_ko": "특정 증빙 또는 신청 서류의 제출 의무",
+      "description_en": "Obligation to submit an identified document",
+      "entity_scope": "APPLICANT_DOCUMENT_OBLIGATION",
+      "allowed_condition_types": [
+        "ELIGIBILITY",
+        "EXCLUSION",
+        "PREFERENCE"
+      ],
+      "allowed_operators": [
+        "EQ",
+        "NEQ",
+        "IN",
+        "NOT_IN",
+        "EXISTS",
+        "NOT_EXISTS"
+      ],
+      "allowed_value_types": [
+        "STRING",
+        "BOOLEAN",
+        "ARRAY",
+        "UNKNOWN"
+      ],
+      "allowed_units": [],
+      "value_profile": "status",
+      "aliases": [
+        "document_submission"
+      ],
+      "normalization_policy": {
+        "automatic_candidate": "EXACT_CASE_ONLY",
+        "field_category_must_agree": true,
+        "value_normalization_contract": "value_normalization_contract_v1.json",
+        "scope_preservation": true,
+        "null_field_allowed": false
+      },
+      "ambiguity_policy": {
+        "action": "HOLD_FOR_REVIEW",
+        "reason_ko": "서류의 증명 대상 사실과 제출 행위를 별도 조건으로 취급",
+        "never_infer_from_gold": true
+      },
+      "examples": [
+        {
+          "text": "거주 증명서 제출 필수",
+          "kind": "SYNTHETIC_CONCEPT_EXAMPLE_NOT_OPERATIONAL_PREDICTION"
+        }
+      ],
+      "counterexamples": [
+        "서울 거주 요건 자체"
+      ],
+      "definition_source": [
+        "tools/extract_condition_candidates_llm.py:ATTRIBUTE_CATALOG",
+        "docs/condition/CONDITION_SCHEMA_V1.md:initial categories",
+        "schemas/conditions/condition-common-v1.1.schema.json#/$defs/condition"
+      ],
+      "definition_status": "DRAFT_INTERPRETATION_REQUIRES_REVIEW",
+      "compatibility_note": "Per-field restrictions are proposed semantic intersections, not existing schema enforcement."
+    },
+    {
+      "canonical_field": "FINANCIAL_CAPACITY",
+      "category_id": "FINANCIAL_CAPACITY",
+      "description_ko": "매출 외 명시된 자금조달·부담·재정 능력 요건",
+      "description_en": "Explicit financial capacity or contribution requirement other than revenue",
+      "entity_scope": "BUSINESS_FINANCE",
+      "allowed_condition_types": [
+        "ELIGIBILITY",
+        "EXCLUSION",
+        "PREFERENCE"
+      ],
+      "allowed_operators": [
+        "EQ",
+        "NEQ",
+        "GT",
+        "GTE",
+        "LT",
+        "LTE",
+        "BETWEEN"
+      ],
+      "allowed_value_types": [
+        "NUMBER",
+        "RANGE"
+      ],
+      "allowed_units": [
+        "KRW",
+        "USD"
+      ],
+      "value_profile": "money",
+      "aliases": [
+        "financial_capacity"
+      ],
+      "normalization_policy": {
+        "automatic_candidate": "EXACT_CASE_ONLY",
+        "field_category_must_agree": true,
+        "value_normalization_contract": "value_normalization_contract_v1.json",
+        "scope_preservation": true,
+        "null_field_allowed": false
+      },
+      "ambiguity_policy": {
+        "action": "HOLD_FOR_REVIEW",
+        "reason_ko": "자산/자부담/투자/담보/지원금은 측정 대상이 달라 subtype 문맥 필요",
+        "never_infer_from_gold": true
+      },
+      "examples": [
+        {
+          "text": "자부담 500만원 확보",
+          "kind": "SYNTHETIC_CONCEPT_EXAMPLE_NOT_OPERATIONAL_PREDICTION"
+        }
+      ],
+      "counterexamples": [
+        "매출 500만원"
+      ],
+      "definition_source": [
+        "tools/extract_condition_candidates_llm.py:ATTRIBUTE_CATALOG",
+        "docs/condition/CONDITION_SCHEMA_V1.md:initial categories",
+        "schemas/conditions/condition-common-v1.1.schema.json#/$defs/condition"
+      ],
+      "definition_status": "DRAFT_INTERPRETATION_REQUIRES_REVIEW",
+      "compatibility_note": "Per-field restrictions are proposed semantic intersections, not existing schema enforcement."
+    },
+    {
+      "canonical_field": "DUPLICATE_OCCUPANCY",
+      "category_id": "DUPLICATE_OCCUPANCY",
+      "description_ko": "동시·중복 입주 사실 또는 금지",
+      "description_en": "Concurrent or duplicate occupancy requirement",
+      "entity_scope": "BUSINESS_SITE_PARTICIPATION",
+      "allowed_condition_types": [
+        "ELIGIBILITY",
+        "EXCLUSION",
+        "PREFERENCE"
+      ],
+      "allowed_operators": [
+        "EQ",
+        "NEQ",
+        "IN",
+        "NOT_IN",
+        "EXISTS",
+        "NOT_EXISTS"
+      ],
+      "allowed_value_types": [
+        "STRING",
+        "BOOLEAN",
+        "ARRAY",
+        "UNKNOWN"
+      ],
+      "allowed_units": [],
+      "value_profile": "status",
+      "aliases": [
+        "duplicate_occupancy"
+      ],
+      "normalization_policy": {
+        "automatic_candidate": "EXACT_CASE_ONLY",
+        "field_category_must_agree": true,
+        "value_normalization_contract": "value_normalization_contract_v1.json",
+        "scope_preservation": true,
+        "null_field_allowed": false
+      },
+      "ambiguity_policy": {
+        "action": "HOLD_FOR_REVIEW",
+        "reason_ko": "시설 범위·본점/지점·시점·부정 극성 보존",
+        "never_infer_from_gold": true
+      },
+      "examples": [
+        {
+          "text": "다른 시설 중복입주 불가",
+          "kind": "SYNTHETIC_CONCEPT_EXAMPLE_NOT_OPERATIONAL_PREDICTION"
+        }
+      ],
+      "counterexamples": [
+        "다른 지원금 중복수혜"
+      ],
+      "definition_source": [
+        "tools/extract_condition_candidates_llm.py:ATTRIBUTE_CATALOG",
+        "docs/condition/CONDITION_SCHEMA_V1.md:initial categories",
+        "schemas/conditions/condition-common-v1.1.schema.json#/$defs/condition"
+      ],
+      "definition_status": "DRAFT_INTERPRETATION_REQUIRES_REVIEW",
+      "compatibility_note": "Per-field restrictions are proposed semantic intersections, not existing schema enforcement."
+    },
+    {
+      "canonical_field": "QUALITATIVE_QUALIFICATION",
+      "category_id": "QUALITATIVE_QUALIFICATION",
+      "description_ko": "별도 속성으로 구조화하지 못한 질적 요건",
+      "description_en": "Qualitative requirement not represented by a more specific attribute",
+      "entity_scope": "APPLICANT_OR_BUSINESS",
+      "allowed_condition_types": [
+        "ELIGIBILITY",
+        "EXCLUSION",
+        "PREFERENCE"
+      ],
+      "allowed_operators": [
+        "EQ",
+        "NEQ",
+        "EXISTS",
+        "NOT_EXISTS",
+        null
+      ],
+      "allowed_value_types": [
+        "STRING",
+        "UNKNOWN"
+      ],
+      "allowed_units": [],
+      "value_profile": "qualitative",
+      "aliases": [
+        "qualitative_qualification"
+      ],
+      "normalization_policy": {
+        "automatic_candidate": "EXACT_CASE_ONLY",
+        "field_category_must_agree": true,
+        "value_normalization_contract": "value_normalization_contract_v1.json",
+        "scope_preservation": true,
+        "null_field_allowed": false
+      },
+      "ambiguity_policy": {
+        "action": "HOLD_FOR_REVIEW",
+        "reason_ko": "알 수 없는 모든 개념을 자동 수용하는 fallback으로 사용 금지",
+        "never_infer_from_gold": true
+      },
+      "examples": [
+        {
+          "text": "친환경 기술역량 보유",
+          "kind": "SYNTHETIC_CONCEPT_EXAMPLE_NOT_OPERATIONAL_PREDICTION"
+        }
+      ],
+      "counterexamples": [
+        "명확한 매출 2억원 요건"
+      ],
+      "definition_source": [
+        "tools/extract_condition_candidates_llm.py:ATTRIBUTE_CATALOG",
+        "docs/condition/CONDITION_SCHEMA_V1.md:initial categories",
+        "schemas/conditions/condition-common-v1.1.schema.json#/$defs/condition"
+      ],
+      "definition_status": "DRAFT_INTERPRETATION_REQUIRES_REVIEW",
+      "compatibility_note": "Per-field restrictions are proposed semantic intersections, not existing schema enforcement."
+    },
+    {
+      "canonical_field": "UNCLASSIFIED",
+      "category_id": "UNCLASSIFIED",
+      "description_ko": "대상 속성 및 의미가 미확정인 조건 원문",
+      "description_en": "Unclassified source requirement awaiting review",
+      "entity_scope": "UNRESOLVED",
+      "allowed_condition_types": [
+        "UNCLASSIFIED"
+      ],
+      "allowed_operators": [
+        null
+      ],
+      "allowed_value_types": [
+        "UNKNOWN"
+      ],
+      "allowed_units": [],
+      "value_profile": "unclassified",
+      "aliases": [
+        "unclassified"
+      ],
+      "normalization_policy": {
+        "automatic_candidate": "EXACT_CASE_ONLY",
+        "field_category_must_agree": true,
+        "value_normalization_contract": "value_normalization_contract_v1.json",
+        "scope_preservation": true,
+        "null_field_allowed": true
+      },
+      "ambiguity_policy": {
+        "action": "HOLD_FOR_REVIEW",
+        "reason_ko": "미확인을 조건 없음으로 해석하지 않으며 판정 불가",
+        "never_infer_from_gold": true
+      },
+      "examples": [
+        {
+          "text": "해석이 미확정인 원문",
+          "kind": "SYNTHETIC_CONCEPT_EXAMPLE_NOT_OPERATIONAL_PREDICTION"
+        }
+      ],
+      "counterexamples": [
+        "아무 조건 없음"
+      ],
+      "definition_source": [
+        "tools/extract_condition_candidates_llm.py:ATTRIBUTE_CATALOG",
+        "docs/condition/CONDITION_SCHEMA_V1.md:initial categories",
+        "schemas/conditions/condition-common-v1.1.schema.json#/$defs/condition"
+      ],
+      "definition_status": "DRAFT_INTERPRETATION_REQUIRES_REVIEW",
+      "compatibility_note": "Per-field restrictions are proposed semantic intersections, not existing schema enforcement."
+    }
+  ],
+  "candidate_promotion_allowed": false,
+  "new_attribute_candidates": [
+    {
+      "canonical_field": "TEAM_MEMBER_AGE",
+      "status": "REQUIRES_APPROVAL",
+      "not_in_existing_catalog": true,
+      "reason": "Different person role from representative/applicant"
+    },
+    {
+      "canonical_field": "HIRING_REQUIREMENT",
+      "status": "REQUIRES_APPROVAL",
+      "not_in_existing_catalog": true,
+      "reason": "Required hiring action/target/status differs from employee stock count"
+    },
+    {
+      "canonical_field": "COLLABORATION_RELATION",
+      "status": "REQUIRES_APPROVAL",
+      "not_in_existing_catalog": true,
+      "reason": "Bilateral cooperation relation is not necessarily program participation"
+    },
+    {
+      "canonical_field": "TECHNOLOGY_TRANSFER_FEASIBILITY",
+      "status": "REQUIRES_APPROVAL",
+      "not_in_existing_catalog": true,
+      "reason": "Future capability differs from participation/actual transfer"
+    },
+    {
+      "canonical_field": "IP_RIGHT_REQUIREMENT",
+      "status": "REQUIRES_APPROVAL",
+      "not_in_existing_catalog": true,
+      "reason": "Right ownership, validity, territory and type differ from certification"
+    }
+  ],
+  "all_new_candidates_source_independent": true
+}

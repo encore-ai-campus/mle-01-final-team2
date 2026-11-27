@@ -1,0 +1,156 @@
+[
+  {
+    "notice_id": "BIZINFO:PBLN_000000000117168",
+    "response_received": true,
+    "json_parsed": true,
+    "extraction_succeeded": true,
+    "technical_gate_pass": true,
+    "evaluation_eligible": true,
+    "decision_eligible": false,
+    "validated_candidate_count": 4
+  },
+  {
+    "notice_id": "BIZINFO:PBLN_000000000118182",
+    "execution_status": "COMPLETED",
+    "response_received": true,
+    "json_parsed": true,
+    "extraction_succeeded": true,
+    "technical_gate_pass": true,
+    "evaluation_eligible": true,
+    "api_connection_failed": false,
+    "decision_eligible": false,
+    "validated_candidate_count": 10
+  },
+  {
+    "notice_id": "BIZINFO:PBLN_000000000119490",
+    "execution_status": "COMPLETED",
+    "response_received": true,
+    "json_parsed": true,
+    "extraction_succeeded": true,
+    "technical_gate_pass": true,
+    "evaluation_eligible": true,
+    "api_connection_failed": false,
+    "decision_eligible": false,
+    "validated_candidate_count": 4
+  },
+  {
+    "notice_id": "BIZINFO:PBLN_000000000126490",
+    "execution_status": "COMPLETED",
+    "response_received": true,
+    "json_parsed": true,
+    "extraction_succeeded": true,
+    "technical_gate_pass": true,
+    "evaluation_eligible": true,
+    "api_connection_failed": false,
+    "decision_eligible": false,
+    "validated_candidate_count": 0
+  },
+  {
+    "notice_id": "BIZINFO:PBLN_000000000128028",
+    "execution_status": "COMPLETED",
+    "response_received": true,
+    "json_parsed": true,
+    "extraction_succeeded": true,
+    "technical_gate_pass": true,
+    "evaluation_eligible": true,
+    "api_connection_failed": false,
+    "decision_eligible": false,
+    "validated_candidate_count": 5
+  },
+  {
+    "notice_id": "KSTARTUP:176001",
+    "execution_status": "COMPLETED",
+    "response_received": true,
+    "json_parsed": true,
+    "extraction_succeeded": true,
+    "technical_gate_pass": true,
+    "evaluation_eligible": true,
+    "api_connection_failed": false,
+    "decision_eligible": false,
+    "validated_candidate_count": 4
+  },
+  {
+    "notice_id": "KSTARTUP:176813",
+    "execution_status": "COMPLETED",
+    "response_received": true,
+    "json_parsed": true,
+    "extraction_succeeded": true,
+    "technical_gate_pass": true,
+    "evaluation_eligible": true,
+    "api_connection_failed": false,
+    "decision_eligible": false,
+    "validated_candidate_count": 2
+  },
+  {
+    "notice_id": "KSTARTUP:177447",
+    "execution_status": "COMPLETED",
+    "response_received": true,
+    "json_parsed": true,
+    "extraction_succeeded": true,
+    "technical_gate_pass": true,
+    "evaluation_eligible": true,
+    "api_connection_failed": false,
+    "decision_eligible": false,
+    "validated_candidate_count": 0
+  },
+  {
+    "notice_id": "KSTARTUP:178507",
+    "execution_status": "SCHEMA_VALIDATION_ERROR",
+    "response_received": true,
+    "json_parsed": true,
+    "extraction_succeeded": false,
+    "evaluation_eligible": true,
+    "decision_eligible": false,
+    "technical_gate_status": "EXTRACTION_FAILED",
+    "source_file_sha256": "57ddd8bc0b149d7a9852f66e6bb63af13a6af2fef3fe59cfd3fd631eb8b5e4ce",
+    "diagnostic_proposal_count": 10,
+    "validated_candidate_count": 0,
+    "intermediate_schema_errors": [
+      {
+        "notice_id": "KSTARTUP:178507",
+        "schema_name": "LLMConditionExtractionIntermediateV1",
+        "schema_version": "1",
+        "schema_dialect": "https://json-schema.org/draft/2020-12/schema",
+        "validation_stage": "INTERMEDIATE_RESPONSE",
+        "json_path": [
+          "conditions",
+          5,
+          "operator"
+        ],
+        "actual_value": "UNKNOWN",
+        "violated_rule": "enum",
+        "expected": [
+          "EQ",
+          "NEQ",
+          "GT",
+          "GTE",
+          "LT",
+          "LTE",
+          "IN",
+          "NOT_IN",
+          "BETWEEN",
+          "EXISTS",
+          "NOT_EXISTS",
+          null
+        ],
+        "source_response_sha256": "b7425e21232b3530cbb5feec03b878fe980e56262e1a48844ebebe7c037c9178",
+        "error_reproduced": true
+      }
+    ],
+    "post_validation_prediction_policy": "EMPTY_PREDICTIONS",
+    "pre_validation_policy": "EXISTING_PREVALIDATION_ADAPTER_WITH_RAW_UNMODIFIED_PROPOSALS",
+    "technical_gate_pass": false
+  },
+  {
+    "notice_id": "KSTARTUP:179386",
+    "execution_status": "COMPLETED",
+    "response_received": true,
+    "json_parsed": true,
+    "extraction_succeeded": true,
+    "technical_gate_pass": true,
+    "evaluation_eligible": true,
+    "api_connection_failed": false,
+    "decision_eligible": false,
+    "validated_candidate_count": 3
+  }
+]

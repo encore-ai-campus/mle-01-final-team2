@@ -1,0 +1,14 @@
+{
+  "notices": 10,
+  "gold_conditions": 62,
+  "gold_logic_groups": 24,
+  "gold_logic_relations": 71,
+  "rule_v1_f1": 0.1364,
+  "rule_E_f1": 0.1412,
+  "P12_f1": 0.021277,
+  "N1_f1": 0.06383,
+  "pilot_precision_target": 0.6,
+  "pilot_recall_target": 0.5,
+  "development_only_not_independent_evaluation": true,
+  "criteria_changed": false
+}
