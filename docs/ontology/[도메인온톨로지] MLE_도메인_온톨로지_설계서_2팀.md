@@ -465,7 +465,7 @@ R3 PREFERENCE   (가상) C9 founder_age LTE 39
 | HAS_TRACK | Notice→Track | 대상별 하위 구분 | 1:N | 요건, 미구축 |
 | HAS_REQUIREMENT | Notice \| Track→Requirement | 요건 | 1:N, `evidence` 필수. 공고에 직접 붙은 요건은 모든 트랙에 AND로 적용(§4.3) | 요건. 구조화 필드분 5,900 적재, 본문 요건 전 |
 | CITES | Requirement→LawArticle \| ExternalLaw | 요건이 법령을 **직접 인용**한 사실 | N:M, `evidence` 필수. 인용된 자격은 조건으로 따로 남김(§4.3). 준수·증빙 맥락의 인용은 `CITES`만 두고 조건을 만들지 않음 | 요건, 미구축(P1). 공고→조문 인용 543건(466건) |
-| HAS_CONDITION | Requirement→Condition | 원자 조건 | 1:N, `evidence` 필수 | 요건. 17,366 적재 |
+| HAS_CONDITION | Requirement→Condition | 원자 조건 | 1:N, `evidence` 필수 | 요건. 16,402 적재 |
 | HAS_CHILD | Condition→Condition | 그룹 조건의 하위 조건(§4.6) | 1:N, `cond_type=GROUP`에서만, 요건 아래 그룹 3단까지, `evidence` 필수 | 요건. 설계만(Aura 0) |
 | ABOUT | Condition→Concept | 조건이 가리키는 개념 | N:M, 정확·확정 별칭 일치만 | 요건 → 개념. 19,766 적재 |
 | DEFINED_BY | Concept→Definition | 개념의 판정 기준 | 1:N | 개념 → 법령 근거. 21 적재 |
@@ -503,7 +503,7 @@ R3 PREFERENCE   (가상) C9 founder_age LTE 39
 
 ### 5.4 관계 시그니처와 금지 관계
 
-관계마다 허용되는 (시작, 끝) 쌍은 5.2의 표가 정한다. 아래는 **금지 관계**와 적재 후에 0이어야 하는 점검 쿼리다(VAL-03·05·10·16·18·20·21). 적재 후 `tools/check_graph_neo4j.py`가 읽기 전용으로 모두 실행하며, 2026-11-27 실행에서 전부 기대값이었다(실행 기록 `docs/ontology/evidence/check_graph_neo4j_20261127.txt`, V9 546·V15 330 등 알려진 값 포함).
+관계마다 허용되는 (시작, 끝) 쌍은 5.2의 표가 정한다. 아래는 **금지 관계**와 적재 후에 0이어야 하는 점검 쿼리다(VAL-03·05·10·16·18·20·21). 적재 후 `tools/check_graph_neo4j.py`가 읽기 전용으로 모두 실행하며, 2026-11-27 실행에서 전부 기대값이었다(실행 기록 `docs/ontology/evidence/check_graph_neo4j_20261127.txt`, V9 546·V15 330 등 알려진 값 포함. 같은 날 판정 규칙 결정을 반영한 뒤 V9 0·V15 1,294, `check_graph_neo4j_20261127_after_sync.txt`).
 
 | ID | 금지 사항 | 이유 | 기대 결과 |
 |---|---|---|---|
@@ -761,7 +761,7 @@ RETURN x, r, c, collect(d) AS children;
 
 ## 8. Neo4j 물리 모델 매핑 예시
 
-개념 온톨로지와 Neo4j 속성 그래프는 같은 표현이 아니다. 아래 Cypher는 매핑을 설명하는 예시이고, 실제 적재는 `tools/load_graph_neo4j.py`가 한다(2026-11-25 구조화 요건까지 적재·점검, [적재 기록](../LOAD_Neo4j_적재기록_v0.1.md)). 저장소의 `tools/load_neo4j.py`는 별도의 IBK 내부 규정 데이터를 적재하는 코드라 이 프로젝트와 관련이 없다.
+개념 온톨로지와 Neo4j 속성 그래프는 같은 표현이 아니다. 아래 Cypher는 매핑을 설명하는 예시이고, 실제 적재는 `tools/sync_graph_neo4j.py`가 한다(2026-11-25 구조화 요건까지 적재·점검, [적재 기록](../LOAD_Neo4j_적재기록_v0.1.md)). 저장소의 `tools/load_neo4j.py`는 별도의 IBK 내부 규정 데이터를 적재하는 코드라 이 프로젝트와 관련이 없다.
 
 ```cypher
 // 제약: 적재 전에 먼저 건다
@@ -870,7 +870,7 @@ Neo4j 속성은 맵을 직접 담지 못해 `Condition.value`는 JSON 문자열�
 | 차이 계산 | 앞 스냅숏과 `content_hash`를 비교해 `NEW·CHANGED·UNCHANGED·CLOSED·DISAPPEARED·REOPENED`. 비싼 단계(첨부 OCR, 조건 추출, 검수)는 NEW·CHANGED만 |
 | 버전 | 같은 공고 ID의 내용이 바뀌면 `version+1`. 이전 요건은 `is_current=false`로 남기고 새 요건이 이전 요건을 `SUPERSEDES`로 가리킨다. 재공고·연장처럼 원천이 새 ID를 준 경우는 §5의 Notice → Notice `SUPERSEDES`(사람이 확인한 묶음만) |
 | 검수 정답 | 원문이 바뀐 공고의 정답은 `STALE`로 표시하고 재검수 대기열에 넣는다. 평가용 정답은 고정 |
-| 적재 | 공용 DB라 지우지 않고 상태 속성으로 표시. 파이프라인은 보고서(판정 변화 포함)까지 만들고, 적재는 승인 뒤 `load_graph_partial.py --select delta` |
+| 적재 | 공용 DB라 지우지 않고 상태 속성으로 표시. 파이프라인은 보고서(판정 변화 포함)까지 만들고, 적재는 승인 뒤 `sync_graph_neo4j.py`(delta 범위) |
 | 법령 계층 | `law_kind`(ACT·DECREE·RULE·ADMIN_RULE·ORDINANCE), 하위 → 상위 `ENFORCES`, 위임 조문 `DELEGATES_TO`, 판 사이 `SUPERSEDES`, 정의 근거 `CITES_LAW {role: basis·criteria·exception}` |
 | 개정 | 월 1회 법령일련번호 비교 → 새 판 노드, 조문 해시 비교로 영향 정의·규칙·조건을 찾아 `needs_review`를 되돌린다 |
 | 적용 판 | 공고 기준일에 시행 중인 판으로 판정. 그 판이 없으면 UNKNOWN + `law_version_unavailable`(VAL-07) |
@@ -933,7 +933,7 @@ Neo4j 속성은 맵을 직접 담지 못해 `Condition.value`는 JSON 문자열�
 
 ## 부록 B. 한계
 
-- 적재한 요건·조건은 구조화 필드로 만든 `structured_only`뿐이다(요건 5,900·조건 17,366, [적재 기록](../LOAD_Neo4j_적재기록_v0.1.md)). **본문에서 읽은 조건과 정의의 판정 기준(`rule_json`)은 적재하지 않았다.** 이 문서의 요건 층 예시는 본문을 손으로 읽은 가설이다.
+- 적재한 요건·조건은 구조화 필드로 만든 `structured_only`뿐이다(요건 4,936·조건 16,402, 2026-11-27 판정 규칙 결정 반영 후, [적재 기록](../LOAD_Neo4j_적재기록_v0.1.md)). **본문에서 읽은 조건과 정의의 판정 기준(`rule_json`)은 적재하지 않았다.** 이 문서의 요건 층 예시는 본문을 손으로 읽은 가설이다.
 - 기업마당은 **모집 중 스냅샷 1회분**(2026-11-24)이다. 마감 공고를 API가 제공하지 않아 과거 이력이 없고, `SUPERSEDES`·`content_hash` 변화는 재수집 후에야 만들 수 있다.
 - 기업마당 지역 태그는 판정 근거로 쓸 수 없다. 지역은 본문·첨부 추출과 소관 기관으로 정해야 한다.
 - K-Startup은 첨부를 받지 않아 첨부에만 있는 요건을 볼 수 없다. 제외 요건 필드가 비어 있어 제외 조건은 본문(자격 문구의 4%)에서만 찾을 수 있다.

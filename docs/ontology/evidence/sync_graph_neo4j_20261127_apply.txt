@@ -1,0 +1,117 @@
+# 실행: 2026-11-27 08:29 KST, python tools/sync_graph_neo4j.py --build (읽기 전용 비교, 승인 전 마지막 확인)
+그래프 파일 다시 만들기(build.py export)
+판정 기준(tools/graphrag/evaluator.py DEFAULT_OPTIONS): c1_pre_founder_not_in_options=unsat, c2_business_age_all_options=satisfied, c3_age_all_options=satisfied, c4_applicant_all_options=satisfied, c6_bizinfo_org_region=drop, a1_kstartup_region=soft, a3_pre_founder_missing_with_age=unsat, a6_unreviewed_group=unknown, body_priority=on, d2_gold_strength=by_attribute, e2_sales_margin=unknown_5pct
+입력: 노드 30,678개, 관계 57,631개 (data/graph)
+파일 검증: 중복 노드·관계 0, 끝점 없는 관계 0, 시그니처 위반 0
+범위 meta+laws+requirements: 노드 30,678 {'Concept': 355, 'Condition': 16402, 'Definition': 23, 'ExternalLaw': 44, 'LawAppendix': 59, 'LawArticle': 2325, 'Notice': 5116, 'Organization': 1399, 'Requirement': 4936, 'SupportCategory': 19}
+  관계 57,631 {'ABOUT': 22326, 'ANNOUNCED_BY': 5116, 'CITES_LAW': 27, 'DEFINED_BY': 21, 'EXECUTED_BY': 947, 'HAS_CONDITION': 16402, 'HAS_REQUIREMENT': 4936, 'IN_SUPPORT_CATEGORY': 5116, 'IS_A': 2, 'MEMBER_OF': 35, 'PART_OF': 2384, 'SUCCEEDED_BY': 35, 'WITHIN': 284}
+  Aura Free 한도 노드: 30,678 / 200,000 (15.3%)
+  Aura Free 한도 관계: 57,631 / 400,000 (14.4%)
+
+DB 비교(4fcaaade.databases.neo4j.io, 읽기 전용): DB 범위 안 노드 32,605, 관계 56,999
+  노드: 새로 1, 속성 바뀜 9,664, 같음 21,013
+  관계: 새로 3,524, 속성 바뀜 0, 같음 54,107
+  DB에만 있음(지울 대상): 노드 {'Condition': 964, 'Requirement': 964}, 관계 0, 노드와 함께 없어질 관계 2,892
+  바뀌는 속성: {'Requirement.logic_basis': 3822, 'Condition.about_pending': 3524, 'Condition.operator': 1354, 'Notice.search_region_id': 964}
+  DB에만 있는 속성(--drop-extra-props일 때만 지운다): {'Condition.about_unmapped': 3524, 'Condition.unknown_reason': 1354}
+  새 노드 예: APPLICANT_TYPE:일반기업
+  바뀐 노드 예: BIZINFO:PBLN_000000000128082 ['search_region_id']; BIZINFO:PBLN_000000000128081 ['search_region_id']; BIZINFO:PBLN_000000000128080 ['search_region_id']
+  지울 노드 예: Condition:BIZINFO:PBLN_000000000103611#C-region; Condition:BIZINFO:PBLN_000000000116966#C-region; Condition:BIZINFO:PBLN_000000000116998#C-region
+비교 요약 저장: plan_final.json(로컬 임시 파일)
+
+비교 끝. 아무것도 쓰지 않았다. 쓰려면 --apply --confirm-host <호스트> (지우기까지는 --prune).
+
+# 실행: 2026-11-27 08:29 KST, python tools/sync_graph_neo4j.py --apply --prune --confirm-host 4fcaaade.databases.neo4j.io (팀 승인 후 쓰기)
+판정 기준(tools/graphrag/evaluator.py DEFAULT_OPTIONS): c1_pre_founder_not_in_options=unsat, c2_business_age_all_options=satisfied, c3_age_all_options=satisfied, c4_applicant_all_options=satisfied, c6_bizinfo_org_region=drop, a1_kstartup_region=soft, a3_pre_founder_missing_with_age=unsat, a6_unreviewed_group=unknown, body_priority=on, d2_gold_strength=by_attribute, e2_sales_margin=unknown_5pct
+입력: 노드 30,678개, 관계 57,631개 (data/graph)
+파일 검증: 중복 노드·관계 0, 끝점 없는 관계 0, 시그니처 위반 0
+범위 meta+laws+requirements: 노드 30,678 {'Concept': 355, 'Condition': 16402, 'Definition': 23, 'ExternalLaw': 44, 'LawAppendix': 59, 'LawArticle': 2325, 'Notice': 5116, 'Organization': 1399, 'Requirement': 4936, 'SupportCategory': 19}
+  관계 57,631 {'ABOUT': 22326, 'ANNOUNCED_BY': 5116, 'CITES_LAW': 27, 'DEFINED_BY': 21, 'EXECUTED_BY': 947, 'HAS_CONDITION': 16402, 'HAS_REQUIREMENT': 4936, 'IN_SUPPORT_CATEGORY': 5116, 'IS_A': 2, 'MEMBER_OF': 35, 'PART_OF': 2384, 'SUCCEEDED_BY': 35, 'WITHIN': 284}
+  Aura Free 한도 노드: 30,678 / 200,000 (15.3%)
+  Aura Free 한도 관계: 57,631 / 400,000 (14.4%)
+
+DB 비교(4fcaaade.databases.neo4j.io, 읽기 전용): DB 범위 안 노드 32,605, 관계 56,999
+  노드: 새로 1, 속성 바뀜 9,664, 같음 21,013
+  관계: 새로 3,524, 속성 바뀜 0, 같음 54,107
+  DB에만 있음(지울 대상): 노드 {'Condition': 964, 'Requirement': 964}, 관계 0, 노드와 함께 없어질 관계 2,892
+  바뀌는 속성: {'Requirement.logic_basis': 3822, 'Condition.about_pending': 3524, 'Condition.operator': 1354, 'Notice.search_region_id': 964}
+  DB에만 있는 속성(--drop-extra-props일 때만 지운다): {'Condition.about_unmapped': 3524, 'Condition.unknown_reason': 1354}
+  새 노드 예: APPLICANT_TYPE:일반기업
+  바뀐 노드 예: BIZINFO:PBLN_000000000128082 ['search_region_id']; BIZINFO:PBLN_000000000128081 ['search_region_id']; BIZINFO:PBLN_000000000128080 ['search_region_id']; BIZINFO:PBLN_000000000128073 ['search_region_id']; BIZINFO:PBLN_000000000128071 ['search_region_id']
+  지울 노드 예: Condition:BIZINFO:PBLN_000000000103611#C-region; Condition:BIZINFO:PBLN_000000000116966#C-region; Condition:BIZINFO:PBLN_000000000116998#C-region; Condition:BIZINFO:PBLN_000000000117038#C-region; Condition:BIZINFO:PBLN_000000000117056#C-region
+
+쓰기 시작
+  노드 Concept 1개
+  노드 Condition 4878개
+  노드 Notice 964개
+  노드 Requirement 3822개
+  관계 ABOUT (Condition->Concept) 3524개
+  노드 삭제 Condition 964개
+  노드 삭제 Requirement 964개
+
+다시 비교: 파일과 같음
+적재 전후 차이:
+  nodes: 32605 → 30678 (-1927)
+  relationships: 56999 → 57631 (+632)
+  labels.Concept: 354 → 355 (+1)
+  labels.Condition: 17366 → 16402 (-964)
+  labels.Requirement: 5900 → 4936 (-964)
+  relationship_types.ABOUT: 19766 → 22326 (+2560)
+  relationship_types.HAS_CONDITION: 17366 → 16402 (-964)
+  relationship_types.HAS_REQUIREMENT: 5900 → 4936 (-964)
+  checks.V15: 330 → 1294 (+964)
+  checks.V9: 546 → 0 (-546)
+경고: V9 ABOUT 없는 개념형 조건: 알려진 값 546 → 0
+경고: V15 요건이 하나도 없는 공고: 알려진 값 330 → 1294
+
+# 실행: 2026-11-27 08:36 KST, python tools/sync_graph_neo4j.py --prune --drop-extra-props (읽기 전용 비교)
+참고: --prune은 --apply와 함께일 때만 지운다. 지금은 지울 대상을 보여 주기만 한다.
+판정 기준(tools/graphrag/evaluator.py DEFAULT_OPTIONS): c1_pre_founder_not_in_options=unsat, c2_business_age_all_options=satisfied, c3_age_all_options=satisfied, c4_applicant_all_options=satisfied, c6_bizinfo_org_region=drop, a1_kstartup_region=soft, a3_pre_founder_missing_with_age=unsat, a6_unreviewed_group=unknown, body_priority=on, d2_gold_strength=by_attribute, e2_sales_margin=unknown_5pct
+입력: 노드 30,678개, 관계 57,631개 (data/graph)
+파일 검증: 중복 노드·관계 0, 끝점 없는 관계 0, 시그니처 위반 0
+범위 meta+laws+requirements: 노드 30,678 {'Concept': 355, 'Condition': 16402, 'Definition': 23, 'ExternalLaw': 44, 'LawAppendix': 59, 'LawArticle': 2325, 'Notice': 5116, 'Organization': 1399, 'Requirement': 4936, 'SupportCategory': 19}
+  관계 57,631 {'ABOUT': 22326, 'ANNOUNCED_BY': 5116, 'CITES_LAW': 27, 'DEFINED_BY': 21, 'EXECUTED_BY': 947, 'HAS_CONDITION': 16402, 'HAS_REQUIREMENT': 4936, 'IN_SUPPORT_CATEGORY': 5116, 'IS_A': 2, 'MEMBER_OF': 35, 'PART_OF': 2384, 'SUCCEEDED_BY': 35, 'WITHIN': 284}
+  Aura Free 한도 노드: 30,678 / 200,000 (15.3%)
+  Aura Free 한도 관계: 57,631 / 400,000 (14.4%)
+
+DB 비교(4fcaaade.databases.neo4j.io, 읽기 전용): DB 범위 안 노드 30,678, 관계 57,631
+  노드: 새로 0, 속성 바뀜 4,878, 같음 25,800
+  관계: 새로 0, 속성 바뀜 0, 같음 57,631
+  DB에만 있음(지울 대상): 노드 0, 관계 0, 노드와 함께 없어질 관계 0
+  바뀌는 속성: {'Condition.-about_unmapped': 3524, 'Condition.-unknown_reason': 1354}
+  DB에만 있는 속성(--drop-extra-props일 때만 지운다): {'Condition.about_unmapped': 3524, 'Condition.unknown_reason': 1354}
+  바뀐 노드 예: KSTARTUP:179839#C-applicant_type ['-about_unmapped']; KSTARTUP:179837#C-business_age ['-unknown_reason']; KSTARTUP:179837#C-applicant_type ['-about_unmapped']
+
+비교 끝. 아무것도 쓰지 않았다. 쓰려면 --apply --confirm-host <호스트> (지우기까지는 --prune).
+
+# 실행: 2026-11-27 08:36 KST, python tools/sync_graph_neo4j.py --apply --prune --drop-extra-props --confirm-host 4fcaaade.databases.neo4j.io (안 쓰는 속성 삭제, 사용자 승인)
+판정 기준(tools/graphrag/evaluator.py DEFAULT_OPTIONS): c1_pre_founder_not_in_options=unsat, c2_business_age_all_options=satisfied, c3_age_all_options=satisfied, c4_applicant_all_options=satisfied, c6_bizinfo_org_region=drop, a1_kstartup_region=soft, a3_pre_founder_missing_with_age=unsat, a6_unreviewed_group=unknown, body_priority=on, d2_gold_strength=by_attribute, e2_sales_margin=unknown_5pct
+입력: 노드 30,678개, 관계 57,631개 (data/graph)
+파일 검증: 중복 노드·관계 0, 끝점 없는 관계 0, 시그니처 위반 0
+범위 meta+laws+requirements: 노드 30,678 {'Concept': 355, 'Condition': 16402, 'Definition': 23, 'ExternalLaw': 44, 'LawAppendix': 59, 'LawArticle': 2325, 'Notice': 5116, 'Organization': 1399, 'Requirement': 4936, 'SupportCategory': 19}
+  관계 57,631 {'ABOUT': 22326, 'ANNOUNCED_BY': 5116, 'CITES_LAW': 27, 'DEFINED_BY': 21, 'EXECUTED_BY': 947, 'HAS_CONDITION': 16402, 'HAS_REQUIREMENT': 4936, 'IN_SUPPORT_CATEGORY': 5116, 'IS_A': 2, 'MEMBER_OF': 35, 'PART_OF': 2384, 'SUCCEEDED_BY': 35, 'WITHIN': 284}
+  Aura Free 한도 노드: 30,678 / 200,000 (15.3%)
+  Aura Free 한도 관계: 57,631 / 400,000 (14.4%)
+
+DB 비교(4fcaaade.databases.neo4j.io, 읽기 전용): DB 범위 안 노드 30,678, 관계 57,631
+  노드: 새로 0, 속성 바뀜 4,878, 같음 25,800
+  관계: 새로 0, 속성 바뀜 0, 같음 57,631
+  DB에만 있음(지울 대상): 노드 0, 관계 0, 노드와 함께 없어질 관계 0
+  바뀌는 속성: {'Condition.-about_unmapped': 3524, 'Condition.-unknown_reason': 1354}
+  DB에만 있는 속성(--drop-extra-props일 때만 지운다): {'Condition.about_unmapped': 3524, 'Condition.unknown_reason': 1354}
+  바뀐 노드 예: KSTARTUP:179839#C-applicant_type ['-about_unmapped']; KSTARTUP:179837#C-business_age ['-unknown_reason']; KSTARTUP:179837#C-applicant_type ['-about_unmapped']; KSTARTUP:179836#C-business_age ['-unknown_reason']; KSTARTUP:179836#C-applicant_type ['-about_unmapped']
+
+쓰기 시작
+  노드 Condition 4878개
+
+다시 비교: 파일과 같음
+적재 전후 차이:
+  없음
+
+# 실행: 2026-11-27 08:36 KST, python tools/sync_graph_neo4j.py (읽기 전용 재확인)
+DB 비교(4fcaaade.databases.neo4j.io, 읽기 전용): DB 범위 안 노드 30,678, 관계 57,631
+  노드: 새로 0, 속성 바뀜 0, 같음 30,678
+  관계: 새로 0, 속성 바뀜 0, 같음 57,631
+  DB에만 있음(지울 대상): 노드 0, 관계 0, 노드와 함께 없어질 관계 0
+
+DB가 이미 파일과 같다. 쓸 것이 없다.

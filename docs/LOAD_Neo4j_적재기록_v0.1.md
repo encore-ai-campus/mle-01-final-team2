@@ -2,14 +2,15 @@
 
 > 지원각 · 근거 it(2팀) · 2026-11-25 · 대상 인스턴스: 우리 전용 Aura(`4fcaaade`)
 > 이 문서는 **무엇을 어떤 순서로 올렸고, 어떻게 다시 올리고, 올린 뒤 무엇을 확인했는지**를 남긴다. 수치는 2026-11-25에 DB를 읽기 전용으로 조회해 센 값이다. 적재 코드는 PR #14·#15에 있다.
+> **2026-11-27 현재:** 판정 규칙 결정을 팀 승인 후 Aura에 반영해 **저장소 빌드와 Aura가 같다**(노드 30,678·관계 57,631, §10). V0~V25 점검은 모두 기대값이다(실행 기록 `docs/ontology/evidence/check_graph_neo4j_20261127_after_sync.txt`). §5·§6의 수치는 2026-11-25 첫 적재 기준이다.
 
 ## 1. 요약
 
 | 항목 | 내용 |
 |---|---|
-| 적재 상태 | **구조화 필드로 만든 요건까지 적재 완료.** 노드 31,506개, 관계 55,903개, 유일 제약 10개. 2026-11-26 추가 법령·정의·개념 적재 후 노드 32,605개, 관계 56,995개(§추가 적재) |
+| 적재 상태 | **구조화 필드로 만든 요건까지 적재 완료.** 노드 31,506개, 관계 55,903개, 유일 제약 10개. 2026-11-26~27 추가 법령·정의·개념·별표 연결 적재 후 노드 32,605개, 관계 56,999개(§추가 적재). 2026-11-27 판정 규칙 결정 반영 후 노드 30,678개, 관계 57,631개로 저장소 빌드와 같다(§10) |
 | 적재 전 상태 | 노드 0, 관계 0, 제약 0(신규 인스턴스). Supabase도 비어 있음(공개 테이블·계정·버킷 0) |
-| 적재 방법 | `tools/load_graph_neo4j.py`. `MERGE` 기반이라 여러 번 실행해도 같은 결과이고 `DELETE`가 없다. 기본은 dry-run |
+| 적재 방법 | `tools/sync_graph_neo4j.py`(2026-11-27부터, 옛 `load_graph_neo4j.py`·`load_graph_partial.py`를 대신한다). 저장소 빌드와 DB를 비교해 새로·바뀐 것만 `MERGE`하고, `--prune`을 주면 DB에만 있는 요건·조건을 지운다. 기본은 읽기 전용 비교 |
 | 적재하지 않은 것 | 본문에서 읽은 조건 17,253건(검수 전), 공고의 법령 인용 `CITES` 543건, 정의의 판정 기준(`rule_json`) |
 | 소요 | 단계별 약 8초 안팎. 전체를 다시 올려도 1분 미만 |
 
@@ -18,7 +19,7 @@
 | 입력 | 만드는 법 | 비고 |
 |---|---|---|
 | `data/graph/nodes.jsonl`, `edges.jsonl` | `python tools/graphrag/build.py export`(약 6초) | `.gitignore` 대상. 정리층(`data/cleaned/20261124`)과 개념·법령 사전에서 만든다 |
-| 개념·법령·정의 | `tools/graphrag/concepts_laws.py`가 export에 포함 | 신청자 유형 24개·인증 7개, 법령 26종·조문 1,286·별표 40(`data/지원사업_법령/`), 법령 원문을 인용한 정의 6개 |
+| 개념·법령·정의 | `tools/graphrag/concepts_laws.py`가 export에 포함 | 신청자 유형 24개·인증 7개, 법령 44문서·조문 2,325·별표 59(`data/지원사업_법령/`), 법령 원문 정의 23개(검수 확인 22) |
 | 보류 목록 | `data/graph/law_citations_pending.jsonl` | 공고가 법령·조문을 인용한 543건. 요건 노드가 본문에서 만들어진 뒤에 `Requirement-[:CITES]->조문`으로 잇는다 |
 | 제약 | `docs/submission/ontology/schema.cypher`의 `CREATE CONSTRAINT` | 적재 단계가 해당 레이블의 제약만 먼저 건다 |
 
@@ -41,34 +42,42 @@
 - 사내망에서 인증서 오류(`self-signed certificate in certificate chain`)가 나면 `pip install truststore`(스크립트가 있으면 자동으로 쓴다)
 
 ```powershell
-python tools/graphrag/build.py export                          # 적재 파일 생성(로컬, 약 6초)
-python tools/load_graph_neo4j.py --stage all                   # dry-run: 파일 검증과 계획 출력, DB 접속 없음
-python tools/load_graph_neo4j.py --stage meta --check-db       # dry-run + DB를 읽기 전용으로 조회(비어 있는지)
-python tools/load_graph_neo4j.py --stage meta --apply --confirm-host <NEO4J_URI의 호스트>
-python tools/load_graph_neo4j.py --stage laws --apply --allow-existing --confirm-host <호스트>
-python tools/load_graph_neo4j.py --stage requirements --apply --allow-existing --confirm-host <호스트>
+python tools/sync_graph_neo4j.py --offline                     # DB 없이 파일 검증과 건수만
+python tools/sync_graph_neo4j.py --build                       # build.py export로 다시 만들고 DB와 비교(읽기 전용)
+python tools/sync_graph_neo4j.py --show 10 --report plan.json  # 바뀌는 예시 10개씩, 계획을 JSON으로 저장
+python tools/sync_graph_neo4j.py --apply --confirm-host <NEO4J_URI의 호스트>      # 새로·바뀐 것만 쓴다(지우지 않음)
+python tools/sync_graph_neo4j.py --apply --prune --confirm-host <호스트>          # DB에만 있는 요건·조건까지 지운다
+python tools/check_graph_neo4j.py --save after.json --check-definitions          # 읽기 전용 점검 + 스냅숏
 ```
 
-안전 장치
-- `--apply`에는 접속 대상 호스트를 `--confirm-host`로 다시 입력해야 한다(다른 인스턴스에 잘못 올리는 것을 막는다).
-- DB에 노드가 하나라도 있으면 중단한다. 이미 올린 단계를 이어서 올릴 때만 `--allow-existing`을 쓴다.
-- 적재 후 건수 일치와 점검 쿼리 V2(순환)·V4(고아 조건)·V8(행정 상위 중복)을 자동으로 확인하고, 문제가 있으면 종료 코드 5로 끝난다.
-- 노드를 모두 올린 뒤 관계를 올린다. 노드는 `MERGE (n:레이블 {키: ...})`로, 지역 개념에는 보조 레이블 `Region`을 붙인다.
+동작
+- 시작할 때 판정 옵션(`evaluator.DEFAULT_OPTIONS`)을 출력한다. 적재 파일이 어느 판정 기준으로 만들어졌는지 기록에 남기기 위해서다.
+- 파일을 먼저 검증한다(중복 노드·중복 관계·끝점 없는 관계·시그니처 위반). 하나라도 있으면 종료 코드 2.
+- DB를 `READ_ACCESS` 세션으로 읽어 노드는 키로, 관계는 (시작, 유형, 끝)으로 비교한다. 결과는 새로·바뀜·같음과 DB에만 있는 것(지울 후보)이다.
+- `--scope meta laws requirements`로 범위를 줄일 수 있다(기본은 전체). 순서는 늘 제약 → 노드 → 관계 → (prune) 관계 삭제 → 노드 삭제다. 노드는 `MERGE (n:레이블 {키})`이고 지역 개념에는 보조 레이블 `Region`을 붙인다.
+- `--with-rules`는 `definition_rules.json`의 판정 기준(`rule_json`)을 정의 노드 속성으로 함께 올린다.
 
-### 이미 적재된 DB를 점검하거나 일부만 고칠 때 (2026-11-26 추가)
+안전 장치
+- 기본은 비교만 하고 쓰지 않는다. `--apply`에는 접속 대상 호스트를 `--confirm-host`로 다시 입력해야 한다(다르면 종료 코드 4).
+- 지우기는 `--prune`일 때만, `--prune-labels`(기본 Requirement·Condition)의 노드만 지운다. 검수 요건(`reviewed=true` 또는 `status=reviewed_excerpt`)은 지우지 않는다. 지울 노드·관계 합계가 `--max-delete`(기본 5,000)를 넘거나 같은 키를 다른 레이블이 쓰면 쓰지 않고 종료 코드 3.
+- DB에만 있는 속성은 기본으로 남기고 건수만 보고한다. `--drop-extra-props`를 주면 속성까지 파일과 똑같이 바꾼다.
+- 쓴 뒤 DB를 다시 읽어 비교하고 V0~V25 점검을 돌린다. 아직 다르거나 0이어야 하는 점검이 실패하면 종료 코드 5.
+- 옛 도구로 하던 단계 적재(`--stage`)와 일부 적재(`--select`)는 `--scope`와 비교 결과로 대신한다. 같은 파일을 다시 넣어도 결과가 같다(멱등).
+
+### 이미 적재된 DB를 점검할 때 (2026-11-26 추가)
 
 ```powershell
 python tools/check_graph_neo4j.py --save before.json --check-definitions   # 읽기 전용 점검 + 스냅숏 저장
-python tools/load_graph_partial.py --select gold --show-changes            # dry-run: DB와 비교한 변경 내역(새로·바뀜·같음)
-python tools/load_graph_partial.py --select gold --apply --confirm-host <호스트>
 python tools/check_graph_neo4j.py --compare before.json                     # 적재 전후 차이
 ```
 
-- `check_graph_neo4j.py`는 쓰지 않는다. 레이블·관계 건수, V0~V17, 정의·법령 점검(D1 조문 없는 정의, D2 옛 형식 링크), 개념 → 정의 → 조문 → 법령 경로 수를 본다. 0이어야 하는 점검이 실패하면 종료 코드 1이고, 알려진 값(V9 546, V15 330, V16a 34, V17 2)이 바뀌면 경고만 한다.
-- `load_graph_partial.py`의 선택은 `laws`(법령·조문·별표·정의), `gold`(검수 요건 `reviewed_excerpt`와 그 조건), `sme-rule`(중소기업 `rule_json`을 기존 정의 노드에 속성으로만 붙인다. 노드가 없으면 만들지 않고 멈춘다), `ids`(정규식)다. 같은 ID를 다른 레이블이 쓰거나 관계 끝점이 선택에도 DB에도 없으면 쓰지 않는다. 지우기는 없다.
-- 2026-11-26 dry-run에서 찾은 차이: 처음 적재한 정의 5개(창업기업·예비창업자·초기창업기업·청년창업기업·중장년창업기업)에 `source` 속성이 없다(파일은 `local_law_text`). `--select laws`로 맞출 수 있다(승인 전).
+- `check_graph_neo4j.py`는 쓰지 않는다. 레이블·관계 건수, V0~V25, 정의·법령 점검(D1 조문 없는 정의, D2 옛 형식 링크), 개념 → 정의 → 조문·별표 → 법령 경로 수를 본다. 0이어야 하는 점검이 실패하면 종료 코드 1이고, 알려진 값(V15 1,294, V16a 34, V17 2, V25 4)이 바뀌면 경고만 한다. V9는 2026-11-27부터 0이어야 하는 점검이다(이전 알려진 값 546, V15는 330). 같은 쿼리가 `docs/submission/ontology/schema.cypher`에 있다(시험이 일치를 확인).
+- 2026-11-26 dry-run에서 찾은 차이: 처음 적재한 정의 5개(창업기업·예비창업자·초기창업기업·청년창업기업·중장년창업기업)에 `source` 속성이 없다(파일은 `local_law_text`). 동기화 도구로 맞출 수 있다(승인 전).
+- 아래 §5~§9의 명령(`load_graph_neo4j.py`, `load_graph_partial.py`)은 그때 쓴 기록이다. 두 도구는 2026-11-27에 `sync_graph_neo4j.py`로 합쳐 지웠다.
 
-## 5. 적재 결과
+## 5. 적재 결과 (2026-11-25 첫 적재)
+
+지금 Aura 건수는 맨 위 안내와 `docs/ontology/evidence/check_graph_neo4j_20261127.txt`를 본다.
 
 노드 31,506개
 
@@ -105,7 +114,7 @@ python tools/check_graph_neo4j.py --compare before.json                     # �
 
 요건 5,900개는 모두 K-Startup·기업마당 구조화 필드로 만든 `structured_only`다(`AND/assumed` 4,786, 예비창업자 허용 업력 `OR/explicit` 1,114). 조건 17,366개의 속성은 `applicant_type IN` 5,074, `region WITHIN` 4,786, `founder_age BETWEEN` 3,822, `business_age LT` 2,330, `business_age`(operator 없음) 1,354다.
 
-## 6. 적재 후 점검 (설계서 5.4의 점검 쿼리)
+## 6. 적재 후 점검 (2026-11-25 첫 적재, 설계서 5.4의 점검 쿼리. 2026-11-27 V0~V25 결과는 실행 기록 파일)
 
 | 점검 | 결과 |
 |---|---|
@@ -154,6 +163,8 @@ python tools/check_graph_neo4j.py --compare before.json                     # �
 |---|---|
 | 2026-11-25 | 적재 전 정규화 정리(PR #14): 지역 코드표 318행, `MEMBER_OF` 분리, `region_source`, `TEXT_ONLY`, Condition `operator` |
 | 2026-11-25 | 적재 스크립트와 1단계 적재(PR #15). 이어서 개념·법령·정의·`ABOUT`을 추가하고 `laws`·`requirements` 단계를 적재 |
+| 2026-11-26~27 | 법령 18문서·정의·개념 추가 적재, 부분 적재·점검 도구(`load_graph_partial.py`, `check_graph_neo4j.py`), 정의 → 위임 별표 4건(아래 추가 적재 절) |
+| 2026-11-27 | 지난 숫자 정리, `schema.cypher` 점검 쿼리를 V0~V25로 맞춤, 저장소와 Aura 차이 기록(§10) |
 
 ## 추가 적재: 법령 18문서 (2026-11-26)
 
@@ -227,3 +238,32 @@ python tools/check_graph_neo4j.py --compare before.json                     # �
 | 적재 | `load_graph_partial.py --select ids --ids "^DEF:(1인 창조기업\|벤처기업\|소상공인\|장애인기업)$" --apply` (MERGE, 사용자 승인) |
 | 적재 후 합계 | 노드 32,605, 관계 56,995 → 56,999. `CITES_LAW` 23 → 27 |
 | 점검 | `check_graph_neo4j.py` 정상. V25 = 4, 개념 → 정의 → 조문·별표 → 법령 경로 21 → 25, V20~V24 = 0 |
+
+## 10. 저장소 빌드와 Aura의 차이와 해소 (2026-11-27)
+
+2026-11-27 판정 규칙 회의 결정(`50ab53c`)이 `build.py export`에는 반영됐지만 Aura에는 아직 올리지 않았다. `python tools/graphrag/build.py export`를 다시 돌리면 커밋된 `data/graph/manifest.json`과 같은 파일이 나온다(재현 확인, 2026-11-27).
+
+| 항목 | 저장소 빌드 | Aura | 원인 |
+|---|---:|---:|---|
+| Concept | 355 | 354 | 신청 대상 `일반기업` 개념 추가(이전에는 `about_pending=true` 546건, V9) |
+| Requirement · HAS_REQUIREMENT | 4,936 | 5,900 | C-6: 기업마당 소관 기관 시도 964건은 자격 조건이 아니라 검색 필터 |
+| Condition · HAS_CONDITION | 16,402 | 17,366 | 같은 C-6 |
+| ABOUT(신청자 유형) | 18,504 | 14,980 | 신청 대상 결정 반영(`일반기업` 연결 포함, +3,524) |
+| ABOUT(지역·묶음) | 3,822 | 4,786 | C-6(−964) |
+| 노드 · 관계 합계 | 30,678 · 57,631 | 32,605 · 56,999 | |
+
+- 저장소 버전은 DB에 올려야 V0~V25를 돌릴 수 있어 **아직 점검하지 않았다.** 파일 검증(중복 노드·끝점 없는 간선·시그니처 위반)은 0이다. 올리면 V9 알려진 값 546은 0이 될 것으로 본다.
+- 옛 적재 도구에는 지우기가 없어 다시 MERGE해도 C-6으로 빠진 요건·조건 964개씩이 Aura에 남았다. 그래서 2026-11-27 `tools/sync_graph_neo4j.py`로 바꿨다. 지울 목록을 먼저 보여 주고 `--apply --prune`일 때만 지운다.
+- 읽기 전용 비교 결과(2026-11-27, 쓰기 없음): 노드 새로 1(`APPLICANT_TYPE:일반기업`)·바뀜 9,664·같음 21,013, 관계 새로 3,524·같음 54,107. 바뀐 속성은 `Requirement.logic_basis` 3,822, `Condition.about_pending` 3,524, `Condition.operator` 1,354, `Notice.search_region_id` 964. 지울 것은 Condition 964·Requirement 964와 거기 붙은 관계 2,892다. DB에만 있는 속성 `Condition.about_unmapped` 3,524·`unknown_reason` 1,354는 기본으로 남긴다.
+- **쓰기 시험(2026-11-27, 로컬 Neo4j 5.26 Community 일회용 컨테이너, Aura 아님):**
+  - 빈 DB 첫 적재: 노드 30,678·관계 57,631·제약 10. 약 44초. 다시 비교하면 파일과 같고 V0~V25 0이어야 하는 점검이 모두 0(V9 546 → 0, V15 330 → 1,294는 경고).
+  - Aura 같은 차이를 만들고 시험: 옛 요건·조건 3쌍, 검수 요건 1개, 바뀐 속성 5개, DB에만 있는 속성 5개.
+  - `--apply`(prune 없음)는 속성 5개만 고치고 아무것도 지우지 않았다. `--apply --prune`은 요건·조건 3쌍과 붙은 관계 9개를 지웠고 검수 요건과 그 관계는 남겼다. `--drop-extra-props`는 DB에만 있던 속성 5개를 지웠다. 같은 명령을 다시 돌리면 "쓸 것이 없다"로 끝났다(멱등).
+  - 안전 장치: 호스트가 다르면 종료 코드 4, 지울 것이 `--max-delete`를 넘으면 3, 키 없는 노드가 있으면 3(쓰지 않음)을 확인했다.
+  - 시험 중 고친 것: 키 없는 DB 노드가 있으면 비교가 멈추던 오류, 검수 요건은 남기면서 그 `HAS_REQUIREMENT`는 지우려던 오류(고아가 될 뻔함). 둘 다 단위 시험을 더했다.
+- **Aura 반영(2026-11-27, 팀 승인 후):**
+  - 순서: `check_graph_neo4j.py --save`(반영 전 스냅숏) → `sync_graph_neo4j.py --build`(읽기 전용 비교, 위 수치와 같음을 확인) → `sync_graph_neo4j.py --apply --prune --confirm-host 4fcaaade.databases.neo4j.io` → `check_graph_neo4j.py --compare`.
+  - 결과: 노드 32,605 → 30,678(−1,927), 관계 56,999 → 57,631(+632). Concept 354 → 355, Requirement·HAS_REQUIREMENT 5,900 → 4,936, Condition·HAS_CONDITION 17,366 → 16,402, ABOUT 19,766 → 22,326. 다시 비교하면 파일과 같다.
+  - 점검: 결과 "정상". V9 546 → 0(이제 0이어야 하는 점검), V15 330 → 1,294(새 알려진 값). `check_graph_neo4j.py`의 기대값을 고쳤다.
+  - DB에만 있던 속성 `Condition.about_unmapped` 3,524·`unknown_reason` 1,354(옛 판정 기준의 값, API·도구가 읽지 않음)는 사용자 승인 후 `--apply --prune --drop-extra-props`로 지웠다(조건 4,878개). 다시 비교하면 노드 30,678·관계 57,631이 속성까지 파일과 같다.
+  - 기록: `docs/ontology/evidence/sync_graph_neo4j_20261127_apply.txt`, `docs/ontology/evidence/check_graph_neo4j_20261127_after_sync.txt`. 스냅숏은 `data/eval/aura_snapshots/`(로컬 전용).

@@ -24,7 +24,7 @@
 | 정규화·조건 입력 | `normalize_support_data.py`, `prepare_condition_inputs.py` 등 | `data/normalized/v1/<날짜>/`, `data/condition_inputs/v1/20261125/` | 입력·출력 날짜가 코드에 고정되어 있다. 바뀐 공고만 다시 추출할 수 없다 |
 | 검수 정답 | `build_condition_gold_review.py`, `ingest_condition_gold_reviews.py` | `data/goldsets/conditions/v1/20261125/` | 기준선이 고정(`PRE_2_4_FROZEN`)이다. 원문이 바뀌어도 정답이 낡았다는 표시가 없다 |
 | 그래프 | `graphrag/build.py export` | `data/graph/` | 매번 전체 재생성. Notice에 `version`·`content_hash`가 없고 `SUPERSEDES`도 없다. `engine.py`의 기준일도 고정 |
-| 적재 | `load_graph_neo4j.py`, `load_graph_partial.py` | Aura | MERGE만 한다(지우기 없음). 그래서 마감·삭제된 공고의 노드는 그대로 남는다 |
+| 적재 | `sync_graph_neo4j.py`(2026-11-27, 옛 두 도구를 합침) | Aura | 저장소 빌드와 비교해 MERGE한다. 지우기는 `--prune`일 때 요건·조건만 한다. 공고 노드는 지우지 않으므로 마감·삭제된 공고는 그대로 남는다 |
 
 자동 실행(스케줄)은 없다. CI는 시험만 돌린다.
 
@@ -80,7 +80,7 @@
 | 5 | 정규화·조건 추출 | `delta`의 NEW·CHANGED만 | 조건 ID는 이미 원문 해시 기반이라 같은 원문이면 같은 ID다. 바뀐 공고는 조건 집합을 통째로 새로 만들고 이전 집합은 `is_current=false` | 날짜 고정 경로를 `--snapshot`·`--only-ids`로 |
 | 6 | 검수 대기열 | `delta` + 정답셋 → `data/goldsets/.../stale.jsonl` | 검수 정답이 있는 공고가 CHANGED면 그 정답을 `STALE`로 표시하고 대기열에 넣는다. STALE 정답은 그래프에 넣지 않는다(재검수 전까지 `structured_only`로 판정) | `gold_bridge`가 STALE을 건너뛰게 |
 | 7 | 그래프 내보내기 | 정리층 + 조건 + 정답 → `data/graph/` | Notice에 `version`, `content_hash`, `status`, `first_seen`, `last_seen`. 바뀐 공고의 이전 요건은 `is_current=false`로 남기고 새 요건과 `SUPERSEDES`로 잇는다 | `build.py export`에 속성 추가, `manifest.json`에 `run_id`·`prev_run_id` |
-| 8 | 점검·보고 | `data/graph/` + Aura(읽기) | `check_graph_neo4j.py --save`, `load_graph_partial.py --select delta`(dry-run), `verdict_hash.py`·`rule_options_impact.py`로 판정 변화 보고 → `data/runs/<run>/report.md` | 부분 적재에 `--select delta`(delta에 든 공고와 그 요건·조건) |
+| 8 | 점검·보고 | `data/graph/` + Aura(읽기) | `check_graph_neo4j.py --save`, `sync_graph_neo4j.py --report`(읽기 전용 비교), `verdict_hash.py`·`rule_options_impact.py`로 판정 변화 보고 → `data/runs/<run>/report.md` | 동기화 도구에 delta 범위(delta에 든 공고와 그 요건·조건) |
 | 9 | 부분 적재 | 승인 뒤 `--apply --confirm-host` | MERGE. 상태 바뀐 공고는 속성만 고친다(지우지 않음) | — |
 | 10 | 적재 후 점검 | `check_graph_neo4j.py --compare` | `zero` 점검 0, 바뀐 건수가 보고서와 같은지 | — |
 

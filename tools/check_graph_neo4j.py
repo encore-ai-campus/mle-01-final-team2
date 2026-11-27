@@ -3,7 +3,7 @@
 
 점검 항목
   - 레이블별 노드 수, 타입별 관계 수
-  - V0~V17 점검 쿼리(설계서 §6.2, `docs/submission/ontology/schema.cypher`, 설계서 부록 A)
+  - V0~V25·D1·D2 점검 쿼리(그래프 스키마 정의서 부록 A, `docs/submission/ontology/schema.cypher`와 같은 쿼리)
     `zero`는 0이어야 정상이고, `known`은 알려진 값이 있어 바뀌었는지만 본다(바뀌면 경고, 실패 아님).
   - 법령 링크 형식(`law_url`), 개념 → 정의 → 조문 → 법령 경로 수
   - `--check-definitions`: DB 정의의 조문 원문 해시를 로컬 조문 파일에서 다시 만든 값과 비교한다
@@ -26,7 +26,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-import load_graph_neo4j as L  # noqa: E402
+import sync_graph_neo4j as L  # noqa: E402  (KEY·IDENT·connect를 함께 쓴다)
 
 # (번호, 설명, Cypher, 기대). 기대: "zero" 또는 알려진 값(int, 2026-11-26 기준)
 CHECKS: list[tuple[str, str, str, object]] = [
@@ -46,7 +46,7 @@ CHECKS: list[tuple[str, str, str, object]] = [
      "MATCH (a:Concept {scheme:'REGION'})-[r:WITHIN]->(:Concept) WITH a, count(r) AS p WHERE p > 1 RETURN count(a) AS c", "zero"),
     ("V9", "ABOUT 없는 개념형 조건",
      "MATCH (c:Condition) WHERE c.attribute IN ['region','applicant_type','company_size','industry','certification'] "
-     "AND NOT (c)-[:ABOUT]->(:Concept) RETURN count(c) AS c", 546),
+     "AND NOT (c)-[:ABOUT]->(:Concept) RETURN count(c) AS c", "zero"),  # 2026-11-27 일반기업 개념 추가로 546 → 0
     ("V10", "대칭 관계 양방향", "MATCH (a:Notice)-[:SAME_AS]->(b:Notice), (b)-[:SAME_AS]->(a) RETURN count(*) AS c", "zero"),
     ("V11", "같은 쌍의 중복 HAS_CONDITION·ABOUT",
      "MATCH (a)-[r:HAS_CONDITION|ABOUT]->(b) WITH a, b, type(r) AS t, count(*) AS n WHERE n > 1 RETURN count(*) AS c", "zero"),
@@ -55,7 +55,7 @@ CHECKS: list[tuple[str, str, str, object]] = [
      "MATCH (c:Condition {attribute: 'region'})-[:ABOUT]->(k) WHERE NOT k:Region RETURN count(c) AS c", "zero"),
     ("V14", "법령에 안 붙은 조문·별표",
      "MATCH (a) WHERE (a:LawArticle OR a:LawAppendix) AND NOT (a)-[:PART_OF]->(:ExternalLaw) RETURN count(a) AS c", "zero"),
-    ("V15", "요건이 하나도 없는 공고", "MATCH (n:Notice) WHERE NOT (n)-[:HAS_REQUIREMENT]->() RETURN count(n) AS c", 330),
+    ("V15", "요건이 하나도 없는 공고", "MATCH (n:Notice) WHERE NOT (n)-[:HAS_REQUIREMENT]->() RETURN count(n) AS c", 1294),  # 2026-11-27 C-6 반영으로 330 → 1,294(기업마당 소관 기관 시도만 있던 공고)
     ("V16", "상위(WITHIN)가 없는 현행 시군구·구",
      "MATCH (a:Region) WHERE a.level IN ['SIGUNGU', 'GU'] AND coalesce(a.status, '') <> '폐지' AND NOT (a)-[:WITHIN]->() RETURN count(a) AS c", "zero"),
     ("V16a", "상위(WITHIN)가 없는 비시도 지역(폐지 시군구 31·권역 3 포함)",
