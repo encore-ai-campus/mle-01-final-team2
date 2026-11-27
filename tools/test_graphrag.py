@@ -133,7 +133,11 @@ class ConceptsAndLawsTests(unittest.TestCase):
 
     def test_definitions_link_only_what_exists(self):
         self.assertEqual(len(self.dnodes), 23)  # v0.1 사전 6 + v0.2 법령 7 + v0.3 추가 법령 10
-        self.assertEqual(sum(e["type"] == "CITES_LAW" for e in self.dedges), 23)
+        cites = [e for e in self.dedges if e["type"] == "CITES_LAW"]
+        self.assertEqual(sum(":A" in e["to"] for e in cites), 23)  # 정의마다 조문 하나
+        appx = {(e["from"], e["to"]) for e in cites if ":T" in e["to"]}  # 검수에서 확인한 위임 별표(설계서 §13.4)
+        self.assertEqual(appx, {("DEF:1인 창조기업", "LAW:280537:T0001-00"), ("DEF:벤처기업", "LAW:287501:T0001-00"),
+                                ("DEF:소상공인", "LAW:281337:T0003-00"), ("DEF:장애인기업", "LAW:281337:T0003-00")})
         self.assertEqual(sum(e["type"] == "DEFINED_BY" for e in self.dedges), 21)  # 청년창업기업·중장년창업기업은 같은 이름의 개념이 없다
         self.assertEqual(len(self.notes), 2)
         self.assertTrue(all("rule_json" not in n for n in self.dnodes))  # 원문 확인 전에는 판정 기준을 만들지 않는다
