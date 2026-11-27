@@ -1,0 +1,373 @@
+{
+  "snapshot": {
+    "graph_nodes": 30678,
+    "graph_edges": 57631,
+    "neo4j_host": "4fcaaade.databases.neo4j.io",
+    "seed": 20261127
+  },
+  "e1": {
+    "inputs": 98,
+    "card_rows": 643,
+    "rows_with_region_path": 56,
+    "rows_with_law_basis": 120,
+    "mismatched_inputs": {
+      "sql_typed": 0,
+      "sql_generic": 0
+    },
+    "mismatch_examples": [],
+    "size": {
+      "sql_typed": {
+        "lines": 38,
+        "chars": 1592,
+        "tokens": 433,
+        "joins_or_hops": 18,
+        "recursive_cte": 1,
+        "post_lines": 8,
+        "total_lines": 46
+      },
+      "sql_generic": {
+        "lines": 31,
+        "chars": 1244,
+        "tokens": 342,
+        "joins_or_hops": 13,
+        "recursive_cte": 1,
+        "post_lines": 8,
+        "total_lines": 39
+      },
+      "cypher": {
+        "lines": 5,
+        "chars": 597,
+        "tokens": 189,
+        "joins_or_hops": 8,
+        "recursive_cte": 0,
+        "post_lines": 2,
+        "total_lines": 7
+      }
+    },
+    "cypher_reduction_vs_sql_typed": {
+      "total_lines": 0.848,
+      "tokens": 0.564
+    },
+    "cypher_reduction_vs_sql_generic": {
+      "total_lines": 0.821,
+      "tokens": 0.447
+    },
+    "example_card": [
+      [
+        "KSTARTUP:175783#C-applicant_type",
+        "applicant_type",
+        "1인 창조기업",
+        [],
+        [
+          [
+            "1인 창조기업",
+            "1인 창조기업 육성에 관한 법률",
+            "제2조"
+          ],
+          [
+            "1인 창조기업",
+            "1인 창조기업 육성에 관한 법률 시행령",
+            "[별표 0001] 1인 창조기업 범위에서 제외되는 업종(제2조제1항 관련)"
+          ]
+        ]
+      ],
+      [
+        "KSTARTUP:175783#C-applicant_type",
+        "applicant_type",
+        "대학",
+        [],
+        []
+      ],
+      [
+        "KSTARTUP:175783#C-applicant_type",
+        "applicant_type",
+        "대학생",
+        [],
+        []
+      ],
+      [
+        "KSTARTUP:175783#C-applicant_type",
+        "applicant_type",
+        "연구기관",
+        [],
+        []
+      ]
+    ]
+  },
+  "e3": {
+    "S0": {
+      "inputs": 18,
+      "mismatched_inputs": {
+        "sql_typed": 0,
+        "sql_generic": 0
+      },
+      "impacted_notices": {
+        "LAW:255889:A2": 0,
+        "LAW:273375:A2": 0,
+        "LAW:273689:A3": 0,
+        "LAW:276603:A2": 0,
+        "LAW:276653:A18": 0,
+        "LAW:277289:A3": 0,
+        "LAW:280145:A2": 0,
+        "LAW:280149:A3": 0,
+        "LAW:280155:A2": 0,
+        "LAW:280423:A2": 0,
+        "LAW:281879:A3": 0,
+        "LAW:281977:A2": 2903,
+        "LAW:281987:A2": 0,
+        "LAW:281989:A2": 0,
+        "LAW:281995:A2": 1252,
+        "LAW:283353:A2": 0,
+        "LAW:284081:A2의2": 0,
+        "LAW:286815:A2": 0
+      },
+      "impacted_open_notices": {
+        "LAW:255889:A2": 0,
+        "LAW:273375:A2": 0,
+        "LAW:273689:A3": 0,
+        "LAW:276603:A2": 0,
+        "LAW:276653:A18": 0,
+        "LAW:277289:A3": 0,
+        "LAW:280145:A2": 0,
+        "LAW:280149:A3": 0,
+        "LAW:280155:A2": 0,
+        "LAW:280423:A2": 0,
+        "LAW:281879:A3": 0,
+        "LAW:281977:A2": 132,
+        "LAW:281987:A2": 0,
+        "LAW:281989:A2": 0,
+        "LAW:281995:A2": 49,
+        "LAW:283353:A2": 0,
+        "LAW:284081:A2의2": 0,
+        "LAW:286815:A2": 0
+      },
+      "size": {
+        "sql_typed": {
+          "lines": 14,
+          "chars": 462,
+          "tokens": 113,
+          "joins_or_hops": 5,
+          "recursive_cte": 1
+        },
+        "sql_generic": {
+          "lines": 14,
+          "chars": 466,
+          "tokens": 113,
+          "joins_or_hops": 5,
+          "recursive_cte": 1
+        },
+        "cypher": {
+          "lines": 3,
+          "chars": 233,
+          "tokens": 67,
+          "joins_or_hops": 6,
+          "recursive_cte": 0
+        }
+      }
+    },
+    "S1": {
+      "inputs": 21,
+      "mismatched_inputs": {
+        "sql_typed": 0,
+        "sql_generic": 0
+      },
+      "impacted_notices": {
+        "LAW:255889:A2": 0,
+        "LAW:273375:A2": 0,
+        "LAW:273689:A3": 0,
+        "LAW:276603:A2": 0,
+        "LAW:276653:A18": 0,
+        "LAW:277289:A3": 0,
+        "LAW:280145:A2": 0,
+        "LAW:280149:A3": 0,
+        "LAW:280155:A2": 0,
+        "LAW:280423:A2": 0,
+        "LAW:281879:A3": 0,
+        "LAW:281977:A2": 2903,
+        "LAW:281987:A2": 0,
+        "LAW:281989:A2": 0,
+        "LAW:281995:A2": 1252,
+        "LAW:283353:A2": 0,
+        "LAW:284081:A2의2": 0,
+        "LAW:286815:A2": 0,
+        "LAW:280537:T0001-00": 2903,
+        "LAW:281337:T0003-00": 0,
+        "LAW:287501:T0001-00": 0
+      },
+      "impacted_open_notices": {
+        "LAW:255889:A2": 0,
+        "LAW:273375:A2": 0,
+        "LAW:273689:A3": 0,
+        "LAW:276603:A2": 0,
+        "LAW:276653:A18": 0,
+        "LAW:277289:A3": 0,
+        "LAW:280145:A2": 0,
+        "LAW:280149:A3": 0,
+        "LAW:280155:A2": 0,
+        "LAW:280423:A2": 0,
+        "LAW:281879:A3": 0,
+        "LAW:281977:A2": 132,
+        "LAW:281987:A2": 0,
+        "LAW:281989:A2": 0,
+        "LAW:281995:A2": 49,
+        "LAW:283353:A2": 0,
+        "LAW:284081:A2의2": 0,
+        "LAW:286815:A2": 0,
+        "LAW:280537:T0001-00": 132,
+        "LAW:281337:T0003-00": 0,
+        "LAW:287501:T0001-00": 0
+      },
+      "size": {
+        "sql_typed": {
+          "lines": 18,
+          "chars": 600,
+          "tokens": 140,
+          "joins_or_hops": 6,
+          "recursive_cte": 1
+        },
+        "sql_generic": {
+          "lines": 14,
+          "chars": 466,
+          "tokens": 113,
+          "joins_or_hops": 5,
+          "recursive_cte": 1
+        },
+        "cypher": {
+          "lines": 4,
+          "chars": 277,
+          "tokens": 77,
+          "joins_or_hops": 6,
+          "recursive_cte": 0
+        }
+      },
+      "changed_lines_from_S0": {
+        "sql_typed": {
+          "added": 4,
+          "removed": 0
+        },
+        "sql_generic": {
+          "added": 0,
+          "removed": 0
+        },
+        "cypher": {
+          "added": 2,
+          "removed": 1
+        }
+      }
+    },
+    "S2": {
+      "inputs": 21,
+      "mismatched_inputs": {
+        "sql_typed": 0,
+        "sql_generic": 0
+      },
+      "impacted_notices": {
+        "LAW:255889:A2": 0,
+        "LAW:273375:A2": 0,
+        "LAW:273689:A3": 0,
+        "LAW:276603:A2": 0,
+        "LAW:276653:A18": 0,
+        "LAW:277289:A3": 0,
+        "LAW:280145:A2": 0,
+        "LAW:280149:A3": 0,
+        "LAW:280155:A2": 0,
+        "LAW:280423:A2": 0,
+        "LAW:281879:A3": 0,
+        "LAW:281977:A2": 2903,
+        "LAW:281987:A2": 0,
+        "LAW:281989:A2": 0,
+        "LAW:281995:A2": 1252,
+        "LAW:283353:A2": 0,
+        "LAW:284081:A2의2": 0,
+        "LAW:286815:A2": 0,
+        "LAW:280537:T0001-00": 2903,
+        "LAW:281337:T0003-00": 0,
+        "LAW:287501:T0001-00": 0
+      },
+      "impacted_open_notices": {
+        "LAW:255889:A2": 0,
+        "LAW:273375:A2": 0,
+        "LAW:273689:A3": 0,
+        "LAW:276603:A2": 0,
+        "LAW:276653:A18": 0,
+        "LAW:277289:A3": 0,
+        "LAW:280145:A2": 0,
+        "LAW:280149:A3": 0,
+        "LAW:280155:A2": 0,
+        "LAW:280423:A2": 0,
+        "LAW:281879:A3": 0,
+        "LAW:281977:A2": 132,
+        "LAW:281987:A2": 0,
+        "LAW:281989:A2": 0,
+        "LAW:281995:A2": 49,
+        "LAW:283353:A2": 0,
+        "LAW:284081:A2의2": 0,
+        "LAW:286815:A2": 0,
+        "LAW:280537:T0001-00": 132,
+        "LAW:281337:T0003-00": 0,
+        "LAW:287501:T0001-00": 0
+      },
+      "size": {
+        "sql_typed": {
+          "lines": 18,
+          "chars": 600,
+          "tokens": 140,
+          "joins_or_hops": 6,
+          "recursive_cte": 1
+        },
+        "sql_generic": {
+          "lines": 14,
+          "chars": 466,
+          "tokens": 113,
+          "joins_or_hops": 5,
+          "recursive_cte": 1
+        },
+        "cypher": {
+          "lines": 4,
+          "chars": 277,
+          "tokens": 77,
+          "joins_or_hops": 6,
+          "recursive_cte": 0
+        }
+      },
+      "changed_lines_from_S1": {
+        "sql_typed": {
+          "added": 1,
+          "removed": 1
+        },
+        "sql_generic": {
+          "added": 1,
+          "removed": 1
+        },
+        "cypher": {
+          "added": 1,
+          "removed": 1
+        }
+      }
+    }
+  },
+  "queries": {
+    "E1": {
+      "sql_typed": "WITH RECURSIVE up(id, hops, path) AS (\n  SELECT k.concept_id, 0, k.name FROM concept k WHERE k.concept_id = :u\n  UNION ALL\n  SELECT e.parent, up.hops + 1, up.path || ' > ' || p.name\n  FROM concept_edge e JOIN up ON e.child = up.id\n  JOIN concept p ON p.concept_id = e.parent\n  WHERE e.rel IN ('WITHIN', 'MEMBER_OF') AND up.hops < 3\n),\nsup(start, id, hops) AS (\n  SELECT concept_id, concept_id, 0 FROM concept\n  UNION\n  SELECT sup.start, e.parent, sup.hops + 1\n  FROM concept_edge e JOIN sup ON e.child = sup.id\n  WHERE e.rel = 'IS_A' AND sup.hops < 2\n),\nbasis(concept_id, term, law, provision) AS (\n  SELECT sup.start, d.term, l.name, '제' || a.article_no || '조'\n  FROM sup JOIN concept_definition kd ON kd.concept_id = sup.id\n  JOIN definition d ON d.def_id = kd.def_id\n  JOIN definition_article da ON da.def_id = d.def_id\n  JOIN law_article a ON a.article_id = da.article_id\n  JOIN external_law l ON l.law_id = a.law_id\n  UNION\n  SELECT sup.start, d.term, l.name, '[별표 ' || x.table_no || '] ' || x.title\n  FROM sup JOIN concept_definition kd ON kd.concept_id = sup.id\n  JOIN definition d ON d.def_id = kd.def_id\n  JOIN definition_appendix dx ON dx.def_id = d.def_id\n  JOIN law_appendix x ON x.appendix_id = dx.appendix_id\n  JOIN external_law l ON l.law_id = x.law_id\n)\nSELECT c.cond_id, c.attribute, k.name, up.path, b.term, b.law, b.provision\nFROM requirement r\nJOIN condition c ON c.req_id = r.req_id\nJOIN condition_concept cc ON cc.cond_id = c.cond_id\nJOIN concept k ON k.concept_id = cc.concept_id\nLEFT JOIN up ON up.id = k.concept_id AND c.attribute = 'region'\nLEFT JOIN basis b ON b.concept_id = k.concept_id\nWHERE r.notice_id = :nid",
+      "sql_generic": "WITH RECURSIVE up(id, hops, path) AS (\n  SELECT k.concept_id, 0, k.name FROM concept k WHERE k.concept_id = :u\n  UNION ALL\n  SELECT e.parent, up.hops + 1, up.path || ' > ' || p.name\n  FROM concept_edge e JOIN up ON e.child = up.id\n  JOIN concept p ON p.concept_id = e.parent\n  WHERE e.rel IN ('WITHIN', 'MEMBER_OF') AND up.hops < 3\n),\nsup(start, id, hops) AS (\n  SELECT concept_id, concept_id, 0 FROM concept\n  UNION\n  SELECT sup.start, e.parent, sup.hops + 1\n  FROM concept_edge e JOIN sup ON e.child = sup.id\n  WHERE e.rel = 'IS_A' AND sup.hops < 2\n),\nbasis(concept_id, term, law, provision) AS (\n  SELECT sup.start, d.term, l.name, p.label\n  FROM sup JOIN concept_definition kd ON kd.concept_id = sup.id\n  JOIN definition d ON d.def_id = kd.def_id\n  JOIN definition_provision dp ON dp.def_id = d.def_id\n  JOIN provision p ON p.provision_id = dp.provision_id\n  JOIN external_law l ON l.law_id = p.law_id\n)\nSELECT c.cond_id, c.attribute, k.name, up.path, b.term, b.law, b.provision\nFROM requirement r\nJOIN condition c ON c.req_id = r.req_id\nJOIN condition_concept cc ON cc.cond_id = c.cond_id\nJOIN concept k ON k.concept_id = cc.concept_id\nLEFT JOIN up ON up.id = k.concept_id AND c.attribute = 'region'\nLEFT JOIN basis b ON b.concept_id = k.concept_id\nWHERE r.notice_id = :nid",
+      "cypher": "MATCH (:Notice {notice_id: $nid})-[:HAS_REQUIREMENT]->(:Requirement)-[:HAS_CONDITION]->(c:Condition)-[:ABOUT]->(k:Concept)\nOPTIONAL MATCH p = (:Concept {concept_id: $u})-[:WITHIN|MEMBER_OF*0..3]->(k) WHERE c.attribute = 'region'\nOPTIONAL MATCH (k)-[:IS_A*0..2]->(:Concept)-[:DEFINED_BY]->(d:Definition)-[:CITES_LAW]->(x)-[:PART_OF]->(l:ExternalLaw)\nRETURN c.cond_id, c.attribute, k.name, collect(DISTINCT [y IN nodes(p) | y.name]) AS paths,\n       collect(DISTINCT CASE WHEN d IS NULL THEN null ELSE [d.term, l.name, coalesce('제' + x.article_no + '조', '[별표 ' + x.table_no + '] ' + x.title)] END) AS basis"
+    },
+    "E3": {
+      "S0": {
+        "sql_typed": "WITH RECURSIVE sub(id, hops) AS (\n  SELECT kd.concept_id, 0\n  FROM definition_article da JOIN concept_definition kd ON kd.def_id = da.def_id\n  WHERE da.article_id = :pid\n  UNION\n  SELECT e.child, sub.hops + 1\n  FROM concept_edge e JOIN sub ON e.parent = sub.id\n  WHERE e.rel = 'IS_A' AND sub.hops < 2\n)\nSELECT DISTINCT r.notice_id\nFROM sub\nJOIN condition_concept cc ON cc.concept_id = sub.id\nJOIN condition c ON c.cond_id = cc.cond_id\nJOIN requirement r ON r.req_id = c.req_id",
+        "sql_generic": "WITH RECURSIVE sub(id, hops) AS (\n  SELECT kd.concept_id, 0\n  FROM definition_provision dp JOIN concept_definition kd ON kd.def_id = dp.def_id\n  WHERE dp.provision_id = :pid\n  UNION\n  SELECT e.child, sub.hops + 1\n  FROM concept_edge e JOIN sub ON e.parent = sub.id\n  WHERE e.rel = 'IS_A' AND sub.hops < 2\n)\nSELECT DISTINCT r.notice_id\nFROM sub\nJOIN condition_concept cc ON cc.concept_id = sub.id\nJOIN condition c ON c.cond_id = cc.cond_id\nJOIN requirement r ON r.req_id = c.req_id",
+        "cypher": "MATCH (:LawArticle {article_id: $pid})<-[:CITES_LAW]-(:Definition)<-[:DEFINED_BY]-(:Concept)<-[:IS_A*0..2]-(:Concept)\n      <-[:ABOUT]-(:Condition)<-[:HAS_CONDITION]-(:Requirement)<-[:HAS_REQUIREMENT]-(n:Notice)\nRETURN DISTINCT n.notice_id"
+      },
+      "S1": {
+        "sql_typed": "WITH RECURSIVE sub(id, hops) AS (\n  SELECT kd.concept_id, 0\n  FROM definition_article da JOIN concept_definition kd ON kd.def_id = da.def_id\n  WHERE da.article_id = :pid\n  UNION\n  SELECT kd.concept_id, 0\n  FROM definition_appendix dx JOIN concept_definition kd ON kd.def_id = dx.def_id\n  WHERE dx.appendix_id = :pid\n  UNION\n  SELECT e.child, sub.hops + 1\n  FROM concept_edge e JOIN sub ON e.parent = sub.id\n  WHERE e.rel = 'IS_A' AND sub.hops < 2\n)\nSELECT DISTINCT r.notice_id\nFROM sub\nJOIN condition_concept cc ON cc.concept_id = sub.id\nJOIN condition c ON c.cond_id = cc.cond_id\nJOIN requirement r ON r.req_id = c.req_id",
+        "sql_generic": "WITH RECURSIVE sub(id, hops) AS (\n  SELECT kd.concept_id, 0\n  FROM definition_provision dp JOIN concept_definition kd ON kd.def_id = dp.def_id\n  WHERE dp.provision_id = :pid\n  UNION\n  SELECT e.child, sub.hops + 1\n  FROM concept_edge e JOIN sub ON e.parent = sub.id\n  WHERE e.rel = 'IS_A' AND sub.hops < 2\n)\nSELECT DISTINCT r.notice_id\nFROM sub\nJOIN condition_concept cc ON cc.concept_id = sub.id\nJOIN condition c ON c.cond_id = cc.cond_id\nJOIN requirement r ON r.req_id = c.req_id",
+        "cypher": "MATCH (x:LawArticle|LawAppendix)<-[:CITES_LAW]-(:Definition)<-[:DEFINED_BY]-(:Concept)<-[:IS_A*0..2]-(:Concept)\n      <-[:ABOUT]-(:Condition)<-[:HAS_CONDITION]-(:Requirement)<-[:HAS_REQUIREMENT]-(n:Notice)\nWHERE x.article_id = $pid OR x.appendix_id = $pid\nRETURN DISTINCT n.notice_id"
+      },
+      "S2": {
+        "sql_typed": "WITH RECURSIVE sub(id, hops) AS (\n  SELECT kd.concept_id, 0\n  FROM definition_article da JOIN concept_definition kd ON kd.def_id = da.def_id\n  WHERE da.article_id = :pid\n  UNION\n  SELECT kd.concept_id, 0\n  FROM definition_appendix dx JOIN concept_definition kd ON kd.def_id = dx.def_id\n  WHERE dx.appendix_id = :pid\n  UNION\n  SELECT e.child, sub.hops + 1\n  FROM concept_edge e JOIN sub ON e.parent = sub.id\n  WHERE e.rel = 'IS_A' AND sub.hops < 3\n)\nSELECT DISTINCT r.notice_id\nFROM sub\nJOIN condition_concept cc ON cc.concept_id = sub.id\nJOIN condition c ON c.cond_id = cc.cond_id\nJOIN requirement r ON r.req_id = c.req_id",
+        "sql_generic": "WITH RECURSIVE sub(id, hops) AS (\n  SELECT kd.concept_id, 0\n  FROM definition_provision dp JOIN concept_definition kd ON kd.def_id = dp.def_id\n  WHERE dp.provision_id = :pid\n  UNION\n  SELECT e.child, sub.hops + 1\n  FROM concept_edge e JOIN sub ON e.parent = sub.id\n  WHERE e.rel = 'IS_A' AND sub.hops < 3\n)\nSELECT DISTINCT r.notice_id\nFROM sub\nJOIN condition_concept cc ON cc.concept_id = sub.id\nJOIN condition c ON c.cond_id = cc.cond_id\nJOIN requirement r ON r.req_id = c.req_id",
+        "cypher": "MATCH (x:LawArticle|LawAppendix)<-[:CITES_LAW]-(:Definition)<-[:DEFINED_BY]-(:Concept)<-[:IS_A*0..3]-(:Concept)\n      <-[:ABOUT]-(:Condition)<-[:HAS_CONDITION]-(:Requirement)<-[:HAS_REQUIREMENT]-(n:Notice)\nWHERE x.article_id = $pid OR x.appendix_id = $pid\nRETURN DISTINCT n.notice_id"
+      }
+    }
+  }
+}
