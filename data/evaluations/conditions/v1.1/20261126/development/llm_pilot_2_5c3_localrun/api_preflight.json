@@ -1,0 +1,20 @@
+{
+  "model_access": "PASS via successful synthetic completion",
+  "synthetic_structured_json": "PASS",
+  "synthetic_valid_intermediate": true,
+  "synthetic_attempts": 1,
+  "synthetic_token_usage": {
+    "prompt_tokens": 1673,
+    "completion_tokens": 275,
+    "reasoning_tokens": 81
+  },
+  "requests_used_before_pilot": 1,
+  "current_run_request_budget": 11,
+  "global_request_limit": 12,
+  "prior_blocked_connection_attempts": 1,
+  "prior_blocked_connection_attempt_delivery_confirmed": false,
+  "elapsed_ms": 5297,
+  "model_id": "gpt-5.6-luna",
+  "endpoint": "OpenAI official SDK default",
+  "secret_logged": false
+}

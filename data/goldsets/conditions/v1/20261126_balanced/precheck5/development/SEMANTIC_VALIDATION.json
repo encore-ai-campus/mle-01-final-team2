@@ -1,0 +1,19 @@
+{
+  "177469_founder_and_3": true,
+  "177469_match": true,
+  "176813_distinct_preferences": true,
+  "176813_center_zero": true,
+  "176813_or": true,
+  "118927_qual_unknown": true,
+  "178507_app_only_elig": true,
+  "178507_post_separate": true,
+  "178507_no_nation_condition": true,
+  "178507_exclusion_true": true,
+  "118182_boolean_structure": true,
+  "all_pending": true,
+  "all_spans": true,
+  "baseline_hashes": true,
+  "evaluation_packets": true,
+  "business_type_field_consistent": true,
+  "reviewed_zero": true
+}

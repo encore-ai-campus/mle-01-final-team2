@@ -1,0 +1,277 @@
+﻿{
+    "status":  "COMPLETED_EXPERIMENT_NOT_ADOPTED",
+    "experiment":  "2-5C-2A/B legacy candidate augmentation",
+    "created_date":  "2026-11-26",
+    "data_version":  "v1",
+    "condition_schema_version":  "1.0 extraction output; gold schema 1.1 evaluation",
+    "goldset":  "conditions-development-v1.1-20261126-final30",
+    "scored_notices":  30,
+    "unscored_development_notices":  50,
+    "evaluation_split_used":  false,
+    "llm_calls":  0,
+    "baseline":  {
+                     "manifest":  {
+                                      "path":  "data/evaluations/conditions/v1.1/20261126/development/baseline_v1/manifest.json",
+                                      "sha256":  "369e1bc29bdf01f700a6b49a5760056086ab15f263b1df4682acc648019fb94b",
+                                      "bytes":  5319
+                                  },
+                     "expected_failure_csv_sha256":  "f4c8594943c1e280d91ea607467a2d3aca55f68aed281aa720ed6160a0156e6e",
+                     "observed_failure_csv_sha256":  "fcb0651a69d9fd73c9e2e31af0dd7e89688acfe2900211b83cafc62b1f8d2452",
+                     "metrics_reproduced":  true
+                 },
+    "candidate_processing":  {
+                                 "scanned":  650,
+                                 "admitted":  30,
+                                 "merged_duplicates":  26,
+                                 "held_or_rejected":  594,
+                                 "verified":  0,
+                                 "decision_eligible_true":  0,
+                                 "data_v2_used":  false,
+                                 "gold_ids_read_during_extraction":  false
+                             },
+    "evaluation_metrics":  {
+                               "baseline":  {
+                                                "macro_f1":  0.1034920634920635,
+                                                "tp":  10,
+                                                "fn":  106,
+                                                "f1":  0.12345679012345678,
+                                                "precision":  0.21739130434782608,
+                                                "recall":  0.086206896551724144,
+                                                "zero_prediction_notices":  8,
+                                                "fp":  36
+                                            },
+                               "legacy_augmented":  {
+                                                        "macro_f1":  0.095293410293410291,
+                                                        "tp":  10,
+                                                        "fn":  106,
+                                                        "f1":  0.1183431952662722,
+                                                        "precision":  0.18867924528301888,
+                                                        "recall":  0.086206896551724144,
+                                                        "zero_prediction_notices":  6,
+                                                        "fp":  43
+                                                    },
+                               "legacy_stage_fn_resolved":  0,
+                               "new_fp":  7,
+                               "safety_errors_baseline":  0,
+                               "safety_errors_augmented":  0
+                           },
+    "test_results":  {
+                         "targeted_legacy_tests":  18,
+                         "targeted_passed":  18,
+                         "full_suite":  168,
+                         "full_suite_passed":  140,
+                         "skipped":  28,
+                         "failed":  0,
+                         "full_suite_command":  ".venv/Scripts/python.exe -m unittest discover -s tests -v",
+                         "full_suite_skipped":  28
+                     },
+    "input_files":  {
+                        "data/evaluations/conditions/v1.1/20261126/development/baseline_v1/failure_analysis.csv":  {
+                                                                                                                       "path":  "data/evaluations/conditions/v1.1/20261126/development/baseline_v1/failure_analysis.csv",
+                                                                                                                       "sha256":  "fcb0651a69d9fd73c9e2e31af0dd7e89688acfe2900211b83cafc62b1f8d2452",
+                                                                                                                       "bytes":  112657
+                                                                                                                   },
+                        "data/normalized/20261124/notices_normalized.jsonl":  {
+                                                                                  "path":  "data/normalized/20261124/notices_normalized.jsonl",
+                                                                                  "sha256":  "31452b47a592744245b2953ed4cf544567f771dc3f0868e54ae4215da59886e2",
+                                                                                  "bytes":  13771546
+                                                                              },
+                        "tools/evaluate_condition_pipeline_v11.py":  {
+                                                                         "path":  "tools/evaluate_condition_pipeline_v11.py",
+                                                                         "sha256":  "7e41d2fb1393d4a99e89f16b7f08b128e9c8e3e6c00cc57f7d4c0ebbb5d0da07",
+                                                                         "bytes":  23910
+                                                                     },
+                        "data/condition_inputs/v1/20261125/candidate_refs.jsonl":  {
+                                                                                       "path":  "data/condition_inputs/v1/20261125/candidate_refs.jsonl",
+                                                                                       "sha256":  "5765dad05de72b8a44875353495e12224704da3f5b0067b955e1fb5e4b5c06e3",
+                                                                                       "bytes":  11795783
+                                                                                   },
+                        "data/evaluations/conditions/v1.1/20261126/development/baseline_v1/evaluation_summary.json":  {
+                                                                                                                          "path":  "data/evaluations/conditions/v1.1/20261126/development/baseline_v1/evaluation_summary.json",
+                                                                                                                          "sha256":  "4d194c7267374c7e6416a9a9e02eaf3603724474bc2ebcd2da9adf0154848fb2",
+                                                                                                                          "bytes":  217709
+                                                                                                                      },
+                        "data/goldsets/conditions/v1.1/20261126/final30/development/manifest.json":  {
+                                                                                                         "path":  "data/goldsets/conditions/v1.1/20261126/final30/development/manifest.json",
+                                                                                                         "sha256":  "9bdaa9597615885209b353417a33b34d5c976544831a6bae8ced4295542bf725",
+                                                                                                         "bytes":  8773
+                                                                                                     },
+                        "data/condition_inputs/v1/20261125/logic/notice_condition_sets.jsonl":  {
+                                                                                                    "path":  "data/condition_inputs/v1/20261125/logic/notice_condition_sets.jsonl",
+                                                                                                    "sha256":  "bf7b995b880c048f844a725920909d0a26e7cf362f2f0947c901844ba0e889dc",
+                                                                                                    "bytes":  385404
+                                                                                                },
+                        "data/evaluations/conditions/v1.1/20261126/development/baseline_v1/manifest.json":  {
+                                                                                                                "path":  "data/evaluations/conditions/v1.1/20261126/development/baseline_v1/manifest.json",
+                                                                                                                "sha256":  "369e1bc29bdf01f700a6b49a5760056086ab15f263b1df4682acc648019fb94b",
+                                                                                                                "bytes":  5319
+                                                                                                            },
+                        "tools/extract_condition_candidates_legacy_augmented.py":  {
+                                                                                       "path":  "tools/extract_condition_candidates_legacy_augmented.py",
+                                                                                       "sha256":  "6ecebed59f421dcfca7bb0f44ecfc96af523b181e3aec525ba376f9e6e0b9925",
+                                                                                       "bytes":  18515
+                                                                                   },
+                        "data/condition_inputs/v1/20261125/extracted/improved/development_conditions.jsonl":  {
+                                                                                                                  "path":  "data/condition_inputs/v1/20261125/extracted/improved/development_conditions.jsonl",
+                                                                                                                  "sha256":  "5585302b26de77d324cf93ec5e05c8b89459af9149d81c0306af09f8225399a0",
+                                                                                                                  "bytes":  99794
+                                                                                                              },
+                        "tests/test_condition_legacy_augmented.py":  {
+                                                                         "path":  "tests/test_condition_legacy_augmented.py",
+                                                                         "sha256":  "f5e45fbc75bd80c09c7b6541928b5515478db4f0c9b19eb671cb77c452096e23",
+                                                                         "bytes":  8344
+                                                                     },
+                        "data/goldsets/conditions/v1.1/20261126/final30/development/reviewed_logic_gold.jsonl":  {
+                                                                                                                     "path":  "data/goldsets/conditions/v1.1/20261126/final30/development/reviewed_logic_gold.jsonl",
+                                                                                                                     "sha256":  "e74adee73086cf1304ecee9d06f988c0f6af86c4149a9c7eb439e6a9509e08e3",
+                                                                                                                     "bytes":  139694
+                                                                                                                 },
+                        "configs/condition_evaluation_v11_development.json":  {
+                                                                                  "path":  "configs/condition_evaluation_v11_development.json",
+                                                                                  "sha256":  "da8270fb7a32dc1d03b9ea6375532d8405009bce5505166a125df58868bc7b05",
+                                                                                  "bytes":  923
+                                                                              },
+                        "data/goldsets/conditions/v1.1/20261126/final30/development/reviewed_condition_gold.jsonl":  {
+                                                                                                                         "path":  "data/goldsets/conditions/v1.1/20261126/final30/development/reviewed_condition_gold.jsonl",
+                                                                                                                         "sha256":  "8450df33455daced4c5e95ca2a51ca262e88c53476c7a8a18e38b3164a52ee76",
+                                                                                                                         "bytes":  189102
+                                                                                                                     }
+                    },
+    "output_files":  {
+                         "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/logic_v1_transform/run_report.json":  {
+                                                                                                                                                  "path":  "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/logic_v1_transform/run_report.json",
+                                                                                                                                                  "sha256":  "b791d2aba64a9ca9443a117f8a71b481124e4589ba22eeaac9da8136dffeceed",
+                                                                                                                                                  "bytes":  870
+                                                                                                                                              },
+                         "data/condition_inputs/v1/20261125/extracted/legacy_augmented/legacy_candidate_diagnostics.csv":  {
+                                                                                                                               "path":  "data/condition_inputs/v1/20261125/extracted/legacy_augmented/legacy_candidate_diagnostics.csv",
+                                                                                                                               "sha256":  "29892485436843a96f8aff71ed3025a8f57e17071839d5e4b55058d514d7bae4",
+                                                                                                                               "bytes":  330442
+                                                                                                                           },
+                         "data/condition_inputs/v1/20261125/extracted/legacy_augmented/candidate_provenance.jsonl":  {
+                                                                                                                         "path":  "data/condition_inputs/v1/20261125/extracted/legacy_augmented/candidate_provenance.jsonl",
+                                                                                                                         "sha256":  "7eab6d05e3dcf3aba3cce6b930f3bf60a1c2e71bccddfcae1cf0fe44193d32c3",
+                                                                                                                         "bytes":  28599
+                                                                                                                     },
+                         "data/condition_inputs/v1/20261125/extracted/legacy_augmented/development_conditions.jsonl":  {
+                                                                                                                           "path":  "data/condition_inputs/v1/20261125/extracted/legacy_augmented/development_conditions.jsonl",
+                                                                                                                           "sha256":  "59564ed56027e9cd3880580956dbecc45d9166e0db9d9b1a6a60f9c939c1f5a9",
+                                                                                                                           "bytes":  135895
+                                                                                                                       },
+                         "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/logic_v1_transform/unresolved_logic_review.jsonl":  {
+                                                                                                                                                                "path":  "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/logic_v1_transform/unresolved_logic_review.jsonl",
+                                                                                                                                                                "sha256":  "add43d7f54c9d6d6baacc294d7ffc0d938f921d87f4080acf3c8ffa0e65c483c",
+                                                                                                                                                                "bytes":  24109
+                                                                                                                                                            },
+                         "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/baseline_recheck/failure_analysis_regenerated.csv":  {
+                                                                                                                                                                 "path":  "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/baseline_recheck/failure_analysis_regenerated.csv",
+                                                                                                                                                                 "sha256":  "5f6db9a008d3096200f929e842cbdf314e1a6aae0a55aeca56fbe6f36f341418",
+                                                                                                                                                                 "bytes":  143788
+                                                                                                                                                             },
+                         "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/baseline_comparison.csv":  {
+                                                                                                                                       "path":  "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/baseline_comparison.csv",
+                                                                                                                                       "sha256":  "3d14f3dcbca07c7085784fc1453b16aa75d029821fe6592c38b27676a6a3f9e4",
+                                                                                                                                       "bytes":  238
+                                                                                                                                   },
+                         "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/legacy_evaluation_metrics.json":  {
+                                                                                                                                              "path":  "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/legacy_evaluation_metrics.json",
+                                                                                                                                              "sha256":  "eda5875bf1b3f314cdb85d5d0a411a7b74f61caf654bd61d60d9105ef66e5294",
+                                                                                                                                              "bytes":  6432
+                                                                                                                                          },
+                         "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/logic_v1_transform/conflict_review.jsonl":  {
+                                                                                                                                                        "path":  "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/logic_v1_transform/conflict_review.jsonl",
+                                                                                                                                                        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                                                                                                                                                        "bytes":  0
+                                                                                                                                                    },
+                         "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/logic_v1_transform/human_logic_review.csv":  {
+                                                                                                                                                         "path":  "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/logic_v1_transform/human_logic_review.csv",
+                                                                                                                                                         "sha256":  "6d0bb9e7ef96d4de53f7a493577234e98d7cf3c0e31e069a15695c9e35c007af",
+                                                                                                                                                         "bytes":  98581
+                                                                                                                                                     },
+                         "data/condition_inputs/v1/20261125/extracted/legacy_augmented_repeat/candidate_provenance.jsonl":  {
+                                                                                                                                "path":  "data/condition_inputs/v1/20261125/extracted/legacy_augmented_repeat/candidate_provenance.jsonl",
+                                                                                                                                "sha256":  "7eab6d05e3dcf3aba3cce6b930f3bf60a1c2e71bccddfcae1cf0fe44193d32c3",
+                                                                                                                                "bytes":  28599
+                                                                                                                            },
+                         "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/logic_v1_transform/qualifier_candidates.jsonl":  {
+                                                                                                                                                             "path":  "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/logic_v1_transform/qualifier_candidates.jsonl",
+                                                                                                                                                             "sha256":  "e6fc3b4b5c08d369c12a4768b1026ca211224612996e2d5f8f51b81c34f3b42f",
+                                                                                                                                                             "bytes":  2743
+                                                                                                                                                         },
+                         "data/condition_inputs/v1/20261125/extracted/legacy_augmented_repeat/legacy_candidate_disposition.jsonl":  {
+                                                                                                                                        "path":  "data/condition_inputs/v1/20261125/extracted/legacy_augmented_repeat/legacy_candidate_disposition.jsonl",
+                                                                                                                                        "sha256":  "0550f409f9461075f4532a70026a43b27e33ae37602ae500502c3613b93638f4",
+                                                                                                                                        "bytes":  543174
+                                                                                                                                    },
+                         "data/condition_inputs/v1/20261125/extracted/legacy_augmented_repeat/run_report.json":  {
+                                                                                                                     "path":  "data/condition_inputs/v1/20261125/extracted/legacy_augmented_repeat/run_report.json",
+                                                                                                                     "sha256":  "47ea4662a14e5cc911432c08def34f249ec4d5e923f4eaa63ec23988a661b578",
+                                                                                                                     "bytes":  898
+                                                                                                                 },
+                         "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/logic_v1_transform/human_logic_review.jsonl":  {
+                                                                                                                                                           "path":  "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/logic_v1_transform/human_logic_review.jsonl",
+                                                                                                                                                           "sha256":  "c19a0910b81097d9db4250255a321c925f6bce9e1b8f986c890f21dacd7b5351",
+                                                                                                                                                           "bytes":  91586
+                                                                                                                                                       },
+                         "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/logic_v1_transform/condition_group_map.jsonl":  {
+                                                                                                                                                            "path":  "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/logic_v1_transform/condition_group_map.jsonl",
+                                                                                                                                                            "sha256":  "764db66c61b5deeb30c4ffc31b770d203406cacf98700bf756fadfc8be2510c2",
+                                                                                                                                                            "bytes":  38281
+                                                                                                                                                        },
+                         "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/BASELINE_INTEGRITY_DIAGNOSTIC.md":  {
+                                                                                                                                                "path":  "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/BASELINE_INTEGRITY_DIAGNOSTIC.md",
+                                                                                                                                                "sha256":  "804dc83aa9694ef5722a25fd1985f95212f73aa7ee729c0e882985db4c485e2f",
+                                                                                                                                                "bytes":  3265
+                                                                                                                                            },
+                         "data/condition_inputs/v1/20261125/extracted/legacy_augmented/legacy_candidate_disposition.jsonl":  {
+                                                                                                                                 "path":  "data/condition_inputs/v1/20261125/extracted/legacy_augmented/legacy_candidate_disposition.jsonl",
+                                                                                                                                 "sha256":  "0550f409f9461075f4532a70026a43b27e33ae37602ae500502c3613b93638f4",
+                                                                                                                                 "bytes":  543174
+                                                                                                                             },
+                         "data/condition_inputs/v1/20261125/extracted/legacy_augmented_repeat/legacy_candidate_diagnostics.csv":  {
+                                                                                                                                      "path":  "data/condition_inputs/v1/20261125/extracted/legacy_augmented_repeat/legacy_candidate_diagnostics.csv",
+                                                                                                                                      "sha256":  "29892485436843a96f8aff71ed3025a8f57e17071839d5e4b55058d514d7bae4",
+                                                                                                                                      "bytes":  330442
+                                                                                                                                  },
+                         "data/condition_inputs/v1/20261125/extracted/legacy_augmented/run_report.json":  {
+                                                                                                              "path":  "data/condition_inputs/v1/20261125/extracted/legacy_augmented/run_report.json",
+                                                                                                              "sha256":  "47ea4662a14e5cc911432c08def34f249ec4d5e923f4eaa63ec23988a661b578",
+                                                                                                              "bytes":  898
+                                                                                                          },
+                         "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/CONDITION_EXTRACTION_LEGACY_IMPROVEMENT_REPORT.md":  {
+                                                                                                                                                                 "path":  "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/CONDITION_EXTRACTION_LEGACY_IMPROVEMENT_REPORT.md",
+                                                                                                                                                                 "sha256":  "99ac59e788c0c1a54ebe2d4e9ea8c50281d62f6d70e3e168f652298c6b7982fd",
+                                                                                                                                                                 "bytes":  5319
+                                                                                                                                                             },
+                         "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/logic_v1_transform/relation_review.jsonl":  {
+                                                                                                                                                        "path":  "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/logic_v1_transform/relation_review.jsonl",
+                                                                                                                                                        "sha256":  "ae424350817d306255057fb6f30b607d242e19e225f705530e31ef260be67684",
+                                                                                                                                                        "bytes":  36326
+                                                                                                                                                    },
+                         "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/baseline_recheck/evaluation_summary.json":  {
+                                                                                                                                                        "path":  "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/baseline_recheck/evaluation_summary.json",
+                                                                                                                                                        "sha256":  "4d194c7267374c7e6416a9a9e02eaf3603724474bc2ebcd2da9adf0154848fb2",
+                                                                                                                                                        "bytes":  217709
+                                                                                                                                                    },
+                         "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/baseline_recheck/baseline_csv_comparison.json":  {
+                                                                                                                                                             "path":  "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/baseline_recheck/baseline_csv_comparison.json",
+                                                                                                                                                             "sha256":  "76875ccd50ba64908d8ea244589c9595d8e86a7cb902c13dbe33086e4076d9aa",
+                                                                                                                                                             "bytes":  2667
+                                                                                                                                                         },
+                         "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/logic_v1_transform/notice_condition_sets.jsonl":  {
+                                                                                                                                                              "path":  "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/logic_v1_transform/notice_condition_sets.jsonl",
+                                                                                                                                                              "sha256":  "f064d9900d4226ffd1591d9b767849fd9df4148b422e519d496585c2282c84eb",
+                                                                                                                                                              "bytes":  439289
+                                                                                                                                                          },
+                         "data/condition_inputs/v1/20261125/extracted/legacy_augmented_repeat/development_conditions.jsonl":  {
+                                                                                                                                  "path":  "data/condition_inputs/v1/20261125/extracted/legacy_augmented_repeat/development_conditions.jsonl",
+                                                                                                                                  "sha256":  "59564ed56027e9cd3880580956dbecc45d9166e0db9d9b1a6a60f9c939c1f5a9",
+                                                                                                                                  "bytes":  135895
+                                                                                                                              },
+                         "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/evaluation_summary.json":  {
+                                                                                                                                       "path":  "data/evaluations/conditions/v1.1/20261126/development/legacy_augmented_2_5c2b/evaluation_summary.json",
+                                                                                                                                       "sha256":  "66ddfc907e5a8d7b17f5bc6007bf673015422d68c464cfb2a85386c13830e197",
+                                                                                                                                       "bytes":  218785
+                                                                                                                                   }
+                     }
+}

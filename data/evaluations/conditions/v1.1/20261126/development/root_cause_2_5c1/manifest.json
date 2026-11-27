@@ -1,0 +1,141 @@
+{
+  "diagnostic_version": "2-5C-1",
+  "created_date": "2026-11-26",
+  "status": "DIAGNOSTIC_ONLY",
+  "output_dir": "data/evaluations/conditions/v1.1/20261126/development/root_cause_2_5c1",
+  "evaluation_scores_recomputed": false,
+  "extractor_or_logic_modified": false,
+  "gold_modified": false,
+  "independent_evaluation_used": false,
+  "external_llm_called": false,
+  "baseline_inputs_sha256": {
+    "data\\evaluations\\conditions\\v1.1\\20261126\\development\\baseline_v1\\evaluation_summary.json": "4d194c7267374c7e6416a9a9e02eaf3603724474bc2ebcd2da9adf0154848fb2",
+    "data\\evaluations\\conditions\\v1.1\\20261126\\development\\baseline_v1\\manifest.json": "369e1bc29bdf01f700a6b49a5760056086ab15f263b1df4682acc648019fb94b",
+    "data\\goldsets\\conditions\\v1.1\\20261126\\final30\\development\\reviewed_condition_gold.jsonl": "8450df33455daced4c5e95ca2a51ca262e88c53476c7a8a18e38b3164a52ee76",
+    "data\\goldsets\\conditions\\v1.1\\20261126\\final30\\development\\reviewed_logic_gold.jsonl": "e74adee73086cf1304ecee9d06f988c0f6af86c4149a9c7eb439e6a9509e08e3",
+    "data\\condition_inputs\\v1\\20261125\\extracted\\improved\\development_conditions.jsonl": "5585302b26de77d324cf93ec5e05c8b89459af9149d81c0306af09f8225399a0",
+    "data\\condition_inputs\\v1\\20261125\\logic\\notice_condition_sets.jsonl": "bf7b995b880c048f844a725920909d0a26e7cf362f2f0947c901844ba0e889dc",
+    "tools\\extract_condition_candidates.py": "13cb692eb495cc440e94102bb9e6a7377657c75815e824300ba2a03457f17bef",
+    "tools\\build_condition_logic.py": "65d2e4f54ab77627c26a4443e3450a0cca0f178d66dc6c1e2e8b5291e7f30fd2",
+    "tools\\evaluate_condition_pipeline_v11.py": "7e41d2fb1393d4a99e89f16b7f08b128e9c8e3e6c00cc57f7d4c0ebbb5d0da07",
+    "data/normalized/v1/20261125_g2b/notices.jsonl": "2cbcf09df66f8ba2c2c906451b228dad18ef0b562ed4ac9ad7e2d4042cc5a901",
+    "data/condition_inputs/v1/20261125/extraction_inputs.jsonl": "14e4f7dd74d71046555998ebdcee93e39ed62f5725cfb9f0dc7091f0328023d1",
+    "data/condition_inputs/v1/20261125/representative_samples.jsonl": "a2aefa309b93bd1ea7070ac1c46412d03b0d140c0ce0997de6c10b1dcffa8b22",
+    "data/condition_inputs/v1/20261125/candidate_refs.jsonl": "5765dad05de72b8a44875353495e12224704da3f5b0067b955e1fb5e4b5c06e3",
+    "data/condition_inputs/v1/20261125/extracted/improved/development_conditions.jsonl": "5585302b26de77d324cf93ec5e05c8b89459af9149d81c0306af09f8225399a0",
+    "data/condition_inputs/v1/20261125/logic/notice_condition_sets.jsonl": "bf7b995b880c048f844a725920909d0a26e7cf362f2f0947c901844ba0e889dc",
+    "data/evaluations/conditions/v1.1/20261126/development/baseline_v1/failure_analysis.csv": "fcb0651a69d9fd73c9e2e31af0dd7e89688acfe2900211b83cafc62b1f8d2452"
+  },
+  "diagnostic_counts": {
+    "fn": 106,
+    "fp": 36,
+    "partial": 18,
+    "partial_is_overlapping": true,
+    "fn_stage_counts": {
+      "LEGACY_CANDIDATE_UNUSED": 40,
+      "PARTIAL_STRICT_MISMATCH": 18,
+      "PATTERN_OR_CONTEXT_REQUIRED": 48
+    },
+    "fp_field_counts": {
+      "BUSINESS_LOCATION": 13,
+      "BUSINESS_TYPE": 11,
+      "UNCLASSIFIED": 6,
+      "BUSINESS_AGE": 4,
+      "REVENUE_FINANCIAL": 1,
+      "REPRESENTATIVE_AGE": 1
+    },
+    "zero_prediction_notices": [
+      {
+        "notice_id": "BIZINFO:PBLN_000000000118927",
+        "fn": 3
+      },
+      {
+        "notice_id": "BIZINFO:PBLN_000000000125345",
+        "fn": 3
+      },
+      {
+        "notice_id": "BIZINFO:PBLN_000000000126490",
+        "fn": 6
+      },
+      {
+        "notice_id": "BIZINFO:PBLN_000000000127992",
+        "fn": 2
+      },
+      {
+        "notice_id": "BIZINFO:PBLN_000000000128028",
+        "fn": 7
+      },
+      {
+        "notice_id": "KSTARTUP:176387",
+        "fn": 6
+      },
+      {
+        "notice_id": "KSTARTUP:176482",
+        "fn": 2
+      },
+      {
+        "notice_id": "KSTARTUP:178610",
+        "fn": 4
+      }
+    ],
+    "logic_notice_exact": 1,
+    "logic_notice_inexact": 29
+  },
+  "outputs": {
+    "CONDITION_EXTRACTION_ROOT_CAUSE_REPORT.md": {
+      "sha256": "7b11471840fcae6f8b692e890a7632fb7e73f28890a98356166fe353507060ed",
+      "bytes": 5937
+    },
+    "condition_failure_root_causes.csv": {
+      "sha256": "82b7a8ea269e3df144b46013510015352cd5399561e165595a6ac2bece093748",
+      "bytes": 398697
+    },
+    "extraction_stage_trace.jsonl": {
+      "sha256": "c9d26a2078be56f901b7832434eb8b0299b502ade178dfdfab981957e0eadc13",
+      "bytes": 215419
+    },
+    "improvement_priority_v11.csv": {
+      "sha256": "ad51e1a4100479d6bb53d9bcccad5f15baf418df23ef533499a961b9ea2fe5aa",
+      "bytes": 3457
+    },
+    "improvement_strategy_comparison.csv": {
+      "sha256": "f5f759f4a98eb928b56beb66665a27582eed98e144615f1b876f3c2887a56ed5",
+      "bytes": 2625
+    },
+    "logic_failure_diagnosis.csv": {
+      "sha256": "8da60f37a7499a2864096651ba1674c607170a79251b1ac725a628ec39fdf930",
+      "bytes": 23592
+    }
+  },
+  "baseline_manifest_sha256": "369e1bc29bdf01f700a6b49a5760056086ab15f263b1df4682acc648019fb94b",
+  "integrity_exception": {
+    "path": "data/evaluations/conditions/v1.1/20261126/development/baseline_v1/failure_analysis.csv",
+    "manifest_sha256": "f4c8594943c1e280d91ea607467a2d3aca55f68aed281aa720ed6160a0156e6e",
+    "manifest_bytes": 111613,
+    "observed_at_diagnostic_start_sha256": "fcb0651a69d9fd73c9e2e31af0dd7e89688acfe2900211b83cafc62b1f8d2452",
+    "observed_bytes": 112657,
+    "cause": "UNKNOWN; pre-existing before this diagnostic run",
+    "modified_by_this_task": false,
+    "score_source": "evaluation_summary.json hash matches frozen manifest"
+  },
+  "trace_validation": {
+    "records": 106,
+    "normalized_record_present": 106,
+    "input_status_extractable": 106,
+    "gold_span_exact": 106,
+    "input_contains_gold_evidence": 106,
+    "segment_intersection_exists": 106,
+    "input_source_ref": "not recorded in existing trace; input file path verified from extractor source/config"
+  },
+  "llm_environment_check": {
+    "actual_dotenv_primary_endpoint_model_present": false,
+    "actual_dotenv_alternate_endpoint_model_present": false,
+    "process_env_primary_endpoint_model_present": false,
+    "process_env_alternate_endpoint_model_present": false,
+    "secret_values_recorded": false,
+    "external_calls": 0,
+    "extractor_llm_provider_status": "NOT_CONFIGURED",
+    "structured_output_in_current_models_config": false,
+    "json_schema_retry_support_in_general_agent_client": "two validation attempts when a schema is requested; not wired to condition extractor"
+  }
+}

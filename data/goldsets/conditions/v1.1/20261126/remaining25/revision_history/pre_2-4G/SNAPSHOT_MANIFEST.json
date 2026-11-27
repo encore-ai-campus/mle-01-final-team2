@@ -1,0 +1,105 @@
+{
+  "source": "data\\goldsets\\conditions\\v1.1\\20261126\\remaining25\\development",
+  "files": [
+    {
+      "file": "condition_review.csv",
+      "sha256": "5aa8ca22b4181b5de1b6072a7efd0194aa4bc716464a6e255f9d6b737503ed37",
+      "bytes": 51276
+    },
+    {
+      "file": "condition_review.jsonl",
+      "sha256": "1ee445a9ec3386c1e1ddc92034cfc3f5ffa8e6b2912c83bfc1ade64881759f32",
+      "bytes": 190248
+    },
+    {
+      "file": "difference_report.csv",
+      "sha256": "9479d8717cf44de1ccdc8c847a34208eef52fc44df44798d4b0ae98a3b2e49bb",
+      "bytes": 23924
+    },
+    {
+      "file": "FINAL_APPROVAL_2_4F.md",
+      "sha256": "e81df12800627e5eb5802bb957bbabd7ee00e97941befd15d30165e142630cdd",
+      "bytes": 1643
+    },
+    {
+      "file": "FINAL_SEMANTIC_2_4E.md",
+      "sha256": "631db85cb4be1fa2f0c8f6eae4095771a442d8bad0271f6184bcff5c66af1833",
+      "bytes": 3335
+    },
+    {
+      "file": "gold_id_migration.csv",
+      "sha256": "0b4534729c56be0a7a0900fea44e8eb806688760f8ca41d0829fe0724605f7eb",
+      "bytes": 23321
+    },
+    {
+      "file": "HUMAN_REVIEW_REMAINING25_BUNDLE1.md",
+      "sha256": "9f66e9af73daab445dce0de3723bdff47f566df7b7ff0c853717fa7faa56cd58",
+      "bytes": 20114
+    },
+    {
+      "file": "HUMAN_REVIEW_REMAINING25_BUNDLE2.md",
+      "sha256": "a28bf4083b7d8762e7ccbe6ebbee9c32be943cc0688448a270326feaa31d6337",
+      "bytes": 15381
+    },
+    {
+      "file": "HUMAN_REVIEW_REMAINING25_BUNDLE3.md",
+      "sha256": "8a7ece01da41037d7d188a3c63e4fb747d9afee0906cfafed336c1cda7c5d84a",
+      "bytes": 24359
+    },
+    {
+      "file": "HUMAN_REVIEW_REMAINING25_BUNDLE4.md",
+      "sha256": "92f14180806b738d2ce553e502d28ad711219c86cf9bd5fbfd8008900fe6ac9d",
+      "bytes": 26029
+    },
+    {
+      "file": "HUMAN_REVIEW_REMAINING25_BUNDLE5.md",
+      "sha256": "2bb9c6c94dde4906d174d1ea79f85ff1504b63dff27b113bc219e31f1cfbcae7",
+      "bytes": 18561
+    },
+    {
+      "file": "ingest_report.json",
+      "sha256": "4b5c1bb111384bc2bc307f07dfca8e1585acb9f514a0d95c3de75ad8eff70a3d",
+      "bytes": 373
+    },
+    {
+      "file": "logic_review.csv",
+      "sha256": "814e1a3245a4a546f4defb893422d4620566a8f293243e22ab8961403e2f2629",
+      "bytes": 46142
+    },
+    {
+      "file": "logic_review.jsonl",
+      "sha256": "2dbb2b3ecda792a06391594f14132dc398f349c8de837f4c4466916b9e7e62f4",
+      "bytes": 280168
+    },
+    {
+      "file": "remaining25_selection.csv",
+      "sha256": "021f0b6653d64b26dd26aa8fbdd057706912a9bdd4e67178eedcce013a725ff6",
+      "bytes": 6728
+    },
+    {
+      "file": "reviewed_condition_gold.jsonl",
+      "sha256": "61136a39f078093576e7fb1ec4919bd2aa85871e8823bcbc5c8ed6424e7e8ca1",
+      "bytes": 132928
+    },
+    {
+      "file": "reviewed_logic_gold.jsonl",
+      "sha256": "ed9d51ce5d3d938924815169251f74930c8f9e3d7056efdc6e1f5a78c1385f75",
+      "bytes": 88121
+    },
+    {
+      "file": "review_opinion_matrix.csv",
+      "sha256": "994ea43e1f5bedd2a0515e1285c7e0294b86c21ed10259467d679d38101e0b1c",
+      "bytes": 7558
+    },
+    {
+      "file": "unresolved_semantics.csv",
+      "sha256": "f9fe15336bc1bf1ade84c9952ef28080df30f979febb45909b288a0ef9d0f833",
+      "bytes": 2546
+    },
+    {
+      "file": "VALIDATION_REPORT.md",
+      "sha256": "d6df712d1cc02a199a839966593868d43c0c1097ca5f7d827fece01e8d0b4f20",
+      "bytes": 3852
+    }
+  ]
+}

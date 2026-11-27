@@ -1,0 +1,24 @@
+{
+  "baseline_tests": {
+    "test": "test_deterministic_recreation",
+    "status": "PASSED",
+    "expected_sha256": "5765dad05de72b8a44875353495e12224704da3f5b0067b955e1fb5e4b5c06e3",
+    "actual_sha256": "5765dad05de72b8a44875353495e12224704da3f5b0067b955e1fb5e4b5c06e3"
+  },
+  "current_version_tests": {
+    "test": "test_current_data_version_is_deterministic_and_separate",
+    "status": "PASSED",
+    "version_id": "condition-inputs-v2-20261126",
+    "candidate_count": 17253,
+    "candidate_sha256": "f20acf5599785e4d3e9c7224359ba41e11a5ae01f867108470798064f4d1b51c"
+  },
+  "full_regression": {
+    "tests": 99,
+    "passed": 94,
+    "skipped": 5,
+    "failed": 0
+  },
+  "semantic_review_complete": false,
+  "automatic_approval": false,
+  "baseline_unchanged": true
+}

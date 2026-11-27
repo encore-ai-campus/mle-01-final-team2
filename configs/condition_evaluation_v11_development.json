@@ -1,0 +1,15 @@
+{
+  "policy_version": "1.1.0",
+  "dataset_split": "DEVELOPMENT",
+  "run_mode": "PREFLIGHT_ONLY",
+  "gold_dir": "data/goldsets/conditions/v1.1/20261126/final30/development",
+  "condition_predictions": "data/condition_inputs/v1/20261125/extracted/improved/development_conditions.jsonl",
+  "logic_predictions": "data/condition_inputs/v1/20261125/logic/notice_condition_sets.jsonl",
+  "common_fields": ["condition_type", "category", "field", "operator", "value", "unit"],
+  "extended_fields": ["applicability_scope", "evaluation_phase", "fulfillment_phase", "requirement_kind", "reference_date_type", "reference_date", "temporal_constraint", "evidence_references", "external_reference"],
+  "strict_tp": "EXACT_MATCH_ONLY",
+  "partial_match": "DIAGNOSTIC_AND_FP_FN",
+  "logic_associativity": "FLATTEN_SAME_OPERATOR_AND_OR",
+  "unknown_gold": "EXCLUDE_FROM_EVALUABLE_DENOMINATOR",
+  "unsupported_v1_field": "REPORT_SEPARATELY"
+}

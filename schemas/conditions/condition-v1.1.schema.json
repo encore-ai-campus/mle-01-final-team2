@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:mle-team2:support-conditions:v1.1:condition",
+  "title": "Shared condition model condition v1.1",
+  "$ref": "urn:mle-team2:support-conditions:v1.1:common#/$defs/condition"
+}

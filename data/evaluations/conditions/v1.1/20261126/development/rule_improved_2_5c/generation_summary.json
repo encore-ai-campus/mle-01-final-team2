@@ -1,0 +1,119 @@
+{
+  "modes": {
+    "A": {
+      "prediction_count": 111,
+      "prediction_path": "data\\evaluations\\conditions\\v1.1\\20261126\\development\\rule_improved_2_5c\\experiment_A\\development_conditions.jsonl",
+      "sha256": "28c921eab2c1851178fb85f4f502047d7e9b070d7e59bc2d7686dfde8d78243d",
+      "condition_type_review_candidates": 0,
+      "condition_types": {
+        "ELIGIBILITY": 102,
+        "EXCLUSION": 6,
+        "PREFERENCE": 3
+      },
+      "fields": {
+        "BUSINESS_LOCATION": 22,
+        "BUSINESS_AGE": 19,
+        "BUSINESS_TYPE": 50,
+        "UNCLASSIFIED": 9,
+        "APPLICANT_AGE": 7,
+        "REPRESENTATIVE_AGE": 2,
+        "REVENUE_FINANCIAL": 1,
+        "REVENUE": 1
+      }
+    },
+    "B": {
+      "prediction_count": 114,
+      "prediction_path": "data\\evaluations\\conditions\\v1.1\\20261126\\development\\rule_improved_2_5c\\experiment_B\\development_conditions.jsonl",
+      "sha256": "c3036d8d7f25309336cbee307b6807d1e6ba712fb117ccfa3f3b585ee067239c",
+      "condition_type_review_candidates": 0,
+      "condition_types": {
+        "ELIGIBILITY": 105,
+        "EXCLUSION": 6,
+        "PREFERENCE": 3
+      },
+      "fields": {
+        "BUSINESS_LOCATION": 24,
+        "BUSINESS_AGE": 14,
+        "BUSINESS_TYPE": 56,
+        "UNCLASSIFIED": 9,
+        "REPRESENTATIVE_AGE": 2,
+        "DOCUMENT_SUBMISSION": 1,
+        "APPLICANT_TYPE": 6,
+        "REVENUE_FINANCIAL": 1,
+        "BUSINESS_REGISTRATION_STATUS": 1
+      }
+    },
+    "C": {
+      "prediction_count": 76,
+      "prediction_path": "data\\evaluations\\conditions\\v1.1\\20261126\\development\\rule_improved_2_5c\\experiment_C\\development_conditions.jsonl",
+      "sha256": "6a39bdabd28132b3dec297085fa077b36366ec3126da33c52a3af551b4b6494b",
+      "condition_type_review_candidates": 11,
+      "condition_types": {
+        "ELIGIBILITY": 67,
+        "EXCLUSION": 6,
+        "PREFERENCE": 3
+      },
+      "fields": {
+        "BUSINESS_AGE": 14,
+        "BUSINESS_TYPE": 50,
+        "UNCLASSIFIED": 9,
+        "REPRESENTATIVE_AGE": 2,
+        "REVENUE_FINANCIAL": 1
+      }
+    },
+    "D": {
+      "prediction_count": 127,
+      "prediction_path": "data\\evaluations\\conditions\\v1.1\\20261126\\development\\rule_improved_2_5c\\experiment_D\\development_conditions.jsonl",
+      "sha256": "d62d47c44e90beee1230e46bda82a88418a8989e7eebc2a59d27ec4f53fb723d",
+      "condition_type_review_candidates": 0,
+      "condition_types": {
+        "ELIGIBILITY": 118,
+        "EXCLUSION": 6,
+        "PREFERENCE": 3
+      },
+      "fields": {
+        "BUSINESS_LOCATION": 24,
+        "BUSINESS_AGE": 19,
+        "BUSINESS_TYPE": 56,
+        "UNCLASSIFIED": 9,
+        "APPLICANT_AGE": 7,
+        "REPRESENTATIVE_AGE": 2,
+        "DOCUMENT_SUBMISSION": 1,
+        "APPLICANT_TYPE": 6,
+        "REVENUE_FINANCIAL": 1,
+        "REVENUE": 1,
+        "BUSINESS_REGISTRATION_STATUS": 1
+      }
+    },
+    "E": {
+      "prediction_count": 105,
+      "prediction_path": "data\\evaluations\\conditions\\v1.1\\20261126\\development\\rule_improved_2_5c\\experiment_E\\development_conditions.jsonl",
+      "sha256": "b8a304f8a081d255d9fe2a9fb43fbbd98593fec52e81b8678886abd85022295a",
+      "condition_type_review_candidates": 11,
+      "condition_types": {
+        "ELIGIBILITY": 96,
+        "EXCLUSION": 6,
+        "PREFERENCE": 3
+      },
+      "fields": {
+        "BUSINESS_AGE": 19,
+        "BUSINESS_TYPE": 56,
+        "BUSINESS_LOCATION": 2,
+        "UNCLASSIFIED": 9,
+        "APPLICANT_AGE": 7,
+        "REPRESENTATIVE_AGE": 2,
+        "DOCUMENT_SUBMISSION": 1,
+        "APPLICANT_TYPE": 6,
+        "REVENUE_FINANCIAL": 1,
+        "REVENUE": 1,
+        "BUSINESS_REGISTRATION_STATUS": 1
+      }
+    }
+  },
+  "data_version": "v1",
+  "development_notices": 80,
+  "evaluation_ids_read_during_extraction": false,
+  "gold_ids_read_during_extraction": false,
+  "review_status": "UNREVIEWED",
+  "decision_eligible_true": 0
+}

@@ -1,0 +1,946 @@
+{
+  "status": "PILOT_SAMPLE_FROZEN_PRE_CALL",
+  "purpose": "DEVELOPMENT_DIAGNOSTIC_NOT_REPRESENTATIVE",
+  "selection_seed": 20261126,
+  "selection_method": "Required failure anchors plus stratified diagnostic slots; no unresolved ties after slot constraints.",
+  "tie_break_policy": "If future equally ranked candidates tie for a slot, sort by SHA256(seed|notice_id) ascending.",
+  "notice_ids": [
+    "BIZINFO:PBLN_000000000117168",
+    "BIZINFO:PBLN_000000000118182",
+    "BIZINFO:PBLN_000000000119490",
+    "BIZINFO:PBLN_000000000126490",
+    "BIZINFO:PBLN_000000000128028",
+    "KSTARTUP:176001",
+    "KSTARTUP:176813",
+    "KSTARTUP:177447",
+    "KSTARTUP:178507",
+    "KSTARTUP:179386"
+  ],
+  "notice_count": 10,
+  "source_counts": {
+    "BIZINFO": 5,
+    "KSTARTUP": 5
+  },
+  "selection_reasons": {
+    "BIZINFO:PBLN_000000000117168": "Region plus applicant address, sustained-date condition, and AND scope.",
+    "BIZINFO:PBLN_000000000118182": "Required high-impact failure case: organization branches, exception, AND/OR.",
+    "BIZINFO:PBLN_000000000119490": "Employee threshold and regional hiring branches with AND/OR structure.",
+    "BIZINFO:PBLN_000000000126490": "No existing rule candidates; same-right IP attributes and unresolved binding.",
+    "BIZINFO:PBLN_000000000128028": "No existing rule candidates; applicant branches and basic/optional duties.",
+    "KSTARTUP:176001": "Simple numeric, business-age, and revenue-share thresholds.",
+    "KSTARTUP:176813": "Applicant/business OR branch, preference conditions, and an exception.",
+    "KSTARTUP:177447": "Team age condition with military-service age-band exception and evidence duties.",
+    "KSTARTUP:178507": "Required high-impact failure case: applicant branches, exclusions, temporal duty and exception.",
+    "KSTARTUP:179386": "Preference condition, open industry scope, and unresolved requirement relation."
+  },
+  "condition_count": 62,
+  "condition_type_counts": {
+    "ELIGIBILITY": 56,
+    "EXCLUSION": 3,
+    "PREFERENCE": 3
+  },
+  "logical_group_count": 24,
+  "logical_operator_counts": {
+    "AND": 17,
+    "OR": 7
+  },
+  "exception_count": 4,
+  "unresolved_relation_count": 2,
+  "rule_E_zero_prediction_notice_count": 3,
+  "source_input": {
+    "path": "data/condition_inputs/v1/20261125/extraction_inputs.jsonl",
+    "sha256": "14e4f7dd74d71046555998ebdcee93e39ed62f5725cfb9f0dc7091f0328023d1",
+    "selected_excerpt_hashes": {
+      "BIZINFO:PBLN_000000000117168": "addb55705066120582a4c8765c4cd0548665c63fa059385bf44bfe93789e7c3e",
+      "BIZINFO:PBLN_000000000118182": "8148ae16b1031ab6c364a5972781227c767b1da13e47a25ceb98b7971c46fa4c",
+      "BIZINFO:PBLN_000000000119490": "394c02bb02512a7ae07a9b8c7c3c6236643ec0f9c6e02d06d72e4e64473ecd33",
+      "BIZINFO:PBLN_000000000126490": "5729146960563a595f71b60cc51925ac8200a9af5c0879428d027b95d6d6d2a9",
+      "BIZINFO:PBLN_000000000128028": "bbf73721a3bd5f0e4eefe9b7c209727b97dc4334f077d54cb895a72ecba75e1e",
+      "KSTARTUP:176001": "2d98fe1249ec64d82440a427da4f27245cf00ce6da3cd5ce5a31aedbce7cbc06",
+      "KSTARTUP:176813": "d2942bece83540d2439c69c400c09b658669fcf5a64860b1b3313aeafbf2b1b4",
+      "KSTARTUP:177447": "4b5b5979142d5373e1b74c1e469fcecdae85a9a4af80b229d82fd423d86c8381",
+      "KSTARTUP:178507": "3b239bee06ff8aa4fa99cf27a913714f4824ca3e7ad75409abcf203b7bf2d3c6",
+      "KSTARTUP:179386": "501121296319fd77e5ba535449b7c5c2f5732bf6f9e19d25cf1acdebf35c9cc3"
+    }
+  },
+  "source_split_manifest_sha256": "a2aefa309b93bd1ea7070ac1c46412d03b0d140c0ce0997de6c10b1dcffa8b22",
+  "goldset": {
+    "version": "conditions-development-v1.1-20261126-final30",
+    "manifest_sha256": "9bdaa9597615885209b353417a33b34d5c976544831a6bae8ced4295542bf725",
+    "conditions_sha256": "8450df33455daced4c5e95ca2a51ca262e88c53476c7a8a18e38b3164a52ee76",
+    "logic_sha256": "e74adee73086cf1304ecee9d06f988c0f6af86c4149a9c7eb439e6a9509e08e3"
+  },
+  "prediction_versions": {
+    "baseline_v1": {
+      "condition_path": "data/condition_inputs/v1/20261125/extracted/improved/development_conditions.jsonl",
+      "condition_sha256": "5585302b26de77d324cf93ec5e05c8b89459af9149d81c0306af09f8225399a0",
+      "logic_path": "data/condition_inputs/v1/20261125/logic/notice_condition_sets.jsonl",
+      "logic_sha256": "bf7b995b880c048f844a725920909d0a26e7cf362f2f0947c901844ba0e889dc"
+    },
+    "rule_experiment_E": {
+      "condition_path": "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/development_conditions.jsonl",
+      "condition_sha256": "b8a304f8a081d255d9fe2a9fb43fbbd98593fec52e81b8678886abd85022295a",
+      "logic_path": "data/evaluations/conditions/v1.1/20261126/development/rule_improved_2_5c/experiment_E/logic/notice_condition_sets.jsonl",
+      "logic_sha256": "e3a7cf1f7b65e2d88011478b4e69d08a6b58b5c9d05579b07516655aa823535c",
+      "status": "EXPERIMENTAL_NOT_ADOPTED"
+    }
+  },
+  "evaluation_policy": {
+    "version": "1.1.0",
+    "strict_tp": "EXACT_MATCH_ONLY",
+    "evaluator_path": "tools/evaluate_condition_pipeline_v11.py",
+    "evaluator_sha256": "7e41d2fb1393d4a99e89f16b7f08b128e9c8e3e6c00cc57f7d4c0ebbb5d0da07",
+    "baseline_preflight": "PASS",
+    "metrics_scope": "10 selected DEVELOPMENT notices only"
+  },
+  "independent_evaluation_overlap_checked_by_id_only": true,
+  "independent_evaluation_semantic_content_used": false,
+  "independent_evaluation_notices_scored": 0,
+  "goldset_modified": false,
+  "llm_called": false,
+  "llm_execution_plan": {
+    "mode": "llm_only",
+    "provider_selected": false,
+    "max_pilot_notices": 10,
+    "max_api_requests": 12,
+    "timeout_seconds": 60,
+    "max_output_tokens": 800,
+    "sdk_retries": 0,
+    "format_validation_retries": 1,
+    "preserve_raw_responses": true,
+    "preserve_validated_intermediate": true,
+    "preserve_pre_and_post_validation_candidates": true,
+    "record_hold_reasons": true,
+    "record_token_usage_and_elapsed_time": true,
+    "prompt_version": "condition-extraction-v1.1-llm-only-2026-11-26",
+    "prompt_sha256": "0f3477e5239e4e36212f7a25f8e71e8b55982f81fec6b831e8f6cdb681b0047a"
+  },
+  "baseline_v1_manifest_sha256": "369e1bc29bdf01f700a6b49a5760056086ab15f263b1df4682acc648019fb94b",
+  "rule_experiment_manifest_sha256": "fbb026476aa3debadca0016d6e60184ebfcafd1990bbb872facb949410bbbc54",
+  "same_sample_baselines": {
+    "baseline_v1": {
+      "micro": {
+        "tp": 6,
+        "fp": 20,
+        "fn": 56,
+        "precision": 0.23076923076923078,
+        "recall": 0.0967741935483871,
+        "f1": 0.13636363636363635,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED"
+      },
+      "macro_by_notice": {
+        "precision": 0.20833333333333331,
+        "recall": 0.10666666666666666,
+        "f1": 0.12714285714285717
+      },
+      "by_source": {
+        "BIZINFO": {
+          "tp": 1,
+          "fp": 6,
+          "fn": 34,
+          "precision": 0.14285714285714285,
+          "recall": 0.02857142857142857,
+          "f1": 0.04761904761904761,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "KSTARTUP": {
+          "tp": 5,
+          "fp": 14,
+          "fn": 22,
+          "precision": 0.2631578947368421,
+          "recall": 0.18518518518518517,
+          "f1": 0.21739130434782608,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        }
+      },
+      "by_condition_type": {
+        "ELIGIBILITY": {
+          "tp": 6,
+          "fp": 14,
+          "fn": 50,
+          "precision": 0.3,
+          "recall": 0.10714285714285714,
+          "f1": 0.15789473684210525,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "EXCLUSION": {
+          "tp": 0,
+          "fp": 4,
+          "fn": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "PREFERENCE": {
+          "tp": 0,
+          "fp": 2,
+          "fn": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        }
+      },
+      "by_field": {
+        "APPLICANT_ADDRESS": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "APPLICANT_AGE": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "BUSINESS_AGE": {
+          "tp": 2,
+          "fp": 1,
+          "fn": 2,
+          "precision": 0.6666666666666666,
+          "recall": 0.5,
+          "f1": 0.5714285714285715,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "BUSINESS_LOCATION": {
+          "tp": 0,
+          "fp": 8,
+          "fn": 6,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "BUSINESS_REGISTRATION": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "BUSINESS_REGISTRATION_COMPLETED": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "BUSINESS_REGISTRATION_STATUS": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "BUSINESS_TECHNOLOGY_SCOPE": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "BUSINESS_TYPE": {
+          "tp": 4,
+          "fp": 3,
+          "fn": 13,
+          "precision": 0.5714285714285714,
+          "recall": 0.23529411764705882,
+          "f1": 0.3333333333333333,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "COMPLIANCE_PLAN_CONTENT": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "COMPLIANCE_STATUS": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "DOCUMENT_SUBMISSION": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "DUPLICATE_OCCUPANCY": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "EMPLOYEE_COUNT": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "FOR_PROFIT_STATUS": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "HIRE_STATUS": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "INDUSTRY": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "INDUSTRY_REVENUE_SHARE": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "IP_RIGHT_COUNTRY": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "IP_RIGHT_OWNERSHIP": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "IP_RIGHT_TYPE": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "IP_RIGHT_VALIDITY": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "LICENSE_STATUS": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "None": {
+          "tp": 0,
+          "fp": 6,
+          "fn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "OPTIONAL_DUTY_COUNT": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "REPRESENTATIVE_AGE": {
+          "tp": 0,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.0,
+          "recall": null,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "NO_GOLD_CONDITIONS"
+        },
+        "RESIDENCE": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "RESTRICTED_GOV_INCUBATOR_EXPERIENCE_COUNT": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "REVENUE": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "REVENUE_FINANCIAL": {
+          "tp": 0,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.0,
+          "recall": null,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "NO_GOLD_CONDITIONS"
+        },
+        "SOGANG_ACADEMIC_COOPERATION": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "SOGANG_TECH_TRANSFER_POSSIBILITY": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "SUPPORTING_COMPANY_STATUS": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        }
+      },
+      "partial_count": 5,
+      "notice_count": 10,
+      "notices_with_misses": 10,
+      "notices_with_false_positives": 8
+    },
+    "rule_experiment_E": {
+      "micro": {
+        "tp": 6,
+        "fp": 17,
+        "fn": 56,
+        "precision": 0.2608695652173913,
+        "recall": 0.0967741935483871,
+        "f1": 0.1411764705882353,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED"
+      },
+      "macro_by_notice": {
+        "precision": 0.23095238095238096,
+        "recall": 0.10666666666666666,
+        "f1": 0.12532467532467534
+      },
+      "by_source": {
+        "BIZINFO": {
+          "tp": 1,
+          "fp": 2,
+          "fn": 34,
+          "precision": 0.3333333333333333,
+          "recall": 0.02857142857142857,
+          "f1": 0.05263157894736842,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "KSTARTUP": {
+          "tp": 5,
+          "fp": 15,
+          "fn": 22,
+          "precision": 0.25,
+          "recall": 0.18518518518518517,
+          "f1": 0.2127659574468085,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        }
+      },
+      "by_condition_type": {
+        "ELIGIBILITY": {
+          "tp": 6,
+          "fp": 11,
+          "fn": 50,
+          "precision": 0.35294117647058826,
+          "recall": 0.10714285714285714,
+          "f1": 0.1643835616438356,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "EXCLUSION": {
+          "tp": 0,
+          "fp": 4,
+          "fn": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "PREFERENCE": {
+          "tp": 0,
+          "fp": 2,
+          "fn": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        }
+      },
+      "by_field": {
+        "APPLICANT_ADDRESS": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "APPLICANT_AGE": {
+          "tp": 0,
+          "fp": 1,
+          "fn": 2,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "BUSINESS_AGE": {
+          "tp": 2,
+          "fp": 2,
+          "fn": 2,
+          "precision": 0.5,
+          "recall": 0.5,
+          "f1": 0.5,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "BUSINESS_LOCATION": {
+          "tp": 0,
+          "fp": 1,
+          "fn": 6,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "BUSINESS_REGISTRATION": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "BUSINESS_REGISTRATION_COMPLETED": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "BUSINESS_REGISTRATION_STATUS": {
+          "tp": 0,
+          "fp": 1,
+          "fn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "BUSINESS_TECHNOLOGY_SCOPE": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "BUSINESS_TYPE": {
+          "tp": 4,
+          "fp": 3,
+          "fn": 13,
+          "precision": 0.5714285714285714,
+          "recall": 0.23529411764705882,
+          "f1": 0.3333333333333333,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "COMPLIANCE_PLAN_CONTENT": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "COMPLIANCE_STATUS": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "DOCUMENT_SUBMISSION": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "DUPLICATE_OCCUPANCY": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "EMPLOYEE_COUNT": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "FOR_PROFIT_STATUS": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "HIRE_STATUS": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "INDUSTRY": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "INDUSTRY_REVENUE_SHARE": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "IP_RIGHT_COUNTRY": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "IP_RIGHT_OWNERSHIP": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "IP_RIGHT_TYPE": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "IP_RIGHT_VALIDITY": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "LICENSE_STATUS": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "None": {
+          "tp": 0,
+          "fp": 6,
+          "fn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "OPTIONAL_DUTY_COUNT": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "REPRESENTATIVE_AGE": {
+          "tp": 0,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.0,
+          "recall": null,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "NO_GOLD_CONDITIONS"
+        },
+        "RESIDENCE": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "RESTRICTED_GOV_INCUBATOR_EXPERIENCE_COUNT": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "REVENUE": {
+          "tp": 0,
+          "fp": 1,
+          "fn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "REVENUE_FINANCIAL": {
+          "tp": 0,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.0,
+          "recall": null,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "NO_GOLD_CONDITIONS"
+        },
+        "SOGANG_ACADEMIC_COOPERATION": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "SOGANG_TECH_TRANSFER_POSSIBILITY": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "SUPPORTING_COMPANY_STATUS": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        }
+      },
+      "partial_count": 6,
+      "notice_count": 10,
+      "notices_with_misses": 10,
+      "notices_with_false_positives": 7
+    }
+  },
+  "selection_csv_sha256": "95eb57cef830ad33d4f273a6220ce877946c14d97afea3b72bb656f41eb8c0cb",
+  "ids_file_sha256": "1162d9092614610358277614b17735d22febfdc99bcd8d6f6fcc0711b3ed1a2d",
+  "baseline_comparison_csv_sha256": "7ff7cc8908a974325b2f84be7b4ca180d49e501c6030c6456c054df1ff7c609e",
+  "preparation_artifacts": {
+    "pilot_notice_ids.json": "1162d9092614610358277614b17735d22febfdc99bcd8d6f6fcc0711b3ed1a2d",
+    "pilot_selection.csv": "95eb57cef830ad33d4f273a6220ce877946c14d97afea3b72bb656f41eb8c0cb",
+    "pilot_baseline_comparison.csv": "7ff7cc8908a974325b2f84be7b4ca180d49e501c6030c6456c054df1ff7c609e",
+    "LLM_EXECUTION_READINESS.md": "8c3d1abdcf15e5144bb943a1265e9c9f1d24f593a0adc08e120dc17417cdad5b",
+    "condition_llm_pilot.env.example": "dafdeb7b7828f099dc709a22e4be26243ed142747c1813c8c50f02fdcd788e01"
+  }
+}

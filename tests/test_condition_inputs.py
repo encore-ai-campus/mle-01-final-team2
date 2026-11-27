@@ -1,7 +1,7 @@
 import hashlib, json, tempfile, unittest
 from collections import Counter
 from pathlib import Path
-from tools.prepare_condition_inputs import OUT, SNAP, FACTS, KS, run, candidate_ref
+from tools.prepare_condition_inputs import OUT, SNAP, FACTS, KS, ROOT, run, candidate_ref
 
 def jl(path):
     with path.open(encoding='utf-8') as f:
@@ -59,9 +59,22 @@ class ConditionInputTests(unittest.TestCase):
         self.assertEqual(report['kstartup_review_status_counts'],{'needs_review':27945,'not_found':18231})
         self.assertEqual(report['kstartup_duplicate_ids'],0)
     def test_deterministic_recreation(self):
+        """Reproduce the immutable historical v1 baseline from its pinned inputs."""
+        historical_facts = ROOT/'data/condition_inputs/legacy/20261125/notices_normalized.jsonl'
         with tempfile.TemporaryDirectory() as d:
-            run(Path(d))
+            run(Path(d), facts_path=historical_facts, facts_label=FACTS)
             for name in ('candidate_refs.jsonl','dispositions.jsonl','extraction_inputs.jsonl','g2b_deferred_samples.jsonl','kstartup_candidate_audit.jsonl','representative_samples.jsonl'):
                 self.assertEqual(hashlib.sha256((OUT/name).read_bytes()).digest(),hashlib.sha256((Path(d)/name).read_bytes()).digest(),name)
+
+    def test_current_data_version_is_deterministic_and_separate(self):
+        """Compare current regeneration only with the current version's own manifest."""
+        manifest_path = ROOT/'data/condition_inputs/v2/20261126/version_manifest.json'
+        manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+        self.assertEqual(manifest['version_id'], 'condition-inputs-v2-20261126')
+        with tempfile.TemporaryDirectory() as d:
+            run(Path(d))
+            for name, expected in manifest['outputs'].items():
+                actual = hashlib.sha256((Path(d)/name).read_bytes()).hexdigest()
+                self.assertEqual(actual, expected['sha256'], name)
 
 if __name__=='__main__': unittest.main()

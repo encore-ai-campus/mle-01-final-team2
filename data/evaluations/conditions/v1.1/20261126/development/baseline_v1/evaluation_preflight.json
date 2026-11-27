@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "errors": [],
+  "goldset_version": "conditions-development-v1.1-20261126-final30",
+  "policy_version": "1.1.0",
+  "notice_count": 30,
+  "condition_count": 116,
+  "scores_computed": false
+}

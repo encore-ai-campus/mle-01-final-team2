@@ -1,0 +1,1 @@
+{"notice_id":"BIZINFO:PBLN_000000000117168","status":"CONNECTION_ERROR","attempts":1,"duration_ms":0,"usage":{},"error_code":"APIConnectionError","provider_metadata":{},"provider_error":{"exception_type":"APIConnectionError","http_status":null,"provider_code":null,"request_id":null,"safe_message":"Connection error"},"request_ordinal":2,"model_id":"gpt-5.6-luna"}

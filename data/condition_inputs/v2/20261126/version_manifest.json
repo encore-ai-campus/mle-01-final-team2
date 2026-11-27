@@ -1,0 +1,58 @@
+{
+  "version_id": "condition-inputs-v2-20261126",
+  "status": "CANDIDATE_NEEDS_REVIEW",
+  "created_for": "separate current-data regression baseline; not semantic approval",
+  "seed": 25112026,
+  "inputs": {
+    "notices": {
+      "path": "data\\normalized\\v1\\20261125_g2b\\notices.jsonl",
+      "sha256": "2cbcf09df66f8ba2c2c906451b228dad18ef0b562ed4ac9ad7e2d4042cc5a901"
+    },
+    "chunks": {
+      "path": "data\\normalized\\v1\\20261125_g2b\\chunks.jsonl",
+      "sha256": "cdce6d9c01b4ad686adef0bbca0b7fcc9f2e27a8d552a70d6ba2ee36fda5abe7"
+    },
+    "facts": {
+      "path": "data\\normalized\\20261124\\notices_normalized.jsonl",
+      "sha256": "31452b47a592744245b2953ed4cf544567f771dc3f0868e54ae4215da59886e2"
+    },
+    "kstartup": {
+      "path": "data\\kstartup\\processed\\kstartup_conditions.jsonl",
+      "sha256": "9651c99316cdde2b818a63edad016d281895e13583dd9d24ac950dce4e614a09"
+    }
+  },
+  "outputs": {
+    "candidate_refs.jsonl": {
+      "path": "candidate_refs.jsonl",
+      "sha256": "f20acf5599785e4d3e9c7224359ba41e11a5ae01f867108470798064f4d1b51c",
+      "records": 17253
+    },
+    "dispositions.jsonl": {
+      "path": "dispositions.jsonl",
+      "sha256": "91b9fe6216e7084a60bf528095fe361ef993a87c4e25ee17a1d2a557de7faad9",
+      "records": 197180
+    },
+    "extraction_inputs.jsonl": {
+      "path": "extraction_inputs.jsonl",
+      "sha256": "605910a460e27b355990e2a85b94e795dce27fafd28591307d78ba58c23e7b8e",
+      "records": 5116
+    },
+    "g2b_deferred_samples.jsonl": {
+      "path": "g2b_deferred_samples.jsonl",
+      "sha256": "9f7e07ac272bc04b8eedabd4da117cdd9d0d3a5b1265399a71563a0281da0604",
+      "records": 4
+    },
+    "kstartup_candidate_audit.jsonl": {
+      "path": "kstartup_candidate_audit.jsonl",
+      "sha256": "4f6654011faa895ea247afbbf7aef7b4b9f38b603d1ed9374a2de275eb3a5e47",
+      "records": 3822
+    },
+    "representative_samples.jsonl": {
+      "path": "representative_samples.jsonl",
+      "sha256": "a2aefa309b93bd1ea7070ac1c46412d03b0d140c0ce0997de6c10b1dcffa8b22",
+      "records": 100
+    }
+  },
+  "conditions_reviewed": false,
+  "decision_eligible": false
+}

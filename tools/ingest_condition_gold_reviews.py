@@ -46,7 +46,8 @@ def schema_validators() -> dict[str, Draft202012Validator]:
     registry = Registry().with_resources(resources)
     return {name: Draft202012Validator(schema, registry=registry, format_checker=FormatChecker())
             for name, schema in schemas.items() if name in {
-                "condition-gold-review-v1.schema.json", "logic-gold-review-v1.schema.json"}}
+                "condition-gold-review-v1.schema.json", "logic-gold-review-v1.schema.json",
+                "condition-gold-review-v1.1.schema.json", "logic-gold-review-v1.1.schema.json"}}
 
 
 def validate_review_packets(root: Path, split: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]], dict[str, Any]]:
@@ -54,14 +55,28 @@ def validate_review_packets(root: Path, split: str) -> tuple[list[dict[str, Any]
     directory = root / key
     other = "evaluation" if key == "development" else "development"
     selected_ids = {row["notice_id"] for row in read_jsonl(directory / "condition_review.jsonl")}
-    other_ids = {row["notice_id"] for row in read_jsonl(root / other / "condition_review.jsonl")}
+    other_path = root / other / "condition_review.jsonl"
+    other_ids = {row["notice_id"] for row in read_jsonl(other_path)} if other_path.exists() else set()
     if selected_ids & other_ids:
         raise ValueError("development/evaluation notice overlap")
     condition_rows = read_jsonl(directory / "condition_review.jsonl")
     logic_rows = read_jsonl(directory / "logic_review.jsonl")
     validators = schema_validators()
-    condition_validator = validators["condition-gold-review-v1.schema.json"]
-    logic_validator = validators["logic-gold-review-v1.schema.json"]
+    versions = {row.get("schema_version") for row in condition_rows + logic_rows}
+    if len(versions) != 1 or versions.pop() not in {"1.0", "1.1"}:
+        raise ValueError("review packet schema versions must match and be supported")
+    version = condition_rows[0]["schema_version"]
+    suffix = "v1.1" if version == "1.1" else "v1"
+    condition_validator = validators[f"condition-gold-review-{suffix}.schema.json"]
+    logic_validator = validators[f"logic-gold-review-{suffix}.schema.json"]
+    title_by_notice = {}
+    if version == "1.1":
+        title_path = ROOT / "data/normalized/v1/20261125_g2b/notices.jsonl"
+        with title_path.open(encoding="utf-8") as stream:
+            for line in stream:
+                item = json.loads(line)
+                if item.get("notice_id") in selected_ids:
+                    title_by_notice[item["notice_id"]] = item["title"]
     condition_by_notice: dict[str, dict[str, Any]] = {}
     logic_by_notice: dict[str, dict[str, Any]] = {}
     for row in condition_rows:
@@ -93,6 +108,13 @@ def validate_review_packets(root: Path, split: str) -> tuple[list[dict[str, Any]
             if condition["gold_condition_id"] in gold_ids:
                 raise ValueError(f"duplicate gold condition ID in {nid}")
             gold_ids.add(condition["gold_condition_id"])
+            if version == "1.1":
+                for evidence in condition["evidence_references"]:
+                    source = title_by_notice.get(nid) if evidence["source_field"] == "title" else row["source_text"]
+                    if source is None or source[evidence["start_char"]:evidence["end_char"]] != evidence["evidence_text"]:
+                        raise ValueError(f"v1.1 evidence span mismatch for {nid}")
+                if condition["review_status"] != "VERIFIED" and condition["decision_possible"]:
+                    raise ValueError(f"unreviewed v1.1 condition marked decision possible for {nid}")
         existing = {c["condition_id"] for c in row.get("existing_candidates", [])}
         for alignment in row["candidate_alignments"]:
             if split == "EVALUATION":
@@ -113,6 +135,61 @@ def validate_review_packets(root: Path, split: str) -> tuple[list[dict[str, Any]
         logic = logic_by_notice[nid]
         if logic["source_text"] != row["source_text"]:
             raise ValueError(f"condition/logic source text mismatch for {nid}")
+        if version == "1.1":
+            sections = logic["gold_logic_sections"]
+            if logic["gold_logic_roots"] != [s["root"] for s in sections]:
+                raise ValueError(f"v1.1 section/root projection mismatch for {nid}")
+            referenced_ids = _validate_logic_roots([s["root"] for s in sections], gold_ids)
+            if referenced_ids != set(logic["condition_gold_ids"]):
+                raise ValueError(f"v1.1 section reference coverage mismatch for {nid}")
+            by_id = {c["gold_condition_id"]: c for c in row["gold_conditions"] + row["missed_condition_candidates"]}
+            for section in sections:
+                ids = _validate_logic_roots([section["root"]], gold_ids)
+                stack = [section["root"]]
+                while stack:
+                    element = stack.pop()
+                    if element["node_type"] != "LOGICAL_GROUP":
+                        continue
+                    source_ref = element.get("evidence") or {}
+                    location = source_ref.get("location") or {}
+                    start, end = location.get("start_char"), location.get("end_char")
+                    text_value = source_ref.get("evidence_text")
+                    if start is not None and end is not None and text_value is not None:
+                        if row["source_text"][start:end] != text_value:
+                            raise ValueError(f"v1.1 logic group evidence mismatch for {nid}")
+                    stack.extend(element["children"])
+                expected_type = section["condition_type"]
+                for cid in ids:
+                    c = by_id[cid]
+                    if expected_type == "POST_SELECTION_OBLIGATION":
+                        good = c["requirement_kind"] == "FULFILLMENT_OBLIGATION"
+                    else:
+                        good = c["condition_type"] == expected_type
+                        if expected_type == "ELIGIBILITY":
+                            good = good and c["requirement_kind"] != "FULFILLMENT_OBLIGATION"
+                    if not good:
+                        raise ValueError(f"v1.1 condition type/section mismatch for {nid}")
+            for exception in logic["gold_exceptions"]:
+                if not set(exception["applies_to_gold_ids"]) <= gold_ids:
+                    raise ValueError(f"v1.1 exception dangling reference for {nid}")
+                legacy = exception["evidence_reference"]
+                if row["source_text"][legacy["start_char"]:legacy["end_char"]] != exception["raw_text"]:
+                    raise ValueError(f"v1.1 exception primary evidence mismatch for {nid}")
+                if exception["application_mode"] == "AST_ONLY" and exception["effect"] == "UNKNOWN":
+                    raise ValueError(f"v1.1 AST exception effect missing for {nid}")
+                for evidence in exception["evidence_references"]:
+                    source = title_by_notice.get(nid) if evidence["source_field"] == "title" else row["source_text"]
+                    if source is None or source[evidence["start_char"]:evidence["end_char"]] != evidence["evidence_text"]:
+                        raise ValueError(f"v1.1 exception evidence span mismatch for {nid}")
+            for benefit in logic["gold_benefits"]:
+                e = benefit["evidence_reference"]
+                if row["source_text"][e["start_char"]:e["end_char"]] != benefit["raw_text"]:
+                    raise ValueError(f"v1.1 benefit evidence mismatch for {nid}")
+                if not set(benefit["applies_when_gold_ids"]) <= gold_ids:
+                    raise ValueError(f"v1.1 benefit dangling reference for {nid}")
+            for unresolved in logic["unresolved_relations"]:
+                if not set(unresolved["gold_condition_ids"]) <= gold_ids:
+                    raise ValueError(f"v1.1 unresolved relation dangling reference for {nid}")
         if logic["review_status"] == "VERIFIED":
             if row["review_status"] != "VERIFIED" or logic["adjudication_status"] == "PENDING" or not logic["reviewer"] or not logic["reviewed_at"]:
                 raise ValueError(f"verified logic review missing verified condition review or metadata for {nid}")
@@ -144,18 +221,26 @@ def validate_review_packets(root: Path, split: str) -> tuple[list[dict[str, Any]
     reviewed_logic = []
     for nid, row in condition_by_notice.items():
         if row["review_status"] == "VERIFIED" and row["adjudication_status"] != "PENDING":
-            reviewed_conditions.append({key: row[key] for key in (
+            payload = {key: row[key] for key in (
                 "schema_version", "dataset_split", "notice_id", "source_system", "source_field", "source_text",
                 "source_text_completeness", "whole_notice_conditions_complete", "source_condition_status",
                 "gold_conditions", "missed_condition_candidates", "candidate_alignments", "review_status",
-                "adjudication_status", "reviewer", "reviewed_at", "revision_history", "review_comment")})
+                "adjudication_status", "reviewer", "reviewed_at", "revision_history", "review_comment")}
+            if version == "1.1":
+                payload["evaluation_version"] = "1.1"
+            reviewed_conditions.append(payload)
         logic = logic_by_notice[nid]
         if logic["review_status"] == "VERIFIED" and logic["adjudication_status"] != "PENDING":
-            reviewed_logic.append({key: logic[key] for key in (
+            payload = {key: logic[key] for key in (
                 "schema_version", "dataset_split", "notice_id", "source_system", "condition_gold_ids",
                 "gold_logic_roots", "gold_exceptions", "gold_benefits", "unresolved_relations", "review_status",
-                "adjudication_status", "reviewer", "reviewed_at", "revision_history", "review_comment")})
+                "adjudication_status", "reviewer", "reviewed_at", "revision_history", "review_comment")}
+            if version == "1.1":
+                payload["evaluation_version"] = "1.1"
+                payload["gold_logic_sections"] = logic["gold_logic_sections"]
+            reviewed_logic.append(payload)
     report = {"split": split.upper(), "condition_review_rows": len(condition_rows), "logic_review_rows": len(logic_rows),
+              "schema_version": version, "evaluation_version": version,
               "reviewed_condition_records": len(reviewed_conditions), "reviewed_logic_records": len(reviewed_logic),
               "unreviewed_records": sum(r["review_status"] != "VERIFIED" for r in condition_rows),
               "evaluation_candidate_data_present": any("existing_candidates" in r or r["candidate_alignments"] for r in condition_rows) if split == "EVALUATION" else False,

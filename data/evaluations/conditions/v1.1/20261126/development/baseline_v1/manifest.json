@@ -1,0 +1,139 @@
+{
+  "status": "FROZEN_DEVELOPMENT_BASELINE",
+  "evaluation_version": "v1.1.0",
+  "policy_version": "1.1.0",
+  "dataset_split": "DEVELOPMENT",
+  "scored_notice_count": 30,
+  "gold_condition_count": 116,
+  "source_counts": {
+    "BIZINFO": 15,
+    "KSTARTUP": 15
+  },
+  "gold_manifest_sha256": "9bdaa9597615885209b353417a33b34d5c976544831a6bae8ced4295542bf725",
+  "gold_inputs": {
+    "reviewed_condition_gold.jsonl": "8450df33455daced4c5e95ca2a51ca262e88c53476c7a8a18e38b3164a52ee76",
+    "reviewed_logic_gold.jsonl": "e74adee73086cf1304ecee9d06f988c0f6af86c4149a9c7eb439e6a9509e08e3",
+    "manifest.json": "9bdaa9597615885209b353417a33b34d5c976544831a6bae8ced4295542bf725"
+  },
+  "predictions": {
+    "data\\condition_inputs\\v1\\20261125\\extracted\\improved\\development_conditions.jsonl": "5585302b26de77d324cf93ec5e05c8b89459af9149d81c0306af09f8225399a0",
+    "data\\condition_inputs\\v1\\20261125\\logic\\notice_condition_sets.jsonl": "bf7b995b880c048f844a725920909d0a26e7cf362f2f0947c901844ba0e889dc"
+  },
+  "baseline_manifest": {
+    "path": "data\\goldsets\\conditions\\v1\\20261126_balanced\\baseline_manifest.json",
+    "sha256": "b3c8edd738a73992d7469cf8ca18a6f33d941ae90da2f705450dda1d44983781"
+  },
+  "evaluation_code": {
+    "path": "tools/evaluate_condition_pipeline_v11.py",
+    "sha256": "7e41d2fb1393d4a99e89f16b7f08b128e9c8e3e6c00cc57f7d4c0ebbb5d0da07"
+  },
+  "configuration": {
+    "path": "configs\\condition_evaluation_v11_development.json",
+    "sha256": "da8270fb7a32dc1d03b9ea6375532d8405009bce5505166a125df58868bc7b05"
+  },
+  "determinism": {
+    "metric_payload_repeated_in_memory": true,
+    "second_run_metric_sha256": "4d194c7267374c7e6416a9a9e02eaf3603724474bc2ebcd2da9adf0154848fb2",
+    "execution_timestamp_in_metrics": false,
+    "repeated_cli_json_equal": true
+  },
+  "test_results": {
+    "full_suite_run": 127,
+    "passed": 122,
+    "skipped": 5,
+    "failed": 0,
+    "evaluator_tests_run": 33,
+    "evaluator_tests_passed": 33
+  },
+  "outputs": {
+    "condition_match_details.csv": {
+      "sha256": "ce752ad8a87de3d33e729b9dd20b9799278d362aa44e2169b9a45c789985c6c8",
+      "bytes": 77267
+    },
+    "condition_match_details.jsonl": {
+      "sha256": "4addc9bb0587cb13255f8488ca0e78c006c052b408a9facca3ed709f66d4271e",
+      "bytes": 71127
+    },
+    "condition_match_details_by_notice.csv": {
+      "sha256": "1d02b3535635b9bc7ec4beaf50b3d2d3359643478ccf89ae1c4870144b86a576",
+      "bytes": 1956
+    },
+    "DEVELOPMENT_BASELINE_EVALUATION_REPORT.md": {
+      "sha256": "a93f5473f41797f7b7f0bc4880ba0bd97a8cde6169f2dcb2b6f4c285936a4f2f",
+      "bytes": 7140
+    },
+    "evaluation_preflight.json": {
+      "sha256": "b0a8c4bf6af1823371a04f3cd6c30f62ac718025b79d64d518c6b7a353faa0f3",
+      "bytes": 222
+    },
+    "evaluation_summary.json": {
+      "sha256": "4d194c7267374c7e6416a9a9e02eaf3603724474bc2ebcd2da9adf0154848fb2",
+      "bytes": 217709
+    },
+    "evidence_evaluation.csv": {
+      "sha256": "a0a4b259d36d26228518f3da7e903ee82e17abe185fc0dbdf4ee41d890b82645",
+      "bytes": 5176
+    },
+    "failure_analysis.csv": {
+      "sha256": "f4c8594943c1e280d91ea607467a2d3aca55f68aed281aa720ed6160a0156e6e",
+      "bytes": 111613
+    },
+    "improvement_priorities.csv": {
+      "sha256": "9ce20617452a655646c06512c59d4eafa80f844c3a0b0a888b5eff2289eee878",
+      "bytes": 805
+    },
+    "logic_match_details.csv": {
+      "sha256": "17aa15b1b5e3e8b6069cefee950099fca14823f1de9996f2c5f05e193adb7130",
+      "bytes": 17507
+    },
+    "logic_match_details.jsonl": {
+      "sha256": "c1ae4599ed52d2f7f880bfaa506dc34d0db109c56114f95850b41168792793e6",
+      "bytes": 22198
+    },
+    "safety_errors.csv": {
+      "sha256": "13cfc3de2a30839058793c7b59acb633da28dc73b4792c4a92be79727d566eec",
+      "bytes": 76
+    },
+    "semantic_evaluation_details.csv": {
+      "sha256": "960a3c6b954ae4d7877b3508e5e3550ec62b2b9a4f2196ab4b15590e7bcf971e",
+      "bytes": 936
+    },
+    "validation_report.json": {
+      "sha256": "5e57e53a53e1fba6b06225f3a182cb95d51f1012b8827c7b16c819fb3a627a69",
+      "bytes": 684
+    }
+  },
+  "scope_note": "Prediction records were scored only for the 30 finalized gold notice IDs. Remaining development 50 were excluded; evaluation 20 used only for ID-mix guard; no extraction evaluation for G2B.",
+  "scored_notice_ids": [
+    "BIZINFO:PBLN_000000000117168",
+    "BIZINFO:PBLN_000000000117340",
+    "BIZINFO:PBLN_000000000117526",
+    "BIZINFO:PBLN_000000000118182",
+    "BIZINFO:PBLN_000000000118927",
+    "BIZINFO:PBLN_000000000119490",
+    "BIZINFO:PBLN_000000000122876",
+    "BIZINFO:PBLN_000000000125094",
+    "BIZINFO:PBLN_000000000125345",
+    "BIZINFO:PBLN_000000000125974",
+    "BIZINFO:PBLN_000000000126490",
+    "BIZINFO:PBLN_000000000126715",
+    "BIZINFO:PBLN_000000000126899",
+    "BIZINFO:PBLN_000000000127992",
+    "BIZINFO:PBLN_000000000128028",
+    "KSTARTUP:176001",
+    "KSTARTUP:176387",
+    "KSTARTUP:176482",
+    "KSTARTUP:176659",
+    "KSTARTUP:176813",
+    "KSTARTUP:177051",
+    "KSTARTUP:177292",
+    "KSTARTUP:177447",
+    "KSTARTUP:177469",
+    "KSTARTUP:177506",
+    "KSTARTUP:177857",
+    "KSTARTUP:178507",
+    "KSTARTUP:178610",
+    "KSTARTUP:179386",
+    "KSTARTUP:179676"
+  ]
+}

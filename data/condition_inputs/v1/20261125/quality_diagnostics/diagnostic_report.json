@@ -1,0 +1,251 @@
+{
+  "development_notices": 80,
+  "conditions_by_notice_bins": {
+    "ONE": 34,
+    "ZERO": 29,
+    "TWO_PLUS": 17
+  },
+  "source_candidates": {
+    "BIZINFO": {
+      "notices": 40,
+      "mean": 0.78,
+      "max": 4
+    },
+    "KSTARTUP": {
+      "notices": 40,
+      "mean": 1.32,
+      "max": 6
+    }
+  },
+  "candidate_reuse": {
+    "connected": 650,
+    "matched": 2,
+    "unmatched": 648
+  },
+  "unmatched_candidate_reason_counts": {
+    "EVIDENCE_OR_SPAN_MISMATCH": 450,
+    "UNSUPPORTED_CATEGORY": 198
+  },
+  "candidate_legacy_duplicate_groups_in_development": 46,
+  "review_queue_notices": 29,
+  "review_sample_notices": 30,
+  "review_rows": 45,
+  "sample_notice_ids": [
+    "BIZINFO:PBLN_000000000117546",
+    "BIZINFO:PBLN_000000000118891",
+    "BIZINFO:PBLN_000000000118927",
+    "BIZINFO:PBLN_000000000123494",
+    "BIZINFO:PBLN_000000000123696",
+    "BIZINFO:PBLN_000000000124501",
+    "BIZINFO:PBLN_000000000125345",
+    "BIZINFO:PBLN_000000000126490",
+    "BIZINFO:PBLN_000000000127205",
+    "BIZINFO:PBLN_000000000127492",
+    "BIZINFO:PBLN_000000000119490",
+    "BIZINFO:PBLN_000000000121247",
+    "BIZINFO:PBLN_000000000128056",
+    "KSTARTUP:176813",
+    "KSTARTUP:178507",
+    "BIZINFO:PBLN_000000000117168",
+    "BIZINFO:PBLN_000000000118182",
+    "BIZINFO:PBLN_000000000117324",
+    "BIZINFO:PBLN_000000000117340",
+    "BIZINFO:PBLN_000000000117526",
+    "BIZINFO:PBLN_000000000118336",
+    "BIZINFO:PBLN_000000000120117",
+    "BIZINFO:PBLN_000000000120481",
+    "BIZINFO:PBLN_000000000120821",
+    "BIZINFO:PBLN_000000000122551",
+    "BIZINFO:PBLN_000000000122876",
+    "BIZINFO:PBLN_000000000124589",
+    "BIZINFO:PBLN_000000000124917",
+    "BIZINFO:PBLN_000000000125094",
+    "BIZINFO:PBLN_000000000125974"
+  ],
+  "no_match": [
+    {
+      "notice_id": "BIZINFO:PBLN_000000000117546",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 0,
+      "text_length": 14
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000118891",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 4,
+      "text_length": 32
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000118927",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 4,
+      "text_length": 44
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000123494",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 0,
+      "text_length": 42
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000123696",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 4,
+      "text_length": 36
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000124501",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 14,
+      "text_length": 91
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000125345",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 18,
+      "text_length": 119
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000126490",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 9,
+      "text_length": 61
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000127205",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 3,
+      "text_length": 34
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000127492",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 13,
+      "text_length": 31
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000127708",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 4,
+      "text_length": 26
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000127731",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 8,
+      "text_length": 134
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000127992",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 0,
+      "text_length": 169
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000128017",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 11,
+      "text_length": 144
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000128028",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 13,
+      "text_length": 220
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000128075",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 6,
+      "text_length": 68
+    },
+    {
+      "notice_id": "KSTARTUP:175764",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 0,
+      "text_length": 100
+    },
+    {
+      "notice_id": "KSTARTUP:175897",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 2,
+      "text_length": 285
+    },
+    {
+      "notice_id": "KSTARTUP:176387",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 1,
+      "text_length": 519
+    },
+    {
+      "notice_id": "KSTARTUP:176482",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 0,
+      "text_length": 28
+    },
+    {
+      "notice_id": "KSTARTUP:176488",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 0,
+      "text_length": 17
+    },
+    {
+      "notice_id": "KSTARTUP:176876",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 1,
+      "text_length": 27
+    },
+    {
+      "notice_id": "KSTARTUP:177275",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 0,
+      "text_length": 64
+    },
+    {
+      "notice_id": "KSTARTUP:178054",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 0,
+      "text_length": 8
+    },
+    {
+      "notice_id": "KSTARTUP:178292",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 0,
+      "text_length": 59
+    },
+    {
+      "notice_id": "KSTARTUP:178610",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 0,
+      "text_length": 76
+    },
+    {
+      "notice_id": "KSTARTUP:178937",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 0,
+      "text_length": 25
+    },
+    {
+      "notice_id": "KSTARTUP:179096",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 0,
+      "text_length": 24
+    },
+    {
+      "notice_id": "KSTARTUP:179687",
+      "reason": "NO_RULE_MATCH_NOT_ABSENCE",
+      "candidate_count": 0,
+      "text_length": 74
+    }
+  ],
+  "condition_candidates": 84,
+  "baseline": {
+    "candidates": 84,
+    "zero_match_notices": 29
+  },
+  "improved": {
+    "candidates": 98,
+    "zero_match_notices": 26
+  },
+  "precision_recall_f1": "NOT_COMPUTED_NO_GOLD_LABELS"
+}

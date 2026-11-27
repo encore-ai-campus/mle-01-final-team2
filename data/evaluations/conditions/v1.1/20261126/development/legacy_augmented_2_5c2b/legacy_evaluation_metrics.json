@@ -1,0 +1,235 @@
+{
+  "status": "COMPLETED",
+  "mode": "legacy_augmented",
+  "goldset_version": "conditions-development-v1.1-20261126-final30",
+  "data_version": "v1",
+  "prediction_scope": "80 DEVELOPMENT notices generated, 30 finalized gold notices scored",
+  "gold_notices_scored": 30,
+  "gold_conditions": 116,
+  "legacy_candidates_scanned": 650,
+  "admitted_unique_legacy_proposals": 30,
+  "merged_duplicate_candidate_count": 26,
+  "held_or_rejected_candidate_count": 594,
+  "disposition_counts": {
+    "ADMITTED_PROPOSAL": 30,
+    "DUPLICATE_RULE": 26,
+    "HOLD_APPLICANT_SCOPE": 3,
+    "HOLD_ATTRIBUTE_UNSUPPORTED": 165,
+    "HOLD_CONDITION_POLARITY": 135,
+    "HOLD_EVIDENCE_NOT_IN_INPUT": 190,
+    "HOLD_POSITION_MISMATCH": 3,
+    "HOLD_REGION_SCOPE": 46,
+    "HOLD_SOURCE_FACT_CONFLICT": 35,
+    "HOLD_SOURCE_FACT_MISMATCH": 17
+  },
+  "strict_metrics_baseline": {
+    "tp": 10,
+    "fp": 36,
+    "fn": 106,
+    "precision": 0.21739130434782608,
+    "recall": 0.08620689655172414,
+    "f1": 0.12345679012345678,
+    "precision_status": "DEFINED",
+    "recall_status": "DEFINED"
+  },
+  "strict_metrics_legacy_augmented": {
+    "tp": 10,
+    "fp": 43,
+    "fn": 106,
+    "precision": 0.18867924528301888,
+    "recall": 0.08620689655172414,
+    "f1": 0.1183431952662722,
+    "precision_status": "DEFINED",
+    "recall_status": "DEFINED"
+  },
+  "macro_by_notice_baseline": {
+    "precision": 0.18939393939393942,
+    "recall": 0.08833333333333333,
+    "f1": 0.1034920634920635
+  },
+  "macro_by_notice_legacy_augmented": {
+    "precision": 0.14166666666666666,
+    "recall": 0.08833333333333333,
+    "f1": 0.09529341029341029
+  },
+  "by_source_baseline": {
+    "BIZINFO": {
+      "tp": 3,
+      "fp": 14,
+      "fn": 57,
+      "precision": 0.17647058823529413,
+      "recall": 0.05,
+      "f1": 0.07792207792207792,
+      "precision_status": "DEFINED",
+      "recall_status": "DEFINED"
+    },
+    "KSTARTUP": {
+      "tp": 7,
+      "fp": 22,
+      "fn": 49,
+      "precision": 0.2413793103448276,
+      "recall": 0.125,
+      "f1": 0.16470588235294117,
+      "precision_status": "DEFINED",
+      "recall_status": "DEFINED"
+    }
+  },
+  "by_source_legacy_augmented": {
+    "BIZINFO": {
+      "tp": 3,
+      "fp": 15,
+      "fn": 57,
+      "precision": 0.16666666666666666,
+      "recall": 0.05,
+      "f1": 0.07692307692307691,
+      "precision_status": "DEFINED",
+      "recall_status": "DEFINED"
+    },
+    "KSTARTUP": {
+      "tp": 7,
+      "fp": 28,
+      "fn": 49,
+      "precision": 0.2,
+      "recall": 0.125,
+      "f1": 0.15384615384615385,
+      "precision_status": "DEFINED",
+      "recall_status": "DEFINED"
+    }
+  },
+  "by_condition_type_baseline": {
+    "ELIGIBILITY": {
+      "tp": 10,
+      "fp": 30,
+      "fn": 100,
+      "precision": 0.25,
+      "recall": 0.09090909090909091,
+      "f1": 0.13333333333333333,
+      "precision_status": "DEFINED",
+      "recall_status": "DEFINED"
+    },
+    "EXCLUSION": {
+      "tp": 0,
+      "fp": 4,
+      "fn": 3,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "precision_status": "DEFINED",
+      "recall_status": "DEFINED"
+    },
+    "PREFERENCE": {
+      "tp": 0,
+      "fp": 2,
+      "fn": 3,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "precision_status": "DEFINED",
+      "recall_status": "DEFINED"
+    }
+  },
+  "by_condition_type_legacy_augmented": {
+    "ELIGIBILITY": {
+      "tp": 10,
+      "fp": 37,
+      "fn": 100,
+      "precision": 0.2127659574468085,
+      "recall": 0.09090909090909091,
+      "f1": 0.12738853503184713,
+      "precision_status": "DEFINED",
+      "recall_status": "DEFINED"
+    },
+    "EXCLUSION": {
+      "tp": 0,
+      "fp": 4,
+      "fn": 3,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "precision_status": "DEFINED",
+      "recall_status": "DEFINED"
+    },
+    "PREFERENCE": {
+      "tp": 0,
+      "fp": 2,
+      "fn": 3,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "precision_status": "DEFINED",
+      "recall_status": "DEFINED"
+    }
+  },
+  "partial_count_baseline": 18,
+  "partial_count_legacy_augmented": 20,
+  "baseline_exact_gold_ids_maintained": 10,
+  "baseline_exact_gold_total": 10,
+  "legacy_stage_FN_total": 40,
+  "legacy_stage_FN_exactly_resolved": 0,
+  "existing_FP_prediction_ids_resolved": 0,
+  "new_FP_prediction_ids_added": 7,
+  "zero_prediction_notices_baseline": 8,
+  "zero_prediction_notices_legacy_augmented": 6,
+  "zero_prediction_notice_ids_baseline": [
+    "BIZINFO:PBLN_000000000118927",
+    "BIZINFO:PBLN_000000000125345",
+    "BIZINFO:PBLN_000000000126490",
+    "BIZINFO:PBLN_000000000127992",
+    "BIZINFO:PBLN_000000000128028",
+    "KSTARTUP:176387",
+    "KSTARTUP:176482",
+    "KSTARTUP:178610"
+  ],
+  "zero_prediction_notice_ids_legacy_augmented": [
+    "BIZINFO:PBLN_000000000118927",
+    "BIZINFO:PBLN_000000000125345",
+    "BIZINFO:PBLN_000000000127992",
+    "BIZINFO:PBLN_000000000128028",
+    "KSTARTUP:176482",
+    "KSTARTUP:178610"
+  ],
+  "safety_errors_baseline": {},
+  "safety_errors_legacy_augmented": {},
+  "logic_metrics_baseline": {
+    "structure_exact_notices": 1,
+    "notice_count": 30,
+    "relation_edges": {
+      "tp": 2,
+      "fp": 31,
+      "fn": 119,
+      "f1": 0.025974025974025976
+    },
+    "logical_groups": {
+      "tp": 1,
+      "fp": 13,
+      "fn": 43,
+      "f1": 0.034482758620689655
+    }
+  },
+  "logic_metrics_legacy_augmented": {
+    "structure_exact_notices": 1,
+    "notice_count": 30,
+    "relation_edges": {
+      "tp": 0,
+      "fp": 39,
+      "fn": 121,
+      "f1": 0.0
+    },
+    "logical_groups": {
+      "tp": 0,
+      "fp": 15,
+      "fn": 44,
+      "f1": 0.0
+    }
+  },
+  "schema_validation_error_count": 0,
+  "all_output_review_status_unreviewed": true,
+  "all_decision_eligible_false": true,
+  "llm_calls": 0,
+  "evaluation_20_used": false,
+  "gold_ids_used_during_extraction": false,
+  "strict_matching_policy_unchanged": true,
+  "condition_prediction_sha256": "59564ed56027e9cd3880580956dbecc45d9166e0db9d9b1a6a60f9c939c1f5a9",
+  "baseline_condition_prediction_sha256": "5585302b26de77d324cf93ec5e05c8b89459af9149d81c0306af09f8225399a0",
+  "fixed_gold_condition_sha256": "8450df33455daced4c5e95ca2a51ca262e88c53476c7a8a18e38b3164a52ee76"
+}

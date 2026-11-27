@@ -1,0 +1,203 @@
+# Development review bundle 1/5
+
+Human approval recorded 2026-11-26 for excerpt-level condition, logic, and exception semantics. Source completeness and application eligibility remain UNKNOWN; decision_possible stays false.
+
+## BIZINFO:PBLN_000000000117168 (BIZINFO; VERIFIED)
+
+### Notice title
+[대구] 2025년 4차 소상공인 맞춤형 출산ㆍ양육지원 사업 모집 공고
+
+### Source excerpt (condition_texts.eligibility.text)
+```text
+대구시에 주소와 사업장을 둔 소상공인
+- 2024. 1. 1. 이전부터 대구시에 사업자등록증명원 소재지 및 주소지 유지
+※ 상세 사업별 신청자격 공고문 참조
+```
+
+### Existing v1 candidates
+- `CND:HVOJVP4HNCG5ZE2VX63J5DTM` 소상공인 [BUSINESS_TYPE] ? MATCH; gold: GOLD:BXR5LSOZJYJ4G7NPQIA7JVZP
+- `CND:JRG6EAAJCDPQ2BWRACAES6AU` 대구 [BUSINESS_LOCATION] ? UNRESOLVED; gold: none
+
+### Gold condition draft
+- `GOLD:VNILCNYBU23H7S5J2V5O2ZZT` **ELIGIBILITY / APPLICANT_ADDRESS / APPLICANT_ADDRESS / EQ "대구광역시"** ? 대구시에 주소 (span 0:7; decision_possible=False; v1 comparison=MISSING in v1 candidates)
+- `GOLD:BFBSIRQNKPL3VNUSVXQG23GL` **ELIGIBILITY / BUSINESS_LOCATION / BUSINESS_LOCATION / EQ "대구광역시"** ? 사업장을 둔 (span 9:15; decision_possible=False; v1 comparison=MISSING in v1 candidates)
+- `GOLD:CF2M4RF4BRNZUYQ4BVTWXL4T` **ELIGIBILITY / APPLICANT_ADDRESS / APPLICANT_ADDRESS / EQ "대구광역시"** ? 주소지 유지 (span 60:66; decision_possible=False; v1 comparison=MISSING in v1 candidates)
+  - Review note: 주소지와 사업자등록 소재지를 별도 조건으로 보존.
+- `GOLD:OF2NP666TGZ4IAUHRZ2IOAE3` **ELIGIBILITY / BUSINESS_LOCATION / BUSINESS_LOCATION / EQ "대구광역시"** ? 사업자등록증명원 소재지 (span 45:57; decision_possible=False; v1 comparison=MISSING in v1 candidates)
+  - Review note: 유지의 연속성은 원문에 명시. 날짜 경계·증빙 해석은 판정 비허용.
+- `GOLD:BXR5LSOZJYJ4G7NPQIA7JVZP` **ELIGIBILITY / BUSINESS_TYPE / BUSINESS_TYPE / EQ "소상공인"** ? 소상공인 (span 16:20; decision_possible=False; v1 comparison=MATCH)
+
+### Logic draft
+- ELIGIBILITY / evaluation APPLICATION / fulfillment APPLICATION:
+
+  `{"node_type": "LOGICAL_GROUP", "group_id": "AST:4B309F52BA2D227588F21953", "operator": "AND", "children": [{"node_type": "CONDITION_REF", "condition_id": "GOLD:VNILCNYBU23H7S5J2V5O2ZZT"}, {"node_type": "CONDITION_REF", "condition_id": "GOLD:BFBSIRQNKPL3VNUSVXQG23GL"}, {"node_type": "CONDITION_REF", "condition_id": "GOLD:CF2M4RF4BRNZUYQ4BVTWXL4T"}, {"node_type": "CONDITION_REF", "condition_id": "GOLD:OF2NP666TGZ4IAUHRZ2IOAE3"}, {"node_type": "CONDITION_REF", "condition_id": "GOLD:BXR5LSOZJYJ4G7NPQIA7JVZP"}], "review_status": "UNREVIEWED", "evidence": {"source_system": "BIZINFO", "source_kind": "NOTICE_FIELD", "source_field": "condition_texts.eligibility.text", "normalized_path": "condition_texts.eligibility.text", "evidence_id": null, "chunk_ids": [], "location": {"start_char": 0, "end_char": 87}, "observed_value_status": "AVAILABLE", "evidence_text": "대구시에 주소와 사업장을 둔 소상공인\n- 2024. 1. 1. 이전부터 대구시에 사업자등록증명원 소재지 및 주소지 유지\n※ 상세 사업별 신청자격 공고문 참조"}}`
+
+### Review/status
+자동 작성 초안. 제공 발췌 전체를 기준으로 작성했으며 공고 전체 조건 완전성은 확정하지 않음. 사람 검수 대기.
+
+Approve: [ ]  Amend:  Unable to decide:  Reviewer/date: 
+
+## BIZINFO:PBLN_000000000117340 (BIZINFO; VERIFIED)
+
+### Notice title
+[경북] 칠곡군 2026년 설대비 중소기업 운전자금(이차보전) 지원 계획 공고
+
+### Source excerpt (condition_texts.eligibility.text)
+```text
+칠곡군 내 사업장(사업자등록증명원의 소재지, 매출액)을 둔 ｢중소기업기본법｣ 상의 중소기업
+※ 자세한 지원대상 공고문 참조
+```
+
+### Existing v1 candidates
+- `CND:4YEL3C5ZJZHDSBBSSUDZFN7E` 중소기업 [BUSINESS_TYPE] ? PARTIAL_MATCH; gold: GOLD:H4UIZ5TFGDIIEBV3ZOIRSFB5
+
+### Gold condition draft
+- `GOLD:7JFJLGRMN4SZ5G7Q66NAAV7V` **ELIGIBILITY / BUSINESS_LOCATION / BUSINESS_LOCATION / EQ "칠곡군"** ? 칠곡군 내 사업장 (span 0:9; decision_possible=False; v1 comparison=MISSING in v1 candidates)
+- `GOLD:H4UIZ5TFGDIIEBV3ZOIRSFB5` **ELIGIBILITY / BUSINESS_TYPE / BUSINESS_TYPE / EQ "중소기업"** ? ｢중소기업기본법｣ 상의 중소기업 (span 33:50; decision_possible=False; v1 comparison=PARTIAL_MATCH)
+  - Review note: 발췌문만으로 구체 충족 사실·세부 기준을 확정할 수 없음; 사람 검수 필요
+
+### Logic draft
+- ELIGIBILITY / evaluation APPLICATION / fulfillment APPLICATION:
+
+  `{"node_type": "LOGICAL_GROUP", "group_id": "AST:3BB6F736B1CD374B58F4CEC8", "operator": "AND", "children": [{"node_type": "CONDITION_REF", "condition_id": "GOLD:7JFJLGRMN4SZ5G7Q66NAAV7V"}, {"node_type": "CONDITION_REF", "condition_id": "GOLD:H4UIZ5TFGDIIEBV3ZOIRSFB5"}], "review_status": "UNREVIEWED", "evidence": {"source_system": "BIZINFO", "source_kind": "NOTICE_FIELD", "source_field": "condition_texts.eligibility.text", "normalized_path": "condition_texts.eligibility.text", "evidence_id": null, "chunk_ids": [], "location": {"start_char": 0, "end_char": 68}, "observed_value_status": "AVAILABLE", "evidence_text": "칠곡군 내 사업장(사업자등록증명원의 소재지, 매출액)을 둔 ｢중소기업기본법｣ 상의 중소기업\n※ 자세한 지원대상 공고문 참조"}}`
+
+### Review/status
+자동 작성 초안. 제공 발췌 전체를 기준으로 작성했으며 공고 전체 조건 완전성은 확정하지 않음. 사람 검수 대기.
+
+Approve: [ ]  Amend:  Unable to decide:  Reviewer/date: 
+
+## BIZINFO:PBLN_000000000117526 (BIZINFO; VERIFIED)
+
+### Notice title
+[경남] 2026년 소상공인 정책자금 운용계획 공고
+
+### Source excerpt (condition_texts.eligibility.text)
+```text
+경남 도내에 소재하고 있는 「소상공인기본법」 제2조에 따른 소상공인
+※ 세부사업별 지원대상 상이 (공고문 참조)
+```
+
+### Existing v1 candidates
+- `CND:3Q2O7JBBJMQN5DDJVBGGW3MB` 소상공인 [BUSINESS_TYPE] ? PARTIAL_MATCH; gold: GOLD:ZNBP5ON3B2BABWEDIDS7B7GJ
+- `CND:RH7LVE5TUYU3YZWCHXXGH2WE` 경남 [BUSINESS_LOCATION] ? PARTIAL_MATCH; gold: GOLD:HA6DO5GSJ4GOHIZF45SXAGBU
+
+### Gold condition draft
+- `GOLD:HA6DO5GSJ4GOHIZF45SXAGBU` **ELIGIBILITY / BUSINESS_LOCATION / BUSINESS_LOCATION / EQ "경상남도"** ? 경남 도내에 소재하고 있는 (span 0:14; decision_possible=False; v1 comparison=PARTIAL_MATCH)
+- `GOLD:ZNBP5ON3B2BABWEDIDS7B7GJ` **ELIGIBILITY / BUSINESS_TYPE / BUSINESS_TYPE / EQ "소상공인"** ? 「소상공인기본법」 제2조에 따른 소상공인 (span 15:37; decision_possible=False; v1 comparison=PARTIAL_MATCH)
+  - Review note: 발췌문만으로 구체 충족 사실·세부 기준을 확정할 수 없음; 사람 검수 필요
+
+### Logic draft
+- ELIGIBILITY / evaluation APPLICATION / fulfillment APPLICATION:
+
+  `{"node_type": "LOGICAL_GROUP", "group_id": "AST:8233F60FCF1DCD3C4B2F4162", "operator": "AND", "children": [{"node_type": "CONDITION_REF", "condition_id": "GOLD:HA6DO5GSJ4GOHIZF45SXAGBU"}, {"node_type": "CONDITION_REF", "condition_id": "GOLD:ZNBP5ON3B2BABWEDIDS7B7GJ"}], "review_status": "UNREVIEWED", "evidence": {"source_system": "BIZINFO", "source_kind": "NOTICE_FIELD", "source_field": "condition_texts.eligibility.text", "normalized_path": "condition_texts.eligibility.text", "evidence_id": null, "chunk_ids": [], "location": {"start_char": 0, "end_char": 62}, "observed_value_status": "AVAILABLE", "evidence_text": "경남 도내에 소재하고 있는 「소상공인기본법」 제2조에 따른 소상공인\n※ 세부사업별 지원대상 상이 (공고문 참조)"}}`
+
+### Review/status
+자동 작성 초안. 제공 발췌 전체를 기준으로 작성했으며 공고 전체 조건 완전성은 확정하지 않음. 사람 검수 대기.
+
+Approve: [ ]  Amend:  Unable to decide:  Reviewer/date: 
+
+## KSTARTUP:176001 (KSTARTUP; VERIFIED)
+
+### Notice title
+2026년 글로벌 스포츠 강소기업 육성 지원(해외진출 역량강화) 사업 모집 공고
+
+### Source excerpt (condition_texts.eligibility.text)
+```text
+- 업력 만 1년 이상
+- 전체 매출액 중 스포츠산업 비중 10% 이상
+- 최근 결산년도 매출액 3억원 이상
+- 중소기업기본법에 의한 중소기업
+```
+
+### Existing v1 candidates
+- `CND:H2T5HOP6DDQW7IG7WF3W2PFE` 업력 만 1년 이상 [BUSINESS_AGE] ? MATCH; gold: GOLD:N3QF42LGMLZNFLXN35JBKWT5
+- `CND:Z3DLRYMGSCRBVNJHXRPVXDI7` 매출액 3억원 이상 [REVENUE_FINANCIAL] ? UNRESOLVED; gold: none
+- `CND:L32RLGA23VMTZMZ6K6MHYGL2` 중소기업 [BUSINESS_TYPE] ? PARTIAL_MATCH; gold: GOLD:3K2JYZN2YHN2QCUYJDJ3RKKD
+
+### Gold condition draft
+- `GOLD:N3QF42LGMLZNFLXN35JBKWT5` **ELIGIBILITY / BUSINESS_AGE / BUSINESS_AGE / GTE 1** ? 업력 만 1년 이상 (span 2:12; decision_possible=False; v1 comparison=MATCH)
+  - Review note: 발췌문만으로 구체 충족 사실·세부 기준을 확정할 수 없음; 사람 검수 필요
+- `GOLD:YY7C3VVWNOHRCG33RVRBXZAK` **ELIGIBILITY / INDUSTRY_REVENUE_SHARE / INDUSTRY_REVENUE_SHARE / GTE 10** ? 전체 매출액 중 스포츠산업 비중 10% 이상 (span 15:39; decision_possible=False; v1 comparison=MISSING in v1 candidates)
+- `GOLD:LBHRZSRUMR3AC4TP4VRAIF4M` **ELIGIBILITY / REVENUE / REVENUE / GTE 300000000** ? 최근 결산년도 매출액 3억원 이상 (span 42:60; decision_possible=False; v1 comparison=MISSING in v1 candidates)
+  - Review note: 발췌문만으로 구체 충족 사실·세부 기준을 확정할 수 없음; 사람 검수 필요
+- `GOLD:3K2JYZN2YHN2QCUYJDJ3RKKD` **ELIGIBILITY / BUSINESS_TYPE / BUSINESS_TYPE / EQ "중소기업"** ? 중소기업기본법에 의한 중소기업 (span 63:79; decision_possible=False; v1 comparison=PARTIAL_MATCH)
+  - Review note: 발췌문만으로 구체 충족 사실·세부 기준을 확정할 수 없음; 사람 검수 필요
+
+### Logic draft
+- ELIGIBILITY / evaluation APPLICATION / fulfillment APPLICATION:
+
+  `{"node_type": "LOGICAL_GROUP", "group_id": "AST:24F8217FCA66F78E3A153F3B", "operator": "AND", "children": [{"node_type": "CONDITION_REF", "condition_id": "GOLD:N3QF42LGMLZNFLXN35JBKWT5"}, {"node_type": "CONDITION_REF", "condition_id": "GOLD:YY7C3VVWNOHRCG33RVRBXZAK"}, {"node_type": "CONDITION_REF", "condition_id": "GOLD:LBHRZSRUMR3AC4TP4VRAIF4M"}, {"node_type": "CONDITION_REF", "condition_id": "GOLD:3K2JYZN2YHN2QCUYJDJ3RKKD"}], "review_status": "UNREVIEWED", "evidence": {"source_system": "KSTARTUP", "source_kind": "NOTICE_FIELD", "source_field": "condition_texts.eligibility.text", "normalized_path": "condition_texts.eligibility.text", "evidence_id": null, "chunk_ids": [], "location": {"start_char": 0, "end_char": 79}, "observed_value_status": "AVAILABLE", "evidence_text": "- 업력 만 1년 이상\n- 전체 매출액 중 스포츠산업 비중 10% 이상\n- 최근 결산년도 매출액 3억원 이상\n- 중소기업기본법에 의한 중소기업"}}`
+
+### Review/status
+자동 작성 초안. 제공 발췌 전체를 기준으로 작성했으며 공고 전체 조건 완전성은 확정하지 않음. 사람 검수 대기.
+
+Approve: [ ]  Amend:  Unable to decide:  Reviewer/date: 
+
+## KSTARTUP:176387 (KSTARTUP; VERIFIED)
+
+### Notice title
+앤틀러코리아 ANTLER FORGE 참여 기업 모집 | 팀 당 6억원 규모 투자
+
+### Source excerpt (condition_texts.eligibility.text)
+```text
+아래 조건 중 하나 이상 충족한 팀/2년 미만 기업
+1. 피지컬ai 관련 하드웨어, 소프트웨어 등 딥테크 분야의 혁신적인 기술력을 보유한 엔지니어링 기반 창업팀
+2. 시장의 실제 수요를 증명하고, $400,000 이상(한화 약 5억 원 이상)의 투자를 유치하고자 하는 초기 기업
+
+*선발 프로세스는 지원서 접수 순으로 진행되며, 선발 인원 충족 시 조기에 마감될 수 있으니 빠른 지원을 권장합니다.
+* 해당 프로그램은 이미 제품을 개발 중이거나 초기 모델을 보유한 팀에게 최적화되어 있습니다. 단순한 아이디어 단계를 넘어, 실제 구현 가능한 기술력을 바탕으로 빠르게 시장에 진입하고자 하는 팀을 환영합니다. 프로그램 기간 중 유의미한 고객 지표나 실제 수요가 확인될 경우, 즉시 최대 50만 달러 규모(6억원 규모)의 투자 심사가 진행됩니다.
+
+대상 산업
+• Physical AI
+• 로보틱스
+• 반도체
+• 모빌리티 및 스마트 인프라
+• 게임, e스포츠
+• 생물의학 및 의료
+• 항공우주 및 방위
+• 기타 시스템 또는 첨단 산업
+```
+
+### Existing v1 candidates
+- No candidate record; this is not evidence that no condition exists.
+
+### Gold condition draft
+- `GOLD:7MYR6H3EWDHLXIIPEU7ZHTB5` **ELIGIBILITY / APPLICANT_PROFILE / QUALITATIVE_QUALIFICATION / UNRESOLVED ** ? 피지컬ai 관련 하드웨어, 소프트웨어 등 딥테크 분야의 혁신적인 기술력을 보유한 엔지니어링 기반 창업팀 (span 32:89; decision_possible=False; v1 comparison=MISSING in v1 candidates)
+  - Review note: 발췌문만으로 구체 충족 사실·세부 기준을 확정할 수 없음; 사람 검수 필요
+- `GOLD:UXPA362Y6IMQQIHYKLAPLSE3` **ELIGIBILITY / BUSINESS_AGE / BUSINESS_AGE / LT 2** ? 2년 미만 기업 (span 20:28; decision_possible=False; v1 comparison=MISSING in v1 candidates)
+  - Review note: 발췌문만으로 구체 충족 사실·세부 기준을 확정할 수 없음; 사람 검수 필요
+- `GOLD:3W6FRNVH5K3FERWLWHNQYZW2` **ELIGIBILITY / MARKET_DEMAND / MARKET_DEMAND_EVIDENCE / UNRESOLVED ** ? 시장의 실제 수요를 증명하고 (span 93:108; decision_possible=False; v1 comparison=MISSING in v1 candidates)
+  - Review note: 수요 입증과 투자유치 의향을 별도 조건으로 분리.
+- `GOLD:RRSZY4GHHCLOGXSIPBBELABS` **ELIGIBILITY / INVESTMENT_INTENT / INVESTMENT_INTENT / UNRESOLVED 400000** ? $400,000 이상(한화 약 5억 원 이상)의 투자를 유치하고자 하는 (span 110:149; decision_possible=False; v1 comparison=MISSING in v1 candidates)
+  - Review note: 투자유치 희망 금액이며 과거 투자실적이나 보조금으로 판정하지 않음.
+- `GOLD:XJF4UD66OOR3WSEYH2MRQPAI` **ELIGIBILITY / BUSINESS_TYPE / BUSINESS_TYPE / UNRESOLVED ** ? 초기 기업 (span 150:155; decision_possible=False; v1 comparison=MISSING in v1 candidates)
+- `GOLD:VLL2HEE7YWR4TICK3RKKE7WQ` **ELIGIBILITY / INDUSTRY / INDUSTRY / IN ["Physical AI", "로보틱스", "반도체", "모빌리티 및 스마트 인프라", "게임·e스포츠", "생물의학 및 의료", "항공우주 및 방위", "기타 시스템 또는 첨단 산업"]** ? 대상 산업
+• Physical AI
+• 로보틱스
+• 반도체
+• 모빌리티 및 스마트 인프라
+• 게임, e스포츠
+• 생물의학 및 의료
+• 항공우주 및 방위
+• 기타 시스템 또는 첨단 산업 (span 417:519; decision_possible=False; v1 comparison=MISSING in v1 candidates)
+  - Review note: 발췌문만으로 구체 충족 사실·세부 기준을 확정할 수 없음; 사람 검수 필요
+
+### Logic draft
+- ELIGIBILITY / evaluation APPLICATION / fulfillment APPLICATION:
+
+  `{"node_type": "LOGICAL_GROUP", "group_id": "AST:5AA8FECA8C035822932CE121", "operator": "OR", "children": [{"node_type": "CONDITION_REF", "condition_id": "GOLD:7MYR6H3EWDHLXIIPEU7ZHTB5"}, {"node_type": "LOGICAL_GROUP", "group_id": "AST:29126F3A32D34B7ECFADD29F", "operator": "AND", "children": [{"node_type": "CONDITION_REF", "condition_id": "GOLD:3W6FRNVH5K3FERWLWHNQYZW2"}, {"node_type": "CONDITION_REF", "condition_id": "GOLD:RRSZY4GHHCLOGXSIPBBELABS"}, {"node_type": "CONDITION_REF", "condition_id": "GOLD:XJF4UD66OOR3WSEYH2MRQPAI"}], "review_status": "UNREVIEWED", "evidence": {"source_system": "KSTARTUP", "source_kind": "NOTICE_FIELD", "source_field": "condition_texts.eligibility.text", "normalized_path": "condition_texts.eligibility.text", "evidence_id": null, "chunk_ids": [], "location": {"start_char": 0, "end_char": 519}, "observed_value_status": "AVAILABLE", "evidence_text": "아래 조건 중 하나 이상 충족한 팀/2년 미만 기업\n1. 피지컬ai 관련 하드웨어, 소프트웨어 등 딥테크 분야의 혁신적인 기술력을 보유한 엔지니어링 기반 창업팀\n2. 시장의 실제 수요를 증명하고, $400,000 이상(한화 약 5억 원 이상)의 투자를 유치하고자 하는 초기 기업\n\n*선발 프로세스는 지원서 접수 순으로 진행되며, 선발 인원 충족 시 조기에 마감될 수 있으니 빠른 지원을 권장합니다.\n* 해당 프로그램은 이미 제품을 개발 중이거나 초기 모델을 보유한 팀에게 최적화되어 있습니다. 단순한 아이디어 단계를 넘어, 실제 구현 가능한 기술력을 바탕으로 빠르게 시장에 진입하고자 하는 팀을 환영합니다. 프로그램 기간 중 유의미한 고객 지표나 실제 수요가 확인될 경우, 즉시 최대 50만 달러 규모(6억원 규모)의 투자 심사가 진행됩니다.\n\n대상 산업\n• Physical AI\n• 로보틱스\n• 반도체\n• 모빌리티 및 스마트 인프라\n• 게임, e스포츠\n• 생물의학 및 의료\n• 항공우주 및 방위\n• 기타 시스템 또는 첨단 산업"}}], "review_status": "UNREVIEWED", "evidence": {"source_system": "KSTARTUP", "source_kind": "NOTICE_FIELD", "source_field": "condition_texts.eligibility.text", "normalized_path": "condition_texts.eligibility.text", "evidence_id": null, "chunk_ids": [], "location": {"start_char": 0, "end_char": 519}, "observed_value_status": "AVAILABLE", "evidence_text": "아래 조건 중 하나 이상 충족한 팀/2년 미만 기업\n1. 피지컬ai 관련 하드웨어, 소프트웨어 등 딥테크 분야의 혁신적인 기술력을 보유한 엔지니어링 기반 창업팀\n2. 시장의 실제 수요를 증명하고, $400,000 이상(한화 약 5억 원 이상)의 투자를 유치하고자 하는 초기 기업\n\n*선발 프로세스는 지원서 접수 순으로 진행되며, 선발 인원 충족 시 조기에 마감될 수 있으니 빠른 지원을 권장합니다.\n* 해당 프로그램은 이미 제품을 개발 중이거나 초기 모델을 보유한 팀에게 최적화되어 있습니다. 단순한 아이디어 단계를 넘어, 실제 구현 가능한 기술력을 바탕으로 빠르게 시장에 진입하고자 하는 팀을 환영합니다. 프로그램 기간 중 유의미한 고객 지표나 실제 수요가 확인될 경우, 즉시 최대 50만 달러 규모(6억원 규모)의 투자 심사가 진행됩니다.\n\n대상 산업\n• Physical AI\n• 로보틱스\n• 반도체\n• 모빌리티 및 스마트 인프라\n• 게임, e스포츠\n• 생물의학 및 의료\n• 항공우주 및 방위\n• 기타 시스템 또는 첨단 산업"}}`
+- ELIGIBILITY / evaluation UNKNOWN / fulfillment UNKNOWN:
+
+  `{"node_type": "CONDITION_REF", "condition_id": "GOLD:UXPA362Y6IMQQIHYKLAPLSE3"}`
+- ELIGIBILITY / evaluation UNKNOWN / fulfillment UNKNOWN:
+
+  `{"node_type": "CONDITION_REF", "condition_id": "GOLD:VLL2HEE7YWR4TICK3RKKE7WQ"}`
+
+### Unresolved relations
+- 2년 기준의 팀/기업 분기 적용범위 미확인. (IDs GOLD:7MYR6H3EWDHLXIIPEU7ZHTB5,GOLD:UXPA362Y6IMQQIHYKLAPLSE3,GOLD:XJF4UD66OOR3WSEYH2MRQPAI; span 20:28)
+- 대상 산업 목록이 어느 분기에 적용되는지 원문상 미확인. (IDs GOLD:7MYR6H3EWDHLXIIPEU7ZHTB5,GOLD:3W6FRNVH5K3FERWLWHNQYZW2,GOLD:RRSZY4GHHCLOGXSIPBBELABS,GOLD:XJF4UD66OOR3WSEYH2MRQPAI,GOLD:VLL2HEE7YWR4TICK3RKKE7WQ; span 417:422)
+
+### Review/status
+자동 작성 초안. 제공 발췌 전체를 기준으로 작성했으며 공고 전체 조건 완전성은 확정하지 않음. 사람 검수 대기.
+
+Approve: [ ]  Amend:  Unable to decide:  Reviewer/date: 

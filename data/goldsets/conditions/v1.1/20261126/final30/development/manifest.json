@@ -1,0 +1,218 @@
+{
+  "status": "FINALIZED",
+  "goldset_version": "conditions-development-v1.1-20261126-final30",
+  "schema_version": "1.1",
+  "dataset_split": "DEVELOPMENT",
+  "notice_ids": [
+    "BIZINFO:PBLN_000000000117168",
+    "BIZINFO:PBLN_000000000117340",
+    "BIZINFO:PBLN_000000000117526",
+    "BIZINFO:PBLN_000000000118182",
+    "BIZINFO:PBLN_000000000118927",
+    "BIZINFO:PBLN_000000000119490",
+    "BIZINFO:PBLN_000000000122876",
+    "BIZINFO:PBLN_000000000125094",
+    "BIZINFO:PBLN_000000000125345",
+    "BIZINFO:PBLN_000000000125974",
+    "BIZINFO:PBLN_000000000126490",
+    "BIZINFO:PBLN_000000000126715",
+    "BIZINFO:PBLN_000000000126899",
+    "BIZINFO:PBLN_000000000127992",
+    "BIZINFO:PBLN_000000000128028",
+    "KSTARTUP:176001",
+    "KSTARTUP:176387",
+    "KSTARTUP:176482",
+    "KSTARTUP:176659",
+    "KSTARTUP:176813",
+    "KSTARTUP:177051",
+    "KSTARTUP:177292",
+    "KSTARTUP:177447",
+    "KSTARTUP:177469",
+    "KSTARTUP:177506",
+    "KSTARTUP:177857",
+    "KSTARTUP:178507",
+    "KSTARTUP:178610",
+    "KSTARTUP:179386",
+    "KSTARTUP:179676"
+  ],
+  "notice_count": 30,
+  "source_system_counts": {
+    "KSTARTUP": 15,
+    "BIZINFO": 15
+  },
+  "condition_type_counts": {
+    "ELIGIBILITY": 110,
+    "PREFERENCE": 3,
+    "EXCLUSION": 3
+  },
+  "condition_count": 116,
+  "logic_section_count": 42,
+  "logic_group_count": 44,
+  "exception_count": 4,
+  "unresolved_relation_count": 9,
+  "source_text_completeness_counts": {
+    "UNKNOWN": 30
+  },
+  "whole_notice_conditions_complete_counts": {
+    "False": 30
+  },
+  "decision_possible_counts": {
+    "False": 116
+  },
+  "review_status_counts": {
+    "VERIFIED": 30
+  },
+  "reviewer_counts": {
+    "bgm3167": 30
+  },
+  "reviewed_at_values": [
+    "2026-11-26T12:46:50+09:00",
+    "2026-11-26T13:05:08+09:00",
+    "2026-11-26T13:38:20+09:00",
+    "2026-11-26T13:43:36+09:00"
+  ],
+  "normalized_snapshot": {
+    "path": "data\\normalized\\v1\\20261125_g2b\\notices.jsonl",
+    "sha256": "2cbcf09df66f8ba2c2c906451b228dad18ef0b562ed4ac9ad7e2d4042cc5a901"
+  },
+  "condition_input_v1": {
+    "path": "data\\condition_inputs\\v1\\20261125\\candidate_refs.jsonl",
+    "sha256": "5765dad05de72b8a44875353495e12224704da3f5b0067b955e1fb5e4b5c06e3"
+  },
+  "extractor_logic_baseline": {
+    "schema_version": "1.0",
+    "data_version": "v1",
+    "manifest_path": "data\\goldsets\\conditions\\v1\\20261126_balanced\\baseline_manifest.json",
+    "manifest_sha256": "b3c8edd738a73992d7469cf8ca18a6f33d941ae90da2f705450dda1d44983781",
+    "files": {
+      "extracted_conditions": {
+        "path": "data/condition_inputs/v1/20261125/extracted/improved/development_conditions.jsonl",
+        "sha256": "5585302b26de77d324cf93ec5e05c8b89459af9149d81c0306af09f8225399a0",
+        "record_count": 98
+      },
+      "notice_condition_sets": {
+        "path": "data/condition_inputs/v1/20261125/logic/notice_condition_sets.jsonl",
+        "sha256": "bf7b995b880c048f844a725920909d0a26e7cf362f2f0947c901844ba0e889dc",
+        "record_count": 80
+      },
+      "relation_review": {
+        "path": "data/condition_inputs/v1/20261125/logic/relation_review.jsonl",
+        "sha256": "4a0c0db8c9f5fdc0edebc4db37161a54f43c391145148fe9f500ea6357d256b9",
+        "record_count": 25
+      },
+      "qualifier_candidates": {
+        "path": "data/condition_inputs/v1/20261125/logic/qualifier_candidates.jsonl",
+        "sha256": "6076bd769c9eb856edff1e65ea4fab3596207a675761542078a4edfd94abb1db",
+        "record_count": 5
+      },
+      "run_report": {
+        "path": "data/condition_inputs/v1/20261125/logic/run_report.json",
+        "sha256": "9f80f9df83732619556a40204ec4a454984e0931cde6805e523fc44620367946",
+        "record": {
+          "development_notices": 80,
+          "source_condition_candidates": 98,
+          "conditions_in_sets": 98,
+          "condition_types": {
+            "ELIGIBILITY": 89,
+            "EXCLUSION": 6,
+            "PREFERENCE": 3
+          },
+          "source_condition_candidates_by_source": {
+            "BIZINFO": 37,
+            "KSTARTUP": 61
+          },
+          "condition_group_map_records": 98,
+          "notices_without_extracted_candidates": 26,
+          "logical_groups": 25,
+          "relation_candidates_by_operator": {
+            "AND": 2,
+            "OR": 5,
+            "UNRESOLVED": 18
+          },
+          "qualifier_candidates": 5,
+          "notice_review_queue_records": 80,
+          "human_review_packet_notices": 30,
+          "conflicting_candidate_groups": 0,
+          "all_decision_eligible_false": true,
+          "evaluation_records_used": false,
+          "g2b_conditions_generated": 0,
+          "schema_validation": "PASSED_ALL_80_RECORDS",
+          "human_review": "NOT_PERFORMED",
+          "elapsed_seconds": 0.51
+        }
+      }
+    }
+  },
+  "review_baseline_v1": {
+    "condition_sha256": "77e4c42d826781c26f5ed16699008063b9f897e50080e190308afca4ac6876ff",
+    "logic_sha256": "4368fb95cc5db5918641bdb4c969ccb7266ff3a15a3aba6f2538f3606090207f"
+  },
+  "component_inputs": {
+    "precheck_conditions": {
+      "path": "data\\goldsets\\conditions\\v1.1\\20261126\\precheck5\\development\\reviewed_condition_gold.jsonl",
+      "sha256": "e29f43ee3fc3dd181101b663b2e9984a77a562c2ca34b77f1827886549dbf6a0"
+    },
+    "precheck_logic": {
+      "path": "data\\goldsets\\conditions\\v1.1\\20261126\\precheck5\\development\\reviewed_logic_gold.jsonl",
+      "sha256": "b16466eb9162145c42fcaa47e0c9d30e76c6a10f4f8e753a63e15f77f9868a20"
+    },
+    "remaining_conditions": {
+      "path": "data\\goldsets\\conditions\\v1.1\\20261126\\remaining25\\development\\reviewed_condition_gold.jsonl",
+      "sha256": "f73e1777fe1bc457f5df6bede40e7b3d31c15864bbc496cdaaf3a5db1682d0a3"
+    },
+    "remaining_logic": {
+      "path": "data\\goldsets\\conditions\\v1.1\\20261126\\remaining25\\development\\reviewed_logic_gold.jsonl",
+      "sha256": "fbd8f226bc0496ad4f56c4a5830bd5bc407ddd5c84e5b714bd3b02470ff3999e"
+    }
+  },
+  "preserved_partial29": {
+    "manifest_path": "data\\goldsets\\conditions\\v1.1\\20261126\\approved29\\development\\manifest.json",
+    "manifest_sha256": "844139616e999b6c76fe221d87920b84f9516ecc09964a36f3ad3ad5a8b82864",
+    "outputs": {
+      "approved_condition_gold.jsonl": {
+        "path": "data\\goldsets\\conditions\\v1.1\\20261126\\approved29\\development\\approved_condition_gold.jsonl",
+        "sha256": "89e5d02aaebb5f996440972d1a6b5e1440b3a4e2344f76358612d3e1944a8599"
+      },
+      "approved_logic_gold.jsonl": {
+        "path": "data\\goldsets\\conditions\\v1.1\\20261126\\approved29\\development\\approved_logic_gold.jsonl",
+        "sha256": "416a845025b94c3d2839dbef85f31a68b7262691b69ff2e30e2f995f2de13a9a"
+      }
+    }
+  },
+  "outputs": {
+    "reviewed_condition_gold.jsonl": {
+      "path": "data\\goldsets\\conditions\\v1.1\\20261126\\final30\\development\\reviewed_condition_gold.jsonl",
+      "sha256": "8450df33455daced4c5e95ca2a51ca262e88c53476c7a8a18e38b3164a52ee76",
+      "bytes": 189102
+    },
+    "reviewed_logic_gold.jsonl": {
+      "path": "data\\goldsets\\conditions\\v1.1\\20261126\\final30\\development\\reviewed_logic_gold.jsonl",
+      "sha256": "e74adee73086cf1304ecee9d06f988c0f6af86c4149a9c7eb439e6a9509e08e3",
+      "bytes": 139694
+    },
+    "reviewed_condition_gold.csv": {
+      "path": "data\\goldsets\\conditions\\v1.1\\20261126\\final30\\development\\reviewed_condition_gold.csv",
+      "sha256": "c295eb5d1eacc7379bdee0cd0920d9033b7b25dd117d285edc284e76a8fef47f",
+      "bytes": 66566
+    },
+    "reviewed_logic_gold.csv": {
+      "path": "data\\goldsets\\conditions\\v1.1\\20261126\\final30\\development\\reviewed_logic_gold.csv",
+      "sha256": "d58efacc80f7c3ade56140176a5e010f00c64a8f3f2b63c864aac5536c499087",
+      "bytes": 75969
+    },
+    "approved_notice_ids.json": {
+      "path": "data\\goldsets\\conditions\\v1.1\\20261126\\final30\\development\\approved_notice_ids.json",
+      "sha256": "b7f3f38fe4ec1806a411171b90a9ee3f9f2a453321e7695f0da66fce038ff9dc",
+      "bytes": 860
+    }
+  },
+  "generation": {
+    "method": "deterministic merge of existing ingest outputs",
+    "git_head": "5f23117d87b4b1224f472b270ece17e5aeba49ee",
+    "ingest_tool_path": "tools/ingest_condition_gold_reviews.py",
+    "ingest_tool_sha256": "36200a8f688cbc1d3dcf8a667b933ad28e1d6d0085621bbee8da78619e27a9bb",
+    "deterministic_regenerations": 3,
+    "regeneration_sha256": "8450df33455daced4c5e95ca2a51ca262e88c53476c7a8a18e38b3164a52ee76"
+  },
+  "evaluation_policy_note": "v1.0 extractor/logic baseline versus v1.1 gold requires explicit compatibility policy; no scores computed"
+}

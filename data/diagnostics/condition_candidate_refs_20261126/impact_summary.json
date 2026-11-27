@@ -1,0 +1,60 @@
+{
+  "changed_split": {
+    "OTHER": 214,
+    "DEVELOPMENT": 17,
+    "EVALUATION": 1
+  },
+  "added_split": {
+    "OTHER": 39,
+    "EVALUATION": 2,
+    "DEVELOPMENT": 1
+  },
+  "changed_labels": {
+    "{\"label\": \"사회적기업\"}": 131,
+    "{\"label\": \"장애인기업\"}": 21,
+    "{\"label\": \"여성기업\"}": 79
+  },
+  "added_labels": {
+    "{\"label\": \"태안군\"}": 4,
+    "{\"label\": \"증평군\"}": 3,
+    "{\"label\": \"영종구\"}": 2,
+    "{\"label\": \"금천구\"}": 23,
+    "{\"label\": \"강북구\"}": 6,
+    "{\"label\": \"광진구\"}": 2
+  },
+  "changed_precheck5": [
+    "BIZINFO:PBLN_000000000118182"
+  ],
+  "added_precheck5": [],
+  "changed_development_ids": [
+    "BIZINFO:PBLN_000000000117324",
+    "BIZINFO:PBLN_000000000118182",
+    "BIZINFO:PBLN_000000000120117",
+    "BIZINFO:PBLN_000000000120481",
+    "BIZINFO:PBLN_000000000124501",
+    "BIZINFO:PBLN_000000000125345",
+    "BIZINFO:PBLN_000000000126965"
+  ],
+  "added_development_ids": [
+    "KSTARTUP:177654"
+  ],
+  "evaluation_candidate_ids_changed": [
+    "BIZINFO:PBLN_000000000119332:FACT:c45981e92d46d16ae67a:0"
+  ],
+  "evaluation_candidate_ids_added": [
+    "BIZINFO:PBLN_000000000117973:FACT:68b456528bec7ec21564:0",
+    "BIZINFO:PBLN_000000000117973:FACT:ff5a3ff1ecdc4626a641:0"
+  ],
+  "reclassification_flags": {
+    "LEGAL_REFERENCE_LANGUAGE": 58,
+    "PREFERENCE_LANGUAGE": 20,
+    "EXCLUSION_LANGUAGE": 1
+  },
+  "region_provisional_categories": {
+    "APPLICANT_REGION_CANDIDATE": 20,
+    "EVALUATION_ID_ONLY": 2,
+    "CONDITIONAL_POST_SELECTION_CONTEXT": 10,
+    "PREFERENCE_REGION_CANDIDATE": 9,
+    "UNKNOWN": 1
+  }
+}

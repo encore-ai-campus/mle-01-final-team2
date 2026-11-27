@@ -497,11 +497,28 @@ def preflight(split: str, gold_root: Path = GOLD_ROOT) -> dict[str, Any]:
         raise ValueError("split must be development or evaluation")
     gold_dir = gold_root / split
     review_path = gold_dir / "condition_review.jsonl"
+    if review_path.exists():
+        first = next((row for row in read_jsonl(review_path)), None)
+        if first and first.get("schema_version") == "1.1":
+            from tools.ingest_condition_gold_reviews import validate_review_packets
+            report: dict[str, Any] = {"split": split.upper(), "schema_version": "1.1",
+                "evaluation_version": "1.1", "score_status": "BLOCKED", "blocking_reasons": [],
+                "reviewed_gold_conditions": 0, "reviewed_gold_logic_notices": 0}
+            try:
+                _, _, integrity = validate_review_packets(gold_root, split)
+                report["review_packet_validation"] = integrity
+            except (ValueError, KeyError, FileNotFoundError) as exc:
+                report["blocking_reasons"].append({"code": "GOLD_SCHEMA_OR_REFERENCE_INVALID", "detail": str(exc)})
+                return report
+            report["blocking_reasons"].append({"code": "V11_SEMANTIC_EVALUATION_NOT_IMPLEMENTED"})
+            if integrity["unreviewed_records"]:
+                report["blocking_reasons"].append({"code": "UNREVIEWED_GOLD", "count": integrity["unreviewed_records"]})
+            return report
     logic_review_path = gold_dir / "logic_review.jsonl"
     condition_path = gold_dir / "reviewed_condition_gold.jsonl"
     logic_path = gold_dir / "reviewed_logic_gold.jsonl"
     baseline_path = gold_root / "baseline_manifest.json"
-    report: dict[str, Any] = {"split": split.upper(), "score_status": "BLOCKED", "blocking_reasons": [],
+    report: dict[str, Any] = {"split": split.upper(), "schema_version": "1.0", "evaluation_version": "1.0", "score_status": "BLOCKED", "blocking_reasons": [],
                               "reviewed_gold_conditions": 0, "reviewed_gold_logic_notices": 0,
                               "excluded_by_status": {}, "baseline_hashes_valid": False}
     missing = [str(p) for p in (review_path, logic_review_path, condition_path, logic_path, baseline_path) if not p.exists()]

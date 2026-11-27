@@ -1,0 +1,61 @@
+{
+  "status": "LEAD_BLOCKED",
+  "fingerprint": {
+    "run_id": "llm_pilot_2_5c3_r2",
+    "model_id": "gpt-5.6-luna",
+    "reasoning_effort": "low",
+    "max_completion_tokens": 8192,
+    "timeout_seconds": 180,
+    "json_mode": "json_object",
+    "sdk_retries": 0,
+    "prompt_sha256_before": "0f3477e5239e4e36212f7a25f8e71e8b55982f81fec6b831e8f6cdb681b0047a",
+    "prompt_sha256_after": "0f3477e5239e4e36212f7a25f8e71e8b55982f81fec6b831e8f6cdb681b0047a",
+    "failed_run_manifest_sha256": "a9a321711225368611fdc514b32dc7db6cdac1f61adcb7efde531bea7731a4bf",
+    "frozen_inputs": {
+      "checks": {
+        "pilot_ids_match": true,
+        "pilot_id_file_hash": true,
+        "pilot_input_hash": true,
+        "gold_finalized": true,
+        "gold_condition_hash": true,
+        "gold_logic_hash": true,
+        "baseline_condition_hash": true,
+        "baseline_logic_hash": true,
+        "rule_e_condition_hash": true,
+        "rule_e_logic_hash": true,
+        "v11_evaluator_hash": true,
+        "pilot_development_only": true,
+        "pilot_source_balance": true,
+        "gold_notice_coverage": true
+      },
+      "pilot_manifest_sha256": "a3ee3339f539899c44897833627bb17fa45d7981d2e3bbd81dd4753a493467a5",
+      "gold_manifest_sha256": "9bdaa9597615885209b353417a33b34d5c976544831a6bae8ced4295542bf725",
+      "input_sha256": "14e4f7dd74d71046555998ebdcee93e39ed62f5725cfb9f0dc7091f0328023d1",
+      "baseline_condition_sha256": "5585302b26de77d324cf93ec5e05c8b89459af9149d81c0306af09f8225399a0",
+      "baseline_logic_sha256": "bf7b995b880c048f844a725920909d0a26e7cf362f2f0947c901844ba0e889dc",
+      "rule_e_condition_sha256": "b8a304f8a081d255d9fe2a9fb43fbbd98593fec52e81b8678886abd85022295a",
+      "rule_e_logic_sha256": "e3a7cf1f7b65e2d88011478b4e69d08a6b58b5c9d05579b07516655aa823535c",
+      "gold_condition_sha256": "8450df33455daced4c5e95ca2a51ca262e88c53476c7a8a18e38b3164a52ee76",
+      "gold_logic_sha256": "e74adee73086cf1304ecee9d06f988c0f6af86c4149a9c7eb439e6a9509e08e3",
+      "v11_evaluator_sha256": "7e41d2fb1393d4a99e89f16b7f08b128e9c8e3e6c00cc57f7d4c0ebbb5d0da07"
+    },
+    "runner_sha256": "fbe7f717add76d95fbee770baea1d668fe85807ff41207066d2284bfde7654cb",
+    "extractor_sha256": "ff0a76cdc977166091ee704cd9997160252bbd5be0ac1fddb47e2101d3e4b242",
+    "evaluator_sha256": "7e41d2fb1393d4a99e89f16b7f08b128e9c8e3e6c00cc57f7d4c0ebbb5d0da07",
+    "notice_ids": [
+      "BIZINFO:PBLN_000000000117168",
+      "BIZINFO:PBLN_000000000118182",
+      "BIZINFO:PBLN_000000000119490",
+      "BIZINFO:PBLN_000000000126490",
+      "BIZINFO:PBLN_000000000128028",
+      "KSTARTUP:176001",
+      "KSTARTUP:176813",
+      "KSTARTUP:177447",
+      "KSTARTUP:178507",
+      "KSTARTUP:179386"
+    ]
+  },
+  "request_limit": 12,
+  "prior_run_budget_reused": false,
+  "requests_used": 2
+}

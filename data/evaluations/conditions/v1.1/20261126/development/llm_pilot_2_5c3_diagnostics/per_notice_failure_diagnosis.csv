@@ -1,0 +1,11 @@
+notice_id,status,attempts,duration_ms,prompt_tokens,completion_tokens,reasoning_tokens,raw_response_text_length,finish_reason,error_code,diagnosis
+BIZINFO:PBLN_000000000117168,PROVIDER_ERROR,1,0,0,0,0,0,NOT_RECORDED,APIConnectionError,Provider SDK connection failure; no response body or provider status saved
+BIZINFO:PBLN_000000000118182,INVALID_RESPONSE,1,8188,1930,800,800,0,NOT_RECORDED,INVALID_JSON_OR_TRUNCATED_OUTPUT,Output cap consumed entirely by reasoning; truncation strongly indicated
+BIZINFO:PBLN_000000000119490,INVALID_RESPONSE,1,9016,1789,800,800,0,NOT_RECORDED,INVALID_JSON_OR_TRUNCATED_OUTPUT,Output cap consumed entirely by reasoning; truncation strongly indicated
+BIZINFO:PBLN_000000000126490,INVALID_RESPONSE,1,9750,1724,800,800,0,NOT_RECORDED,INVALID_JSON_OR_TRUNCATED_OUTPUT,Output cap consumed entirely by reasoning; truncation strongly indicated
+BIZINFO:PBLN_000000000128028,INVALID_RESPONSE,1,9000,1836,800,800,0,NOT_RECORDED,INVALID_JSON_OR_TRUNCATED_OUTPUT,Output cap consumed entirely by reasoning; truncation strongly indicated
+KSTARTUP:176001,INVALID_RESPONSE,1,7703,1733,800,800,0,NOT_RECORDED,INVALID_JSON_OR_TRUNCATED_OUTPUT,Output cap consumed entirely by reasoning; truncation strongly indicated
+KSTARTUP:176813,INVALID_RESPONSE,1,8781,1775,800,800,0,NOT_RECORDED,INVALID_JSON_OR_TRUNCATED_OUTPUT,Output cap consumed entirely by reasoning; truncation strongly indicated
+KSTARTUP:177447,INVALID_RESPONSE,1,9562,1854,800,800,0,NOT_RECORDED,INVALID_JSON_OR_TRUNCATED_OUTPUT,Output cap consumed entirely by reasoning; truncation strongly indicated
+KSTARTUP:178507,INVALID_RESPONSE,1,8922,1954,800,800,0,NOT_RECORDED,INVALID_JSON_OR_TRUNCATED_OUTPUT,Output cap consumed entirely by reasoning; truncation strongly indicated
+KSTARTUP:179386,INVALID_RESPONSE,1,9172,1765,800,800,0,NOT_RECORDED,INVALID_JSON_OR_TRUNCATED_OUTPUT,Output cap consumed entirely by reasoning; truncation strongly indicated

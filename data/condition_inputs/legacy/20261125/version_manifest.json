@@ -1,0 +1,15 @@
+{
+  "version_id": "condition-inputs-v1-legacy-20261125",
+  "status": "FROZEN_HISTORICAL_INPUT",
+  "source_git_commit": "afc464e",
+  "input_path": "data\\condition_inputs\\legacy\\20261125\\notices_normalized.jsonl",
+  "input_sha256": "c47bccc38ee373f756481a93e68e1a123a24d31f04ed1b4f198d3647930ac2e8",
+  "line_ending": "CRLF",
+  "reconstructed_from_git_blob": true,
+  "original_analysis_report_input_sha256": "c47bccc38ee373f756481a93e68e1a123a24d31f04ed1b4f198d3647930ac2e8",
+  "baseline_candidate_path": "data/condition_inputs/v1/20261125/candidate_refs.jsonl",
+  "baseline_candidate_sha256": "5765dad05de72b8a44875353495e12224704da3f5b0067b955e1fb5e4b5c06e3",
+  "baseline_candidate_records": 17211,
+  "semantic_review_complete": false,
+  "decision_eligible": false
+}

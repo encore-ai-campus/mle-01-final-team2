@@ -1,0 +1,100 @@
+{
+  "source": "data\\goldsets\\conditions\\v1.1\\20261126\\remaining25\\development",
+  "files": [
+    {
+      "file": "condition_review.csv",
+      "sha256": "9700e8e305cc7e51f958be7a1cb56129429fa213b0863b281c8a9b0623c0a911",
+      "bytes": 51184
+    },
+    {
+      "file": "condition_review.jsonl",
+      "sha256": "f5862b3d912c4a4c16a3c5637db9163e5bc60c77f9cf20b03abd729872647a71",
+      "bytes": 188275
+    },
+    {
+      "file": "difference_report.csv",
+      "sha256": "9479d8717cf44de1ccdc8c847a34208eef52fc44df44798d4b0ae98a3b2e49bb",
+      "bytes": 23924
+    },
+    {
+      "file": "FINAL_SEMANTIC_2_4E.md",
+      "sha256": "631db85cb4be1fa2f0c8f6eae4095771a442d8bad0271f6184bcff5c66af1833",
+      "bytes": 3335
+    },
+    {
+      "file": "gold_id_migration.csv",
+      "sha256": "0b4534729c56be0a7a0900fea44e8eb806688760f8ca41d0829fe0724605f7eb",
+      "bytes": 23321
+    },
+    {
+      "file": "HUMAN_REVIEW_REMAINING25_BUNDLE1.md",
+      "sha256": "9f66e9af73daab445dce0de3723bdff47f566df7b7ff0c853717fa7faa56cd58",
+      "bytes": 20114
+    },
+    {
+      "file": "HUMAN_REVIEW_REMAINING25_BUNDLE2.md",
+      "sha256": "a28bf4083b7d8762e7ccbe6ebbee9c32be943cc0688448a270326feaa31d6337",
+      "bytes": 15381
+    },
+    {
+      "file": "HUMAN_REVIEW_REMAINING25_BUNDLE3.md",
+      "sha256": "c279f55b22e979ec8f241b517a4ca3f5a4a0516912b5b396b1b99cbf3a5a9561",
+      "bytes": 22033
+    },
+    {
+      "file": "HUMAN_REVIEW_REMAINING25_BUNDLE4.md",
+      "sha256": "7b68a7e1f63c532a14ab28c51008e65d12dabfb50e89c46c17f48917b809e409",
+      "bytes": 22143
+    },
+    {
+      "file": "HUMAN_REVIEW_REMAINING25_BUNDLE5.md",
+      "sha256": "2bb9c6c94dde4906d174d1ea79f85ff1504b63dff27b113bc219e31f1cfbcae7",
+      "bytes": 18561
+    },
+    {
+      "file": "ingest_report.json",
+      "sha256": "59c5f8861a17bd4b628c2d1dc3731176fe98eb398d2ac3479114fa70449f7c2a",
+      "bytes": 374
+    },
+    {
+      "file": "logic_review.csv",
+      "sha256": "7deaf6ebeea530413eb0747a6755032664ba4eaa0657188f85ba5a587b28c931",
+      "bytes": 46188
+    },
+    {
+      "file": "logic_review.jsonl",
+      "sha256": "19acdae616c24951dac70cb0f6a1c8ec6275cee9143795804deb27a5eefd6591",
+      "bytes": 277969
+    },
+    {
+      "file": "remaining25_selection.csv",
+      "sha256": "2ee02df9541fd4582c5f0d27669378004e7a9f2022ad70dd7a1ec50b3aa6c376",
+      "bytes": 6656
+    },
+    {
+      "file": "reviewed_condition_gold.jsonl",
+      "sha256": "81edd869420cc8bc2159b6e9e9ec607004977e3c802c7002710afcf501a8d82f",
+      "bytes": 83943
+    },
+    {
+      "file": "reviewed_logic_gold.jsonl",
+      "sha256": "519e355407871d5a523bce3a77d673fc340e53581ed9b76377151cd85b9fc793",
+      "bytes": 57756
+    },
+    {
+      "file": "review_opinion_matrix.csv",
+      "sha256": "ff62bb2e4e66f0511379ffe6c17fa8c2e45f0969e02231f26692de6c44055aa8",
+      "bytes": 7486
+    },
+    {
+      "file": "unresolved_semantics.csv",
+      "sha256": "f9fe15336bc1bf1ade84c9952ef28080df30f979febb45909b288a0ef9d0f833",
+      "bytes": 2546
+    },
+    {
+      "file": "VALIDATION_REPORT.md",
+      "sha256": "53e732d45e989beddb4276a7b7587a41d65b90b440f78c3ff706a37dcfbb2a94",
+      "bytes": 3882
+    }
+  ]
+}

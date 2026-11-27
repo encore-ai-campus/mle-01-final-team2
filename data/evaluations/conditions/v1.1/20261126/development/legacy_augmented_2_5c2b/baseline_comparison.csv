@@ -1,0 +1,9 @@
+﻿metric,baseline_v1,legacy_augmented,delta
+tp,10,10,0
+fp,36,43,7
+fn,106,106,0
+precision,21.7391,18.8679,-2.8712
+recall,8.6207,8.6207,0.0
+f1,12.3457,11.8343,-0.5114
+macro_f1,10.3492,9.5293,-0.8199
+zero_prediction_notices,8,6,-2
