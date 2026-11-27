@@ -138,6 +138,14 @@ class ConceptsAndLawsTests(unittest.TestCase):
         self.assertEqual(len(self.notes), 2)
         self.assertTrue(all("rule_json" not in n for n in self.dnodes))  # 원문 확인 전에는 판정 기준을 만들지 않는다
 
+    def test_definition_review_sets_needs_review(self):
+        by = {n["term"]: n for n in self.dnodes}
+        self.assertEqual(sorted(t for t, n in by.items() if n["needs_review"]), ["예비창업자"])  # 검수 결과 칸이 빈 정의만 남는다
+        self.assertTrue(all(n["review_status"] == "확인" and n["reviewed_at"] == "2026-11-27" for t, n in by.items() if t != "예비창업자"))
+        self.assertIn("중소기업기본법 시행령 제3조(중소기업의 범위)", by["중소기업"]["delegated_basis"])
+        self.assertNotIn("delegated_basis", by["협동조합"])
+        self.assertTrue(all(":\\" not in s for n in self.dnodes for s in n.get("delegated_basis", []) + [n.get("review_note", "")]))  # 로컬 경로를 넣지 않는다
+
     def test_v03_definitions_are_verbatim_clauses(self):
         from graphrag import concepts_laws as C
         arts = {(r["doc_name"], str(r["article_no"])): r["text"] for r in C._jsonl(C.LAW_DIR / "조문.jsonl") if r.get("level") == "article"}
