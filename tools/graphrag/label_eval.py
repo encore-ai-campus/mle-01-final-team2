@@ -8,6 +8,9 @@
 규칙(요약)
 - 조건: SATISFIED / UNSATISFIED / UNKNOWN. 프로필에 값이 없으면(None) UNKNOWN.
 - 요건 논리: AND, OR, NONE_OF(하나라도 해당하면 제외), AT_LEAST(k).
+- `open_ended`는 열린 목록만 넓힌다. AND 요건에서 닫힌 속성(지역·업력·연령·매출·직원 수) 조건이 불충족이거나 제외(NONE_OF)에 해당하면 불충족을 확정한다.
+- 연령 값에 basis=YEAR_AGE(연 나이)가 있으면 만 나이와 만 나이+1이 갈릴 때 미확인(BOUNDARY_UNCLEAR).
+- 예비창업자의 업력: 하한 조건(1년 이상 등)은 불충족, 상한 조건은 미확인.
 - `unparsed` 자격 요건, 조건이 둘 이상인데 `logic_basis=assumed`, `open_ended`가 ELIGIBLE을 만들 상황이면 NEEDS_CHECK.
 - 트랙: 하나라도 ELIGIBLE이면 ELIGIBLE, 전부 NOT_ELIGIBLE이면 NOT_ELIGIBLE, 그 외 NEEDS_CHECK.
 """
@@ -91,6 +94,27 @@ def compare(x: float, op: str, v: dict) -> bool | None:
     return {"LT": x < t, "LTE": x <= t, "GT": x > t, "GTE": x >= t, "EQ": x == t}.get(op)
 
 
+def is_lower_bound(op: str, v: dict) -> bool:
+    """업력 0년이 떨어지는 하한 조건인가(GTE 1, GT 0, BETWEEN 1~3 등)."""
+    if op in ("GT", "GTE", "EQ"):
+        t = num(v)
+        return t is not None and (t > 0 if op != "GT" else t >= 0)
+    if op == "BETWEEN":
+        lo = num(v.get("min"))
+        return lo is not None and (lo > 0 if v.get("min_inclusive", True) else lo >= 0)
+    return False
+
+
+CLOSED_ATTRS = {"region", "zone", "business_age", "founder_age", "revenue", "employees"}  # 값이 닫혀 있어 '등'으로 넓어지지 않는 속성
+
+
+def is_closed(c: dict) -> bool:
+    """조건(또는 그룹)의 잎 조건이 모두 닫힌 속성인가."""
+    if c.get("children"):
+        return all(is_closed(ch) for ch in c["children"])
+    return c.get("attribute") in CLOSED_ATTRS
+
+
 def eval_condition(c: dict, prof: dict) -> tuple[str, list[str]]:
     """조건 하나 -> (결과, 플래그)."""
     a, op, v = c.get("attribute"), c.get("operator"), c.get("value") or {}
@@ -98,13 +122,22 @@ def eval_condition(c: dict, prof: dict) -> tuple[str, list[str]]:
     res = UNK
     if a == "business_age":
         x = prof.get("business_age_years")
-        if x is not None and prof.get("business_status") != "예비창업자":
+        if prof.get("business_status") == "예비창업자":
+            # 사업자등록 전이라 업력이 없다. 하한(1년 이상 등)은 못 넘으므로 불충족, 상한(7년 이내 등)에 예비창업자가 드는지는 공고 정의 문제라 미확인
+            res = UNSAT if is_lower_bound(op, v) else UNK
+        elif x is not None:
             ok = compare(float(x), op, v)
             res = UNK if ok is None else (SAT if ok else UNSAT)
     elif a == "founder_age":
         x = prof.get("founder_age")
         if x is not None:
             ok = compare(float(x), op, v)
+            if isinstance(v, dict) and v.get("basis") == "YEAR_AGE":
+                # 연 나이(출생연도 기준, 예: '1975년 12월 31일 이전 출생')는 만 나이와 같거나 1 많다. 두 경우가 갈리면 확정하지 않는다
+                ok2 = compare(float(x) + 1, op, v)
+                if ok != ok2:
+                    ok = None
+                    flags.append("BOUNDARY_UNCLEAR")
             res = UNK if ok is None else (SAT if ok else UNSAT)
     elif a == "employees":
         x = prof.get("employees")
@@ -223,10 +256,15 @@ def eval_requirement(r: dict, prof: dict) -> dict:
         reasons.add("ASSUMED_LOGIC")
     if r.get("open_ended"):
         reasons.add("OPEN_ENDED")
-        if out == UNSAT:
+        logic = r.get("logic", "AND")
+        closed_fail = logic == "AND" and any(t == UNSAT and is_closed(c) for t, c in zip(tops, conds))
+        if out == UNSAT and logic != "NONE_OF" and not closed_fail:
             out = UNK  # 목록이 열려 있어 불충족을 확정할 수 없다
+        # 제외(NONE_OF)에 해당한 것, 닫힌 조건(지역·업력·연령 등)이 AND에서 불충족인 것은 '등'과 상관없이 확정한다
     if "NEEDS_DEFINITION" in flags:
         reasons.add("NEEDS_DEFINITION")
+    if "BOUNDARY_UNCLEAR" in flags:
+        reasons.add("BOUNDARY_UNCLEAR")
     if UNK in vals and not reasons:
         reasons.add("PROFILE_MISSING_ATTR")
     return {"req_id": r.get("req_id"), "kind": r.get("kind"), "result": out, "conditions": results, "reasons": sorted(reasons), "track_id": r.get("track_id")}

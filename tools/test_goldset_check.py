@@ -107,6 +107,35 @@ class TestRules(unittest.TestCase):
         p = {"profile_id": "P3", "region": "경남 창원시", "business_status": "예비창업자", "business_age_years": None, "founder_age": 24}
         self.assertEqual(judge(a, p).conditions["C1"], "UNKNOWN")
 
+    def test_preliminary_founder_fails_lower_bound(self):
+        p = {"profile_id": "P3", "region": "경남 창원시", "business_status": "예비창업자", "business_age_years": None, "founder_age": 24}
+        for op, v in (("GTE", {"value": 1}), ("GT", {"value": 0}), ("BETWEEN", {"min": 1, "max": 3})):
+            a = {"requirements": [req("R1", [cond("C1", "business_age", op, v)])], "tracks": []}
+            self.assertEqual(judge(a, p).conditions["C1"], "UNSATISFIED", op)
+            self.assertEqual(judge(a, p).overall, NOT_ELIGIBLE, op)
+
+    def test_open_ended_keeps_closed_attribute_failure(self):
+        conds = [{"cond_id": "G1", "logic": "OR", "children": [cond("C1", "region", "WITHIN", {"label": "강원"}), cond("C2", "region", "WITHIN", {"label": "대구"})]},
+                 cond("C3", "applicant_type", "IS_A", {"label": "대학생"})]
+        a = {"requirements": [req("R1", conds, open_ended=True)], "tracks": []}
+        self.assertEqual(judge(a, P1).overall, NOT_ELIGIBLE)  # 서울은 강원·대구 밖: '등'이 있어도 지역 불충족은 확정
+        a2 = {"requirements": [req("R1", [cond("C3", "applicant_type", "IS_A", {"label": "대학생"})], open_ended=True)], "tracks": []}
+        self.assertNotEqual(judge(a2, dict(P1, company_size="소기업")).overall, NOT_ELIGIBLE)  # 열린 목록만 있으면 확정하지 않는다
+
+    def test_open_ended_exclusion_hit_is_final(self):
+        a = {"requirements": [req("R1", [cond("C1", "region", "WITHIN", {"label": "서울"})], kind="EXCLUSION", logic="NONE_OF", open_ended=True)], "tracks": []}
+        self.assertEqual(judge(a, P1).overall, NOT_ELIGIBLE)
+
+    def test_year_age_basis_is_unclear_only_at_boundary(self):
+        a = {"requirements": [req("R1", [cond("C1", "founder_age", "GTE", {"value": 51, "basis": "YEAR_AGE"})])], "tracks": []}
+        v = judge(a, dict(P1, founder_age=50))  # 만 50세는 연 나이로 50 또는 51
+        self.assertEqual((v.overall, v.conditions["C1"]), (NEEDS_CHECK, "UNKNOWN"))
+        self.assertIn("BOUNDARY_UNCLEAR", v.reasons)
+        self.assertEqual(judge(a, dict(P1, founder_age=49)).overall, NOT_ELIGIBLE)
+        self.assertEqual(judge(a, dict(P1, founder_age=51)).conditions["C1"], "SATISFIED")
+        a2 = {"requirements": [req("R1", [cond("C1", "founder_age", "GTE", {"value": 51})])], "tracks": []}  # 만 나이면 경계도 확정
+        self.assertEqual(judge(a2, dict(P1, founder_age=50)).overall, NOT_ELIGIBLE)
+
     def test_company_size_hierarchy(self):
         a = {"requirements": [req("R1", [cond("C1", "company_size", "IS_A", {"label": "중소기업"})])], "tracks": []}
         self.assertEqual(judge(a, P1).conditions["C1"], "SATISFIED")  # 소기업 ⊂ 중소기업

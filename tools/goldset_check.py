@@ -249,7 +249,7 @@ def agree_notice(a1: dict, a2: dict) -> dict:
 
 
 def cmd_agree() -> int:
-    rvs = reviewers()
+    rvs = sys.argv[2:4] if len(sys.argv) >= 4 else reviewers()  # agree <라벨러1> <라벨러2>로 고를 수 있다(모델 라벨과 비교 등)
     if len(rvs) < 2:
         print("라벨러가 2명 필요하다. 현재:", rvs)
         return 1
