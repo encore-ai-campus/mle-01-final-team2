@@ -1,0 +1,159 @@
+{
+  "snapshot": {
+    "graph_nodes": 30678,
+    "graph_edges": 57631,
+    "notices_with_region_condition_open": 158,
+    "profiles": 300,
+    "seed": 20261124,
+    "repeats": 3,
+    "warmup_profiles": 5,
+    "neo4j_host": "4fcaaade.databases.neo4j.io",
+    "neo4j_location": "remote",
+    "measured_on": "2026-11-27"
+  },
+  "hierarchy": {
+    "pairs_checked_per_arm": 47400,
+    "mismatch_vs_C": {
+      "A": 1883,
+      "A2": 0,
+      "A3": 0,
+      "G": 0
+    },
+    "mismatch_status_pairs": {
+      "A": {
+        "SATISFIED->UNSATISFIED": 1883
+      },
+      "A2": {},
+      "A3": {},
+      "G": {}
+    },
+    "profiles_with_any_mismatch_by_region_level": {
+      "SIGUNGU": {
+        "profiles": 225,
+        "A": 218,
+        "A2": 0,
+        "A3": 0,
+        "G": 0
+      },
+      "GU": {
+        "profiles": 59,
+        "A": 59,
+        "A2": 0,
+        "A3": 0,
+        "G": 0
+      },
+      "SIDO": {
+        "profiles": 16,
+        "A": 0,
+        "A2": 0,
+        "A3": 0,
+        "G": 0
+      }
+    },
+    "mismatch_examples": {
+      "A": [
+        {
+          "profile_region": "REGION:2824500000",
+          "notice": "KSTARTUP:176208",
+          "reference": "SATISFIED",
+          "A": "UNSATISFIED"
+        },
+        {
+          "profile_region": "REGION:1111000000",
+          "notice": "KSTARTUP:176090",
+          "reference": "SATISFIED",
+          "A": "UNSATISFIED"
+        },
+        {
+          "profile_region": "REGION:1165000000",
+          "notice": "KSTARTUP:176090",
+          "reference": "SATISFIED",
+          "A": "UNSATISFIED"
+        }
+      ],
+      "A2": [],
+      "A3": [],
+      "G": []
+    },
+    "hierarchy_pairs_A_could_not_match": {
+      "pairs_needing_hierarchy": 1883,
+      "A_found_sat": 0,
+      "A_recall": 0.0
+    }
+  },
+  "latency_per_profile_query": {
+    "A": {
+      "n": 900,
+      "p50_ms": 0.21,
+      "p95_ms": 0.31,
+      "mean_ms": 0.22
+    },
+    "A2": {
+      "n": 900,
+      "p50_ms": 0.2,
+      "p95_ms": 0.31,
+      "mean_ms": 0.21
+    },
+    "A3": {
+      "n": 900,
+      "p50_ms": 0.26,
+      "p95_ms": 0.41,
+      "mean_ms": 0.28
+    },
+    "C": {
+      "n": 900,
+      "p50_ms": 1.13,
+      "p95_ms": 1.67,
+      "mean_ms": 1.18
+    },
+    "G": {
+      "n": 900,
+      "p50_ms": 164.37,
+      "p95_ms": 183.42,
+      "mean_ms": 169.16
+    }
+  },
+  "neo4j_server_ms_per_profile": {
+    "n": 900,
+    "p50_ms": 9.0,
+    "p95_ms": 15.0,
+    "mean_ms": 9.58
+  },
+  "neo4j_ping_roundtrip_ms": {
+    "n": 100,
+    "p50_ms": 78.1,
+    "p95_ms": 85.64,
+    "mean_ms": 84.4
+  },
+  "neo4j_queries_per_profile": {
+    "with_region": 2,
+    "without_region": 1
+  },
+  "definition_path": {
+    "rows_sql": 21,
+    "rows_cypher": 21,
+    "same_result": true,
+    "sql_ms": 11.4,
+    "cypher_roundtrip_ms": 117.99,
+    "cypher_server_ms": 31,
+    "sql_joins": 5,
+    "cypher_hops": 3,
+    "examples": [
+      [
+        "1인 창조기업",
+        "2",
+        "1인 창조기업 육성에 관한 법률"
+      ],
+      [
+        "농업인",
+        "3",
+        "농업ㆍ농촌 및 식품산업 기본법"
+      ],
+      [
+        "마을기업",
+        "2",
+        "마을기업 육성 및 지원에 관한 법률"
+      ]
+    ]
+  }
+}

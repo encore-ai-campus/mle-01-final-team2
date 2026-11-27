@@ -10,6 +10,7 @@ Neo4j Aura에 적재된 그래프를 **읽기 전용**으로 내려받아, 같�
 - 공고→조건을 미리 펼친 테이블이나 폐쇄 테이블(사전 계산)은 쓰지 않는다. 그래프와 같은 정보만 가진 정규화 스키마다.
 - 두 언어 모두 같은 서식 규칙(절 하나에 한 줄)으로 쓴다. 서식에 덜 흔들리게 토큰 수도 함께 본다.
 - 코드가 짧다는 것은 정확도·속도의 우위가 아니다. 결과 해석은 문서에 따로 적는다.
+- 결과의 ms_p50은 참고용이다(SQLite 메모리 대 Neo4j 왕복). 지연 비교는 compare_neo4j.py로 한다.
 
 사용: python tools/graphrag/compare_query_size.py   (.env의 NEO4J_* 필요, 쓰기 없음)
 """
@@ -246,7 +247,9 @@ def main() -> int:
         "Q4": [{"aid": a} for a in articles],
     }
 
-    report = {"tables": sizes, "queries": {}}
+    # ms_p50은 참고용이다. SQLite는 같은 프로세스 메모리에서, Neo4j는 원격 왕복(네트워크 포함)으로 재고 워밍업도 없어 지연 비교가 아니다.
+    # 같은 기기·워밍업 제외 지연 비교는 compare_neo4j.py(로컬 Neo4j 측정 포함)를 본다.
+    report = {"tables": sizes, "ms_note": "참고용: SQLite 메모리 대 Neo4j 왕복, 워밍업 없음. 지연 비교는 compare_neo4j.py", "queries": {}}
     for qid, q in QUERIES.items():
         mismatch, total_rows, t_sql, t_cy = 0, 0, [], []
         for p in inputs[qid]:
