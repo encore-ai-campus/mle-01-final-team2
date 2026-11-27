@@ -267,3 +267,16 @@ python tools/check_graph_neo4j.py --compare before.json                     # �
   - 점검: 결과 "정상". V9 546 → 0(이제 0이어야 하는 점검), V15 330 → 1,294(새 알려진 값). `check_graph_neo4j.py`의 기대값을 고쳤다.
   - DB에만 있던 속성 `Condition.about_unmapped` 3,524·`unknown_reason` 1,354(옛 판정 기준의 값, API·도구가 읽지 않음)는 사용자 승인 후 `--apply --prune --drop-extra-props`로 지웠다(조건 4,878개). 다시 비교하면 노드 30,678·관계 57,631이 속성까지 파일과 같다.
   - 기록: `docs/ontology/evidence/sync_graph_neo4j_20261127_apply.txt`, `docs/ontology/evidence/check_graph_neo4j_20261127_after_sync.txt`. 스냅숏은 `data/eval/aura_snapshots/`(로컬 전용).
+
+## 11. 추가 적재: 검수 정답 v1.1 요건·조건 (2026-11-28, 사용자 결정·팀 검토 전)
+
+| 항목 | 내용 |
+|---|---|
+| 대상 | 개발용 검수 정답 v1.1 최종 30건(`data/goldsets/conditions/v1.1/20261126/final30/development`)에서 만든 요건 39(`{notice_id}#G{n}`)·조건 113(`GOLD:…`) |
+| 적재 전 | `check_graph_neo4j.py --save data/eval/aura_snapshots/before_gold_v11.json` 정상. `sync_graph_neo4j.py` 읽기 전용 비교: 새 노드 152, 새 관계 166, `Notice.text_requirements` 바뀜 30, 지울 것 0 |
+| 적재 | `sync_graph_neo4j.py --apply --confirm-host <호스트>`(지우기 없음, 사용자 승인) |
+| 적재 후 1차 | 파일과 같음. V9(개념형 조건인데 ABOUT 없음) 0 → 12로 실패. 업종 7·신청자 유형 2·인증 1·지역 2가 가리킬 개념이 없었다 |
+| 보정 | `build.py`가 이 조건에 `about_pending=true`·`about_unmapped`를 적고, V9는 표시 없는 조건만 세며 표시한 조건은 V9b(알려진 값 12)로 센다. 사용자 승인 후 속성 12개 노드만 다시 적용 |
+| 적재 후 합계 | 노드 30,678 → 30,830, 관계 57,631 → 57,797. Condition 16,515, Requirement 4,975, ABOUT 22,340 |
+| 점검 | 정상. V9 0, V9b 12, V15 1,294 → 1,279(알려진 값 갱신). 기록: `docs/ontology/evidence/check_graph_neo4j_20261128_gold_v11.txt` |
+| 판정 영향 | `tools/graphrag/gold_impact.py`: 9,000쌍에서 ELIGIBLE 0, 바뀐 쌍 906(`data/eval/gold_v11_impact.json`). 서비스 판정은 Aura가 아니라 같은 정답 파일을 읽으므로 적재 전부터 반영돼 있었다 |

@@ -166,7 +166,7 @@ flowchart TB
 | Program | program_id | name, level | 미구축 |
 | Track | track_id | name, benefit_summary, benefit_limit | 미구축. K-Startup 통합공고 854건이 후보 |
 | Requirement | req_id | kind, logic(AND/OR/NONE_OF/AT_LEAST), min_count, logic_basis, source_sentence, status(parsed·unparsed·structured_only), exception_kind(§4.7), extraction_run_id | 구조화 필드로 만든 Requirement 5,900개를 Neo4j에 적재함(2026-11-25): `AND`·`assumed` 4,786, 예비창업자 허용 업력 `OR`·`explicit` 1,114, 모두 `status=structured_only`. 본문 요건(기업마당 첨부 자격·제외 구간과 두 출처의 자격 문구)은 적재 전. `NONE_OF`·`AT_LEAST` 요건은 Aura에 0건(구조화 필드에는 없고 본문 요건 적재 때 생긴다) |
-| Condition | cond_id | cond_type(ATOM·GROUP), attribute, operator, value(JSON), unit, ref_date_kind, negate, source_conflict, open_ended, confidence, reviewed. GROUP은 attribute 대신 logic(AND·OR·NONE_OF·AT_LEAST), min_count를 가짐(§4.6) | 구조화 필드로 만든 17,366개를 적재함(2026-11-25). 모두 `operator`와 통일한 값(`LT`·`BETWEEN`·`WITHIN`·`IN`)을 갖고 옛 값은 `legacy_value`로 남으며, 업력 옵션을 전부 고른 1,354건은 operator가 없다(UNKNOWN). 본문에서 읽은 값 후보 17,253건(업력·연령·지역·기업 규모·인증·법령 인용·제외 등)은 정규화 층에 있고 전부 `unreviewed`, 확정 0이며 적재하지 않았다. 적재한 17,366개와는 다른 단계다(구분·검수 계획은 그래프 스키마 정의서 §14.1). 팀 결정 C-6(기업마당 소관 기관 시도 964건은 조건이 아니라 검색 필터)을 반영한 저장소 빌드는 조건 16,402개이고 Aura 반영은 승인 대기다. 그룹 조건(`GROUP`·`HAS_CHILD`)은 Aura 0건 |
+| Condition | cond_id | cond_type(ATOM·GROUP), attribute, operator, value(JSON), unit, ref_date_kind, negate, source_conflict, open_ended, confidence, reviewed. GROUP은 attribute 대신 logic(AND·OR·NONE_OF·AT_LEAST), min_count를 가짐(§4.6) | 구조화 필드로 만든 17,366개를 적재함(2026-11-25). 모두 `operator`와 통일한 값(`LT`·`BETWEEN`·`WITHIN`·`IN`)을 갖고 옛 값은 `legacy_value`로 남으며, 업력 옵션을 전부 고른 1,354건은 operator가 없다(UNKNOWN). 본문에서 읽은 값 후보 17,253건(업력·연령·지역·기업 규모·인증·법령 인용·제외 등)은 정규화 층에 있고 전부 `unreviewed`, 확정 0이며 적재하지 않았다. 적재한 17,366개와는 다른 단계다(구분·검수 계획은 그래프 스키마 정의서 §14.1). 팀 결정 C-6(기업마당 소관 기관 시도 964건은 조건이 아니라 검색 필터)을 2026-11-27 Aura에 반영해 구조화 조건은 16,402개다. 2026-11-28 검수 정답 v1.1 조건 113개(`reviewed=true`)를 더해 Aura 조건은 16,515개다. 그룹 조건(`GROUP`·`HAS_CHILD`)은 Aura 0건 |
 | Concept | concept_id | scheme, code, label, code_version, level, status, valid_from, valid_to | 지역 321개(코드표 318행과 전국·묶음)와 신청자 유형 18·인증 7·특수 집단 2를 적재함(2026-11-25). 별칭(`aliases`)은 노드 속성이 아니라 그래프 밖 사전 `data/사전/지역_별칭사전.csv`(639개, 상태 OK·BUNDLE·AMBIGUOUS·NEEDS_REVIEW)에 둔다. `서구`처럼 대상이 여럿인 별칭은 그것만으로 개념을 확정하지 못하므로 후보가 여럿이면 검수 큐로 보낸다 |
 | Definition | def_id | term, rule_json, basis_note, article_text_hash, needs_review, delegated_basis | 23개 적재(2026-11-26, 법령 원문 정의 조항). 사람 검수 22개 확인·1개 미기재(2026-11-27, `needs_review=false` 22). 개념과 연결된 것 21개(청년·중장년창업기업 2개는 연령 조건으로 다룸). `rule_json`은 별표 숫자 기준을 규칙으로 옮기기 전이라 비움 |
 | ExternalLaw | law_id | name, doc_kind(법률·시행령), effective_date, source_url | 법령 단위. 44문서(법률 22·시행령 22) 적재(2026-11-26) |
@@ -465,7 +465,7 @@ R3 PREFERENCE   (가상) C9 founder_age LTE 39
 | HAS_TRACK | Notice→Track | 대상별 하위 구분 | 1:N | 요건, 미구축 |
 | HAS_REQUIREMENT | Notice \| Track→Requirement | 요건 | 1:N, `evidence` 필수. 공고에 직접 붙은 요건은 모든 트랙에 AND로 적용(§4.3) | 요건. 구조화 필드분 5,900 적재, 본문 요건 전 |
 | CITES | Requirement→LawArticle \| ExternalLaw | 요건이 법령을 **직접 인용**한 사실 | N:M, `evidence` 필수. 인용된 자격은 조건으로 따로 남김(§4.3). 준수·증빙 맥락의 인용은 `CITES`만 두고 조건을 만들지 않음 | 요건, 미구축(P1). 공고→조문 인용 543건(466건) |
-| HAS_CONDITION | Requirement→Condition | 원자 조건 | 1:N, `evidence` 필수 | 요건. 16,402 적재 |
+| HAS_CONDITION | Requirement→Condition | 원자 조건 | 1:N, `evidence` 필수 | 요건. 16,515 적재(구조화 16,402 + 검수 113) |
 | HAS_CHILD | Condition→Condition | 그룹 조건의 하위 조건(§4.6) | 1:N, `cond_type=GROUP`에서만, 요건 아래 그룹 3단까지, `evidence` 필수 | 요건. 설계만(Aura 0) |
 | ABOUT | Condition→Concept | 조건이 가리키는 개념 | N:M, 정확·확정 별칭 일치만 | 요건 → 개념. 19,766 적재 |
 | DEFINED_BY | Concept→Definition | 개념의 판정 기준 | 1:N | 개념 → 법령 근거. 21 적재 |
@@ -945,7 +945,7 @@ Neo4j 속성은 맵을 직접 담지 못해 `Condition.value`는 JSON 문자열�
 
 ## 부록 B. 한계
 
-- 적재한 요건·조건은 구조화 필드로 만든 `structured_only`뿐이다(요건 4,936·조건 16,402, 2026-11-27 판정 규칙 결정 반영 후, [적재 기록](../LOAD_Neo4j_적재기록_v0.1.md)). **본문에서 읽은 조건과 정의의 판정 기준(`rule_json`)은 적재하지 않았다.** 이 문서의 요건 층 예시는 본문을 손으로 읽은 가설이다.
+- 적재한 요건·조건은 구조화 필드로 만든 `structured_only`(요건 4,936·조건 16,402, 2026-11-27 판정 규칙 결정 반영 후)와 사람이 검수한 본문 발췌 정답 v1.1(공고 30건, 요건 39·조건 113, 2026-11-28)이다([적재 기록](../LOAD_Neo4j_적재기록_v0.1.md)). **기계가 본문에서 읽은 조건 후보와 정의의 판정 기준(`rule_json`)은 적재하지 않았다.** 이 문서의 요건 층 예시는 본문을 손으로 읽은 가설이다.
 - 기업마당은 **모집 중 스냅샷 1회분**(2026-11-24)이다. 마감 공고를 API가 제공하지 않아 과거 이력이 없고, `SUPERSEDES`·`content_hash` 변화는 재수집 후에야 만들 수 있다.
 - 기업마당 지역 태그는 판정 근거로 쓸 수 없다. 지역은 본문·첨부 추출과 소관 기관으로 정해야 한다.
 - K-Startup은 첨부를 받지 않아 첨부에만 있는 요건을 볼 수 없다. 제외 요건 필드가 비어 있어 제외 조건은 본문(자격 문구의 4%)에서만 찾을 수 있다.

@@ -46,7 +46,10 @@ CHECKS: list[tuple[str, str, str, object]] = [
      "MATCH (a:Concept {scheme:'REGION'})-[r:WITHIN]->(:Concept) WITH a, count(r) AS p WHERE p > 1 RETURN count(a) AS c", "zero"),
     ("V9", "ABOUT 없는 개념형 조건",
      "MATCH (c:Condition) WHERE c.attribute IN ['region','applicant_type','company_size','industry','certification'] "
-     "AND NOT (c)-[:ABOUT]->(:Concept) RETURN count(c) AS c", "zero"),  # 2026-11-27 일반기업 개념 추가로 546 → 0
+     "AND NOT (c)-[:ABOUT]->(:Concept) AND coalesce(c.about_pending, false) = false RETURN count(c) AS c", "zero"),  # 2026-11-27 일반기업 개념 추가로 546 → 0
+    ("V9b", "개념 연결 보류로 표시한 조건(about_pending, ABOUT 없음)",
+     "MATCH (c:Condition) WHERE c.attribute IN ['region','applicant_type','company_size','industry','certification'] "
+     "AND NOT (c)-[:ABOUT]->(:Concept) AND c.about_pending = true RETURN count(c) AS c", 12),  # 2026-11-28 검수 정답 v1.1: 업종 7·신청자 유형 2·인증 1·지역 2
     ("V10", "대칭 관계 양방향", "MATCH (a:Notice)-[:SAME_AS]->(b:Notice), (b)-[:SAME_AS]->(a) RETURN count(*) AS c", "zero"),
     ("V11", "같은 쌍의 중복 HAS_CONDITION·ABOUT",
      "MATCH (a)-[r:HAS_CONDITION|ABOUT]->(b) WITH a, b, type(r) AS t, count(*) AS n WHERE n > 1 RETURN count(*) AS c", "zero"),
@@ -55,7 +58,7 @@ CHECKS: list[tuple[str, str, str, object]] = [
      "MATCH (c:Condition {attribute: 'region'})-[:ABOUT]->(k) WHERE NOT k:Region RETURN count(c) AS c", "zero"),
     ("V14", "법령에 안 붙은 조문·별표",
      "MATCH (a) WHERE (a:LawArticle OR a:LawAppendix) AND NOT (a)-[:PART_OF]->(:ExternalLaw) RETURN count(a) AS c", "zero"),
-    ("V15", "요건이 하나도 없는 공고", "MATCH (n:Notice) WHERE NOT (n)-[:HAS_REQUIREMENT]->() RETURN count(n) AS c", 1294),  # 2026-11-27 C-6 반영으로 330 → 1,294(기업마당 소관 기관 시도만 있던 공고)
+    ("V15", "요건이 하나도 없는 공고", "MATCH (n:Notice) WHERE NOT (n)-[:HAS_REQUIREMENT]->() RETURN count(n) AS c", 1279),  # 2026-11-27 C-6 반영으로 330 → 1,294(기업마당 소관 기관 시도만 있던 공고), 2026-11-28 검수 정답 v1.1로 15건이 요건을 얻어 1,279
     ("V16", "상위(WITHIN)가 없는 현행 시군구·구",
      "MATCH (a:Region) WHERE a.level IN ['SIGUNGU', 'GU'] AND coalesce(a.status, '') <> '폐지' AND NOT (a)-[:WITHIN]->() RETURN count(a) AS c", "zero"),
     ("V16a", "상위(WITHIN)가 없는 비시도 지역(폐지 시군구 31·권역 3 포함)",
