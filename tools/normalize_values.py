@@ -33,7 +33,7 @@ from graphrag.regions import REPO  # noqa: E402
 ORIGIN_SOURCE = {"API": "TEXT_RULE", "ATTACHMENT": "TEXT_RULE", "ATTACHMENT_OCR": "OCR_TEXT", "ATTACHMENT_PREVIEW": "PREVIEW_TEXT"}
 SECTION_KIND = {"eligibility_api": "ELIGIBILITY", "exclusion_api": "EXCLUSION", "att_eligibility": "ELIGIBILITY", "att_exclusion": "EXCLUSION"}
 APPLICANT_MAP = {"청소년": "APPLICANT_TYPE:청소년", "대학생": "APPLICANT_TYPE:대학생", "일반인": "APPLICANT_TYPE:일반인", "대학": "APPLICANT_TYPE:대학",
-                 "연구기관": "APPLICANT_TYPE:연구기관", "일반기업": None, "1인 창조기업": "APPLICANT_TYPE:1인 창조기업"}
+                 "연구기관": "APPLICANT_TYPE:연구기관", "일반기업": "APPLICANT_TYPE:일반기업", "1인 창조기업": "APPLICANT_TYPE:1인 창조기업"}
 YOUTH_BANDS = [(0, 20), (20, 40), (40, 200)]
 
 

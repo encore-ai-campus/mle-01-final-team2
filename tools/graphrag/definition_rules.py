@@ -134,11 +134,19 @@ def _special(rule: dict, ksic: str) -> dict | None:
     return next((s for s in rule["special_cases"] if k.startswith(s["ksic"])), None)
 
 
-def evaluate_sme(rule: dict, facts: dict) -> dict:
+def _sales_step(industry: str, limit: float, sales: float, margin: float) -> tuple[str, str]:
+    """매출 기준 비교. E-2 ②: 기준의 ±margin 안이면 산정 방식·기준일 차이로 결과가 바뀔 수 있어 UNKNOWN이다."""
+    if margin and abs(sales - limit) <= limit * margin:
+        return UNK, f"{industry} {limit:,}억원 이하, 입력 {sales:g}억원은 기준의 ±{margin:.0%} 안이라 확인 필요(E-2)"
+    return (SAT if sales <= limit else UNSAT), f"{industry} {limit:,}억원 이하, 입력 {sales:g}억원"
+
+
+def evaluate_sme(rule: dict, facts: dict, sales_margin: float = 0.05) -> dict:
     """사업자 사실(facts) -> 중소기업 여부 3값. 모르는 값은 UNKNOWN이고, '제한 없음'으로 바꾸지 않는다.
 
     facts: main_industry_ksic(str), avg_sales_eok(float), total_assets_eok(float), independence_ok(bool),
            disclosure_group_member(bool), in_grace_period(bool). 없으면 입력하지 않은 것이다.
+    sales_margin: 매출 기준 경계(E-2 ②, 기본 ±5%). 0이면 '이하'를 그대로 비교한다.
     """
     steps = []
     k, sales = facts.get("main_industry_ksic"), facts.get("avg_sales_eok")
@@ -150,14 +158,12 @@ def evaluate_sme(rule: dict, facts: dict) -> dict:
         if sp and sp["partial"]:
             steps.append(("S1", UNK, f"{k}는 별표 1 비고 2에 따라 {sp['item']}만 기준이 다름. 코드만으로 정할 수 없음"))
         elif sp:
-            ok = sales <= sp["max_avg_sales_eok"]
-            steps.append(("S1", SAT if ok else UNSAT, f"{k} 비고 2 기준 {sp['max_avg_sales_eok']:,}억원 이하, 입력 {sales:g}억원"))
+            steps.append(("S1", *_sales_step(f"{k} 비고 2 기준", sp["max_avg_sales_eok"], sales, sales_margin)))
         elif len({r["max_avg_sales_eok"] for r in rows}) != 1:
-            steps.append(("S1", UNK, f"업종 코드 {k}를 별표 1 행에 대응시키지 못함"))
+            steps.append(("S1", UNK, f"업종 코드 {k}를 별표 1 행에 대응시키지 못함(별표에 없는 업종은 UNKNOWN, E-1)"))
         else:
             r = rows[0]
-            ok = sales <= r["max_avg_sales_eok"]
-            steps.append(("S1", SAT if ok else UNSAT, f"{r['industry']}({r['ksic']}) {r['max_avg_sales_eok']:,}억원 이하, 입력 {sales:g}억원"))
+            steps.append(("S1", *_sales_step(f"{r['industry']}({r['ksic']})", r["max_avg_sales_eok"], sales, sales_margin)))
     a = facts.get("total_assets_eok")
     steps.append(("S2", UNK, "자산총액 미입력") if a is None else
                  ("S2", SAT if a < ASSET_LIMIT_EOK else UNSAT, f"자산총액 {a:g}억원, 기준 {ASSET_LIMIT_EOK:,}억원 미만"))

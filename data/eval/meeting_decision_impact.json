@@ -1,0 +1,49 @@
+{
+ "open_notices": 1452,
+ "random_profiles": 300,
+ "pairs_random": 435600,
+ "before": {
+  "c1_pre_founder_not_in_options": "unsat",
+  "c2_business_age_all_options": "unknown",
+  "c3_age_all_options": "satisfied",
+  "c4_applicant_all_options": "satisfied",
+  "c6_bizinfo_org_region": "soft",
+  "a1_kstartup_region": "soft",
+  "a3_pre_founder_missing_with_age": "unsat",
+  "a6_unreviewed_group": "flag",
+  "body_priority": "off",
+  "d2_gold_strength": "soft",
+  "e2_sales_margin": "exact"
+ },
+ "after": {
+  "c1_pre_founder_not_in_options": "unsat",
+  "c2_business_age_all_options": "satisfied",
+  "c3_age_all_options": "satisfied",
+  "c4_applicant_all_options": "satisfied",
+  "c6_bizinfo_org_region": "drop",
+  "a1_kstartup_region": "soft",
+  "a3_pre_founder_missing_with_age": "unsat",
+  "a6_unreviewed_group": "unknown",
+  "body_priority": "on",
+  "d2_gold_strength": "by_attribute",
+  "e2_sales_margin": "unknown_5pct"
+ },
+ "random": {
+  "verdict_transitions": {},
+  "verdict_changed": 0,
+  "notices_changed": 0,
+  "profiles_changed": 0,
+  "condition_changes": {
+   "조건 수 변화(drop)": 289200,
+   "business_age: UNKNOWN → SATISFIED": 4347
+  }
+ },
+ "named": {
+  "예비창업자·서울 성동구·28세": {},
+  "업력 2년·대구·35세·일반기업": {},
+  "업력 12년·경기·45세·일반기업": {},
+  "업력 4년·광주 남구·예비창업 여부 미입력": {},
+  "대학생·부산·22세·예비창업자": {},
+  "지역만 입력(세종)": {}
+ }
+}

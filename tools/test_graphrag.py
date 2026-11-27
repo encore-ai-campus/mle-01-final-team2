@@ -1,12 +1,14 @@
 """graphrag 평가기·지역 계층·청크 필터 단위 시험. 실행: python tools/test_graphrag.py"""
 import sys
 import unittest
+from dataclasses import replace
+from datetime import date
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from graphrag.data import _chunk  # noqa: E402
-from graphrag.evaluator import (ELIGIBLE, NEEDS_CHECK, NOT_ELIGIBLE, SAT, UNK, UNSAT, Profile,  # noqa: E402
+from graphrag.evaluator import (DEFAULT_OPTIONS, ELIGIBLE, NEEDS_CHECK, NOT_ELIGIBLE, SAT, UNK, UNSAT, Profile,  # noqa: E402
                                 evaluate_condition, evaluate_notice, parse_age_options, parse_business_age_options)
 from graphrag.regions import RegionGraph  # noqa: E402
 
@@ -188,11 +190,11 @@ class ConditionSchemaTests(unittest.TestCase):
         legacy = parse_business_age_options("1년미만,2년미만,3년미만")
         self.assertEqual(unify("business_age", legacy), ("business_age", "LT", {"value": 3, "unit": "YEAR"}))
 
-    def test_all_options_is_unknown_not_unlimited(self):
+    def test_all_options_is_unlimited_c2(self):
         from graphrag.condition_schema import unify
         legacy = parse_business_age_options("예비창업자,1년미만,2년미만,3년미만,5년미만,7년미만,10년미만")
         attr, op, val = unify("business_age", legacy)
-        self.assertEqual((attr, op, val), ("business_age", None, {"all_options": True}))
+        self.assertEqual((attr, op, val), ("business_age", "ANY", {"all_options": True}))  # C-2 ②: 전부 선택 = 제한 없음
 
     def test_only_pre_founder_becomes_applicant_type(self):
         from graphrag.condition_schema import unify
@@ -236,9 +238,9 @@ class ConditionTests(unittest.TestCase):
     def test_region_nationwide(self):
         self.assertEqual(evaluate_condition(region_cond("REGION:NATIONWIDE"), Profile(), RG).status, SAT)
 
-    def test_legacy_gwangju_matches_namgu_but_flags_unreviewed(self):
+    def test_legacy_gwangju_unreviewed_group_is_unknown(self):
         r = evaluate_condition(region_cond("REGION_GROUP:GWANGJU_OLD"), Profile(region="REGION:1227000000"), RG)
-        self.assertEqual(r.status, SAT)
+        self.assertEqual(r.status, UNK)  # A-6 ②: 미검수 묶음은 검수 전 UNKNOWN
         self.assertIn("unreviewed_group", r.flags)
         r2 = evaluate_condition(region_cond("REGION_GROUP:GWANGJU_OLD"), Profile(region="REGION:1211000000"), RG)  # 목포시
         self.assertEqual(r2.status, UNSAT)
@@ -255,10 +257,10 @@ class ConditionTests(unittest.TestCase):
         self.assertEqual(evaluate_condition(age_cond("3년미만"), Profile(pre_founder=True), RG).status, UNSAT)
         self.assertEqual(evaluate_condition(age_cond("예비창업자"), Profile(business_age_years=1), RG).status, UNSAT)
 
-    def test_all_options_does_not_become_unconditional_pass(self):
+    def test_all_options_is_no_limit_c2(self):
         c = age_cond("예비창업자,1년미만,2년미만,3년미만,5년미만,7년미만,10년미만")
         r = evaluate_condition(c, Profile(business_age_years=15), RG)
-        self.assertEqual(r.status, UNK)  # '전체 나열 = 제한 없음' 규칙은 미검증이라 SATISFIED로 만들지 않는다
+        self.assertEqual((r.status, r.flags), (SAT, ["all_options"]))  # C-2 ②: 전부 나열 = 제한 없음
         self.assertEqual(evaluate_condition(c, Profile(business_age_years=4), RG).status, SAT)
 
     def test_unparseable_options_return_none(self):
@@ -379,15 +381,18 @@ class GoldBridgeTests(unittest.TestCase):
         self.assertEqual(r["verdict"], NEEDS_CHECK)  # 발췌 검수라 ELIGIBLE을 풀지 않는다
         self.assertIn("REQ_UNPARSED", r["reasons"])
 
-    def test_unsatisfied_gold_is_soft_and_exclusion_negates(self):
+    def test_unsatisfied_gold_follows_attribute_strength_and_exclusion_negates(self):
         n = self.notice([gold("GOLD:A", "ELIGIBILITY", "BUSINESS_AGE", "LTE", 3, "창업 3년 이내", "YEAR"),
                          gold("GOLD:X", "EXCLUSION", "BUSINESS_LOCATION", "EQ", "서울특별시", "서울특별시")])
         self.assertEqual(n["gold_requirements"][0]["logic_basis"], "assumed")  # 논리 검수 없음 -> AND 가정
         r = evaluate_notice(n, Profile(business_age_years=10, region=RG.find_by_name("성동구")[0]), RG)
         st = {c.cond_id: c.status for c in r["conditions"]}
         self.assertEqual(st, {"GOLD:A": UNSAT, "GOLD:X": UNSAT})  # 서울 소재 -> 제외 조건에 해당 -> 요건 불충족
-        self.assertEqual(r["verdict"], NEEDS_CHECK)  # 검수 조건은 soft라 NOT_ELIGIBLE을 만들지 않는다
-        self.assertIn("SOFT_CONDITION_UNSATISFIED", r["reasons"])
+        self.assertEqual(r["verdict"], NOT_ELIGIBLE)  # D-2 ③: 검수 업력 조건은 구조화 업력처럼 hard
+        self.assertEqual({c.cond_id: c.strength for c in r["conditions"]}, {"GOLD:A": "hard", "GOLD:X": "soft"})
+        r2 = evaluate_notice(n, Profile(business_age_years=10, region=RG.find_by_name("성동구")[0]), RG, replace(DEFAULT_OPTIONS, d2_gold_strength="soft"))
+        self.assertEqual(r2["verdict"], NEEDS_CHECK)
+        self.assertIn("SOFT_CONDITION_UNSATISFIED", r2["reasons"])
 
     def test_skips_unverified_preference_and_keeps_unsupported_unknown(self):
         n = self.notice([gold("GOLD:P", "PREFERENCE", "BUSINESS_TYPE", "EQ", "여성기업", "여성기업 우대"),
@@ -436,8 +441,12 @@ class SmeRuleTests(unittest.TestCase):
     def test_evaluate_three_values(self):
         ev = lambda **f: self.D.evaluate_sme(self.rule, f)["status"]
         base = dict(main_industry_ksic="J5821", total_assets_eok=100, independence_ok=True, disclosure_group_member=False)
-        self.assertEqual(ev(avg_sales_eok=1000, **base), SAT)  # 정보통신업 1,000억원 이하(경계 포함)
-        self.assertEqual(ev(avg_sales_eok=1000.5, **base), UNSAT)
+        self.assertEqual(ev(avg_sales_eok=1000, **base), UNK)  # E-2 ②: 기준 1,000억원의 ±5% 안은 확인 필요
+        self.assertEqual(ev(avg_sales_eok=1060, **base), UNSAT)
+        self.assertEqual(ev(avg_sales_eok=940, **base), SAT)
+        exact = lambda **f: self.D.evaluate_sme(self.rule, f, sales_margin=0)["status"]
+        self.assertEqual(exact(avg_sales_eok=1000, **base), SAT)  # 경계 포함("이하")
+        self.assertEqual(exact(avg_sales_eok=1000.5, **base), UNSAT)
         self.assertEqual(ev(avg_sales_eok=50), UNK)  # 자산·독립성 등 미입력은 충족으로 보지 않는다
         self.assertEqual(ev(avg_sales_eok=50, **{**base, "total_assets_eok": 5000}), UNSAT)  # 5천억원 미만
         self.assertEqual(ev(avg_sales_eok=50, **{**base, "disclosure_group_member": True}), UNSAT)
@@ -494,8 +503,8 @@ class RuleOptionTests(unittest.TestCase):
 
     def test_c2_all_business_age_options(self):
         n = self.n(age_cond("예비창업자,1년미만,2년미만,3년미만,5년미만,7년미만,10년미만"))
-        self.assertEqual(self.ev(n, Profile(business_age_years=20))["conditions"][0].status, UNK)
-        self.assertEqual(self.ev(n, Profile(business_age_years=20), c2_business_age_all_options="satisfied")["verdict"], ELIGIBLE)
+        self.assertEqual(self.ev(n, Profile(business_age_years=20))["verdict"], ELIGIBLE)  # C-2 ② 기본값
+        self.assertEqual(self.ev(n, Profile(business_age_years=20), c2_business_age_all_options="unknown")["conditions"][0].status, UNK)
         r = self.ev(n, Profile(business_age_years=20), c2_business_age_all_options="drop")
         self.assertEqual(r["n_conditions"], 0)
 
@@ -515,11 +524,11 @@ class RuleOptionTests(unittest.TestCase):
     def test_c6_a1_region_by_source(self):
         busan = region_cond("REGION:2600000000")
         seoul = Profile(region="REGION:1100000000")
-        self.assertEqual(self.ev(self.n(busan, source="BIZINFO"), seoul)["verdict"], NEEDS_CHECK)
-        self.assertEqual(self.ev(self.n(busan, source="BIZINFO"), seoul, c6_bizinfo_org_region="drop")["verdict"], ELIGIBLE)
-        self.assertEqual(self.ev(self.n(busan, source="KSTARTUP"), seoul, c6_bizinfo_org_region="drop")["verdict"], NEEDS_CHECK)
+        self.assertEqual(self.ev(self.n(busan, source="BIZINFO"), seoul)["verdict"], ELIGIBLE)  # C-6 ② 기본값: 소관 기관 시도는 조건 아님
+        self.assertEqual(self.ev(self.n(busan, source="BIZINFO"), seoul, c6_bizinfo_org_region="soft")["verdict"], NEEDS_CHECK)
+        self.assertEqual(self.ev(self.n(busan, source="KSTARTUP"), seoul)["verdict"], NEEDS_CHECK)
         self.assertEqual(self.ev(self.n(busan), seoul, a1_kstartup_region="hard")["verdict"], NOT_ELIGIBLE)
-        self.assertEqual(self.ev(self.n(busan, source="BIZINFO"), seoul, a1_kstartup_region="hard")["verdict"], NEEDS_CHECK)
+        self.assertEqual(self.ev(self.n(busan, source="BIZINFO"), seoul, a1_kstartup_region="hard", c6_bizinfo_org_region="soft")["verdict"], NEEDS_CHECK)
 
     def test_a3_and_a6(self):
         n = self.n(age_cond("예비창업자,1년미만,3년미만"))
@@ -527,15 +536,93 @@ class RuleOptionTests(unittest.TestCase):
         self.assertEqual(self.ev(n, Profile(business_age_years=8), a3_pre_founder_missing_with_age="unknown")["verdict"], NEEDS_CHECK)
         g = self.n(region_cond("REGION_GROUP:GWANGJU_OLD"))
         south = Profile(region="REGION:1227000000")
-        self.assertEqual(self.ev(g, south)["conditions"][0].status, SAT)
-        self.assertEqual(self.ev(g, south, a6_unreviewed_group="unknown")["conditions"][0].status, UNK)
+        self.assertEqual(self.ev(g, south)["conditions"][0].status, UNK)  # A-6 ② 기본값
+        self.assertEqual(self.ev(g, south, a6_unreviewed_group="flag")["conditions"][0].status, SAT)
 
     def test_option_choices_cover_defaults(self):
         from dataclasses import fields
         from graphrag.evaluator import DEFAULT_OPTIONS, OPTION_CHOICES
         self.assertEqual({f.name for f in fields(DEFAULT_OPTIONS)}, set(OPTION_CHOICES))
         for f, choices in OPTION_CHOICES.items():
-            self.assertEqual(getattr(DEFAULT_OPTIONS, f), choices[0])  # 첫 선택지가 지금 동작
+            self.assertEqual(getattr(DEFAULT_OPTIONS, f), choices[0])  # 첫 선택지가 기본값(2026-11-27 결정)
+
+
+class MeetingDecisionTests(unittest.TestCase):
+    """2026-11-27 팀 회의 결정(`docs/MEETING_판정규칙_결정시트_2026-11-27.md`)을 반영한 동작."""
+
+    TODAY = date(2026, 11, 24)
+
+    def kst(self, *conds, deadline="2026-12-31"):
+        return {"notice_id": "N", "source": "KSTARTUP", "conditions": list(conds), "text_requirements": "reviewed", "deadline": deadline}
+
+    def ev(self, notice, prof):
+        return evaluate_notice(notice, prof, RG, today=self.TODAY)
+
+    def test_a5_several_applicant_types_any_match(self):
+        from graphrag.evaluator import parse_applicant_options
+        app = {"cond_id": "b", "attribute": "applicant_type", "strength": "soft", "value": {"options": parse_applicant_options("일반기업")}}
+        self.assertEqual(self.ev(self.kst(app), Profile(applicant_type="1인 창조기업"))["conditions"][0].status, UNSAT)
+        r = self.ev(self.kst(app), Profile(applicant_type=["1인 창조기업", "일반기업"]))["conditions"][0]
+        self.assertEqual((r.status, r.reason), (SAT, "일반기업 허용"))
+        self.assertEqual(self.ev(self.kst(app), Profile(applicant_type=[]))["conditions"][0].status, UNK)
+
+    def test_a2_business_start_date_uses_reference_dates(self):
+        c = age_cond("1년미만,3년미만")  # 3년 미만, hard
+        self.assertEqual(self.ev(self.kst(c), Profile(business_start_date="2024-06-01"))["verdict"], ELIGIBLE)  # 두 기준일 모두 3년 미만
+        r = self.ev(self.kst(c), Profile(business_start_date="2023-12-10"))  # 3년이 되는 날 2026-12-10이 오늘과 마감일 사이
+        self.assertEqual((r["conditions"][0].status, r["reference_dates"]), (UNK, ["2026-11-24", "2026-12-31"]))
+        self.assertEqual(self.ev(self.kst(c, deadline="2026-12-01"), Profile(business_start_date="2023-12-10"))["verdict"], ELIGIBLE)
+        self.assertEqual(self.ev(self.kst(c), Profile(business_start_date="2020-01-01"))["verdict"], NOT_ELIGIBLE)
+        # 연수만 넣으면 지금처럼 ±0.5년 경계는 UNKNOWN
+        self.assertEqual(self.ev(self.kst(c), Profile(business_age_years=2.8))["conditions"][0].status, UNK)
+
+    def test_a4_birth_date_full_age(self):
+        age = {"cond_id": "a", "attribute": "founder_age", "strength": "soft", "value": {"ranges": parse_age_options("만 20세 이상 ~ 만 39세 이하")}}
+        self.assertEqual(self.ev(self.kst(age), Profile(birth_date="1990-01-01"))["conditions"][0].status, SAT)
+        self.assertEqual(self.ev(self.kst(age), Profile(birth_date="1986-12-01"))["conditions"][0].status, UNK)  # 오늘 39세, 마감일 40세
+        self.assertEqual(self.ev(self.kst(age), Profile(birth_date="1980-01-01"))["conditions"][0].status, UNSAT)
+
+    def test_e5_certificate_and_expected(self):
+        sme = GoldBridgeTests()
+        n = sme.notice([gold("GOLD:S", "ELIGIBILITY", "BUSINESS_TYPE", "EQ", "중소기업", "중소기업")])
+        st = lambda p: evaluate_notice(n, p, RG)["conditions"][0]
+        self.assertEqual(st(Profile(sme_status="certified")).status, SAT)
+        r = st(Profile(sme_status="expected"))
+        self.assertEqual((r.status, r.flags), (UNK, ["gold", "sme_expected"]))
+        self.assertEqual(st(Profile(sme_status="expected", sme_facts=SmeEngineTests.FACTS)).status, SAT)  # 상세 입력이 있으면 그대로 판정
+        self.assertEqual(st(Profile()).status, UNK)
+
+    def test_body_priority_over_structured_field(self):
+        sme = GoldBridgeTests()
+        n = sme.notice([gold("GOLD:A", "ELIGIBILITY", "BUSINESS_AGE", "LT", 7, "업력 7년 미만", "YEAR")])
+        n.update(source="KSTARTUP", conditions=[age_cond("1년미만,3년미만")])
+        r = evaluate_notice(n, Profile(business_age_years=5), RG)
+        self.assertEqual(r["overridden_by_body"], ["c2"])  # API 업력(3년 미만) 대신 본문(7년 미만)
+        self.assertEqual([c.cond_id for c in r["conditions"]], ["GOLD:A"])
+        self.assertNotEqual(r["verdict"], NOT_ELIGIBLE)
+        off = evaluate_notice(n, Profile(business_age_years=5), RG, replace(DEFAULT_OPTIONS, body_priority="off"))
+        self.assertEqual(off["verdict"], NOT_ELIGIBLE)
+
+    def test_c5_structured_and_is_explicit(self):
+        from graphrag.condition_schema import requirement_groups
+        groups = requirement_groups("N", [region_cond("REGION:1100000000"), age_cond("1년미만")])
+        self.assertEqual([(g[0], g[2]) for g in groups], [("N#R1", "explicit")])
+
+    def test_b1_general_company_concept(self):
+        from graphrag import concepts_laws
+        nodes, _, by_label = concepts_laws.concepts()
+        self.assertEqual(by_label["일반기업"], "APPLICANT_TYPE:일반기업")
+        self.assertNotIn("APPLICANT_TYPE:일반기업", {e["from"] for e in concepts_laws.concepts()[1] if e["type"] == "IS_A"})  # 중소기업 하위 아님
+
+    def test_b5_support_field_mapping(self):
+        from graphrag.support_field import support_fields
+        self.assertEqual(support_fields("KSTARTUP", "행사ㆍ네트워크"), ["기타"])
+        self.assertEqual(support_fields("KSTARTUP", "사업화"), ["창업"])
+        self.assertEqual(support_fields("KSTARTUP", "판로·해외진출", "호주 현지 팝업스토어 참가"), ["수출"])
+        self.assertEqual(support_fields("KSTARTUP", "판로ㆍ해외진출", "조선몰 입점 지원"), ["내수"])
+        self.assertEqual(support_fields("KSTARTUP", "판로ㆍ해외진출", "참여기업 모집"), ["내수", "수출"])
+        self.assertEqual(support_fields("KSTARTUP", "기술개발(R&amp;D)"), ["기술"])
+        self.assertEqual(support_fields("BIZINFO", "금융"), ["금융"])
 
 
 class ChunkTests(unittest.TestCase):

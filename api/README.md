@@ -17,7 +17,7 @@
 | `config/models.yaml` | 모델 레지스트리. 주소·모델 이름은 환경변수로 가리킨다 | 있음 |
 | `deploy/mock_vllm/` | **vLLM 대역 서버**(OpenAI 호환, 진짜 모델 아님) | 있음 |
 | `deploy/docker-compose.yml` | 로컬 구성: 웹 + API + 대역 서버 | 있음 |
-| `web/` | 최소 사용자 웹(Next.js): 조건 입력 → 판정 카드·요건·경로·정의·설명. `/api/chat`은 Next 서버가 API로 SSE 중계 | 최소 화면 |
+| `web/` | 최소 사용자 웹(Next.js): 조건 입력 → 판정 카드·요건·경로·정의·설명. `/api/chat`은 Next 서버가 API로 SSE 중계. `/eligibility`는 모델 없이 규칙 판정만 하는 PoC 화면(2026-11-27 회의 결정 입력 포함) | 최소 화면 |
 
 ## 모델 호출 방식
 

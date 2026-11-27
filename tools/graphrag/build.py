@@ -24,7 +24,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from graphrag import concepts_laws  # noqa: E402
 from graphrag.condition_schema import requirement_groups, unify  # noqa: E402
 from graphrag.engine import Engine  # noqa: E402
-from graphrag.evaluator import BOUNDARY_YEARS, NOT_ELIGIBLE, Profile, evaluate_notice  # noqa: E402
+from graphrag.evaluator import BOUNDARY_YEARS, DEFAULT_OPTIONS, NOT_ELIGIBLE, Profile, evaluate_notice  # noqa: E402
 
 OUT = Path(__file__).resolve().parents[2] / "data" / "graph"
 
@@ -50,9 +50,17 @@ def export(e: Engine) -> dict:
             edges.append({"type": "SUCCEEDED_BY", "from": rid, "to": succ, "partial": True, "reviewed": False})
     for n in e.notices:
         nid = n["notice_id"]
-        nodes.append({"label": "Notice", "notice_id": nid, "source_system": n["source"], "title": n["title"], "detail_url": n["detail_url"],
-                      "deadline": n.get("deadline"), "apply_status_kind": n["apply_status_kind"], "is_open": n["is_open"], "fetched_at": n["fetched_at"],
-                      "text_requirements": n["text_requirements"]})
+        node = {"label": "Notice", "notice_id": nid, "source_system": n["source"], "title": n["title"], "detail_url": n["detail_url"],
+                "deadline": n.get("deadline"), "apply_status_kind": n["apply_status_kind"], "is_open": n["is_open"], "fetched_at": n["fetched_at"],
+                "text_requirements": n["text_requirements"]}
+        conditions = n["conditions"]
+        if n["source"] == "BIZINFO" and DEFAULT_OPTIONS.c6_bizinfo_org_region == "drop":
+            # C-6 ②: 기업마당 소관 기관 시도는 자격 조건이 아니다. 조건을 만들지 않고 검색 필터 속성으로만 둔다
+            org_region = [c for c in conditions if c["attribute"] == "region"]
+            conditions = [c for c in conditions if c["attribute"] != "region"]
+            if org_region:
+                node["search_region_id"] = org_region[0]["value"]["concept_id"]
+        nodes.append(node)
         if n.get("org"):
             edges.append({"type": "ANNOUNCED_BY", "from": nid, "to": org_id(n["org"]), "source_field": "jrsdInsttNm" if n["source"] == "BIZINFO" else "pbanc_ntrp_nm"})
         if n.get("executor"):
@@ -60,9 +68,9 @@ def export(e: Engine) -> dict:
         if n.get("category"):
             cid = cats.setdefault(f"{n['source']}|{n['category']}", f"CAT:{n['source']}:{hashlib.sha1(n['category'].encode()).hexdigest()[:10]}")
             edges.append({"type": "IN_SUPPORT_CATEGORY", "from": nid, "to": cid})
-        if n["conditions"]:
+        if conditions:
             # 예비창업자 허용 업력은 OR 요건으로 따로 둔다(설계서 4.3). 평가기도 같은 묶음을 쓴다
-            for rq, logic, basis, conds in requirement_groups(nid, n["conditions"]):
+            for rq, logic, basis, conds in requirement_groups(nid, conditions):
                 nodes.append({"label": "Requirement", "req_id": rq, "kind": "ELIGIBILITY", "logic": logic, "logic_basis": basis,
                               "status": "structured_only", "extraction_method": "rule"})
                 edges.append({"type": "HAS_REQUIREMENT", "from": nid, "to": rq, "evidence": "구조화 API 필드", "source": "api_structured"})

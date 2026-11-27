@@ -446,6 +446,21 @@
    "definition_text_verbatim": null,
    "parents": [],
    "note": "K-Startup 신청 대상 값"
+  },
+  {
+   "concept_id": "APPLICANT_TYPE:일반기업",
+   "label": "일반기업",
+   "group": "ORGANIZATION",
+   "aliases": [],
+   "mentions_in_notices": {
+    "BIZINFO": null,
+    "KSTARTUP": null,
+    "total": null
+   },
+   "definition_source": "missing",
+   "definition_text_verbatim": null,
+   "parents": [],
+   "note": "K-Startup 신청 대상 값. 예비창업자·대학생 등 개인과 구분하려고 쓰는 말이며 법령 정의가 없다. 중소기업과 동일시하지 않는다(B-1, 2026-11-27 결정). 기업마당 본문의 '일반기업'(우대기업과 구분한 지원 금액 차등)과는 다른 뜻이다"
   }
  ],
  "source_value_mapping": {
@@ -455,7 +470,7 @@
    "일반인": "APPLICANT_TYPE:일반인",
    "대학": "APPLICANT_TYPE:대학",
    "연구기관": "APPLICANT_TYPE:연구기관",
-   "일반기업": "(미정: 기업 일반. 중소기업과 동일시하지 않는다)",
+   "일반기업": "APPLICANT_TYPE:일반기업",
    "1인 창조기업": "APPLICANT_TYPE:1인 창조기업"
   },
   "bizinfo_trgetNm": {
@@ -586,7 +601,7 @@
     "경영"
    ],
    "행사ㆍ네트워크": [
-    "경영"
+    "기타"
    ],
    "창업교육": [
     "창업"
@@ -611,24 +626,30 @@
     "금융"
    ]
   },
+  "per_notice_split": {
+   "판로ㆍ해외진출": {
+    "수출": "해외|수출|글로벌|국제|현지|바이어",
+    "내수": "입점|판로|쇼핑몰|라이브커머스|홈쇼핑|유통|구매상담|기획전|팝업",
+    "rule": "해외 키워드가 있으면 수출, 국내 판로 키워드만 있으면 내수, 둘 다 없으면 내수·수출(제목·지원 내용 기준)"
+   }
+  },
   "confidence": {
    "high": [
     "기술개발(R&D)",
     "인력",
     "정책자금",
     "융자ㆍ보증",
-    "글로벌"
-   ],
-   "low": [
+    "글로벌",
     "사업화",
     "시설ㆍ공간ㆍ보육",
     "멘토링ㆍ컨설팅ㆍ교육",
     "행사ㆍ네트워크",
     "창업교육",
     "판로ㆍ해외진출"
-   ]
+   ],
+   "low": []
   },
-  "note": "기업마당 대분류 8개를 표준 기준으로 삼고 K-Startup 11개를 대응시킨 제안이다. 낮은 신뢰 항목은 이름만으로 정한 것이라 팀 검토가 필요하다."
+  "note": "기업마당 대분류 8개를 표준 기준으로 삼고 K-Startup 11개를 대응시켰다. 낮은 신뢰 6개는 2026-11-27 회의에서 실제 공고를 보고 확정했다(B-5). 검색 필터 전용이다."
  },
  "corpus": {
   "notices": {
