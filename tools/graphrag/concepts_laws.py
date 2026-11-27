@@ -106,6 +106,8 @@ def laws() -> tuple[list[dict], list[dict], dict[tuple[str, str], str], list[dic
         nodes.append({"label": "LawAppendix", "appendix_id": pid, "law_id": law_id[r["doc_id"]], "table_no": r["table_no"],
                       "table_kind": r["table_kind"], "title": r["title"], "text": r["text"], "text_hash": sha(r["text"])})
         edges.append({"type": "PART_OF", "from": pid, "to": law_id[r["doc_id"]]})
+        if seen[base] == 1 and str(r.get("table_branch")) in ("00", "0"):
+            index[(r["doc_name"], f"별표{int(r['table_no'])}")] = pid  # 정의가 위임한 별표 찾기(`definitions`)
     return nodes, edges, index, pending
 
 
@@ -180,6 +182,9 @@ def law_definitions() -> dict[str, dict]:
     return out
 
 
+APPENDIX_REF = re.compile(r"(?:^|;\s*)([^;\[]+?)\s*\[별표\s*(\d+)\]")
+
+
 def definitions(by_label: dict[str, str], article_index: dict[tuple[str, str], str]) -> tuple[list[dict], list[dict], list[str]]:
     """(노드, 간선, 연결하지 못한 정의 설명). 법령 원문을 그대로 인용한 정의만 만든다.
 
@@ -209,6 +214,13 @@ def definitions(by_label: dict[str, str], article_index: dict[tuple[str, str], s
             edges.append({"type": "CITES_LAW", "from": did, "to": aid, "article_ref": d["article"]})
         else:
             notes.append(f"{term}: 조문 `{d['law']} {d['article']}`을 수집 법령에서 찾지 못함")
+        # 검수에서 판정에 필요하다고 확인한 별표(업종 제외, 규모 기준)를 CITES_LAW로 잇는다(설계서 §13.4)
+        for law, no in APPENDIX_REF.findall("; ".join(r.get("delegated_basis") or [])) if checked else []:
+            pid = article_index.get((law.strip(), f"별표{int(no)}"))
+            if pid:
+                edges.append({"type": "CITES_LAW", "from": did, "to": pid, "article_ref": f"{law.strip()} [별표 {int(no)}]", "role": "delegated_appendix"})
+            else:
+                notes.append(f"{term}: 위임 별표 `{law.strip()} [별표 {no}]`을 수집 법령에서 찾지 못함")
         cid = by_label.get(term)
         if cid:
             edges.append({"type": "DEFINED_BY", "from": cid, "to": did})

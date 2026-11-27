@@ -3,6 +3,7 @@
 > 2팀 "근거 it" · 지원각 · 작성 2026-11-26
 > 기준: Neo4j Aura에 **실제 적재된 그래프를 읽기 전용으로 조회한 값**(2026-11-26). 설계 초안은 `docs/submission/ontology/schema.cypher`(온톨로지 설계서 v0.2 §8)이고, 둘이 다른 곳은 §3.3에 적었다.
 > 강사 피드백(2026-11-26) 6개 항목은 §4(매핑)·§6(정합성)·§7(계층)·§8(추론 경로)·§9(판정)·§10(SQL 대비)에서 다룬다.
+> 강사 피드백(2026-11-27, 정합성 체크 5개 항목)은 §13에서 다룬다. 관계 제약 점검 V20~V25는 2026-11-27에 Aura를 읽기 전용으로 조회한 값이다.
 
 ---
 
@@ -467,12 +468,191 @@ E1~E3은 지금 데이터로 바로 할 수 있다. E4는 업종 코드표와 �
 | P1 | 신규 데이터 갱신 | 수집·정리층이 스냅숏 1회. 기준일 고정, 차이 계산·`SUPERSEDES` 없음, 마감 공고가 Aura에 남음 | 설계 `docs/DESIGN_신규데이터_파이프라인과_상위법령_v0.1.md` §3: 실행 폴더 + `LATEST`, 차이 계산(`NEW·CHANGED·UNCHANGED·CLOSED·DISAPPEARED`), 바뀐 공고만 재추출, Notice `version·status`, 요건 `SUPERSEDES`, `--select delta` 부분 적재 | 같은 원천 2회 실행 시 전부 UNCHANGED, V18·V19 = 0 |
 | P1 | 상위 법령 계층 | 법률 22·시행령 22, 상하위 관계·위임 연결 없음, 시행규칙·고시 0 | 설계 `docs/DESIGN_신규데이터_파이프라인과_상위법령_v0.1.md` §4: `law_kind`·`law_master_id`, `ENFORCES`(시행령 제1조 22개 모두 상위 법률명 있음), `DELEGATES_TO`(시행령 조문 76%가 "법 제N조" 참조), `CITES_LAW role`, 고시 수집 | 시행령 22개 모두 `ENFORCES`, 중소기업 규칙 근거가 그래프 조문과 해시 일치 |
 | P2 | 법령 개정 반영 | 현행본만 보유, 판 사이 관계 없음, 부칙 버림 | 설계 `docs/DESIGN_신규데이터_파이프라인과_상위법령_v0.1.md` §4.4·§4.5: 월 1회 일련번호 비교, 판별 노드 + `SUPERSEDES`, 영향 정의 `needs_review` 되돌림, 기준일 판 선택·`law_version_unavailable` | VAL-07 충족 |
+| P1 | 판정기 통합(2026-11-27 추가) | 서비스 `evaluator.py`는 AND·OR만, 정답셋 `label_eval.py`는 NONE_OF·AT_LEAST·3단 트리까지 | `evaluator.py`가 `label_eval.combine`을 쓰게 하고 두 판정기 결과가 같은지 시험 | 정답셋 50쌍에서 두 판정기 결과 같음 |
+| P1 | 정의 → 별표 연결 (**완료 2026-11-27**) | `CITES_LAW`(정의 → 별표) 4건 적재, V25 = 4 | 중소기업 [별표 1] 연결 여부 검수, 별표 본문을 판정 규칙으로 바꿀지 결정 | V25 = 4 이상 |
 | P2 | 폐지 지역 승계 | `SUCCEEDED_BY` 35건 검수 전 | 행정구역 개편 자료로 검수 | `reviewed=true` |
 | P2 | 인덱스 | §5.2 | 생성 | `SHOW INDEXES`로 확인 |
 
 ---
 
-## 부록 A. 추가 점검 쿼리 (V11~V17)
+## 13. 강사 피드백(2026-11-27) 대응: 정합성 체크 5항목
+
+| # | 강사 체크 항목 | 상태 | 이 절 |
+|---|---|---|---|
+| ① | 메타·요건·개념 층의 노드와 관계 매핑 | 매핑 완료. 층 사이 관계는 `ABOUT`·`DEFINED_BY` 두 개뿐 | §13.1 |
+| ② | `IS_A`·`WITHIN`·`MEMBER_OF`·`SUCCEEDED_BY`의 방향과 제약 | 관계별 제약 점검 6개 추가(V20~V25), Aura 위반 0 | §13.2 |
+| ③ | `AND`·`OR`·`NONE_OF`·`AT_LEAST` 논리와 조건 트리 | 저장 구조·3값 진리표 확정. **Aura에는 AND·OR만 있고 그룹 조건 0건**, 서비스 판정기는 NONE_OF·AT_LEAST 미지원 | §13.3 |
+| ④ | 조건 → 개념 → 정의 → 법령·조문·**별표** 경로 | 조문까지는 연결(21경로). **별표는 정의와 연결 0** → 기존 `CITES_LAW`로 4건 **적재 완료**(경로 21 → 25) | §13.4 |
+| ⑤ | 신청 가능·불가·확인 필요 3값 판정 정확성 | 정답셋 파일럿 50쌍에서 규칙 판정과 사람 판정 일치 **0.90**, "신청 가능" 오판 0. 판사 모델과 사람 판정 일치 0.96 | §13.5 |
+
+### 13.1 층별 노드·관계 매핑 (①)
+
+강사 체크의 세 층(메타·요건·개념)에 맞춰 §2의 네 층을 다시 묶었다. 법령 층은 개념 계층의 **근거**로 개념 계층 아래에 둔다.
+
+| 층 | 노드(건수) | 층 안 관계 | 다른 층으로 가는 관계 | 판정에 쓰나 |
+|---|---|---|---|---|
+| 메타 층 | Organization 1,399 · SupportCategory 19 | 없음 | Notice → Organization `ANNOUNCED_BY` 5,116 · `EXECUTED_BY` 947, Notice → SupportCategory `IN_SUPPORT_CATEGORY` 5,116 | 아니오(검색·필터) |
+| 요건 층 | Notice 5,116 · Requirement 5,900 · Condition 17,366 | `HAS_REQUIREMENT` 5,900 · `HAS_CONDITION` 17,366 · `HAS_CHILD` 0(그룹 조건, §13.3) | Condition → Concept·Region `ABOUT` 19,766 | 예 |
+| 개념 계층 | Concept 354(그중 Region 321) | `IS_A` 2 · `WITHIN` 284 · `MEMBER_OF` 35 · `SUCCEEDED_BY` 35 | Concept → Definition `DEFINED_BY` 21 | 예 |
+| └ 법령 근거 | Definition 23 · LawArticle 2,325 · LawAppendix 59 · ExternalLaw 44 | `CITES_LAW` 27(조문 23 · 별표 4, §13.4) · `PART_OF` 2,384 | 없음(끝) | 근거 표시 |
+
+층을 건너는 관계는 **요건 → 개념(`ABOUT`)**과 **개념 → 법령 근거(`DEFINED_BY`)** 두 개뿐이다. 메타 층은 판정 경로에 들어오지 않으므로, 메타 정보가 틀려도 판정은 바뀌지 않는다.
+
+### 13.2 계층 관계의 방향과 제약 (②)
+
+강사 메모에서 `AT_LEAST`는 계층 관계에서 지워 ③(복합 조건)으로 옮겨졌다. 여기서는 네 계층 관계만 다룬다.
+
+| 관계 | 출발 → 도착 | 방향 뜻 | 전이 | 자기 관계 | 순환 | 개수 제약 | 판정 사용 | 점검(2026-11-27 Aura) |
+|---|---|---|---|---|---|---|---|---|
+| `IS_A` | Concept → Concept(지역 아님, 같은 scheme) | 하위 → 상위(소기업 → 중소기업) | 예, 2 hop | 금지 | 금지 | 상위 여럿 허용 | 유형 충족·정의 찾기 | V1 0 · V2 0 · V20 0 · V21 0 |
+| `WITHIN` | Region·Zone → Region | 하위 행정구역 → 상위(구 → 시 → 도) | 예, 3 hop | 금지 | 금지 | **행정 상위는 하나**(V8) | 지역 충족 | V1 0 · V2 0 · V8 0 · V20 0 · V21 0 |
+| `MEMBER_OF` | Region → 묶음(GROUP), 묶음 → 상위 Region | 구성원 → 묶음(경상권, 통합 이전 지역) | 예(`WITHIN`과 합쳐 3 hop) | 금지 | 금지 | 양쪽 중 한쪽은 GROUP | 지역 충족(근거 공고 `basis`) | V2 0 · V20 0 · V21 0 · **V22 0** |
+| `SUCCEEDED_BY` | Region(폐지) → Region(현행) | 옛 지역 → 승계 지역 | 아니오 | 금지 | 금지 | 출발은 `status='폐지'`만 | **안 씀**(검수 전, `partial`은 자동 충족 금지) | V20 0 · V21 0 · **V23 0 · V24 0** |
+
+- 이번에 추가한 점검은 다음 여섯 개다. 모두 `tools/check_graph_neo4j.py`에 넣었다(읽기 전용).
+  - V20: 끝점 종류
+  - V21: 자기 관계
+  - V22: MEMBER_OF는 한쪽이 묶음
+  - V23: 승계 순환
+  - V24: 승계 출발은 폐지 지역
+  - V25: 정의 → 위임 별표 `CITES_LAW`(§13.4). 적재 전 0, 적재 뒤 4
+- V22를 처음에 "도착이 묶음"으로 걸었더니 3건이 나왔다. `전남(구)`·`광주(구)` → `전남광주통합특별시`, `경상권` → `전국`처럼 **묶음이 상위 지역에 속하는 관계**였다. 설계상 맞는 쓰임이라 규칙을 "양쪽 중 한쪽은 묶음"으로 고쳤다.
+- 관계 종류를 섞어 따라가지 않는다(§7). 지역 판정은 `WITHIN|MEMBER_OF`만, 유형 판정은 `IS_A`만 쓴다. `SUCCEEDED_BY`는 판정 경로에 넣지 않는다.
+- Neo4j는 관계 끝점의 레이블이나 순환을 제약으로 걸 수 없다. 그래서 적재 뒤 점검 쿼리로 막는다. 점검 값이 0이 아니면 `check_graph_neo4j.py`가 실패를 낸다.
+
+### 13.3 복합 조건: 논리와 조건 트리 (③)
+
+**저장 구조**
+
+```text
+Requirement {kind, logic ∈ AND|OR|NONE_OF|AT_LEAST, min_count, logic_basis ∈ explicit|assumed, open_ended}
+  -HAS_CONDITION-> Condition(원자: attribute, operator, value)
+  -HAS_CONDITION-> Condition(그룹: logic, min_count) -HAS_CHILD-> Condition ...   (요건 아래 3단까지, V6)
+```
+
+- 원자 조건과 그룹 조건은 같은 `Condition` 레이블을 쓴다. 그룹은 `logic`을 가지고, `HAS_CHILD`로 아래 조건을 가진다.
+- 제외 요건(`kind=EXCLUSION`)은 `NONE_OF`로 쓴다. "다음에 하나라도 해당하면 제외"라는 뜻이다.
+- `AT_LEAST`는 `min_count`가 필수다(예: "다음 3개 중 2개 이상").
+
+**3값 진리표**(`tools/graphrag/label_eval.py`의 `combine`. S = 충족 수, U = 불충족 수, K = 모름 수, n = 전체)
+
+| 논리 | SATISFIED | UNSATISFIED | 그 밖(UNKNOWN) |
+|---|---|---|---|
+| `AND` | S = n | U ≥ 1 | 불충족 없이 모름이 있음 |
+| `OR` | S ≥ 1 | U = n | 충족 없이 모름이 있음 |
+| `NONE_OF` | U = n(아무것에도 해당 안 함) | S ≥ 1(하나라도 해당) | 해당 없이 모름이 있음 |
+| `AT_LEAST k` | S ≥ k | S + K < k | 그 밖 |
+
+요건 단위 추가 규칙(정답셋 가이드 §4.4, 2026-11-27 평가기 수정 반영)
+- `logic_basis=assumed`(원문이 AND/OR를 말하지 않음)인 요건이 충족을 만들면 공고 판정은 **확인 필요**(`ASSUMED_LOGIC`)다.
+- `open_ended`("등")는 **열린 목록만** 넓힌다.
+  - AND 요건에서 지역·업력·연령·매출·직원 수 같은 닫힌 조건이 불충족이면 불충족을 확정한다.
+  - 제외(`NONE_OF`)에 해당해도 불충족을 확정한다.
+  - 열린 목록만 있으면 불충족을 모름으로 바꾼다.
+- 예비창업자는 업력이 없다. 하한 조건(1년 이상)은 불충족, 상한 조건(7년 이내)은 모름이다.
+
+**조건 트리 예(정답셋 파일럿)**
+
+```text
+KSTARTUP:174935 R1 ELIGIBILITY AND (assumed, open_ended)
+├─ G1 OR ─ region WITHIN 강원 | region WITHIN 경북 | region WITHIN 대구      ← 본문 "동북권(강원, 경북, 대구)"
+└─ applicant_type ...
+BIZINFO:127745 R9 EXCLUSION NONE_OF (open_ended)
+└─ industry IS_A 특수목적의상 업체                                            ← "아동복, 부품·소재, 웨딩웨어, 한복 등"
+```
+
+**현재 상태와 차이**
+
+| 항목 | Aura(서비스) | 정답셋 라벨(파일럿 10건) |
+|---|---|---|
+| 요건 논리 | AND 4,786 · OR 1,114 | AND 9 · OR 1 · NONE_OF 7 · AT_LEAST 0 |
+| 그룹 조건(`HAS_CHILD`) | 0 | 7개(OR 6 · AND 1), 최대 1단 |
+| 판정기 | `tools/graphrag/evaluator.py`: AND·OR(검수 트리는 NOT·UNRESOLVED) | `tools/graphrag/label_eval.py`: AND·OR·NONE_OF·AT_LEAST, 3단 트리 |
+
+- **판정기가 둘이다.** 강사 체크의 네 논리를 모두 처리하는 쪽은 정답셋용 `label_eval.py`뿐이다. 서비스용 `evaluator.py`는 정형 필드만 다뤄서 AND·OR로 충분했다. 하지만 본문 요건(제외, 몇 개 이상)을 적재하면 모자란다.
+- **보완 계획(§12 P1):**
+  - `evaluator.py`가 요건과 그룹을 합칠 때 `label_eval.combine`을 그대로 쓰게 바꾼다.
+  - 같은 입력에서 두 판정기의 결과가 같은지 시험으로 확인한다.
+  - 본문 요건을 적재할 때 `HAS_CHILD`와 `min_count`를 함께 넣는다.
+
+### 13.4 법령 연결 경로: 조문과 별표 (④)
+
+```text
+Condition -ABOUT-> Concept -IS_A*0..2-> Concept -DEFINED_BY-> Definition -CITES_LAW------> LawArticle  -PART_OF-> ExternalLaw
+                                                                        └-CITES_LAW-----> LawAppendix -PART_OF-> ExternalLaw   (위임 별표, 2026-11-27 추가)
+```
+
+- 2026-11-27 보완 전에는 조문 경로만 이어져 있었다. 개념 → 정의 → 조문 → 법령 경로가 21개였고, **별표는 정의와 이어져 있지 않았다**(V25 = 0). 별표 59개는 `PART_OF`로 법령에만 붙어 있었다.
+- **보완 후(Aura 적재 완료):** 위임 별표 4건을 이었다. 개념 → 정의 → 조문·별표 → 법령 경로는 **25개**, V25 = 4다. 조문·별표를 인용하지 않은 정의는 0개다(D1).
+- 그런데 법령 정의 검수(2026-11-27)에서 판정에 별표가 필요한 정의가 나왔다. 업종 제외와 규모 기준이 조문이 아니라 별표에 있기 때문이다.
+
+| 정의 | 필요한 별표 | 그래프의 별표 노드 | 근거 |
+|---|---|---|---|
+| 1인 창조기업 | 1인 창조기업 육성에 관한 법률 시행령 [별표 1] 1인 창조기업 범위에서 제외되는 업종 | `LAW:280537:T0001-00` | 검수 시트 |
+| 벤처기업 | 벤처기업육성에 관한 특별법 시행령 [별표 1] 벤처기업에 포함되지 않는 업종 | `LAW:287501:T0001-00` | 검수 시트 |
+| 소상공인 | 중소기업기본법 시행령 [별표 3] 주된 업종별 평균매출액등의 소기업 규모 기준 | `LAW:281337:T0003-00` | 검수 시트 |
+| 장애인기업 | 중소기업기본법 시행령 [별표 3] (위와 같음) | `LAW:281337:T0003-00` | 검수 시트 |
+| 중소기업(후보) | 중소기업기본법 시행령 [별표 1] 주된 업종별 평균매출액등의 중소기업 규모 기준 | `LAW:281337:T0001-00` | 시행령 제3조 제1항 제1호 가목. 검수 시트에 별표가 따로 적혀 있지 않아 확인이 필요하다 |
+
+- **관계 타입은 새로 만들지 않는다.** 적재 도구의 관계 시그니처가 이미 `CITES_LAW`를 Definition → LawArticle과 Definition → LawAppendix 둘 다 허용한다. 그래서 같은 `CITES_LAW`에 `role: 'delegated_appendix'`와 `article_ref`(예: `중소기업기본법 시행령 [별표 3]`)를 붙인다. 조문 인용과 별표 인용은 끝점 레이블로 나뉜다.
+- **만드는 곳:** `tools/graphrag/concepts_laws.py`가 법령 정의 검수 결과(`data/ref/definition_review_v0.1.json`)에서 '확인'된 정의의 `delegated_basis`를 읽는다. 거기서 `[별표 N]`을 찾아 수집한 별표 노드와 잇는다. 그래서 전체를 다시 적재해도 이 관계가 남는다. 중소기업(별표 1)은 검수 시트에 별표가 적혀 있지 않아 만들지 않았다.
+- **dry-run(2026-11-27, Aura 읽기 전용):**
+  - 정의 4개만 골라 비교했다. 새 관계는 4, 노드 속성 변화는 0이었다.
+  - 법령 층 전체(노드 2,451 · 관계 2,432)로도 비교했다. 새 관계 4개 말고는 바뀌는 것이 없었다.
+  - 내보내기 `manifest.json`도 `CITES_LAW`만 23 → 27로 바뀌었다.
+- **적재(2026-11-27, 승인 후):** 관계 56,995 → 56,999(+4), `CITES_LAW` 23 → 27. 적재 뒤 `check_graph_neo4j.py`는 정상이었다(V25 = 4, 경로 25, V20~V24 = 0). 기록은 `docs/LOAD_Neo4j_적재기록_v0.1.md`에 있다.
+- 별표 본문(업종 목록, 매출 기준 표)을 판정 규칙으로 바꾸는 일은 따로 한다. 지금은 **근거 표시**까지만 하고, 업종 제외는 확인 필요로 둔다.
+
+### 13.5 3값 판정 정확성 (⑤)
+
+**측정(정답셋 파일럿, 2026-11-27)**
+- 대상은 공고 10건 × 배정 프로필 5개 = 50쌍이다.
+- 라벨 A(요건 정규화, 송진명)를 `label_eval.py`로 판정한 결과를 라벨 B(사람 독립 판정, 백관민)와 비교했다. 정답은 사람 판정이다.
+
+| 단계 | 일치 | 바뀐 것 |
+|---|---:|---|
+| 받은 그대로 | 41/50 = 0.82 | — |
+| 라벨 오류 수정 후 | 42/50 = 0.84 | 라벨 A 4건, 라벨 B 21곳(`data/goldset/adjudication.csv`) |
+| 평가기 버그 2개 수정, 라벨 1건 수정 후 | **45/50 = 0.90** | "등"(열린 목록)이 닫힌 조건 불충족을 덮던 문제, 예비창업자 업력 하한, 연 나이(`YEAR_AGE`) |
+
+혼동표(사람 → 규칙, 최종)
+
+| 사람 \ 규칙 | 신청 가능 | 신청 불가 | 확인 필요 |
+|---|---:|---:|---:|
+| 신청 가능(2) | 0 | 0 | 2 |
+| 신청 불가(19) | 0 | 17 | 2 |
+| 확인 필요(29) | 0 | 1 | 28 |
+
+- **"신청 가능" 오판은 0이다.** 규칙이 신청 가능을 낸 쌍이 없다. 사람이 신청 가능이라 한 2쌍도 규칙은 확인 필요로 냈다(안전한 쪽). 프로필에 성별이 없고, 신청 대상·업종 사전이 없어서다.
+- **"신청 불가" 오판은 1건이다(171725 PX-1).**
+  - 업력 3년 미만 제한이 API에만 있고, 본문은 "여성 예비(기) 창업자"라 기창업자에게도 제한이 있는지 불분명하다. 사람은 이를 확인 필요로 판정했다.
+  - API와 본문이 다를 때 확인 필요로 낮추는 규칙이 없어서 생긴 오판이다(가이드 v0.2에서 결정).
+- **확인 필요 비율:** 규칙 32/50(64%), 사람 29/50(58%). 확인 필요를 남발하지 않는지 함께 본다.
+- 남은 5건의 원인은 데이터 한계 4건(프로필에 신청자 유형·성별 없음, 업종 사전 없음)과 가이드 모호 1건이다. 규칙 버그는 남지 않았다.
+
+**판사 모델과 비교(2026-11-27)**
+
+`tools/goldset_judge_llm.py`로 gpt-6-luna가 사람 라벨을 보지 않고 같은 10건의 라벨 A·B를 따로 만들었다(`data/goldset/labels/model_luna/`). 모델 라벨은 정답이 아니다. 사람 라벨이 얼마나 일관된지, 어디가 어려운지 보는 기준선이다.
+
+| 비교 | 결과 |
+|---|---|
+| 판정(라벨 B): 사람(백관민) vs 모델 | **48/50 = 0.96, κ = 0.924** |
+| 요건 정규화(라벨 A): 사람(송진명) vs 모델 | 요건 F1 0.281, 조건 엄격 일치 0.087, 느슨한 일치 0.174 |
+| 모델 라벨 A를 규칙으로 판정 vs 사람 판정 | 44/50 = 0.88 |
+
+- **판정은 사람과 모델이 거의 같다.** 어긋난 2쌍(171725 PX-1, 174935 PX-1)은 모두 API와 본문이 다른 공고다. 사람은 확인 필요, 모델은 신청 불가로 판정했다. 규칙의 유일한 "신청 불가" 오판도 같은 유형이다. 그래서 **API·본문 상충(`SOURCE_CONFLICT`)이 있으면 확인 필요로 낮추는 규칙**을 가이드 v0.2의 첫 결정 항목으로 둔다.
+- **요건 정규화는 크게 갈린다.** 사람과 모델이 요건을 나누는 단위와 조건을 쓰는 방식이 다르다. 그런데도 규칙 판정 결과는 0.90과 0.88로 비슷하다. 정규화 모양이 달라도 판정은 비슷하게 나온다는 뜻이다. 그러니 라벨 A의 일치는 조건 문자열이 아니라 판정 결과로 재는 편이 맞다.
+- 모델 라벨 20건 중 1건은 원문 기호를 바꿔 옮겨(`□` → `❍`) 검사에서 걸렸다. 원문 기호로 고쳤다.
+
+**한계와 다음 측정**
+- 라벨러 한 명의 A와 다른 한 명의 B를 엇갈려 맞춘 결과다. 라벨러 2명이 같은 공고의 A·B를 모두 작성해 비교한 사람 사이 일치율은 아직 없다. 지금은 판사 모델을 세 번째 라벨러로 둔 비교로 대신한다.
+- 서비스 판정기 `evaluator.py`로는 아직 재지 않았다. 판정기를 하나로 맞춘 뒤(§13.3) 같은 50쌍으로 다시 잰다.
+  - 서비스 판정기는 업력이 기준 ±0.5년 안이면 모름으로 둔다. 사람은 업력이 경계에 딱 걸린 경우를 불충족으로 확정했다(P6, PX-172947-1). 이 차이도 그때 정한다.
+- 목표(§9.2)는 hard 조건 판정 오류 0, "신청 가능" 오판 0이다. 공고를 50건 이상으로 늘려 다시 잰다.
+
+---
+
+## 부록 A. 추가 점검 쿼리 (V11~V17, V20~V25)
 
 ```cypher
 // V11 같은 쌍 중복 관계
@@ -489,6 +669,13 @@ MATCH (n:Notice) WHERE NOT (n)-[:HAS_REQUIREMENT]->() RETURN count(n) AS notices
 MATCH (a:Region) WHERE NOT a.level IN ['SIDO', 'NATIONWIDE'] AND NOT (a)-[:WITHIN]->() RETURN count(a) AS rootless_regions;
 // V17 개념에 안 붙은 정의
 MATCH (d:Definition) WHERE NOT ()-[:DEFINED_BY]->(d) RETURN count(d) AS orphan_definitions;
+// V20~V25 계층 관계 제약(2026-11-27, §13.2)
+MATCH (a)-[r:WITHIN|MEMBER_OF|SUCCEEDED_BY|IS_A]->(b) WHERE (type(r) = 'WITHIN' AND NOT (a.scheme IN ['REGION','ZONE'] AND b.scheme = 'REGION')) OR (type(r) IN ['MEMBER_OF','SUCCEEDED_BY'] AND NOT (a.scheme = 'REGION' AND b.scheme = 'REGION')) OR (type(r) = 'IS_A' AND (a:Region OR b:Region OR NOT a:Concept OR NOT b:Concept)) RETURN count(r) AS bad_endpoints;
+MATCH (a)-[r:WITHIN|MEMBER_OF|SUCCEEDED_BY|IS_A]->(a) RETURN count(r) AS self_loops;
+MATCH (a)-[r:MEMBER_OF]->(g) WHERE coalesce(a.level, '') <> 'GROUP' AND coalesce(g.level, '') <> 'GROUP' RETURN count(r) AS member_of_without_group;
+MATCH p = (a)-[:SUCCEEDED_BY*1..6]->(a) RETURN count(p) AS succession_cycles;
+MATCH (a)-[r:SUCCEEDED_BY]->() WHERE coalesce(a.status, '') <> '폐지' RETURN count(r) AS succession_from_current;
+MATCH (:Definition)-[r:CITES_LAW]->(:LawAppendix) RETURN count(r) AS definition_appendix_links;
 ```
 
 ## 부록 B. 재현

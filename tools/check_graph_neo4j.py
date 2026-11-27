@@ -61,6 +61,19 @@ CHECKS: list[tuple[str, str, str, object]] = [
     ("V16a", "상위(WITHIN)가 없는 비시도 지역(폐지 시군구 31·권역 3 포함)",
      "MATCH (a:Region) WHERE NOT a.level IN ['SIDO', 'NATIONWIDE'] AND NOT (a)-[:WITHIN]->() RETURN count(a) AS c", 34),
     ("V17", "개념에 안 붙은 정의", "MATCH (d:Definition) WHERE NOT ()-[:DEFINED_BY]->(d) RETURN count(d) AS c", 2),
+    # 계층 관계 제약(강사 피드백 2026-11-27 ②): 끝점 종류, 자기 관계, 묶음 대상, 승계 방향
+    ("V20", "계층 관계 끝점 위반(WITHIN: 지역·구역→지역, MEMBER_OF·SUCCEEDED_BY: 지역→지역, IS_A: 지역 아닌 개념끼리)",
+     "MATCH (a)-[r:WITHIN|MEMBER_OF|SUCCEEDED_BY|IS_A]->(b) WHERE "
+     "(type(r) = 'WITHIN' AND NOT (a.scheme IN ['REGION','ZONE'] AND b.scheme = 'REGION')) OR "
+     "(type(r) IN ['MEMBER_OF','SUCCEEDED_BY'] AND NOT (a.scheme = 'REGION' AND b.scheme = 'REGION')) OR "
+     "(type(r) = 'IS_A' AND (a:Region OR b:Region OR NOT a:Concept OR NOT b:Concept)) RETURN count(r) AS c", "zero"),
+    ("V21", "자기 자신을 가리키는 계층 관계", "MATCH (a)-[r:WITHIN|MEMBER_OF|SUCCEEDED_BY|IS_A]->(a) RETURN count(r) AS c", "zero"),
+    ("V22", "MEMBER_OF 양쪽 모두 묶음(GROUP)이 아님(지역→묶음, 묶음→상위 지역만 허용)",
+     "MATCH (a)-[r:MEMBER_OF]->(g) WHERE coalesce(a.level, '') <> 'GROUP' AND coalesce(g.level, '') <> 'GROUP' RETURN count(r) AS c", "zero"),
+    ("V23", "SUCCEEDED_BY 순환(승계가 되돌아옴, 6 hop)", "MATCH p = (a)-[:SUCCEEDED_BY*1..6]->(a) RETURN count(p) AS c", "zero"),
+    ("V24", "SUCCEEDED_BY 출발이 폐지 지역이 아님", "MATCH (a)-[r:SUCCEEDED_BY]->() WHERE coalesce(a.status, '') <> '폐지' RETURN count(r) AS c", "zero"),
+    ("V25", "위임 별표를 가리키는 정의 관계(Definition-CITES_LAW->LawAppendix, 검수 확인분)",
+     "MATCH (:Definition)-[r:CITES_LAW]->(:LawAppendix) RETURN count(r) AS c", 4),
     ("D1", "조문·별표를 인용하지 않은 정의", "MATCH (d:Definition) WHERE NOT (d)-[:CITES_LAW]->() RETURN count(d) AS c", "zero"),
     ("D2", "옛 형식 법령 링크(lsInfoP.do?lsiSeq= 아님)",
      "MATCH (l:ExternalLaw) WHERE l.source_url IS NULL OR NOT l.source_url STARTS WITH 'https://www.law.go.kr/lsInfoP.do?lsiSeq=' RETURN count(l) AS c", "zero"),

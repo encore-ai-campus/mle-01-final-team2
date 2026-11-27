@@ -215,3 +215,15 @@ python tools/check_graph_neo4j.py --compare before.json                     # �
 | 적재 | `Definition` 1(원문 해시 `d5159658…` → `62c13e88…`, `basis_note`·`legal_term`·`source` 갱신), `CITES_LAW` 1(`article_ref` 제2조 제1항·제2항 → 제1항~제3항), `ExternalLaw` 44(`source_url`) (MERGE) |
 | 적재 후 합계 | 노드 32,605, 관계 56,995(변화 없음). `Definition` 23, `CITES_LAW` 23, `DEFINED_BY` 21 |
 | 점검 | 정의 23개 원문 해시 파일과 일치, 옛 형식 링크 0, 새 형식 링크 44, 조문 없는 정의 0, V17 = 2, 개념 → 정의 → 조문 → 법령 경로 21개 |
+
+## 추가 적재: 정의 → 위임 별표 연결 (2026-11-27)
+
+| 항목 | 값 |
+|---|---|
+| 원인 | 강사 피드백(2026-11-27) ④ "조건 → 개념 → 정의 → 법령·조문·별표". 법령 정의 검수(2026-11-27)에서 판정에 시행령 별표가 필요하다고 확인한 정의 4개가 별표와 이어져 있지 않았다(별표 59개는 `PART_OF`로 법령에만 연결) |
+| 수정 | `concepts_laws.definitions()`가 검수 '확인' 정의의 `delegated_basis`에서 `[별표 N]`을 찾아 `CITES_LAW`(Definition → LawAppendix, `role='delegated_appendix'`)를 만든다. 관계 타입은 새로 만들지 않았다(적재 시그니처가 이미 허용) |
+| 대상 | 1인 창조기업 → `LAW:280537:T0001-00`, 벤처기업 → `LAW:287501:T0001-00`, 소상공인·장애인기업 → `LAW:281337:T0003-00` |
+| 사전 점검 | dry-run: 정의 4개 선택 시 새 관계 4·노드 변화 0, 법령 층 전체(노드 2,451·관계 2,432) 선택 시도 새 관계 4 외 변화 0 |
+| 적재 | `load_graph_partial.py --select ids --ids "^DEF:(1인 창조기업\|벤처기업\|소상공인\|장애인기업)$" --apply` (MERGE, 사용자 승인) |
+| 적재 후 합계 | 노드 32,605, 관계 56,995 → 56,999. `CITES_LAW` 23 → 27 |
+| 점검 | `check_graph_neo4j.py` 정상. V25 = 4, 개념 → 정의 → 조문·별표 → 법령 경로 21 → 25, V20~V24 = 0 |
