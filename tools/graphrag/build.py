@@ -27,6 +27,7 @@ from graphrag.engine import Engine  # noqa: E402
 from graphrag.evaluator import BOUNDARY_YEARS, DEFAULT_OPTIONS, NOT_ELIGIBLE, Profile, evaluate_notice  # noqa: E402
 
 OUT = Path(__file__).resolve().parents[2] / "data" / "graph"
+CONCEPT_ATTRS = ("region", "applicant_type", "company_size", "industry", "certification")  # ABOUT로 개념을 가리켜야 하는 조건 속성(점검 V9)
 
 
 def export(e: Engine) -> dict:
@@ -117,6 +118,9 @@ def export(e: Engine) -> dict:
                         "reviewed": True, "ref_date_kind": c.get("reference_date_type") or "UNKNOWN"}
                 if v.get("unsupported"):
                     node["unknown_reason"] = "no_evaluation_rule"
+                if c["attribute"] in CONCEPT_ATTRS and not v.get("concept_ids"):  # 가리킬 개념이 아직 없다(V9가 아니라 V9b로 센다)
+                    node["about_pending"] = True
+                    node["about_unmapped"] = v.get("unresolved") or v.get("labels") or [str(x) for x in (c["raw_value"] if isinstance(c["raw_value"], list) else [c["raw_value"]]) if x is not None]
                 nodes.append(node)
                 for cid in v.get("concept_ids", []):
                     edges.append({"type": "ABOUT", "from": c["cond_id"], "to": cid})
