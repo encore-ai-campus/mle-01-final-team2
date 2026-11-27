@@ -1,7 +1,7 @@
 """환경 설정. 값은 환경변수(또는 저장소 루트 .env)에서 읽고, 비밀 값은 코드·로그에 남기지 않는다.
 
 배포 구성(팀 결정): API = AWS CPU 서버(Docker), LLM = RunPod GPU의 vLLM(OpenAI 호환 API), 그래프 = Neo4j Aura, 원문·사용자 = Supabase.
-외부 저장소 변수 이름은 적재 스크립트(tools/load_graph_neo4j.py)가 쓰는 기존 .env 이름을 그대로 쓴다.
+외부 저장소 변수 이름은 적재 스크립트(tools/sync_graph_neo4j.py)가 쓰는 기존 .env 이름을 그대로 쓴다.
 """
 from __future__ import annotations
 

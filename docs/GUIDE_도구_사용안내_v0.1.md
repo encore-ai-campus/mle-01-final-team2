@@ -16,13 +16,13 @@
 | SQL 베이스라인과 비교 | `python tools/graphrag/build.py compare` | 안 씀 |
 | 적재 대상 건수 보기 | `python tools/graphrag/build.py stats` | 안 씀 |
 | Aura 상태 점검 | `python tools/check_graph_neo4j.py` | 읽기 |
-| 일부만 적재(미리 보기) | `python tools/load_graph_partial.py --select gold` | 읽기 |
-| 일부만 적재(실제) | `... --apply --confirm-host <호스트>` | **쓰기, 승인 필요** |
+| 저장소 빌드와 Aura 비교 | `python tools/sync_graph_neo4j.py` | 읽기 |
+| Aura를 저장소와 맞추기 | `... --apply [--prune] --confirm-host <호스트>` | **쓰기, 승인 필요** |
 | 검수 준비표 다시 만들기 | `python tools/make_review_prep.py` | 안 씀 |
 | 검수 결과 반영 | `python tools/ingest_condition_gold_reviews.py --split development` | 안 씀 |
 | 규칙 선택지별 판정 영향 | `python tools/graphrag/rule_options_impact.py` | 안 씀 |
 | 평가기 회귀 확인 | `python tools/graphrag/verdict_hash.py before.json` | 안 씀 |
-| 시험 | `python -m unittest tools.test_graphrag tools.test_graph_ops` | 안 씀 |
+| 시험 | `python -m unittest tools.test_graphrag tools.test_graph_ops tools.test_sync_graph` | 안 씀 |
 
 ## 1. 그래프 내보내기
 
@@ -44,32 +44,34 @@ python tools/check_graph_neo4j.py --check-definitions    # 정의 원문 해시�
 ```
 
 - `zero` 점검은 0이어야 정상이다. 실패하면 종료 코드 1.
-- `known` 점검은 알려진 값(V9 546, V15 330, V16a 34, V17 2)에서 바뀌었는지만 경고한다.
-- 2026-11-26 기준: 노드 32,605, 관계 56,995. 2026-11-27에 정의 23개의 검수 결과(`needs_review`·`review_status` 등)와 빠져 있던 정의 5개의 `source`를 올렸다(`--select ids --ids "^DEF:"`).
+- `known` 점검은 알려진 값(V15 1,294, V16a 34, V17 2, V25 4)에서 바뀌었는지만 경고한다. V9는 2026-11-27부터 `zero` 점검이다.
+- 2026-11-27 판정 규칙 결정 반영 후: 노드 30,678, 관계 57,631(저장소 빌드와 같음). 그 전 2026-11-26 기준: 노드 32,605, 관계 56,995. 2026-11-27에 정의 23개의 검수 결과(`needs_review`·`review_status` 등)와 빠져 있던 정의 5개의 `source`를 올렸다(`--select ids --ids "^DEF:"`).
 
-## 3. 부분 적재 (기본 dry-run)
+## 3. 적재·동기화 (기본은 비교만)
+
+`tools/sync_graph_neo4j.py` 하나로 빈 DB 첫 적재와 이미 적재된 DB 맞추기를 모두 한다(2026-11-27에 옛 `load_graph_neo4j.py`·`load_graph_partial.py`를 합쳤다).
 
 ```
-python tools/load_graph_partial.py --select gold                     # DB와 비교만
-python tools/load_graph_partial.py --select sme-rule --show-changes  # 바뀌는 속성 전후 값까지
-python tools/load_graph_partial.py --select laws gold                # 여러 개 함께
-python tools/load_graph_partial.py --select ids --ids "^DEF:"        # ID 정규식으로
-python tools/load_graph_partial.py --select gold --apply --confirm-host <NEO4J_URI의 호스트>
+python tools/sync_graph_neo4j.py --offline                     # DB 없이 파일 검증과 건수만
+python tools/sync_graph_neo4j.py --build                       # 다시 만들고 DB와 비교(읽기 전용)
+python tools/sync_graph_neo4j.py --scope laws --show 10        # 범위를 줄이고 바뀌는 예시 10개씩
+python tools/sync_graph_neo4j.py --with-rules                  # 정의 판정 기준(rule_json)까지 비교
+python tools/sync_graph_neo4j.py --apply --confirm-host <NEO4J_URI의 호스트>   # 새로·바뀐 것만 쓴다
+python tools/sync_graph_neo4j.py --apply --prune --confirm-host <호스트>       # DB에만 있는 요건·조건까지 지운다
 ```
 
-| 선택 | 무엇을 올리나 |
+| 범위(`--scope`) | 레이블 |
 |---|---|
+| `meta` | 공고·기관·분야·개념과 그 사이 관계 |
 | `laws` | 법령·조문·별표·정의와 PART_OF·DEFINED_BY·CITES_LAW |
-| `gold` | 검수한 본문 요건(`status=reviewed_excerpt`)과 조건, HAS_REQUIREMENT·HAS_CONDITION·ABOUT |
-| `sme-rule` | 중소기업 판정 기준을 기존 Definition의 `rule_json` 속성으로(노드는 만들지 않음) |
-| `ids` | `--ids` 정규식에 맞는 노드와 그 노드의 관계 |
+| `requirements` | 요건·조건과 HAS_REQUIREMENT·HAS_CONDITION·ABOUT |
 
-순서: 1) `build.py export` → 2) `check_graph_neo4j.py --save before.json` → 3) dry-run으로 변경 내역 확인, 승인 받기 → 4) `--apply --confirm-host` → 5) `check_graph_neo4j.py --compare before.json`.
+순서: 1) `check_graph_neo4j.py --save before.json` → 2) `sync_graph_neo4j.py --build --report plan.json`으로 비교, 승인 받기 → 3) `--apply [--prune] --confirm-host` → 4) `check_graph_neo4j.py --compare before.json`.
 
-- MERGE만 한다. 지우기(DELETE·REMOVE)는 없다.
-- 중복 ID, 다른 레이블로 쓰인 같은 ID, 끝점 없는 관계가 하나라도 있으면 쓰지 않는다.
-- 적재 뒤 `zero` 점검이 실패하면 종료 코드 5.
-- 빈 DB에 처음부터 올릴 때는 `tools/load_graph_neo4j.py --stage meta|laws|requirements`를 쓴다(DB에 노드가 있으면 중단).
+- 시작할 때 판정 옵션(`evaluator.DEFAULT_OPTIONS`)을 출력한다.
+- 중복 노드·중복 관계·끝점 없는 관계·시그니처 위반이 있으면 쓰지 않는다(종료 코드 2). 같은 키를 다른 레이블이 쓰거나 지울 것이 `--max-delete`(기본 5,000)를 넘으면 종료 코드 3.
+- 지우기는 `--prune`일 때 `--prune-labels`(기본 Requirement·Condition)만. 검수 요건은 지우지 않는다. DB에만 있는 속성은 `--drop-extra-props`일 때만 지운다.
+- 쓴 뒤 다시 비교하고 `zero` 점검을 돌린다. 실패하면 종료 코드 5.
 
 ## 4. 검수 패킷
 
@@ -129,7 +131,7 @@ python tools/graphrag/verdict_hash.py out.json --profiles 50 --gold <검수 정�
 ```
 python -m unittest tools.test_graphrag tools.test_graph_ops
 python -m unittest tests.test_api tests.test_agent tests.test_condition_evaluation tests.test_condition_extractor tests.test_g2b_normalization tests.test_normalize_support_data
-ruff check tools/graphrag tools/check_graph_neo4j.py tools/load_graph_partial.py --select F,E9
+ruff check tools/graphrag tools/check_graph_neo4j.py tools/sync_graph_neo4j.py tools/test_sync_graph.py --select F,E9
 ```
 
 - CI(`.github/workflows/tools-tests.yml`)는 PR과 main 푸시마다 위 시험과 ruff를 돌린다. DB·비밀값은 쓰지 않는다.

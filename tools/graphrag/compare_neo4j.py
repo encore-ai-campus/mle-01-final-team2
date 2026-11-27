@@ -199,7 +199,7 @@ def definition_paths(nodes, edges, session):
 
 # ----------------------------------------------------------------------------- 실행
 def main() -> int:
-    import load_graph_neo4j as L
+    import sync_graph_neo4j as L
     from neo4j import READ_ACCESS
 
     hier, notice_region, nodes, edges = load_inputs()
