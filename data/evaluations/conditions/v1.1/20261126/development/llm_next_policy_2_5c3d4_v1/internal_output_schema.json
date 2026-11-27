@@ -1,0 +1,1476 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": [
+        "condition-next-extraction-policy-v1"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "CONDITIONS_FOUND",
+        "NO_CONDITIONS_FOUND",
+        "UNABLE_TO_EXTRACT"
+      ]
+    },
+    "source_state": {
+      "type": "string",
+      "enum": [
+        "CONDITIONS_PRESENT",
+        "NOT_STATED",
+        "INTERPRETATION_UNCLEAR",
+        "EXPLICIT_NO_RESTRICTION",
+        "REVIEW_REQUIRED"
+      ]
+    },
+    "conditions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/condition"
+      }
+    },
+    "unresolved_conditions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/unresolved"
+      }
+    },
+    "logic_groups": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/group"
+      }
+    },
+    "logic_sections": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/section"
+      }
+    },
+    "exceptions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/exception"
+      }
+    },
+    "unresolved_relations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/nodeRef"
+            }
+          },
+          "reason": {
+            "type": "string"
+          },
+          "evidence_quotes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "members",
+          "reason",
+          "evidence_quotes"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "logic_completeness": {
+      "type": "string",
+      "enum": [
+        "PROPOSAL_ONLY",
+        "INCOMPLETE",
+        "UNRESOLVED"
+      ]
+    },
+    "decision_eligible": {
+      "type": "boolean",
+      "enum": [
+        false
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "status",
+    "source_state",
+    "conditions",
+    "unresolved_conditions",
+    "logic_groups",
+    "logic_sections",
+    "exceptions",
+    "unresolved_relations",
+    "logic_completeness",
+    "decision_eligible"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "bound": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "number"
+        },
+        "inclusive": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "value",
+        "inclusive"
+      ],
+      "additionalProperties": false
+    },
+    "range": {
+      "type": "object",
+      "properties": {
+        "lower": {
+          "$ref": "#/$defs/bound"
+        },
+        "upper": {
+          "$ref": "#/$defs/bound"
+        }
+      },
+      "required": [
+        "lower",
+        "upper"
+      ],
+      "additionalProperties": false
+    },
+    "temporal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "anchor_event",
+        "fixed_reference_date",
+        "offset_value",
+        "offset_unit",
+        "operator",
+        "inclusive",
+        "applies_to",
+        "anchor_date_known"
+      ],
+      "properties": {
+        "anchor_event": {
+          "type": "string",
+          "enum": [
+            "APPLICATION",
+            "MOVE_IN_APPLICATION",
+            "MOVE_IN_START",
+            "CONTRACT_SIGNING",
+            "SELECTION",
+            "FIXED_DATE",
+            "UNKNOWN"
+          ]
+        },
+        "fixed_reference_date": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "offset_value": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "offset_unit": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "DAY",
+            "MONTH",
+            "YEAR",
+            null
+          ]
+        },
+        "operator": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "EQ",
+            "GT",
+            "GTE",
+            "LT",
+            "LTE",
+            null
+          ]
+        },
+        "inclusive": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "applies_to": {
+          "type": "string"
+        },
+        "anchor_date_known": {
+          "type": "boolean"
+        }
+      }
+    },
+    "externalReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reference_type",
+        "reference_text",
+        "collection_status",
+        "details_confirmed"
+      ],
+      "properties": {
+        "reference_type": {
+          "type": "string",
+          "enum": [
+            "LAW",
+            "DETAIL_NOTICE",
+            "OTHER"
+          ]
+        },
+        "reference_text": {
+          "type": "string"
+        },
+        "collection_status": {
+          "type": "string",
+          "enum": [
+            "COLLECTED",
+            "NOT_COLLECTED",
+            "UNKNOWN"
+          ]
+        },
+        "details_confirmed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "condition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "condition_type",
+        "category_id",
+        "field",
+        "operator",
+        "value",
+        "value_type",
+        "unit",
+        "evidence_quotes",
+        "source_field",
+        "applicability_scope",
+        "evaluation_phase",
+        "fulfillment_phase",
+        "requirement_kind",
+        "reference_date_type",
+        "reference_date",
+        "temporal_constraint",
+        "uncertainty",
+        "external_reference"
+      ],
+      "properties": {
+        "condition_type": {
+          "type": "string",
+          "enum": [
+            "ELIGIBILITY",
+            "EXCLUSION",
+            "PREFERENCE",
+            "UNCLASSIFIED"
+          ]
+        },
+        "category_id": {
+          "type": "string",
+          "enum": [
+            "APPLICANT_ADDRESS",
+            "APPLICANT_AGE",
+            "APPLICANT_TYPE",
+            "BUSINESS_AGE",
+            "BUSINESS_LOCATION",
+            "BUSINESS_REGISTRATION",
+            "BUSINESS_REGISTRATION_STATUS",
+            "BUSINESS_TYPE",
+            "CERTIFICATION",
+            "DOCUMENT_SUBMISSION",
+            "DUPLICATE_OCCUPANCY",
+            "EMPLOYEE_COUNT",
+            "FINANCIAL_CAPACITY",
+            "INDUSTRY",
+            "INDUSTRY_REVENUE_SHARE",
+            "LICENSE_STATUS",
+            "PROGRAM_PARTICIPATION",
+            "QUALITATIVE_QUALIFICATION",
+            "REPRESENTATIVE_AGE",
+            "REVENUE",
+            "REVENUE_FINANCIAL",
+            "UNCLASSIFIED"
+          ]
+        },
+        "field": {
+          "type": "string",
+          "enum": [
+            "APPLICANT_ADDRESS",
+            "APPLICANT_AGE",
+            "APPLICANT_TYPE",
+            "BUSINESS_AGE",
+            "BUSINESS_LOCATION",
+            "BUSINESS_REGISTRATION",
+            "BUSINESS_REGISTRATION_STATUS",
+            "BUSINESS_TYPE",
+            "CERTIFICATION",
+            "DOCUMENT_SUBMISSION",
+            "DUPLICATE_OCCUPANCY",
+            "EMPLOYEE_COUNT",
+            "FINANCIAL_CAPACITY",
+            "INDUSTRY",
+            "INDUSTRY_REVENUE_SHARE",
+            "LICENSE_STATUS",
+            "PROGRAM_PARTICIPATION",
+            "QUALITATIVE_QUALIFICATION",
+            "REPRESENTATIVE_AGE",
+            "REVENUE",
+            "REVENUE_FINANCIAL",
+            "UNCLASSIFIED"
+          ]
+        },
+        "operator": {
+          "type": "string",
+          "enum": [
+            "EQ",
+            "NEQ",
+            "GT",
+            "GTE",
+            "LT",
+            "LTE",
+            "IN",
+            "NOT_IN",
+            "BETWEEN",
+            "EXISTS",
+            "NOT_EXISTS"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "boolean"
+                  }
+                ]
+              }
+            },
+            {
+              "$ref": "#/$defs/range"
+            }
+          ]
+        },
+        "value_type": {
+          "type": "string",
+          "enum": [
+            "STRING",
+            "NUMBER",
+            "DATE",
+            "BOOLEAN",
+            "ARRAY",
+            "RANGE",
+            "NULL",
+            "UNKNOWN"
+          ]
+        },
+        "unit": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "YEAR",
+            "MONTH",
+            "DAY",
+            "PERCENT",
+            "PERSON",
+            "KRW",
+            "USD",
+            null
+          ]
+        },
+        "evidence_quotes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "source_field": {
+          "type": "string"
+        },
+        "applicability_scope": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evaluation_phase": {
+          "type": "string",
+          "enum": [
+            "APPLICATION",
+            "SELECTION",
+            "POST_SELECTION",
+            "POST_MOVE_IN",
+            "UNKNOWN"
+          ]
+        },
+        "fulfillment_phase": {
+          "type": "string",
+          "enum": [
+            "APPLICATION",
+            "SELECTION",
+            "POST_SELECTION",
+            "POST_MOVE_IN",
+            "UNKNOWN"
+          ]
+        },
+        "requirement_kind": {
+          "type": "string",
+          "enum": [
+            "CURRENT_STATE",
+            "FUTURE_FEASIBILITY",
+            "FULFILLMENT_OBLIGATION",
+            "UNKNOWN"
+          ]
+        },
+        "reference_date_type": {
+          "type": "string",
+          "enum": [
+            "PUBLICATION_DATE",
+            "APPLICATION_START",
+            "APPLICATION_END",
+            "SPECIFIC_DATE",
+            "RULE",
+            "UNKNOWN"
+          ]
+        },
+        "reference_date": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "temporal_constraint": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/temporal"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "uncertainty": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "is_uncertain",
+            "reason"
+          ],
+          "properties": {
+            "is_uncertain": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "external_reference": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/externalReference"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "field": {
+                "const": "BUSINESS_TYPE"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "category_id": {
+                "const": "BUSINESS_TYPE"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "field": {
+                "const": "APPLICANT_TYPE"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "category_id": {
+                "const": "APPLICANT_TYPE"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "field": {
+                "const": "APPLICANT_ADDRESS"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "category_id": {
+                "const": "APPLICANT_ADDRESS"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "field": {
+                "const": "BUSINESS_LOCATION"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "category_id": {
+                "const": "BUSINESS_LOCATION"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "field": {
+                "const": "BUSINESS_AGE"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "category_id": {
+                "const": "BUSINESS_AGE"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "field": {
+                "const": "REPRESENTATIVE_AGE"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "category_id": {
+                "const": "REPRESENTATIVE_AGE"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "field": {
+                "const": "APPLICANT_AGE"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "category_id": {
+                "const": "APPLICANT_AGE"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "field": {
+                "const": "INDUSTRY"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "category_id": {
+                "const": "INDUSTRY"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "field": {
+                "const": "REVENUE"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "category_id": {
+                "const": "REVENUE"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "field": {
+                "const": "REVENUE_FINANCIAL"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "category_id": {
+                "const": "REVENUE_FINANCIAL"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "field": {
+                "const": "INDUSTRY_REVENUE_SHARE"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "category_id": {
+                "const": "INDUSTRY_REVENUE_SHARE"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "field": {
+                "const": "EMPLOYEE_COUNT"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "category_id": {
+                "const": "EMPLOYEE_COUNT"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "field": {
+                "const": "CERTIFICATION"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "category_id": {
+                "const": "CERTIFICATION"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "field": {
+                "const": "LICENSE_STATUS"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "category_id": {
+                "const": "LICENSE_STATUS"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "field": {
+                "const": "BUSINESS_REGISTRATION"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "category_id": {
+                "const": "BUSINESS_REGISTRATION"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "field": {
+                "const": "BUSINESS_REGISTRATION_STATUS"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "category_id": {
+                "const": "BUSINESS_REGISTRATION_STATUS"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "field": {
+                "const": "PROGRAM_PARTICIPATION"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "category_id": {
+                "const": "PROGRAM_PARTICIPATION"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "field": {
+                "const": "DOCUMENT_SUBMISSION"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "category_id": {
+                "const": "DOCUMENT_SUBMISSION"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "field": {
+                "const": "FINANCIAL_CAPACITY"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "category_id": {
+                "const": "FINANCIAL_CAPACITY"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "field": {
+                "const": "DUPLICATE_OCCUPANCY"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "category_id": {
+                "const": "DUPLICATE_OCCUPANCY"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "field": {
+                "const": "QUALITATIVE_QUALIFICATION"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "category_id": {
+                "const": "QUALITATIVE_QUALIFICATION"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "field": {
+                "const": "UNCLASSIFIED"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "category_id": {
+                "const": "UNCLASSIFIED"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operator": {
+                "const": "BETWEEN"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value_type": {
+                "const": "RANGE"
+              },
+              "value": {
+                "$ref": "#/$defs/range"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operator": {
+                "const": "IN"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value_type": {
+                "const": "ARRAY"
+              },
+              "value": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operator": {
+                "const": "NOT_IN"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value_type": {
+                "const": "ARRAY"
+              },
+              "value": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operator": {
+                "const": "EXISTS"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value_type": {
+                "const": "UNKNOWN"
+              },
+              "value": {
+                "type": "null"
+              },
+              "unit": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operator": {
+                "const": "NOT_EXISTS"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value_type": {
+                "const": "UNKNOWN"
+              },
+              "value": {
+                "type": "null"
+              },
+              "unit": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "value_type": {
+                "const": "STRING"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "value_type": {
+                "const": "NUMBER"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "value_type": {
+                "const": "BOOLEAN"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "value_type": {
+                "const": "DATE"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "string",
+                "format": "date"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "value_type": {
+                "const": "ARRAY"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "value_type": {
+                "const": "RANGE"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "$ref": "#/$defs/range"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "value_type": {
+                "const": "NULL"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "value_type": {
+                "const": "UNKNOWN"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "nodeRef": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "node_type": {
+              "type": "string",
+              "enum": [
+                "CONDITION_REF"
+              ]
+            },
+            "condition_index": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "node_type",
+            "condition_index"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "node_type": {
+              "type": "string",
+              "enum": [
+                "GROUP_REF"
+              ]
+            },
+            "group_id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "node_type",
+            "group_id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "node_type": {
+              "type": "string",
+              "enum": [
+                "UNRESOLVED_REF"
+              ]
+            },
+            "unresolved_index": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "node_type",
+            "unresolved_index"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "group": {
+      "type": "object",
+      "properties": {
+        "group_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "operator": {
+          "type": "string",
+          "enum": [
+            "AND",
+            "OR",
+            "NOT",
+            "UNRESOLVED"
+          ],
+          "minLength": 1
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nodeRef"
+          }
+        },
+        "evidence_quote": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "group_id",
+        "operator",
+        "children",
+        "evidence_quote"
+      ],
+      "additionalProperties": false
+    },
+    "section": {
+      "type": "object",
+      "properties": {
+        "section_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "section_type": {
+          "type": "string",
+          "enum": [
+            "ELIGIBILITY",
+            "EXCLUSION",
+            "PREFERENCE",
+            "POST_SELECTION_OBLIGATION"
+          ],
+          "minLength": 1
+        },
+        "evaluation_phase": {
+          "type": "string",
+          "enum": [
+            "APPLICATION",
+            "SELECTION",
+            "POST_SELECTION",
+            "POST_MOVE_IN",
+            "UNKNOWN"
+          ],
+          "minLength": 1
+        },
+        "fulfillment_phase": {
+          "type": "string",
+          "enum": [
+            "APPLICATION",
+            "SELECTION",
+            "POST_SELECTION",
+            "POST_MOVE_IN",
+            "UNKNOWN"
+          ],
+          "minLength": 1
+        },
+        "root_ref": {
+          "$ref": "#/$defs/nodeRef"
+        }
+      },
+      "required": [
+        "section_id",
+        "section_type",
+        "evaluation_phase",
+        "fulfillment_phase",
+        "root_ref"
+      ],
+      "additionalProperties": false
+    },
+    "exception": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "effect",
+        "effect_target",
+        "precondition",
+        "replacement",
+        "effect_confirmed",
+        "application_mode",
+        "evidence_quote",
+        "target_refs"
+      ],
+      "properties": {
+        "effect": {
+          "type": "string",
+          "enum": [
+            "WAIVE_REQUIREMENT",
+            "EXCLUDE_FROM_SCOPE",
+            "REPLACE_DEADLINE",
+            "UNKNOWN"
+          ],
+          "minLength": 1
+        },
+        "effect_target": {
+          "type": "string",
+          "minLength": 1
+        },
+        "precondition": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "replacement": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "boolean"
+                  }
+                ]
+              }
+            },
+            {
+              "$ref": "#/$defs/range"
+            }
+          ]
+        },
+        "effect_confirmed": {
+          "type": "boolean"
+        },
+        "application_mode": {
+          "type": "string",
+          "enum": [
+            "AST_ONLY",
+            "EFFECT_ONLY",
+            "UNKNOWN"
+          ],
+          "minLength": 1
+        },
+        "evidence_quote": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nodeRef"
+          },
+          "minItems": 1
+        }
+      }
+    },
+    "unresolved": {
+      "type": "object",
+      "properties": {
+        "raw_condition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_quotes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "proposed_field": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "entity_scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "condition_type": {
+          "type": "string",
+          "enum": [
+            "ELIGIBILITY",
+            "EXCLUSION",
+            "PREFERENCE",
+            "UNCLASSIFIED"
+          ],
+          "minLength": 1
+        },
+        "operator": {
+          "type": "null"
+        },
+        "reason_code": {
+          "type": "string",
+          "enum": [
+            "UNSUPPORTED_ATTRIBUTE",
+            "AMBIGUOUS_SEMANTICS",
+            "OPERATOR_UNCLEAR",
+            "VALUE_UNCLEAR",
+            "EXPLICIT_NO_RESTRICTION",
+            "CONTEXT_REQUIRED",
+            "NOT_STATED"
+          ],
+          "minLength": 1
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "review_status": {
+          "type": "string",
+          "enum": [
+            "NEEDS_REVIEW"
+          ],
+          "minLength": 1
+        },
+        "decision_eligible": {
+          "type": "boolean",
+          "enum": [
+            false
+          ]
+        }
+      },
+      "required": [
+        "raw_condition",
+        "evidence_quotes",
+        "proposed_field",
+        "entity_scope",
+        "condition_type",
+        "operator",
+        "reason_code",
+        "reason",
+        "review_status",
+        "decision_eligible"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:mle-team2:condition-next-policy:v1:internal"
+}

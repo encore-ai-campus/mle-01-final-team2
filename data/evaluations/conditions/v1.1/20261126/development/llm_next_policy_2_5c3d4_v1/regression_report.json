@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "new_policy_test_count": 30,
+  "related_regression_test_count": 163,
+  "mock_sdk_modes_verified": [
+    "json_schema strict",
+    "json_object"
+  ],
+  "network_transport_blocked": true,
+  "sdk_automatic_retries": 0,
+  "legacy_intermediate_and_final_condition_validation_connected": true,
+  "source_and_payload_mutation": false,
+  "gold_records_used_in_prompt_or_fixtures": false,
+  "model_generation_quality_evaluated": false,
+  "actual_api_call_count": 0,
+  "tests_module": "tests/test_condition_llm_next_policy.py",
+  "limitations": [
+    "Mock transport validates serialization and local checks, not server schema acceptance.",
+    "Synthetic evidence and graph checks do not prove model semantic accuracy.",
+    "Unresolved descendant groups are quarantined as a whole; source graphs and refs retained."
+  ]
+}

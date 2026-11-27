@@ -1,0 +1,43 @@
+{
+  "status": "PASS",
+  "run_id": "llm_pilot_2_5c3d5a_p4",
+  "source_run_id": "llm_pilot_2_5c3_r2_p12",
+  "notice_ids": [
+    "BIZINFO:PBLN_000000000117168",
+    "BIZINFO:PBLN_000000000118182",
+    "BIZINFO:PBLN_000000000119490",
+    "BIZINFO:PBLN_000000000126490",
+    "BIZINFO:PBLN_000000000128028",
+    "KSTARTUP:176001",
+    "KSTARTUP:176813",
+    "KSTARTUP:177447",
+    "KSTARTUP:178507",
+    "KSTARTUP:179386"
+  ],
+  "counts": {
+    "notices": 10,
+    "gold_conditions": 62,
+    "gold_logic_groups": 24,
+    "gold_logic_relations": 71
+  },
+  "sdk": {
+    "openai": "2.54.0",
+    "httpx": "0.28.1",
+    "jsonschema": "4.26.0"
+  },
+  "response_format_serialized": {
+    "type": "json_schema",
+    "json_schema_name": "condition_next_policy_v1",
+    "strict": true,
+    "schema_root_type": "object"
+  },
+  "response_format_parameter": true,
+  "provider_schema_enum_values": 177,
+  "provider_schema_unsupported_constraints": [],
+  "internal_schema_uses_additional_local_constraints": true,
+  "server_schema_acceptance": "NOT_TESTED; first live request is compatibility gate",
+  "client_timeout_seconds": 180,
+  "sdk_max_retries": 0,
+  "api_calls": 0,
+  "fingerprint_sha256": "c0a91d8892494af09c01339724710ed27b0f04e33fcddad00826b0c1c0adc5d6"
+}

@@ -5,3 +5,25 @@ data/goldsets/conditions/v1.1/** -text
 data/goldsets/conditions/v1/20261126_balanced/** -text
 schemas/conditions/*v1.1.schema.json -text
 data/normalized/v1/20261125_g2b/notices.jsonl filter=lfs diff=lfs merge=lfs -text
+
+# Fingerprinted condition-pipeline sources and draft contract: preserve the
+# checked-in bytes so checkout settings cannot change experiment fingerprints.
+tools/condition_llm_next_policy.py -text
+tools/condition_logic_evaluation_adapter.py -text
+tools/condition_safe_normalization_experiment.py -text
+tools/diagnose_condition_llm_p12.py -text
+tools/evaluate_condition_pipeline.py -text
+tools/evaluate_condition_pipeline_v11.py -text
+tools/extract_condition_candidates_llm.py -text
+tools/replay_condition_llm_attribute_normalization.py -text
+tools/run_condition_llm_openai_pilot.py -text
+tools/run_condition_llm_openai_pilot_r2.py -text
+tools/run_condition_llm_openai_pilot_r2_norm_v2.py -text
+tools/run_condition_llm_openai_pilot_r2_norm_v2_p8.py -text
+tools/run_condition_llm_openai_pilot_r2_norm_v2_recovery.py -text
+tools/run_condition_llm_p10.py -text
+tools/run_condition_llm_p12.py -text
+tools/run_condition_llm_p4_pilot.py -text
+tools/run_condition_normalization_experiments.py -text
+tools/run_logic_adapter_experiments.py -text
+schemas/conditions/contracts/draft-v1/** -text

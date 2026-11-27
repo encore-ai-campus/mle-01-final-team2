@@ -189,23 +189,13 @@ docs/                          기존 설계 문서 + handover 3종
 - P4 `--preflight`: PASS, 고정 10 IDs와 62/24/71 개수 확인, API 호출 0.
 - P4 `--offline-self-test`: PASS, 임시 폴더에서 mock 요청 10회, 기존 P12 파일 보존, API 실제 호출 0.
 - 안정된 LLM/정규화/논리 모듈 subset: 154 tests PASS.
-- 전체 `unittest discover -s tests`: 362 tests, 8 failures, 8 errors, 37 skipped. 데이터 오류는 `data/normalized/v1/20261125_g2b/notices.jsonl` 누락에 따른 `test_condition_gold_v11`, `test_condition_inputs`, `test_condition_schema` 오류다. 나머지 관련 장애는 P10/P12/P8의 이전 fingerprint·blocked state·예산 fixture 불일치, P12 테스트의 응답 수 기대 9 대 현재 10, P4 preflight 테스트가 이미 존재하는 P4 output 경로를 없다고 가정하는 항목이다. 테스트 삭제/skip 변경이나 데이터 fixture 생성을 하지 않았다.
+- G2B `notices.jsonl`을 포함한 전체 `unittest discover -s tests`: 369 tests, 11 failures, 2 errors, 37 skipped. 파일 누락 오류는 해소됐지만 고정 입력 hash/원문과 snapshot 내용 차이로 `test_condition_inputs` 3개가 실패한다. 나머지는 P10 fingerprint/CLI 2개, P12 budget·claim·10응답 집계·CLI 4개, P4 preflight의 기존 output 경로 가정 1개, P8 blocked fixture 1개 등이다. P10/P12 CLI 2개는 오류다. 테스트를 삭제하거나 건너뛰고 데이터를 임의 수정하지 않았다.
 - 관련 안정 모듈 subset: 154 tests PASS. P4 전체 모의 CLI self-test PASS; 실제 API 호출 0.
 - 기존 P12와 N1 저장 응답/예측에서 평가 helper를 in-memory로 재실행하여 10개 notice·62개 gold 기준을 재현했다: 규칙 v1 6/20/56 F1 13.636%; 규칙 E 6/17/56 F1 14.118%; P12 검증 전 1/57/61 F1 1.667%; P12 검증 후 1/31/61 F1 2.128%; P12+N1 3/29/59 F1 6.383%. 어떤 평가 파일도 덮어쓰지 않았다.
 - 테스트 전 백업 archive와 비교해 P12/P4 manifest 및 요청 장부 바이트 hash가 동일함을 확인했다. P4 3/10 사용·7회 잔여, 부모 P12 13/13 상태는 그대로다.
 
-현재 브랜치는 `handover/condition-extraction`; 아직 커밋하지 않았다. `.gitattributes`는 고정 data 경로에 `-text`를 지정하지만 LFS filter는 설정하지 않았고, `git lfs ls-files` 결과도 비어 있었다. `.env`, `.venv`, 첨부/원문 등 `.gitignore` 대상은 계속 제외한다. `data/normalized/v1/20261125_g2b/`는 미추적 입력/파생 데이터이고 P4 직접 의존성으로 확인되지 않았으나 소유권과 재현성 확인 전 삭제하지 않는다.
+현재 브랜치는 `handover/condition-extraction`이다. 문서와 normalized G2B snapshot/LFS 및 Linux 경로 수정은 이미 branch history에 있다. 후속 공유 범위에는 P4/P12 실행 코드와 import 의존성, 관련 테스트, draft contract, P12/P4 manifest가 직접 hash로 참조하는 246개 파일, P12/N1/logic adapter 최종 평가 산출물, P4 실제 응답 3건이 포함된다. 파일 본문 스캔에서 API key/Bearer 패턴은 발견되지 않았다. `.env`, `.venv`, 첨부파일과 로컬 raw attachment 디렉터리는 제외한다.
 
-**staging 권장 경로(소유자와 내용 검토 후 개별 지정):** P4 묶음은 `tools/run_condition_llm_p4_pilot.py`, `tools/condition_llm_next_policy.py`, `tools/condition_logic_evaluation_adapter.py`, `tools/condition_safe_normalization_experiment.py`, `tools/extract_condition_candidates_llm.py`, `tools/evaluate_condition_pipeline_v11.py`, `tools/evaluate_condition_pipeline.py`, `tools/run_condition_llm_openai_pilot.py`, `schemas/conditions/contracts/draft-v1/` 전체, 관련 P4/정책/adapter/정규화 테스트와 세 handover 문서다. P12/P10/P8 lineage 재현에 필요한 실행기는 `tools/run_condition_llm_p12.py`, `tools/run_condition_llm_p10.py`, `tools/run_condition_llm_openai_pilot_r2_norm_v2.py`, `_p8.py`, `_recovery.py` 및 직접 import되는 공통 모듈/테스트를 묶음으로 검토한다. fingerprint hash가 고정한 파일을 일부만 선택해 stage하면 재현되지 않을 수 있다. raw 응답, ledger, untracked eval subtree, normalized snapshot, 기존 사용자/팀 변경(goldset pilot profiles, labeler, 기존 P12 manifest/ledger 등)은 먼저 담당자·데이터 공유 정책을 확인하고 별도 전달 또는 artifact 보관을 선택한다. `git add .`는 사용하지 않는다.
+`.gitattributes`는 기존 평가 JSONL/JSON의 `-text` 규칙을 유지하고, 이 실행 계보에서 fingerprint를 고정한 Python source 및 draft contract에도 범위를 좁혀 `-text`를 적용했다. 이는 현재 바이트를 바꾸지 않고 다른 OS의 checkout이 해시를 바꾸지 않도록 한다. `data/normalized/v1/20261125_g2b/notices.jsonl`은 LFS 대상으로 branch에 포함됐다. 기존 G2B `chunks.jsonl`/정규화 보고서와 중복 initial-run 디렉터리는 이번 공유 묶음에서 제외하고 로컬 보존한다. 사용자/팀의 goldset pilot profile, labeler, 기존 R2 manifest/ledger 수정은 별도 검토 전 커밋하지 않는다.
 
-문서만 우선 공유하기로 리뷰에서 결정한 경우의 명령 예시(아직 실행하지 않음):
-
-```powershell
-git add -- docs/CONDITION_EXTRACTION_HANDOVER.md docs/CONDITION_EXTRACTION_TROUBLESHOOTING.md docs/CONDITION_EXTRACTION_NEXT_TODO.md
-git diff --cached --check
-git diff --cached --stat
-git commit -m "docs(condition): add extraction pipeline handover"
-git push -u origin handover/condition-extraction
-```
-
-코드·계약·실험 산출물은 위 문서 커밋에 무조건 섞지 않는다. 재현에 필요한 코드 묶음과 data 공유 정책을 검토한 뒤 별도 범위로 stage한다. 아직 commit/push는 없으며 강제 push를 하지 않는다.
+이번 후속 공유는 문서만이 아니라 실행 가능한 P4/P12 계보와 재현 산출물을 명시적 파일 목록으로 추가한다. 코드 정리로 fingerprint를 다시 쓰지 않고 현재 계보 해시를 보존한다. raw responses와 ledger는 고정 실험 산출물이며 P4 3/10, P12 13/13 상태를 그대로 공유한다. 저장소 전체 `git add .`는 사용하지 않는다. 추가 커밋에는 코드/테스트/계약/필수 산출물만 포함하고 별도 사용자 변경은 그대로 unstaged로 남긴다.

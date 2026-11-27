@@ -1,0 +1,12 @@
+[
+  "한글 field 정규화",
+  "field/category_id 의미 정합성",
+  "hiring_target",
+  "team_member_age",
+  "residence/residence_proof",
+  "military_service_proof",
+  "BETWEEN minimum/maximum",
+  "UNKNOWN operator",
+  "프롬프트/중간 스키마 정합성",
+  "속성 카탈로그 확장 및 단일화"
+]

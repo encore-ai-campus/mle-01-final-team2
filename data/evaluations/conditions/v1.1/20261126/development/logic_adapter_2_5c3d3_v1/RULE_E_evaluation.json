@@ -1,0 +1,2931 @@
+{
+  "policy_version": "1.1.0",
+  "common": {
+    "micro": {
+      "tp": 6,
+      "fp": 17,
+      "fn": 56,
+      "precision": 0.2608695652173913,
+      "recall": 0.0967741935483871,
+      "f1": 0.1411764705882353,
+      "precision_status": "DEFINED",
+      "recall_status": "DEFINED"
+    },
+    "macro_by_notice": {
+      "precision": 0.23095238095238096,
+      "recall": 0.10666666666666666,
+      "f1": 0.12532467532467534
+    },
+    "by_source": {
+      "BIZINFO": {
+        "tp": 1,
+        "fp": 2,
+        "fn": 34,
+        "precision": 0.3333333333333333,
+        "recall": 0.02857142857142857,
+        "f1": 0.05263157894736842,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED"
+      },
+      "KSTARTUP": {
+        "tp": 5,
+        "fp": 15,
+        "fn": 22,
+        "precision": 0.25,
+        "recall": 0.18518518518518517,
+        "f1": 0.2127659574468085,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED"
+      }
+    },
+    "by_condition_type": {
+      "ELIGIBILITY": {
+        "tp": 6,
+        "fp": 11,
+        "fn": 50,
+        "precision": 0.35294117647058826,
+        "recall": 0.10714285714285714,
+        "f1": 0.1643835616438356,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED"
+      },
+      "EXCLUSION": {
+        "tp": 0,
+        "fp": 4,
+        "fn": 3,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED"
+      },
+      "PREFERENCE": {
+        "tp": 0,
+        "fp": 2,
+        "fn": 3,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED"
+      }
+    },
+    "by_field": {
+      "APPLICANT_ADDRESS": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      },
+      "APPLICANT_AGE": {
+        "tp": 0,
+        "fp": 1,
+        "fn": 2,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED"
+      },
+      "BUSINESS_AGE": {
+        "tp": 2,
+        "fp": 2,
+        "fn": 2,
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED"
+      },
+      "BUSINESS_LOCATION": {
+        "tp": 0,
+        "fp": 1,
+        "fn": 6,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED"
+      },
+      "BUSINESS_REGISTRATION": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      },
+      "BUSINESS_REGISTRATION_COMPLETED": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      },
+      "BUSINESS_REGISTRATION_STATUS": {
+        "tp": 0,
+        "fp": 1,
+        "fn": 1,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED"
+      },
+      "BUSINESS_TECHNOLOGY_SCOPE": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      },
+      "BUSINESS_TYPE": {
+        "tp": 4,
+        "fp": 3,
+        "fn": 13,
+        "precision": 0.5714285714285714,
+        "recall": 0.23529411764705882,
+        "f1": 0.3333333333333333,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED"
+      },
+      "COMPLIANCE_PLAN_CONTENT": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      },
+      "COMPLIANCE_STATUS": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      },
+      "DOCUMENT_SUBMISSION": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      },
+      "DUPLICATE_OCCUPANCY": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      },
+      "EMPLOYEE_COUNT": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      },
+      "FOR_PROFIT_STATUS": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      },
+      "HIRE_STATUS": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      },
+      "INDUSTRY": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      },
+      "INDUSTRY_REVENUE_SHARE": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      },
+      "IP_RIGHT_COUNTRY": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      },
+      "IP_RIGHT_OWNERSHIP": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      },
+      "IP_RIGHT_TYPE": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      },
+      "IP_RIGHT_VALIDITY": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      },
+      "LICENSE_STATUS": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      },
+      "None": {
+        "tp": 0,
+        "fp": 6,
+        "fn": 1,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED"
+      },
+      "OPTIONAL_DUTY_COUNT": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      },
+      "REPRESENTATIVE_AGE": {
+        "tp": 0,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.0,
+        "recall": null,
+        "f1": 0.0,
+        "precision_status": "DEFINED",
+        "recall_status": "NO_GOLD_CONDITIONS"
+      },
+      "RESIDENCE": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      },
+      "RESTRICTED_GOV_INCUBATOR_EXPERIENCE_COUNT": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      },
+      "REVENUE": {
+        "tp": 0,
+        "fp": 1,
+        "fn": 1,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED"
+      },
+      "REVENUE_FINANCIAL": {
+        "tp": 0,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.0,
+        "recall": null,
+        "f1": 0.0,
+        "precision_status": "DEFINED",
+        "recall_status": "NO_GOLD_CONDITIONS"
+      },
+      "SOGANG_ACADEMIC_COOPERATION": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      },
+      "SOGANG_TECH_TRANSFER_POSSIBILITY": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      },
+      "SUPPORTING_COMPANY_STATUS": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      }
+    },
+    "partial_count": 6,
+    "notice_count": 10,
+    "notices_with_misses": 10,
+    "notices_with_false_positives": 7
+  },
+  "extended": {
+    "applicability_scope": {
+      "target": 62,
+      "unsupported": 12,
+      "no_aligned_prediction": 50
+    },
+    "evaluation_phase": {
+      "target": 58,
+      "unsupported": 11,
+      "no_aligned_prediction": 47,
+      "unknown": 4
+    },
+    "fulfillment_phase": {
+      "target": 58,
+      "unsupported": 11,
+      "no_aligned_prediction": 47,
+      "unknown": 4
+    },
+    "requirement_kind": {
+      "target": 57,
+      "unsupported": 11,
+      "no_aligned_prediction": 46,
+      "unknown": 5
+    },
+    "reference_date_type": {
+      "target": 7,
+      "unknown": 55,
+      "no_aligned_prediction": 5,
+      "unknown_prediction": 2
+    },
+    "reference_date": {
+      "unknown": 60,
+      "target": 2,
+      "no_aligned_prediction": 2
+    },
+    "temporal_constraint.anchor_event": {
+      "target": 8,
+      "unknown": 54,
+      "no_aligned_prediction": 6,
+      "unsupported": 2
+    },
+    "temporal_constraint.fixed_reference_date": {
+      "target": 3,
+      "unknown": 59,
+      "no_aligned_prediction": 3
+    },
+    "temporal_constraint.offset_value": {
+      "unknown": 57,
+      "target": 5,
+      "unsupported": 3,
+      "no_aligned_prediction": 2
+    },
+    "temporal_constraint.offset_unit": {
+      "unknown": 57,
+      "target": 5,
+      "unsupported": 3,
+      "no_aligned_prediction": 2
+    },
+    "temporal_constraint.operator": {
+      "target": 8,
+      "unknown": 54,
+      "no_aligned_prediction": 5,
+      "unsupported": 3
+    },
+    "temporal_constraint.inclusive": {
+      "target": 10,
+      "unknown": 52,
+      "no_aligned_prediction": 6,
+      "unsupported": 4
+    },
+    "evidence_references": {
+      "target": 62,
+      "unsupported": 12,
+      "no_aligned_prediction": 50
+    },
+    "external_reference": {
+      "target": 14,
+      "unsupported": 2,
+      "unknown": 48,
+      "no_aligned_prediction": 12
+    }
+  },
+  "safety": {},
+  "notices": [
+    {
+      "notice_id": "BIZINFO:PBLN_000000000117168",
+      "source_system": "BIZINFO",
+      "common": {
+        "tp": 1,
+        "fp": 1,
+        "fn": 4,
+        "precision": 0.5,
+        "recall": 0.2,
+        "f1": 0.28571428571428575,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED"
+      },
+      "partial_count": 0,
+      "pairs": [
+        {
+          "status": "EXACT_MATCH",
+          "gold_id": "GOLD:BXR5LSOZJYJ4G7NPQIA7JVZP",
+          "prediction_id": "CND:HVOJVP4HNCG5ZE2VX63J5DTM",
+          "differences": [],
+          "evidence_status": "EXACT_SPAN",
+          "evidence_semantic_status": "NEEDS_HUMAN_REVIEW"
+        }
+      ],
+      "false_negative_ids": [
+        "GOLD:BFBSIRQNKPL3VNUSVXQG23GL",
+        "GOLD:CF2M4RF4BRNZUYQ4BVTWXL4T",
+        "GOLD:OF2NP666TGZ4IAUHRZ2IOAE3",
+        "GOLD:VNILCNYBU23H7S5J2V5O2ZZT"
+      ],
+      "false_positive_ids": [
+        "CND:CVVI7RQCLM5XNA6EO4AL3A2Q"
+      ],
+      "extended": {
+        "applicability_scope": {
+          "target": 5,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 4
+        },
+        "evaluation_phase": {
+          "target": 5,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 4
+        },
+        "fulfillment_phase": {
+          "target": 5,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 4
+        },
+        "requirement_kind": {
+          "target": 5,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 4
+        },
+        "reference_date_type": {
+          "target": 2,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 3,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 2
+        },
+        "reference_date": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 5,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.anchor_event": {
+          "target": 2,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 3,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 2
+        },
+        "temporal_constraint.fixed_reference_date": {
+          "target": 2,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 3,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 2
+        },
+        "temporal_constraint.offset_value": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 5,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.offset_unit": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 5,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.operator": {
+          "target": 2,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 3,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 2
+        },
+        "temporal_constraint.inclusive": {
+          "target": 2,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 3,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 2
+        },
+        "evidence_references": {
+          "target": 5,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 4
+        },
+        "external_reference": {
+          "target": 1,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 4,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        }
+      },
+      "logic": {
+        "logical_relation": {
+          "tp": 0,
+          "fp": 2,
+          "fn": 5,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "operator_accuracy": {
+          "correct_groups": 0,
+          "predicted_groups": 1,
+          "gold_groups": 1,
+          "accuracy": 0.0,
+          "status": "DEFINED"
+        },
+        "logical_group_exact": {
+          "correct": 0,
+          "predicted": 1,
+          "gold": 1,
+          "precision": 0.0,
+          "recall": 0.0
+        },
+        "notice_structure_exact": false,
+        "nested_structure_exact": {
+          "gold_nested_groups": 0,
+          "predicted_nested_groups": 0,
+          "exact": true
+        },
+        "exceptions": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "NO_GOLD_CONDITIONS"
+        },
+        "preference_benefit_links": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "NO_GOLD_CONDITIONS"
+        },
+        "unresolved_handling": {
+          "correct": 0,
+          "predicted": 1,
+          "gold": 0,
+          "precision": 0.0,
+          "recall": null,
+          "overcautious_unresolved": 1
+        },
+        "logic_generation_possible": true,
+        "gold_root_count": 1,
+        "prediction_root_count": 1,
+        "section_semantics": {
+          "status": "UNSUPPORTED_V1_0",
+          "target": 1
+        },
+        "exception_effects": {
+          "target": 0,
+          "status": "UNSUPPORTED_V1_0",
+          "exact": null
+        },
+        "unresolved_relation_semantics": {
+          "status": "UNSUPPORTED_V1_0",
+          "target": 0
+        }
+      },
+      "safety_errors": []
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000118182",
+      "source_system": "BIZINFO",
+      "common": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 11,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      },
+      "partial_count": 0,
+      "pairs": [],
+      "false_negative_ids": [
+        "GOLD:5JIPAID7CCBFOU3RIOTPMKOI",
+        "GOLD:A4WSO43TKQWP7ID5FPS7U7HO",
+        "GOLD:AK6QCETSJGS72OBGPPVH3DRQ",
+        "GOLD:BP3Y47M5FUWWJYFGJHP3D2DF",
+        "GOLD:BWZKRDSI567HUS6IFN4GJ3HL",
+        "GOLD:JB3FUI37RSO2M425UG5TFERN",
+        "GOLD:MD6SUB2ZEWNHTSQA4KVOGP3K",
+        "GOLD:O53W5ZPOQ3J4GMSQ2ACMSFOJ",
+        "GOLD:UOAGRRT2R3XTU2SNSXFR242C",
+        "GOLD:VPS4NR5FIET4BQFGJ4YRBTER",
+        "GOLD:YN5LOI5WGWIRFPR5NFKMYFSG"
+      ],
+      "false_positive_ids": [],
+      "extended": {
+        "applicability_scope": {
+          "target": 11,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 11
+        },
+        "evaluation_phase": {
+          "target": 11,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 11
+        },
+        "fulfillment_phase": {
+          "target": 11,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 11
+        },
+        "requirement_kind": {
+          "target": 11,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 11
+        },
+        "reference_date_type": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 11,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "reference_date": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 11,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.anchor_event": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 11,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.fixed_reference_date": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 11,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.offset_value": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 11,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.offset_unit": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 11,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.operator": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 11,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.inclusive": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 11,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "evidence_references": {
+          "target": 11,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 11
+        },
+        "external_reference": {
+          "target": 8,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 3,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 8
+        }
+      },
+      "logic": {
+        "logical_relation": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 19,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "operator_accuracy": {
+          "correct_groups": 0,
+          "predicted_groups": 0,
+          "gold_groups": 6,
+          "accuracy": 0.0,
+          "status": "DEFINED"
+        },
+        "logical_group_exact": {
+          "correct": 0,
+          "predicted": 0,
+          "gold": 6,
+          "precision": null,
+          "recall": 0.0
+        },
+        "notice_structure_exact": false,
+        "nested_structure_exact": {
+          "gold_nested_groups": 4,
+          "predicted_nested_groups": 0,
+          "exact": false
+        },
+        "exceptions": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "preference_benefit_links": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "NO_GOLD_CONDITIONS"
+        },
+        "unresolved_handling": {
+          "correct": 0,
+          "predicted": 0,
+          "gold": 0,
+          "precision": null,
+          "recall": null,
+          "overcautious_unresolved": 0
+        },
+        "logic_generation_possible": true,
+        "gold_root_count": 1,
+        "prediction_root_count": 0,
+        "section_semantics": {
+          "status": "UNSUPPORTED_V1_0",
+          "target": 1
+        },
+        "exception_effects": {
+          "target": 1,
+          "status": "UNSUPPORTED_V1_0",
+          "exact": null
+        },
+        "unresolved_relation_semantics": {
+          "status": "UNSUPPORTED_V1_0",
+          "target": 0
+        }
+      },
+      "safety_errors": []
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000119490",
+      "source_system": "BIZINFO",
+      "common": {
+        "tp": 0,
+        "fp": 1,
+        "fn": 6,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED"
+      },
+      "partial_count": 0,
+      "pairs": [],
+      "false_negative_ids": [
+        "GOLD:4CNJ6NBNNIINQ3U2XXXGKKD6",
+        "GOLD:5ME3M7JJ3EHSU4EDM3RBR67A",
+        "GOLD:BNSAZ3SCURPTDENMJRN3CU2M",
+        "GOLD:DQ63JDCGDQXMWOWP67DEFR26",
+        "GOLD:SIL562G3O4GDPSSAVOQYZQPR",
+        "GOLD:ZOC6BM43M3Z7H3ZQD73ZTCWK"
+      ],
+      "false_positive_ids": [
+        "CND:OOK7DGIRZ364DCFZEWUJQYHO"
+      ],
+      "extended": {
+        "applicability_scope": {
+          "target": 6,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 6
+        },
+        "evaluation_phase": {
+          "target": 4,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 2,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 4
+        },
+        "fulfillment_phase": {
+          "target": 4,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 2,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 4
+        },
+        "requirement_kind": {
+          "target": 4,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 2,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 4
+        },
+        "reference_date_type": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 6,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "reference_date": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 6,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.anchor_event": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 6,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.fixed_reference_date": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 6,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.offset_value": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 6,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.offset_unit": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 6,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.operator": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 6,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.inclusive": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 6,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "evidence_references": {
+          "target": 6,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 6
+        },
+        "external_reference": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 6,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        }
+      },
+      "logic": {
+        "logical_relation": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 9,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "operator_accuracy": {
+          "correct_groups": 0,
+          "predicted_groups": 0,
+          "gold_groups": 4,
+          "accuracy": 0.0,
+          "status": "DEFINED"
+        },
+        "logical_group_exact": {
+          "correct": 0,
+          "predicted": 0,
+          "gold": 4,
+          "precision": null,
+          "recall": 0.0
+        },
+        "notice_structure_exact": false,
+        "nested_structure_exact": {
+          "gold_nested_groups": 2,
+          "predicted_nested_groups": 0,
+          "exact": false
+        },
+        "exceptions": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "NO_GOLD_CONDITIONS"
+        },
+        "preference_benefit_links": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "NO_GOLD_CONDITIONS"
+        },
+        "unresolved_handling": {
+          "correct": 0,
+          "predicted": 0,
+          "gold": 0,
+          "precision": null,
+          "recall": null,
+          "overcautious_unresolved": 0
+        },
+        "logic_generation_possible": true,
+        "gold_root_count": 1,
+        "prediction_root_count": 1,
+        "section_semantics": {
+          "status": "UNSUPPORTED_V1_0",
+          "target": 1
+        },
+        "exception_effects": {
+          "target": 0,
+          "status": "UNSUPPORTED_V1_0",
+          "exact": null
+        },
+        "unresolved_relation_semantics": {
+          "status": "UNSUPPORTED_V1_0",
+          "target": 0
+        }
+      },
+      "safety_errors": []
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000126490",
+      "source_system": "BIZINFO",
+      "common": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 6,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      },
+      "partial_count": 0,
+      "pairs": [],
+      "false_negative_ids": [
+        "GOLD:CD7GO4EYSLWUYM7X2X7Y7P5P",
+        "GOLD:G7UCL7P2QR2S644ZNOOMIA6X",
+        "GOLD:IUI7OJRR3CKO27RGPIGAQ7PL",
+        "GOLD:JBVFWBQQPQE2BAT5W3QT2FMJ",
+        "GOLD:KLBG2PGX6LPQBHAAWRGRFEWO",
+        "GOLD:VKMSFSS6WQWCAH3F3CCYWKII"
+      ],
+      "false_positive_ids": [],
+      "extended": {
+        "applicability_scope": {
+          "target": 6,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 6
+        },
+        "evaluation_phase": {
+          "target": 6,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 6
+        },
+        "fulfillment_phase": {
+          "target": 6,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 6
+        },
+        "requirement_kind": {
+          "target": 6,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 6
+        },
+        "reference_date_type": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 6,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "reference_date": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 6,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.anchor_event": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 6,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.fixed_reference_date": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 6,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.offset_value": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 6,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.offset_unit": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 6,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.operator": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 6,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.inclusive": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 6,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "evidence_references": {
+          "target": 6,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 6
+        },
+        "external_reference": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 6,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        }
+      },
+      "logic": {
+        "logical_relation": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 6,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "operator_accuracy": {
+          "correct_groups": 0,
+          "predicted_groups": 0,
+          "gold_groups": 1,
+          "accuracy": 0.0,
+          "status": "DEFINED"
+        },
+        "logical_group_exact": {
+          "correct": 0,
+          "predicted": 0,
+          "gold": 1,
+          "precision": null,
+          "recall": 0.0
+        },
+        "notice_structure_exact": false,
+        "nested_structure_exact": {
+          "gold_nested_groups": 0,
+          "predicted_nested_groups": 0,
+          "exact": true
+        },
+        "exceptions": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "NO_GOLD_CONDITIONS"
+        },
+        "preference_benefit_links": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "NO_GOLD_CONDITIONS"
+        },
+        "unresolved_handling": {
+          "correct": 0,
+          "predicted": 0,
+          "gold": 1,
+          "precision": null,
+          "recall": 0.0,
+          "overcautious_unresolved": 0
+        },
+        "logic_generation_possible": true,
+        "gold_root_count": 1,
+        "prediction_root_count": 0,
+        "section_semantics": {
+          "status": "UNSUPPORTED_V1_0",
+          "target": 1
+        },
+        "exception_effects": {
+          "target": 0,
+          "status": "UNSUPPORTED_V1_0",
+          "exact": null
+        },
+        "unresolved_relation_semantics": {
+          "status": "UNSUPPORTED_V1_0",
+          "target": 1
+        }
+      },
+      "safety_errors": []
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000128028",
+      "source_system": "BIZINFO",
+      "common": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 7,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "NO_PREDICTIONS",
+        "recall_status": "DEFINED"
+      },
+      "partial_count": 0,
+      "pairs": [],
+      "false_negative_ids": [
+        "GOLD:2OTFWPYD5V3ZWNU3VCZ4T4XY",
+        "GOLD:5ZJTE4BIUAX3EUSQ5ITDADN3",
+        "GOLD:E4CL7MPMP5KOLIG4HDGYGSEC",
+        "GOLD:FYNJKZMSMVCDXR7TNUWZ47GV",
+        "GOLD:H2CEZ2GPY6OJL7PGCHYX7LQQ",
+        "GOLD:V4RWLG7CMNSKJ2JGFZXY2PGU",
+        "GOLD:WQMKMUOWL2FYX3PID6ZG5JB5"
+      ],
+      "false_positive_ids": [],
+      "extended": {
+        "applicability_scope": {
+          "target": 7,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 7
+        },
+        "evaluation_phase": {
+          "target": 7,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 7
+        },
+        "fulfillment_phase": {
+          "target": 7,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 7
+        },
+        "requirement_kind": {
+          "target": 7,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 7
+        },
+        "reference_date_type": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 7,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "reference_date": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 7,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.anchor_event": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 7,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.fixed_reference_date": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 7,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.offset_value": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 7,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.offset_unit": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 7,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.operator": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 7,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.inclusive": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 7,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "evidence_references": {
+          "target": 7,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 7
+        },
+        "external_reference": {
+          "target": 3,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 4,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 3
+        }
+      },
+      "logic": {
+        "logical_relation": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 9,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "operator_accuracy": {
+          "correct_groups": 0,
+          "predicted_groups": 0,
+          "gold_groups": 3,
+          "accuracy": 0.0,
+          "status": "DEFINED"
+        },
+        "logical_group_exact": {
+          "correct": 0,
+          "predicted": 0,
+          "gold": 3,
+          "precision": null,
+          "recall": 0.0
+        },
+        "notice_structure_exact": false,
+        "nested_structure_exact": {
+          "gold_nested_groups": 2,
+          "predicted_nested_groups": 0,
+          "exact": false
+        },
+        "exceptions": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "NO_GOLD_CONDITIONS"
+        },
+        "preference_benefit_links": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "NO_GOLD_CONDITIONS"
+        },
+        "unresolved_handling": {
+          "correct": 0,
+          "predicted": 0,
+          "gold": 0,
+          "precision": null,
+          "recall": null,
+          "overcautious_unresolved": 0
+        },
+        "logic_generation_possible": true,
+        "gold_root_count": 1,
+        "prediction_root_count": 0,
+        "section_semantics": {
+          "status": "UNSUPPORTED_V1_0",
+          "target": 1
+        },
+        "exception_effects": {
+          "target": 0,
+          "status": "UNSUPPORTED_V1_0",
+          "exact": null
+        },
+        "unresolved_relation_semantics": {
+          "status": "UNSUPPORTED_V1_0",
+          "target": 0
+        }
+      },
+      "safety_errors": []
+    },
+    {
+      "notice_id": "KSTARTUP:176001",
+      "source_system": "KSTARTUP",
+      "common": {
+        "tp": 1,
+        "fp": 3,
+        "fn": 3,
+        "precision": 0.25,
+        "recall": 0.25,
+        "f1": 0.25,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED"
+      },
+      "partial_count": 2,
+      "pairs": [
+        {
+          "status": "EXACT_MATCH",
+          "gold_id": "GOLD:N3QF42LGMLZNFLXN35JBKWT5",
+          "prediction_id": "CND:H2T5HOP6DDQW7IG7WF3W2PFE",
+          "differences": [],
+          "evidence_status": "EXACT_SPAN",
+          "evidence_semantic_status": "NEEDS_HUMAN_REVIEW"
+        },
+        {
+          "status": "PARTIAL_MATCH",
+          "gold_id": "GOLD:3K2JYZN2YHN2QCUYJDJ3RKKD",
+          "prediction_id": "CND:L32RLGA23VMTZMZ6K6MHYGL2",
+          "differences": [
+            "evidence"
+          ],
+          "evidence_status": "OVERLAPPING_SPAN",
+          "evidence_semantic_status": "NEEDS_HUMAN_REVIEW"
+        },
+        {
+          "status": "PARTIAL_MATCH",
+          "gold_id": "GOLD:LBHRZSRUMR3AC4TP4VRAIF4M",
+          "prediction_id": "CND:O5E6JSKKSTAIORIR6SUBLKS7",
+          "differences": [
+            "evidence"
+          ],
+          "evidence_status": "OVERLAPPING_SPAN",
+          "evidence_semantic_status": "NEEDS_HUMAN_REVIEW"
+        }
+      ],
+      "false_negative_ids": [
+        "GOLD:3K2JYZN2YHN2QCUYJDJ3RKKD",
+        "GOLD:LBHRZSRUMR3AC4TP4VRAIF4M",
+        "GOLD:YY7C3VVWNOHRCG33RVRBXZAK"
+      ],
+      "false_positive_ids": [
+        "CND:L32RLGA23VMTZMZ6K6MHYGL2",
+        "CND:O5E6JSKKSTAIORIR6SUBLKS7",
+        "CND:Z3DLRYMGSCRBVNJHXRPVXDI7"
+      ],
+      "extended": {
+        "applicability_scope": {
+          "target": 4,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 3,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 1
+        },
+        "evaluation_phase": {
+          "target": 4,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 3,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 1
+        },
+        "fulfillment_phase": {
+          "target": 4,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 3,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 1
+        },
+        "requirement_kind": {
+          "target": 4,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 3,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 1
+        },
+        "reference_date_type": {
+          "target": 1,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 3,
+          "unknown_prediction": 1,
+          "no_aligned_prediction": 0
+        },
+        "reference_date": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 4,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.anchor_event": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 4,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.fixed_reference_date": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 4,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.offset_value": {
+          "target": 1,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 3,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.offset_unit": {
+          "target": 1,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 3,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.operator": {
+          "target": 1,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 3,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.inclusive": {
+          "target": 1,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 3,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "evidence_references": {
+          "target": 4,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 3,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 1
+        },
+        "external_reference": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 4,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        }
+      },
+      "logic": {
+        "logical_relation": {
+          "tp": 0,
+          "fp": 4,
+          "fn": 4,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "operator_accuracy": {
+          "correct_groups": 0,
+          "predicted_groups": 1,
+          "gold_groups": 1,
+          "accuracy": 0.0,
+          "status": "DEFINED"
+        },
+        "logical_group_exact": {
+          "correct": 0,
+          "predicted": 1,
+          "gold": 1,
+          "precision": 0.0,
+          "recall": 0.0
+        },
+        "notice_structure_exact": false,
+        "nested_structure_exact": {
+          "gold_nested_groups": 0,
+          "predicted_nested_groups": 0,
+          "exact": true
+        },
+        "exceptions": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "NO_GOLD_CONDITIONS"
+        },
+        "preference_benefit_links": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "NO_GOLD_CONDITIONS"
+        },
+        "unresolved_handling": {
+          "correct": 0,
+          "predicted": 1,
+          "gold": 0,
+          "precision": 0.0,
+          "recall": null,
+          "overcautious_unresolved": 1
+        },
+        "logic_generation_possible": true,
+        "gold_root_count": 1,
+        "prediction_root_count": 1,
+        "section_semantics": {
+          "status": "UNSUPPORTED_V1_0",
+          "target": 1
+        },
+        "exception_effects": {
+          "target": 0,
+          "status": "UNSUPPORTED_V1_0",
+          "exact": null
+        },
+        "unresolved_relation_semantics": {
+          "status": "UNSUPPORTED_V1_0",
+          "target": 0
+        }
+      },
+      "safety_errors": []
+    },
+    {
+      "notice_id": "KSTARTUP:176813",
+      "source_system": "KSTARTUP",
+      "common": {
+        "tp": 1,
+        "fp": 4,
+        "fn": 5,
+        "precision": 0.2,
+        "recall": 0.16666666666666666,
+        "f1": 0.1818181818181818,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED"
+      },
+      "partial_count": 1,
+      "pairs": [
+        {
+          "status": "EXACT_MATCH",
+          "gold_id": "GOLD:RBSON2DWXS3FIAMA2NIJKW37",
+          "prediction_id": "CND:LHXAPWWGYLMBIB7JUAKN4G74",
+          "differences": [],
+          "evidence_status": "EXACT_SPAN",
+          "evidence_semantic_status": "NEEDS_HUMAN_REVIEW"
+        },
+        {
+          "status": "PARTIAL_MATCH",
+          "gold_id": "GOLD:CLG4YUJX3JBDNDXIIAIMP6HK",
+          "prediction_id": "CND:BP6KYZ4RGT2T2MWRGANINGM7",
+          "differences": [
+            "evidence"
+          ],
+          "evidence_status": "OVERLAPPING_SPAN",
+          "evidence_semantic_status": "NEEDS_HUMAN_REVIEW"
+        }
+      ],
+      "false_negative_ids": [
+        "GOLD:A3WST6DTWQKFYMUD6DWLMKYK",
+        "GOLD:CLG4YUJX3JBDNDXIIAIMP6HK",
+        "GOLD:UTDHOPDVHP5NDS7BL2XQ773U",
+        "GOLD:UUO4VKZ34CFAU3U3V45ME6XD",
+        "GOLD:VXO7CQZP4XQO64HSS7XBZ2CI"
+      ],
+      "false_positive_ids": [
+        "CND:AA5EI662A5TEPVKB6UMUFRSG",
+        "CND:BH26BINNLVA2VMM5VCQH5RZ5",
+        "CND:BP6KYZ4RGT2T2MWRGANINGM7",
+        "CND:F77XTN5WHTCQTTNVTQ4V6NTF"
+      ],
+      "extended": {
+        "applicability_scope": {
+          "target": 6,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 2,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 4
+        },
+        "evaluation_phase": {
+          "target": 6,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 2,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 4
+        },
+        "fulfillment_phase": {
+          "target": 6,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 2,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 4
+        },
+        "requirement_kind": {
+          "target": 6,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 2,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 4
+        },
+        "reference_date_type": {
+          "target": 1,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 5,
+          "unknown_prediction": 1,
+          "no_aligned_prediction": 0
+        },
+        "reference_date": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 6,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.anchor_event": {
+          "target": 1,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 5,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.fixed_reference_date": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 6,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.offset_value": {
+          "target": 1,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 5,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.offset_unit": {
+          "target": 1,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 5,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.operator": {
+          "target": 1,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 5,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.inclusive": {
+          "target": 1,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 5,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "evidence_references": {
+          "target": 6,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 2,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 4
+        },
+        "external_reference": {
+          "target": 1,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 5,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 1
+        }
+      },
+      "logic": {
+        "logical_relation": {
+          "tp": 0,
+          "fp": 3,
+          "fn": 5,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "operator_accuracy": {
+          "correct_groups": 0,
+          "predicted_groups": 1,
+          "gold_groups": 2,
+          "accuracy": 0.0,
+          "status": "DEFINED"
+        },
+        "logical_group_exact": {
+          "correct": 0,
+          "predicted": 1,
+          "gold": 2,
+          "precision": 0.0,
+          "recall": 0.0
+        },
+        "notice_structure_exact": false,
+        "nested_structure_exact": {
+          "gold_nested_groups": 1,
+          "predicted_nested_groups": 0,
+          "exact": false
+        },
+        "exceptions": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "preference_benefit_links": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "unresolved_handling": {
+          "correct": 0,
+          "predicted": 0,
+          "gold": 0,
+          "precision": null,
+          "recall": null,
+          "overcautious_unresolved": 0
+        },
+        "logic_generation_possible": true,
+        "gold_root_count": 3,
+        "prediction_root_count": 3,
+        "section_semantics": {
+          "status": "UNSUPPORTED_V1_0",
+          "target": 3
+        },
+        "exception_effects": {
+          "target": 1,
+          "status": "UNSUPPORTED_V1_0",
+          "exact": null
+        },
+        "unresolved_relation_semantics": {
+          "status": "UNSUPPORTED_V1_0",
+          "target": 0
+        }
+      },
+      "safety_errors": []
+    },
+    {
+      "notice_id": "KSTARTUP:177447",
+      "source_system": "KSTARTUP",
+      "common": {
+        "tp": 0,
+        "fp": 2,
+        "fn": 3,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED"
+      },
+      "partial_count": 1,
+      "pairs": [
+        {
+          "status": "PARTIAL_MATCH",
+          "gold_id": "GOLD:UMIN5GYYJI25MI4RXWSOFKZQ",
+          "prediction_id": "CND:MCJY62OZLW3BUDRP2I4QP74C",
+          "differences": [
+            "value",
+            "evidence"
+          ],
+          "evidence_status": "OVERLAPPING_SPAN",
+          "evidence_semantic_status": "NEEDS_HUMAN_REVIEW"
+        }
+      ],
+      "false_negative_ids": [
+        "GOLD:2DQHTBU7LBCMIF3TV7UBSOB7",
+        "GOLD:QBTTRF3JZNJMBATWCAT3JTGC",
+        "GOLD:UMIN5GYYJI25MI4RXWSOFKZQ"
+      ],
+      "false_positive_ids": [
+        "CND:CUBRQ6S66FNJBGGF52NU2JGP",
+        "CND:MCJY62OZLW3BUDRP2I4QP74C"
+      ],
+      "extended": {
+        "applicability_scope": {
+          "target": 3,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 2
+        },
+        "evaluation_phase": {
+          "target": 3,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 2
+        },
+        "fulfillment_phase": {
+          "target": 3,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 2
+        },
+        "requirement_kind": {
+          "target": 3,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 2
+        },
+        "reference_date_type": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 3,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "reference_date": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 3,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.anchor_event": {
+          "target": 2,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 1,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 1
+        },
+        "temporal_constraint.fixed_reference_date": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 3,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.offset_value": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 3,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.offset_unit": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 3,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.operator": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 3,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.inclusive": {
+          "target": 2,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 1,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 1
+        },
+        "evidence_references": {
+          "target": 3,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 2
+        },
+        "external_reference": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 3,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        }
+      },
+      "logic": {
+        "logical_relation": {
+          "tp": 0,
+          "fp": 2,
+          "fn": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "operator_accuracy": {
+          "correct_groups": 0,
+          "predicted_groups": 1,
+          "gold_groups": 1,
+          "accuracy": 0.0,
+          "status": "DEFINED"
+        },
+        "logical_group_exact": {
+          "correct": 0,
+          "predicted": 1,
+          "gold": 1,
+          "precision": 0.0,
+          "recall": 0.0
+        },
+        "notice_structure_exact": false,
+        "nested_structure_exact": {
+          "gold_nested_groups": 0,
+          "predicted_nested_groups": 0,
+          "exact": true
+        },
+        "exceptions": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "preference_benefit_links": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "NO_GOLD_CONDITIONS"
+        },
+        "unresolved_handling": {
+          "correct": 0,
+          "predicted": 0,
+          "gold": 0,
+          "precision": null,
+          "recall": null,
+          "overcautious_unresolved": 0
+        },
+        "logic_generation_possible": true,
+        "gold_root_count": 1,
+        "prediction_root_count": 1,
+        "section_semantics": {
+          "status": "UNSUPPORTED_V1_0",
+          "target": 1
+        },
+        "exception_effects": {
+          "target": 1,
+          "status": "UNSUPPORTED_V1_0",
+          "exact": null
+        },
+        "unresolved_relation_semantics": {
+          "status": "UNSUPPORTED_V1_0",
+          "target": 0
+        }
+      },
+      "safety_errors": []
+    },
+    {
+      "notice_id": "KSTARTUP:178507",
+      "source_system": "KSTARTUP",
+      "common": {
+        "tp": 2,
+        "fp": 4,
+        "fn": 8,
+        "precision": 0.3333333333333333,
+        "recall": 0.2,
+        "f1": 0.25,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED"
+      },
+      "partial_count": 1,
+      "pairs": [
+        {
+          "status": "EXACT_MATCH",
+          "gold_id": "GOLD:DIZ2L732LLD4GHZKMKVWGAML",
+          "prediction_id": "CND:XFMX64TWAJXTYNE4ZMTMDGIF",
+          "differences": [],
+          "evidence_status": "EXACT_SPAN",
+          "evidence_semantic_status": "NEEDS_HUMAN_REVIEW"
+        },
+        {
+          "status": "EXACT_MATCH",
+          "gold_id": "GOLD:FE24B2OORHELAJRV66G7VJPC",
+          "prediction_id": "CND:7JY337WSVIQOWASD75J3XBUD",
+          "differences": [],
+          "evidence_status": "EXACT_SPAN",
+          "evidence_semantic_status": "NEEDS_HUMAN_REVIEW"
+        },
+        {
+          "status": "PARTIAL_MATCH",
+          "gold_id": "GOLD:XNGCLJRMJ6SBOJFO6PQZI5SF",
+          "prediction_id": "CND:OAGVVLW22ZLPWV46AUOLHOJS",
+          "differences": [
+            "evidence"
+          ],
+          "evidence_status": "OVERLAPPING_SPAN",
+          "evidence_semantic_status": "NEEDS_HUMAN_REVIEW"
+        }
+      ],
+      "false_negative_ids": [
+        "GOLD:64HML7YO6L4FES5PLPUTFK2O",
+        "GOLD:IZGLBYNHDYFKYAW7RWGYQUCJ",
+        "GOLD:M7PXG6623INOEMITL3AOE3CK",
+        "GOLD:RKY5YC5WF6UKLIPCFCPOBLSC",
+        "GOLD:UTYFQJK6CDHOFA3MZKFI3DFP",
+        "GOLD:V4K4AAIB7KG32LIHAEKQMZIU",
+        "GOLD:XNGCLJRMJ6SBOJFO6PQZI5SF",
+        "GOLD:XNGYEKKQZZIRCEYLRC7XBPHS"
+      ],
+      "false_positive_ids": [
+        "CND:CZXVSBG3QPOCJO77ZRYCWLOD",
+        "CND:DNQ2I756A7TOBEMOIMJ6QSAA",
+        "CND:I244DGKLY5NODRJ5NKRKECHZ",
+        "CND:OAGVVLW22ZLPWV46AUOLHOJS"
+      ],
+      "extended": {
+        "applicability_scope": {
+          "target": 10,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 3,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 7
+        },
+        "evaluation_phase": {
+          "target": 8,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 2,
+          "unknown": 2,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 6
+        },
+        "fulfillment_phase": {
+          "target": 8,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 2,
+          "unknown": 2,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 6
+        },
+        "requirement_kind": {
+          "target": 7,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 2,
+          "unknown": 3,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 5
+        },
+        "reference_date_type": {
+          "target": 3,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 7,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 3
+        },
+        "reference_date": {
+          "target": 2,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 8,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 2
+        },
+        "temporal_constraint.anchor_event": {
+          "target": 3,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 7,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 3
+        },
+        "temporal_constraint.fixed_reference_date": {
+          "target": 1,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 9,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 1
+        },
+        "temporal_constraint.offset_value": {
+          "target": 2,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 8,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 2
+        },
+        "temporal_constraint.offset_unit": {
+          "target": 2,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 8,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 2
+        },
+        "temporal_constraint.operator": {
+          "target": 3,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 7,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 3
+        },
+        "temporal_constraint.inclusive": {
+          "target": 3,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 7,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 3
+        },
+        "evidence_references": {
+          "target": 10,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 3,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 7
+        },
+        "external_reference": {
+          "target": 1,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 9,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        }
+      },
+      "logic": {
+        "logical_relation": {
+          "tp": 0,
+          "fp": 6,
+          "fn": 9,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "operator_accuracy": {
+          "correct_groups": 0,
+          "predicted_groups": 2,
+          "gold_groups": 4,
+          "accuracy": 0.0,
+          "status": "DEFINED"
+        },
+        "logical_group_exact": {
+          "correct": 0,
+          "predicted": 2,
+          "gold": 4,
+          "precision": 0.0,
+          "recall": 0.0
+        },
+        "notice_structure_exact": false,
+        "nested_structure_exact": {
+          "gold_nested_groups": 2,
+          "predicted_nested_groups": 0,
+          "exact": false
+        },
+        "exceptions": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "preference_benefit_links": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "NO_GOLD_CONDITIONS"
+        },
+        "unresolved_handling": {
+          "correct": 0,
+          "predicted": 1,
+          "gold": 0,
+          "precision": 0.0,
+          "recall": null,
+          "overcautious_unresolved": 1
+        },
+        "logic_generation_possible": true,
+        "gold_root_count": 5,
+        "prediction_root_count": 2,
+        "section_semantics": {
+          "status": "UNSUPPORTED_V1_0",
+          "target": 5
+        },
+        "exception_effects": {
+          "target": 1,
+          "status": "UNSUPPORTED_V1_0",
+          "exact": null
+        },
+        "unresolved_relation_semantics": {
+          "status": "UNSUPPORTED_V1_0",
+          "target": 0
+        }
+      },
+      "safety_errors": []
+    },
+    {
+      "notice_id": "KSTARTUP:179386",
+      "source_system": "KSTARTUP",
+      "common": {
+        "tp": 1,
+        "fp": 2,
+        "fn": 3,
+        "precision": 0.3333333333333333,
+        "recall": 0.25,
+        "f1": 0.28571428571428575,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED"
+      },
+      "partial_count": 1,
+      "pairs": [
+        {
+          "status": "EXACT_MATCH",
+          "gold_id": "GOLD:3QRRTUPV5LYHVHJELE2BPBZ4",
+          "prediction_id": "CND:WCH2XWWHUIKN72BIERPWKSNC",
+          "differences": [],
+          "evidence_status": "EXACT_SPAN",
+          "evidence_semantic_status": "NEEDS_HUMAN_REVIEW"
+        },
+        {
+          "status": "PARTIAL_MATCH",
+          "gold_id": "GOLD:4PHRWOONTBVTFZAQ5BJAHJQB",
+          "prediction_id": "CND:UZVVBGQJZQPGZWI36PNRQETP",
+          "differences": [
+            "value",
+            "evidence"
+          ],
+          "evidence_status": "OVERLAPPING_SPAN",
+          "evidence_semantic_status": "NEEDS_HUMAN_REVIEW"
+        }
+      ],
+      "false_negative_ids": [
+        "GOLD:4PHRWOONTBVTFZAQ5BJAHJQB",
+        "GOLD:BX7MXK4OPKU5KLAOI53KHSPV",
+        "GOLD:RBZS3UUFH5NAU6JE3BBRORZA"
+      ],
+      "false_positive_ids": [
+        "CND:KF7GL6UKP2LSISJWOOBBS5EP",
+        "CND:UZVVBGQJZQPGZWI36PNRQETP"
+      ],
+      "extended": {
+        "applicability_scope": {
+          "target": 4,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 2,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 2
+        },
+        "evaluation_phase": {
+          "target": 4,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 2,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 2
+        },
+        "fulfillment_phase": {
+          "target": 4,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 2,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 2
+        },
+        "requirement_kind": {
+          "target": 4,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 2,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 2
+        },
+        "reference_date_type": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 4,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "reference_date": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 4,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.anchor_event": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 4,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.fixed_reference_date": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 4,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.offset_value": {
+          "target": 1,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 3,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.offset_unit": {
+          "target": 1,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 3,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.operator": {
+          "target": 1,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 3,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "temporal_constraint.inclusive": {
+          "target": 1,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 1,
+          "unknown": 3,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        },
+        "evidence_references": {
+          "target": 4,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 2,
+          "unknown": 0,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 2
+        },
+        "external_reference": {
+          "target": 0,
+          "evaluable": 0,
+          "correct": 0,
+          "unsupported": 0,
+          "unknown": 4,
+          "unknown_prediction": 0,
+          "no_aligned_prediction": 0
+        }
+      },
+      "logic": {
+        "logical_relation": {
+          "tp": 0,
+          "fp": 2,
+          "fn": 2,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "operator_accuracy": {
+          "correct_groups": 0,
+          "predicted_groups": 1,
+          "gold_groups": 1,
+          "accuracy": 0.0,
+          "status": "DEFINED"
+        },
+        "logical_group_exact": {
+          "correct": 0,
+          "predicted": 1,
+          "gold": 1,
+          "precision": 0.0,
+          "recall": 0.0
+        },
+        "notice_structure_exact": false,
+        "nested_structure_exact": {
+          "gold_nested_groups": 0,
+          "predicted_nested_groups": 0,
+          "exact": true
+        },
+        "exceptions": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "NO_GOLD_CONDITIONS"
+        },
+        "preference_benefit_links": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "NO_GOLD_CONDITIONS"
+        },
+        "unresolved_handling": {
+          "correct": 0,
+          "predicted": 1,
+          "gold": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "overcautious_unresolved": 1
+        },
+        "logic_generation_possible": true,
+        "gold_root_count": 3,
+        "prediction_root_count": 2,
+        "section_semantics": {
+          "status": "UNSUPPORTED_V1_0",
+          "target": 3
+        },
+        "exception_effects": {
+          "target": 0,
+          "status": "UNSUPPORTED_V1_0",
+          "exact": null
+        },
+        "unresolved_relation_semantics": {
+          "status": "UNSUPPORTED_V1_0",
+          "target": 1
+        }
+      },
+      "safety_errors": []
+    }
+  ]
+}

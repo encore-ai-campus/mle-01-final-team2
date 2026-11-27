@@ -1,0 +1,62 @@
+[
+  {
+    "experiment": "P0",
+    "prompt_chars": 6503,
+    "prompt_utf8_bytes": 6503,
+    "prompt_bytes_delta_vs_P0": 0,
+    "schema_payload_utf8_bytes": 0,
+    "planning_input_bytes_prompt_plus_schema": 6503,
+    "estimated_prompt_schema_tokens_low": 1084,
+    "estimated_prompt_schema_tokens_high": 3252,
+    "tokenizer_used": null,
+    "estimate_method": "UTF8 byte proxy: 2--6 bytes/token; planning range, not a guaranteed bound or measured model tokens"
+  },
+  {
+    "experiment": "P1",
+    "prompt_chars": 11396,
+    "prompt_utf8_bytes": 12732,
+    "prompt_bytes_delta_vs_P0": 6229,
+    "schema_payload_utf8_bytes": 9051,
+    "planning_input_bytes_prompt_plus_schema": 21804,
+    "estimated_prompt_schema_tokens_low": 3634,
+    "estimated_prompt_schema_tokens_high": 10902,
+    "tokenizer_used": null,
+    "estimate_method": "UTF8 byte proxy: 2--6 bytes/token; planning range, not a guaranteed bound or measured model tokens"
+  },
+  {
+    "experiment": "P2",
+    "prompt_chars": 11396,
+    "prompt_utf8_bytes": 12732,
+    "prompt_bytes_delta_vs_P0": 6229,
+    "schema_payload_utf8_bytes": 9051,
+    "planning_input_bytes_prompt_plus_schema": 21783,
+    "estimated_prompt_schema_tokens_low": 3631,
+    "estimated_prompt_schema_tokens_high": 10892,
+    "tokenizer_used": null,
+    "estimate_method": "UTF8 byte proxy: 2--6 bytes/token; planning range, not a guaranteed bound or measured model tokens"
+  },
+  {
+    "experiment": "P3",
+    "prompt_chars": 12993,
+    "prompt_utf8_bytes": 14329,
+    "prompt_bytes_delta_vs_P0": 7826,
+    "schema_payload_utf8_bytes": 9051,
+    "planning_input_bytes_prompt_plus_schema": 23401,
+    "estimated_prompt_schema_tokens_low": 3901,
+    "estimated_prompt_schema_tokens_high": 11701,
+    "tokenizer_used": null,
+    "estimate_method": "UTF8 byte proxy: 2--6 bytes/token; planning range, not a guaranteed bound or measured model tokens"
+  },
+  {
+    "experiment": "P4",
+    "prompt_chars": 12993,
+    "prompt_utf8_bytes": 14329,
+    "prompt_bytes_delta_vs_P0": 7826,
+    "schema_payload_utf8_bytes": 9051,
+    "planning_input_bytes_prompt_plus_schema": 23380,
+    "estimated_prompt_schema_tokens_low": 3897,
+    "estimated_prompt_schema_tokens_high": 11690,
+    "tokenizer_used": null,
+    "estimate_method": "UTF8 byte proxy: 2--6 bytes/token; planning range, not a guaranteed bound or measured model tokens"
+  }
+]

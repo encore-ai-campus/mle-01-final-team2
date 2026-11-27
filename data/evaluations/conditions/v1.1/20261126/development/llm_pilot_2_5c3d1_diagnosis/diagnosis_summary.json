@@ -1,0 +1,570 @@
+{
+  "evaluation_reproduced": true,
+  "gold_count": 62,
+  "raw_proposals": 58,
+  "post_predictions": 32,
+  "metrics": {
+    "baseline_v1": {
+      "micro": {
+        "tp": 6,
+        "fp": 20,
+        "fn": 56,
+        "precision": 0.23076923076923078,
+        "recall": 0.0967741935483871,
+        "f1": 0.13636363636363635,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED",
+        "notice_count": 10,
+        "macro_f1": 0.12714285714285717,
+        "partial_match_count": 5,
+        "notices_with_misses": 10,
+        "notices_with_false_positives": 8,
+        "zero_prediction_notices": 2
+      },
+      "by_source": {
+        "BIZINFO": {
+          "tp": 1,
+          "fp": 6,
+          "fn": 34,
+          "precision": 0.14285714285714285,
+          "recall": 0.02857142857142857,
+          "f1": 0.04761904761904761,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED",
+          "notice_count": 5,
+          "macro_f1": 0.05714285714285715,
+          "partial_match_count": 1,
+          "notices_with_misses": 5,
+          "notices_with_false_positives": 3,
+          "zero_prediction_notices": 2
+        },
+        "KSTARTUP": {
+          "tp": 5,
+          "fp": 14,
+          "fn": 22,
+          "precision": 0.2631578947368421,
+          "recall": 0.18518518518518517,
+          "f1": 0.21739130434782608,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED",
+          "notice_count": 5,
+          "macro_f1": 0.19714285714285715,
+          "partial_match_count": 4,
+          "notices_with_misses": 5,
+          "notices_with_false_positives": 5,
+          "zero_prediction_notices": 0
+        }
+      },
+      "by_condition_type": {
+        "ELIGIBILITY": {
+          "tp": 6,
+          "fp": 14,
+          "fn": 50,
+          "precision": 0.3,
+          "recall": 0.10714285714285714,
+          "f1": 0.15789473684210525,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "EXCLUSION": {
+          "tp": 0,
+          "fp": 4,
+          "fn": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "PREFERENCE": {
+          "tp": 0,
+          "fp": 2,
+          "fn": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        }
+      }
+    },
+    "rule_experiment_E": {
+      "micro": {
+        "tp": 6,
+        "fp": 17,
+        "fn": 56,
+        "precision": 0.2608695652173913,
+        "recall": 0.0967741935483871,
+        "f1": 0.1411764705882353,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED",
+        "notice_count": 10,
+        "macro_f1": 0.12532467532467534,
+        "partial_match_count": 6,
+        "notices_with_misses": 10,
+        "notices_with_false_positives": 7,
+        "zero_prediction_notices": 3
+      },
+      "by_source": {
+        "BIZINFO": {
+          "tp": 1,
+          "fp": 2,
+          "fn": 34,
+          "precision": 0.3333333333333333,
+          "recall": 0.02857142857142857,
+          "f1": 0.05263157894736842,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED",
+          "notice_count": 5,
+          "macro_f1": 0.05714285714285715,
+          "partial_match_count": 0,
+          "notices_with_misses": 5,
+          "notices_with_false_positives": 2,
+          "zero_prediction_notices": 3
+        },
+        "KSTARTUP": {
+          "tp": 5,
+          "fp": 15,
+          "fn": 22,
+          "precision": 0.25,
+          "recall": 0.18518518518518517,
+          "f1": 0.2127659574468085,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED",
+          "notice_count": 5,
+          "macro_f1": 0.19350649350649352,
+          "partial_match_count": 6,
+          "notices_with_misses": 5,
+          "notices_with_false_positives": 5,
+          "zero_prediction_notices": 0
+        }
+      },
+      "by_condition_type": {
+        "ELIGIBILITY": {
+          "tp": 6,
+          "fp": 11,
+          "fn": 50,
+          "precision": 0.35294117647058826,
+          "recall": 0.10714285714285714,
+          "f1": 0.1643835616438356,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "EXCLUSION": {
+          "tp": 0,
+          "fp": 4,
+          "fn": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "PREFERENCE": {
+          "tp": 0,
+          "fp": 2,
+          "fn": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        }
+      }
+    },
+    "llm_pre_validation": {
+      "micro": {
+        "tp": 1,
+        "fp": 57,
+        "fn": 61,
+        "precision": 0.017241379310344827,
+        "recall": 0.016129032258064516,
+        "f1": 0.016666666666666666,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED",
+        "notice_count": 10,
+        "macro_f1": 0.025,
+        "partial_match_count": 3,
+        "notices_with_misses": 10,
+        "notices_with_false_positives": 10,
+        "zero_prediction_notices": 0
+      },
+      "by_source": {
+        "BIZINFO": {
+          "tp": 0,
+          "fp": 29,
+          "fn": 35,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED",
+          "notice_count": 5,
+          "macro_f1": 0.0,
+          "partial_match_count": 1,
+          "notices_with_misses": 5,
+          "notices_with_false_positives": 5,
+          "zero_prediction_notices": 0
+        },
+        "KSTARTUP": {
+          "tp": 1,
+          "fp": 28,
+          "fn": 26,
+          "precision": 0.034482758620689655,
+          "recall": 0.037037037037037035,
+          "f1": 0.03571428571428571,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED",
+          "notice_count": 5,
+          "macro_f1": 0.05,
+          "partial_match_count": 2,
+          "notices_with_misses": 5,
+          "notices_with_false_positives": 5,
+          "zero_prediction_notices": 0
+        }
+      },
+      "by_condition_type": {
+        "ELIGIBILITY": {
+          "tp": 1,
+          "fp": 50,
+          "fn": 55,
+          "precision": 0.0196078431372549,
+          "recall": 0.017857142857142856,
+          "f1": 0.018691588785046728,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "EXCLUSION": {
+          "tp": 0,
+          "fp": 3,
+          "fn": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "PREFERENCE": {
+          "tp": 0,
+          "fp": 4,
+          "fn": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        }
+      }
+    },
+    "llm_post_validation": {
+      "micro": {
+        "tp": 1,
+        "fp": 31,
+        "fn": 61,
+        "precision": 0.03125,
+        "recall": 0.016129032258064516,
+        "f1": 0.02127659574468085,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED",
+        "notice_count": 10,
+        "macro_f1": 0.025,
+        "partial_match_count": 16,
+        "notices_with_misses": 10,
+        "notices_with_false_positives": 7,
+        "zero_prediction_notices": 3
+      },
+      "by_source": {
+        "BIZINFO": {
+          "tp": 0,
+          "fp": 23,
+          "fn": 35,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED",
+          "notice_count": 5,
+          "macro_f1": 0.0,
+          "partial_match_count": 11,
+          "notices_with_misses": 5,
+          "notices_with_false_positives": 4,
+          "zero_prediction_notices": 1
+        },
+        "KSTARTUP": {
+          "tp": 1,
+          "fp": 8,
+          "fn": 26,
+          "precision": 0.1111111111111111,
+          "recall": 0.037037037037037035,
+          "f1": 0.05555555555555555,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED",
+          "notice_count": 5,
+          "macro_f1": 0.05,
+          "partial_match_count": 5,
+          "notices_with_misses": 5,
+          "notices_with_false_positives": 3,
+          "zero_prediction_notices": 2
+        }
+      },
+      "by_condition_type": {
+        "ELIGIBILITY": {
+          "tp": 1,
+          "fp": 30,
+          "fn": 55,
+          "precision": 0.03225806451612903,
+          "recall": 0.017857142857142856,
+          "f1": 0.022988505747126436,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "EXCLUSION": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 3,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "PREFERENCE": {
+          "tp": 0,
+          "fp": 1,
+          "fn": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        }
+      }
+    }
+  },
+  "fn_primary_counts": {
+    "VALUE_NORMALIZATION_MISMATCH": 10,
+    "SEMANTIC_AMBIGUITY": 1,
+    "ATTRIBUTE_MAPPING_MISMATCH": 15,
+    "CONDITION_GRANULARITY_MISMATCH": 8,
+    "EVIDENCE_SPAN_MISMATCH": 6,
+    "UNSUPPORTED_ATTRIBUTE": 9,
+    "OTHER_OR_UNRESOLVED": 1,
+    "SCHEMA_REJECTION": 10,
+    "CONDITION_TYPE_MISMATCH": 1,
+    "RAW_PROPOSAL_MISSING": 0,
+    "OPERATOR_MISMATCH": 0,
+    "EVALUATION_ADAPTER_MISMATCH": 0
+  },
+  "fp_primary_counts": {
+    "VALUE_NORMALIZATION_MISMATCH": 9,
+    "ATTRIBUTE_MAPPING_MISMATCH": 15,
+    "EVIDENCE_SPAN_MISMATCH": 6,
+    "CONDITION_GRANULARITY_MISMATCH": 1
+  },
+  "partial_primary_counts": {
+    "VALUE_NORMALIZATION_MISMATCH": 10,
+    "EVIDENCE_SPAN_MISMATCH": 6
+  },
+  "partial_blocker_combinations": {
+    "value|evidence": 7,
+    "evidence": 6,
+    "unit|evidence": 1,
+    "unit": 2
+  },
+  "partial_blocker_incidence": {
+    "value": 7,
+    "evidence": 14,
+    "unit": 3
+  },
+  "rule_llm_buckets": {
+    "NEITHER": 55,
+    "RULE_ONLY": 6,
+    "LLM_ONLY": 1
+  },
+  "fn_by_source": {
+    "BIZINFO": {
+      "VALUE_NORMALIZATION_MISMATCH": 7,
+      "SEMANTIC_AMBIGUITY": 1,
+      "ATTRIBUTE_MAPPING_MISMATCH": 12,
+      "CONDITION_GRANULARITY_MISMATCH": 8,
+      "EVIDENCE_SPAN_MISMATCH": 3,
+      "UNSUPPORTED_ATTRIBUTE": 4
+    },
+    "KSTARTUP": {
+      "VALUE_NORMALIZATION_MISMATCH": 3,
+      "ATTRIBUTE_MAPPING_MISMATCH": 3,
+      "UNSUPPORTED_ATTRIBUTE": 5,
+      "EVIDENCE_SPAN_MISMATCH": 3,
+      "OTHER_OR_UNRESOLVED": 1,
+      "SCHEMA_REJECTION": 10,
+      "CONDITION_TYPE_MISMATCH": 1
+    }
+  },
+  "fn_by_type": {
+    "ELIGIBILITY": {
+      "VALUE_NORMALIZATION_MISMATCH": 10,
+      "SEMANTIC_AMBIGUITY": 1,
+      "ATTRIBUTE_MAPPING_MISMATCH": 15,
+      "CONDITION_GRANULARITY_MISMATCH": 8,
+      "EVIDENCE_SPAN_MISMATCH": 5,
+      "UNSUPPORTED_ATTRIBUTE": 7,
+      "OTHER_OR_UNRESOLVED": 1,
+      "SCHEMA_REJECTION": 7,
+      "CONDITION_TYPE_MISMATCH": 1
+    },
+    "EXCLUSION": {
+      "SCHEMA_REJECTION": 3
+    },
+    "PREFERENCE": {
+      "UNSUPPORTED_ATTRIBUTE": 2,
+      "EVIDENCE_SPAN_MISMATCH": 1
+    }
+  },
+  "ledger": {
+    "used": 13,
+    "limit": 13,
+    "remaining": 0
+  },
+  "api_calls_during_diagnosis": 0,
+  "logic_preservation": [
+    {
+      "notice_id": "BIZINFO:PBLN_000000000117168",
+      "raw_group_count": 1,
+      "proposal_group_count": 1,
+      "raw_exception_count": 0,
+      "exception_objects_preserved": true,
+      "raw_unresolved_relations_preserved": true,
+      "unresolved_indexes": [
+        0
+      ],
+      "completeness": "INCOMPLETE"
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000118182",
+      "raw_group_count": 3,
+      "proposal_group_count": 3,
+      "raw_exception_count": 1,
+      "exception_objects_preserved": true,
+      "raw_unresolved_relations_preserved": true,
+      "unresolved_indexes": [],
+      "completeness": "PROPOSAL_ONLY"
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000119490",
+      "raw_group_count": 2,
+      "proposal_group_count": 2,
+      "raw_exception_count": 0,
+      "exception_objects_preserved": true,
+      "raw_unresolved_relations_preserved": true,
+      "unresolved_indexes": [
+        3,
+        5
+      ],
+      "completeness": "INCOMPLETE"
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000126490",
+      "raw_group_count": 1,
+      "proposal_group_count": 1,
+      "raw_exception_count": 0,
+      "exception_objects_preserved": true,
+      "raw_unresolved_relations_preserved": true,
+      "unresolved_indexes": [
+        0,
+        1,
+        2
+      ],
+      "completeness": "INCOMPLETE"
+    },
+    {
+      "notice_id": "BIZINFO:PBLN_000000000128028",
+      "raw_group_count": 1,
+      "proposal_group_count": 1,
+      "raw_exception_count": 0,
+      "exception_objects_preserved": true,
+      "raw_unresolved_relations_preserved": true,
+      "unresolved_indexes": [],
+      "completeness": "PROPOSAL_ONLY"
+    },
+    {
+      "notice_id": "KSTARTUP:176001",
+      "raw_group_count": 1,
+      "proposal_group_count": 1,
+      "raw_exception_count": 0,
+      "exception_objects_preserved": true,
+      "raw_unresolved_relations_preserved": true,
+      "unresolved_indexes": [],
+      "completeness": "PROPOSAL_ONLY"
+    },
+    {
+      "notice_id": "KSTARTUP:176813",
+      "raw_group_count": 2,
+      "proposal_group_count": 2,
+      "raw_exception_count": 1,
+      "exception_objects_preserved": true,
+      "raw_unresolved_relations_preserved": true,
+      "unresolved_indexes": [
+        0,
+        3,
+        4,
+        5
+      ],
+      "completeness": "INCOMPLETE"
+    },
+    {
+      "notice_id": "KSTARTUP:177447",
+      "raw_group_count": 3,
+      "proposal_group_count": 3,
+      "raw_exception_count": 3,
+      "exception_objects_preserved": true,
+      "raw_unresolved_relations_preserved": true,
+      "unresolved_indexes": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "completeness": "INCOMPLETE"
+    },
+    {
+      "notice_id": "KSTARTUP:179386",
+      "raw_group_count": 2,
+      "proposal_group_count": 2,
+      "raw_exception_count": 0,
+      "exception_objects_preserved": true,
+      "raw_unresolved_relations_preserved": true,
+      "unresolved_indexes": [
+        2
+      ],
+      "completeness": "INCOMPLETE"
+    }
+  ],
+  "logic_measured_totals": {
+    "logical_relation": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 71
+    },
+    "logical_group_exact": {
+      "correct": 0,
+      "predicted": 0,
+      "gold": 24
+    },
+    "exceptions": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 4
+    },
+    "preference_benefit_links": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 2
+    }
+  },
+  "ast_notice_exact_count": 0,
+  "interpretation_warning": "Manual FN/FP correspondences are diagnostic, not proven universal aliases; partial matching is not semantic equivalence.",
+  "confirmed_source_unsupported_fp_count": 0,
+  "fp_source_quote_exact_count": 31,
+  "normalization_only_guaranteed_recovery_not_estimated": true
+}

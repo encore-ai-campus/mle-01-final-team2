@@ -1,0 +1,287 @@
+{
+  "status": "PASS",
+  "checks": {
+    "schema_errors": 0,
+    "evidence_span_errors": 0,
+    "reference_errors": 0,
+    "decision_eligible_true": 0,
+    "source_mutation_errors": 0,
+    "idempotency_errors": 0,
+    "temporal_errors": 0,
+    "logic_preservation_errors": 0,
+    "deterministic_replay_errors": 0,
+    "normalization_order_conflicts": 0
+  },
+  "deltas": {
+    "N0": {
+      "existing_tp_preserved": true,
+      "new_exact_gold_ids": [],
+      "lost_exact_gold_ids": [],
+      "resolved_fn_count": 0,
+      "fp_count_delta": 0,
+      "old_fp_ids_absent": [],
+      "new_fp_ids": [],
+      "partial_to_exact_gold_ids": [],
+      "remaining_partial_gold_ids": [
+        "GOLD:3QRRTUPV5LYHVHJELE2BPBZ4",
+        "GOLD:4CNJ6NBNNIINQ3U2XXXGKKD6",
+        "GOLD:5ZJTE4BIUAX3EUSQ5ITDADN3",
+        "GOLD:BFBSIRQNKPL3VNUSVXQG23GL",
+        "GOLD:BNSAZ3SCURPTDENMJRN3CU2M",
+        "GOLD:BX7MXK4OPKU5KLAOI53KHSPV",
+        "GOLD:CF2M4RF4BRNZUYQ4BVTWXL4T",
+        "GOLD:CLG4YUJX3JBDNDXIIAIMP6HK",
+        "GOLD:H2CEZ2GPY6OJL7PGCHYX7LQQ",
+        "GOLD:N3QF42LGMLZNFLXN35JBKWT5",
+        "GOLD:O53W5ZPOQ3J4GMSQ2ACMSFOJ",
+        "GOLD:OF2NP666TGZ4IAUHRZ2IOAE3",
+        "GOLD:VNILCNYBU23H7S5J2V5O2ZZT",
+        "GOLD:WQMKMUOWL2FYX3PID6ZG5JB5",
+        "GOLD:YY7C3VVWNOHRCG33RVRBXZAK",
+        "GOLD:ZOC6BM43M3Z7H3ZQD73ZTCWK"
+      ],
+      "recovered_proposals": [],
+      "lost_valid_proposals": [],
+      "fp_id_churn_warning": "ID removal/addition may represent same proposal after unit/value normalization; not necessarily resolved/new semantic FP",
+      "proposal_level_outcome_changes": [],
+      "resolved_fp_count_by_proposal": 0,
+      "new_fp_count_by_proposal": 0
+    },
+    "N1": {
+      "existing_tp_preserved": true,
+      "new_exact_gold_ids": [
+        "GOLD:N3QF42LGMLZNFLXN35JBKWT5",
+        "GOLD:YY7C3VVWNOHRCG33RVRBXZAK"
+      ],
+      "lost_exact_gold_ids": [],
+      "resolved_fn_count": 2,
+      "fp_count_delta": -2,
+      "old_fp_ids_absent": [
+        "CND:PAJZP4YXFUHWADQQ2C6WW5MB",
+        "CND:WVM5XWXAEDPVA3MJEM3P3E4J"
+      ],
+      "new_fp_ids": [],
+      "partial_to_exact_gold_ids": [
+        "GOLD:N3QF42LGMLZNFLXN35JBKWT5",
+        "GOLD:YY7C3VVWNOHRCG33RVRBXZAK"
+      ],
+      "remaining_partial_gold_ids": [
+        "GOLD:3QRRTUPV5LYHVHJELE2BPBZ4",
+        "GOLD:4CNJ6NBNNIINQ3U2XXXGKKD6",
+        "GOLD:5ZJTE4BIUAX3EUSQ5ITDADN3",
+        "GOLD:BFBSIRQNKPL3VNUSVXQG23GL",
+        "GOLD:BNSAZ3SCURPTDENMJRN3CU2M",
+        "GOLD:BX7MXK4OPKU5KLAOI53KHSPV",
+        "GOLD:CF2M4RF4BRNZUYQ4BVTWXL4T",
+        "GOLD:CLG4YUJX3JBDNDXIIAIMP6HK",
+        "GOLD:H2CEZ2GPY6OJL7PGCHYX7LQQ",
+        "GOLD:O53W5ZPOQ3J4GMSQ2ACMSFOJ",
+        "GOLD:OF2NP666TGZ4IAUHRZ2IOAE3",
+        "GOLD:VNILCNYBU23H7S5J2V5O2ZZT",
+        "GOLD:WQMKMUOWL2FYX3PID6ZG5JB5",
+        "GOLD:ZOC6BM43M3Z7H3ZQD73ZTCWK"
+      ],
+      "recovered_proposals": [],
+      "lost_valid_proposals": [],
+      "fp_id_churn_warning": "ID removal/addition may represent same proposal after unit/value normalization; not necessarily resolved/new semantic FP",
+      "proposal_level_outcome_changes": [
+        {
+          "notice_id": "KSTARTUP:176001",
+          "proposal_index": 1,
+          "before": "FP",
+          "after": "TP"
+        },
+        {
+          "notice_id": "KSTARTUP:176001",
+          "proposal_index": 0,
+          "before": "FP",
+          "after": "TP"
+        }
+      ],
+      "resolved_fp_count_by_proposal": 2,
+      "new_fp_count_by_proposal": 0
+    },
+    "N2": {
+      "existing_tp_preserved": true,
+      "new_exact_gold_ids": [],
+      "lost_exact_gold_ids": [],
+      "resolved_fn_count": 0,
+      "fp_count_delta": 0,
+      "old_fp_ids_absent": [
+        "CND:ZYI34TQBKU2FY7FA43IC2INW"
+      ],
+      "new_fp_ids": [
+        "CND:GMGO3BFBRIAS2FFA7S4LTTON"
+      ],
+      "partial_to_exact_gold_ids": [],
+      "remaining_partial_gold_ids": [
+        "GOLD:3QRRTUPV5LYHVHJELE2BPBZ4",
+        "GOLD:4CNJ6NBNNIINQ3U2XXXGKKD6",
+        "GOLD:5ZJTE4BIUAX3EUSQ5ITDADN3",
+        "GOLD:BFBSIRQNKPL3VNUSVXQG23GL",
+        "GOLD:BNSAZ3SCURPTDENMJRN3CU2M",
+        "GOLD:BX7MXK4OPKU5KLAOI53KHSPV",
+        "GOLD:CF2M4RF4BRNZUYQ4BVTWXL4T",
+        "GOLD:CLG4YUJX3JBDNDXIIAIMP6HK",
+        "GOLD:H2CEZ2GPY6OJL7PGCHYX7LQQ",
+        "GOLD:N3QF42LGMLZNFLXN35JBKWT5",
+        "GOLD:O53W5ZPOQ3J4GMSQ2ACMSFOJ",
+        "GOLD:OF2NP666TGZ4IAUHRZ2IOAE3",
+        "GOLD:VNILCNYBU23H7S5J2V5O2ZZT",
+        "GOLD:WQMKMUOWL2FYX3PID6ZG5JB5",
+        "GOLD:YY7C3VVWNOHRCG33RVRBXZAK",
+        "GOLD:ZOC6BM43M3Z7H3ZQD73ZTCWK"
+      ],
+      "recovered_proposals": [],
+      "lost_valid_proposals": [],
+      "fp_id_churn_warning": "ID removal/addition may represent same proposal after unit/value normalization; not necessarily resolved/new semantic FP",
+      "proposal_level_outcome_changes": [],
+      "resolved_fp_count_by_proposal": 0,
+      "new_fp_count_by_proposal": 0
+    },
+    "N3": {
+      "existing_tp_preserved": true,
+      "new_exact_gold_ids": [],
+      "lost_exact_gold_ids": [],
+      "resolved_fn_count": 0,
+      "fp_count_delta": 0,
+      "old_fp_ids_absent": [],
+      "new_fp_ids": [],
+      "partial_to_exact_gold_ids": [],
+      "remaining_partial_gold_ids": [
+        "GOLD:3QRRTUPV5LYHVHJELE2BPBZ4",
+        "GOLD:4CNJ6NBNNIINQ3U2XXXGKKD6",
+        "GOLD:5ZJTE4BIUAX3EUSQ5ITDADN3",
+        "GOLD:BFBSIRQNKPL3VNUSVXQG23GL",
+        "GOLD:BNSAZ3SCURPTDENMJRN3CU2M",
+        "GOLD:BX7MXK4OPKU5KLAOI53KHSPV",
+        "GOLD:CF2M4RF4BRNZUYQ4BVTWXL4T",
+        "GOLD:CLG4YUJX3JBDNDXIIAIMP6HK",
+        "GOLD:H2CEZ2GPY6OJL7PGCHYX7LQQ",
+        "GOLD:N3QF42LGMLZNFLXN35JBKWT5",
+        "GOLD:O53W5ZPOQ3J4GMSQ2ACMSFOJ",
+        "GOLD:OF2NP666TGZ4IAUHRZ2IOAE3",
+        "GOLD:VNILCNYBU23H7S5J2V5O2ZZT",
+        "GOLD:WQMKMUOWL2FYX3PID6ZG5JB5",
+        "GOLD:YY7C3VVWNOHRCG33RVRBXZAK",
+        "GOLD:ZOC6BM43M3Z7H3ZQD73ZTCWK"
+      ],
+      "recovered_proposals": [],
+      "lost_valid_proposals": [],
+      "fp_id_churn_warning": "ID removal/addition may represent same proposal after unit/value normalization; not necessarily resolved/new semantic FP",
+      "proposal_level_outcome_changes": [],
+      "resolved_fp_count_by_proposal": 0,
+      "new_fp_count_by_proposal": 0
+    },
+    "N4": {
+      "existing_tp_preserved": true,
+      "new_exact_gold_ids": [],
+      "lost_exact_gold_ids": [],
+      "resolved_fn_count": 0,
+      "fp_count_delta": 0,
+      "old_fp_ids_absent": [],
+      "new_fp_ids": [],
+      "partial_to_exact_gold_ids": [],
+      "remaining_partial_gold_ids": [
+        "GOLD:3QRRTUPV5LYHVHJELE2BPBZ4",
+        "GOLD:4CNJ6NBNNIINQ3U2XXXGKKD6",
+        "GOLD:5ZJTE4BIUAX3EUSQ5ITDADN3",
+        "GOLD:BFBSIRQNKPL3VNUSVXQG23GL",
+        "GOLD:BNSAZ3SCURPTDENMJRN3CU2M",
+        "GOLD:BX7MXK4OPKU5KLAOI53KHSPV",
+        "GOLD:CF2M4RF4BRNZUYQ4BVTWXL4T",
+        "GOLD:CLG4YUJX3JBDNDXIIAIMP6HK",
+        "GOLD:H2CEZ2GPY6OJL7PGCHYX7LQQ",
+        "GOLD:N3QF42LGMLZNFLXN35JBKWT5",
+        "GOLD:O53W5ZPOQ3J4GMSQ2ACMSFOJ",
+        "GOLD:OF2NP666TGZ4IAUHRZ2IOAE3",
+        "GOLD:VNILCNYBU23H7S5J2V5O2ZZT",
+        "GOLD:WQMKMUOWL2FYX3PID6ZG5JB5",
+        "GOLD:YY7C3VVWNOHRCG33RVRBXZAK",
+        "GOLD:ZOC6BM43M3Z7H3ZQD73ZTCWK"
+      ],
+      "recovered_proposals": [],
+      "lost_valid_proposals": [],
+      "fp_id_churn_warning": "ID removal/addition may represent same proposal after unit/value normalization; not necessarily resolved/new semantic FP",
+      "proposal_level_outcome_changes": [],
+      "resolved_fp_count_by_proposal": 0,
+      "new_fp_count_by_proposal": 0
+    },
+    "N5": {
+      "existing_tp_preserved": true,
+      "new_exact_gold_ids": [
+        "GOLD:N3QF42LGMLZNFLXN35JBKWT5",
+        "GOLD:YY7C3VVWNOHRCG33RVRBXZAK"
+      ],
+      "lost_exact_gold_ids": [],
+      "resolved_fn_count": 2,
+      "fp_count_delta": -2,
+      "old_fp_ids_absent": [
+        "CND:PAJZP4YXFUHWADQQ2C6WW5MB",
+        "CND:WVM5XWXAEDPVA3MJEM3P3E4J",
+        "CND:ZYI34TQBKU2FY7FA43IC2INW"
+      ],
+      "new_fp_ids": [
+        "CND:GMGO3BFBRIAS2FFA7S4LTTON"
+      ],
+      "partial_to_exact_gold_ids": [
+        "GOLD:N3QF42LGMLZNFLXN35JBKWT5",
+        "GOLD:YY7C3VVWNOHRCG33RVRBXZAK"
+      ],
+      "remaining_partial_gold_ids": [
+        "GOLD:3QRRTUPV5LYHVHJELE2BPBZ4",
+        "GOLD:4CNJ6NBNNIINQ3U2XXXGKKD6",
+        "GOLD:5ZJTE4BIUAX3EUSQ5ITDADN3",
+        "GOLD:BFBSIRQNKPL3VNUSVXQG23GL",
+        "GOLD:BNSAZ3SCURPTDENMJRN3CU2M",
+        "GOLD:BX7MXK4OPKU5KLAOI53KHSPV",
+        "GOLD:CF2M4RF4BRNZUYQ4BVTWXL4T",
+        "GOLD:CLG4YUJX3JBDNDXIIAIMP6HK",
+        "GOLD:H2CEZ2GPY6OJL7PGCHYX7LQQ",
+        "GOLD:O53W5ZPOQ3J4GMSQ2ACMSFOJ",
+        "GOLD:OF2NP666TGZ4IAUHRZ2IOAE3",
+        "GOLD:VNILCNYBU23H7S5J2V5O2ZZT",
+        "GOLD:WQMKMUOWL2FYX3PID6ZG5JB5",
+        "GOLD:ZOC6BM43M3Z7H3ZQD73ZTCWK"
+      ],
+      "recovered_proposals": [],
+      "lost_valid_proposals": [],
+      "fp_id_churn_warning": "ID removal/addition may represent same proposal after unit/value normalization; not necessarily resolved/new semantic FP",
+      "proposal_level_outcome_changes": [
+        {
+          "notice_id": "KSTARTUP:176001",
+          "proposal_index": 1,
+          "before": "FP",
+          "after": "TP"
+        },
+        {
+          "notice_id": "KSTARTUP:176001",
+          "proposal_index": 0,
+          "before": "FP",
+          "after": "TP"
+        }
+      ],
+      "resolved_fp_count_by_proposal": 2,
+      "new_fp_count_by_proposal": 0
+    }
+  },
+  "baseline_reproduced": true,
+  "N4_status": "NO_CHANGE",
+  "source_hashes_preserved": true,
+  "api_call_count": 0,
+  "logic_adapter_modified": false,
+  "extended_verification": {
+    "N0_candidate_records_identical_to_P12": true,
+    "six_distinct_experiment_fingerprints": true,
+    "invalid_logic_references": 0,
+    "exception_auto_application_allowed": 0,
+    "response_wide_schema_failure_unchanged": true
+  },
+  "test_results": {
+    "new_normalization_synthetic_tests": 22,
+    "existing_contract_tests": 27,
+    "related_unittest_total_including_new": 81,
+    "all_passed": true,
+    "additional_data_replay": "9 valid responses x 6 arms x 2 independent replays; 1 schema-failed response preserved in all arms"
+  }
+}

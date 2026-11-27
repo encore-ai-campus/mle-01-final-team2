@@ -1,0 +1,54 @@
+[
+  {
+    "notice_id": "BIZINFO:PBLN_000000000117168",
+    "status": "SOURCE_FIELD_MISMATCH",
+    "review_status": "NEEDS_REVIEW",
+    "decision_eligible": false,
+    "proposal_index": 0,
+    "field": "BUSINESS_TYPE",
+    "normalized_field": "BUSINESS_TYPE",
+    "condition_type": "ELIGIBILITY",
+    "evidence_quotes": [
+      "대구시에 주소와 사업장을 둔 소상공인"
+    ]
+  },
+  {
+    "notice_id": "BIZINFO:PBLN_000000000117168",
+    "status": "SOURCE_FIELD_MISMATCH",
+    "review_status": "NEEDS_REVIEW",
+    "decision_eligible": false,
+    "proposal_index": 1,
+    "field": "APPLICANT_ADDRESS",
+    "normalized_field": "APPLICANT_ADDRESS",
+    "condition_type": "ELIGIBILITY",
+    "evidence_quotes": [
+      "대구시에 주소와 사업장을 둔 소상공인",
+      "2024. 1. 1. 이전부터 대구시에 사업자등록증명원 소재지 및 주소지 유지"
+    ]
+  },
+  {
+    "notice_id": "BIZINFO:PBLN_000000000117168",
+    "status": "SOURCE_FIELD_MISMATCH",
+    "review_status": "NEEDS_REVIEW",
+    "decision_eligible": false,
+    "proposal_index": 2,
+    "field": "BUSINESS_LOCATION",
+    "normalized_field": "BUSINESS_LOCATION",
+    "condition_type": "ELIGIBILITY",
+    "evidence_quotes": [
+      "대구시에 주소와 사업장을 둔 소상공인",
+      "2024. 1. 1. 이전부터 대구시에 사업자등록증명원 소재지 및 주소지 유지"
+    ]
+  },
+  {
+    "notice_id": "BIZINFO:PBLN_000000000117168",
+    "status": "INCOMPLETE_LOGIC_DUE_TO_HELD_CONDITIONS",
+    "unresolved_condition_indexes": [
+      0,
+      1,
+      2
+    ],
+    "review_status": "NEEDS_REVIEW",
+    "decision_eligible": false
+  }
+]

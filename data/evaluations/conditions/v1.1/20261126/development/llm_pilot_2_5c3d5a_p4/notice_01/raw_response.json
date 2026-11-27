@@ -1,0 +1,28 @@
+{
+  "run_id": "llm_pilot_2_5c3d5a_p4",
+  "request_ordinal": 1,
+  "notice_id": "BIZINFO:PBLN_000000000117168",
+  "http_status": 200,
+  "provider_request_id": "req_58ff8abd9c7e4168b95c4807d146abae",
+  "finish_reason": "stop",
+  "usage": {
+    "completion_tokens": 995,
+    "prompt_tokens": 5359,
+    "total_tokens": 6354,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 206,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 5356,
+      "cached_tokens": 0
+    }
+  },
+  "duration_ms": 10886,
+  "raw_response_sha256": "f158d79f1cc7df58e5f009d38e5c51e62352808a9498e81f55a1080bd75511d3",
+  "response_text": "{\"schema_version\":\"condition-next-extraction-policy-v1\",\"status\":\"CONDITIONS_FOUND\",\"source_state\":\"CONDITIONS_PRESENT\",\"conditions\":[{\"condition_type\":\"ELIGIBILITY\",\"category_id\":\"BUSINESS_TYPE\",\"field\":\"BUSINESS_TYPE\",\"operator\":\"EQ\",\"value\":\"소상공인\",\"value_type\":\"STRING\",\"unit\":null,\"evidence_quotes\":[\"대구시에 주소와 사업장을 둔 소상공인\"],\"source_field\":\"소상공인\",\"applicability_scope\":\"사업체\",\"evaluation_phase\":\"APPLICATION\",\"fulfillment_phase\":\"APPLICATION\",\"requirement_kind\":\"CURRENT_STATE\",\"reference_date_type\":\"UNKNOWN\",\"reference_date\":null,\"temporal_constraint\":null,\"uncertainty\":{\"is_uncertain\":false,\"reason\":null},\"external_reference\":null},{\"condition_type\":\"ELIGIBILITY\",\"category_id\":\"APPLICANT_ADDRESS\",\"field\":\"APPLICANT_ADDRESS\",\"operator\":\"EQ\",\"value\":\"대구시\",\"value_type\":\"STRING\",\"unit\":null,\"evidence_quotes\":[\"대구시에 주소와 사업장을 둔 소상공인\",\"2024. 1. 1. 이전부터 대구시에 사업자등록증명원 소재지 및 주소지 유지\"],\"source_field\":\"주소지\",\"applicability_scope\":\"신청자 주소지\",\"evaluation_phase\":\"APPLICATION\",\"fulfillment_phase\":\"APPLICATION\",\"requirement_kind\":\"CURRENT_STATE\",\"reference_date_type\":\"SPECIFIC_DATE\",\"reference_date\":\"2024-01-01\",\"temporal_constraint\":{\"anchor_event\":\"FIXED_DATE\",\"fixed_reference_date\":\"2024-01-01\",\"offset_value\":null,\"offset_unit\":null,\"operator\":\"LT\",\"inclusive\":false,\"applies_to\":\"주소지 유지 시작 시점\",\"anchor_date_known\":true},\"uncertainty\":{\"is_uncertain\":false,\"reason\":null},\"external_reference\":null},{\"condition_type\":\"ELIGIBILITY\",\"category_id\":\"BUSINESS_LOCATION\",\"field\":\"BUSINESS_LOCATION\",\"operator\":\"EQ\",\"value\":\"대구시\",\"value_type\":\"STRING\",\"unit\":null,\"evidence_quotes\":[\"대구시에 주소와 사업장을 둔 소상공인\",\"2024. 1. 1. 이전부터 대구시에 사업자등록증명원 소재지 및 주소지 유지\"],\"source_field\":\"사업자등록증명원 소재지\",\"applicability_scope\":\"사업장 소재지\",\"evaluation_phase\":\"APPLICATION\",\"fulfillment_phase\":\"APPLICATION\",\"requirement_kind\":\"CURRENT_STATE\",\"reference_date_type\":\"SPECIFIC_DATE\",\"reference_date\":\"2024-01-01\",\"temporal_constraint\":{\"anchor_event\":\"FIXED_DATE\",\"fixed_reference_date\":\"2024-01-01\",\"offset_value\":null,\"offset_unit\":null,\"operator\":\"LT\",\"inclusive\":false,\"applies_to\":\"사업장 소재지 유지 시작 시점\",\"anchor_date_known\":true},\"uncertainty\":{\"is_uncertain\":false,\"reason\":null},\"external_reference\":null}],\"unresolved_conditions\":[],\"logic_groups\":[{\"group_id\":\"G1\",\"operator\":\"AND\",\"children\":[{\"node_type\":\"CONDITION_REF\",\"condition_index\":0},{\"node_type\":\"CONDITION_REF\",\"condition_index\":1},{\"node_type\":\"CONDITION_REF\",\"condition_index\":2}],\"evidence_quote\":\"대구시에 주소와 사업장을 둔 소상공인\\n- 2024. 1. 1. 이전부터 대구시에 사업자등록증명원 소재지 및 주소지 유지\"}],\"logic_sections\":[{\"section_id\":\"S1\",\"section_type\":\"ELIGIBILITY\",\"evaluation_phase\":\"APPLICATION\",\"fulfillment_phase\":\"APPLICATION\",\"root_ref\":{\"node_type\":\"GROUP_REF\",\"group_id\":\"G1\"}}],\"exceptions\":[],\"unresolved_relations\":[],\"logic_completeness\":\"PROPOSAL_ONLY\",\"decision_eligible\":false}",
+  "refusal": null
+}

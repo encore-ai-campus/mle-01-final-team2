@@ -1,0 +1,313 @@
+{
+  "conditions": [],
+  "source_state": "CONDITIONS_PRESENT",
+  "attribute_validation": [
+    {
+      "proposal_index": 0,
+      "original_field": "BUSINESS_TYPE",
+      "normalized_field": "BUSINESS_TYPE",
+      "original_category_id": "BUSINESS_TYPE",
+      "original_value": "소상공인",
+      "original_evidence_quotes": [
+        "대구시에 주소와 사업장을 둔 소상공인"
+      ],
+      "mapping_rule_id": "IDENTITY_CATALOG_FIELD_V1",
+      "mapping_rule_version": "attribute-normalization-v2",
+      "normalization_reason": "already canonical",
+      "mapping_status": "IDENTITY"
+    },
+    {
+      "proposal_index": 1,
+      "original_field": "APPLICANT_ADDRESS",
+      "normalized_field": "APPLICANT_ADDRESS",
+      "original_category_id": "APPLICANT_ADDRESS",
+      "original_value": "대구시",
+      "original_evidence_quotes": [
+        "대구시에 주소와 사업장을 둔 소상공인",
+        "2024. 1. 1. 이전부터 대구시에 사업자등록증명원 소재지 및 주소지 유지"
+      ],
+      "mapping_rule_id": "IDENTITY_CATALOG_FIELD_V1",
+      "mapping_rule_version": "attribute-normalization-v2",
+      "normalization_reason": "already canonical",
+      "mapping_status": "IDENTITY"
+    },
+    {
+      "proposal_index": 2,
+      "original_field": "BUSINESS_LOCATION",
+      "normalized_field": "BUSINESS_LOCATION",
+      "original_category_id": "BUSINESS_LOCATION",
+      "original_value": "대구시",
+      "original_evidence_quotes": [
+        "대구시에 주소와 사업장을 둔 소상공인",
+        "2024. 1. 1. 이전부터 대구시에 사업자등록증명원 소재지 및 주소지 유지"
+      ],
+      "mapping_rule_id": "IDENTITY_CATALOG_FIELD_V1",
+      "mapping_rule_version": "attribute-normalization-v2",
+      "normalization_reason": "already canonical",
+      "mapping_status": "IDENTITY"
+    }
+  ],
+  "candidate_review_queue": {
+    "notice_id": "BIZINFO:PBLN_000000000117168",
+    "source_system": "BIZINFO",
+    "status": "CANDIDATE_REVIEW_REQUIRED",
+    "held_count": 4,
+    "held_items": [
+      {
+        "notice_id": "BIZINFO:PBLN_000000000117168",
+        "status": "SOURCE_FIELD_MISMATCH",
+        "review_status": "NEEDS_REVIEW",
+        "decision_eligible": false,
+        "proposal_index": 0,
+        "field": "BUSINESS_TYPE",
+        "normalized_field": "BUSINESS_TYPE",
+        "condition_type": "ELIGIBILITY",
+        "evidence_quotes": [
+          "대구시에 주소와 사업장을 둔 소상공인"
+        ]
+      },
+      {
+        "notice_id": "BIZINFO:PBLN_000000000117168",
+        "status": "SOURCE_FIELD_MISMATCH",
+        "review_status": "NEEDS_REVIEW",
+        "decision_eligible": false,
+        "proposal_index": 1,
+        "field": "APPLICANT_ADDRESS",
+        "normalized_field": "APPLICANT_ADDRESS",
+        "condition_type": "ELIGIBILITY",
+        "evidence_quotes": [
+          "대구시에 주소와 사업장을 둔 소상공인",
+          "2024. 1. 1. 이전부터 대구시에 사업자등록증명원 소재지 및 주소지 유지"
+        ]
+      },
+      {
+        "notice_id": "BIZINFO:PBLN_000000000117168",
+        "status": "SOURCE_FIELD_MISMATCH",
+        "review_status": "NEEDS_REVIEW",
+        "decision_eligible": false,
+        "proposal_index": 2,
+        "field": "BUSINESS_LOCATION",
+        "normalized_field": "BUSINESS_LOCATION",
+        "condition_type": "ELIGIBILITY",
+        "evidence_quotes": [
+          "대구시에 주소와 사업장을 둔 소상공인",
+          "2024. 1. 1. 이전부터 대구시에 사업자등록증명원 소재지 및 주소지 유지"
+        ]
+      },
+      {
+        "notice_id": "BIZINFO:PBLN_000000000117168",
+        "status": "INCOMPLETE_LOGIC_DUE_TO_HELD_CONDITIONS",
+        "unresolved_condition_indexes": [
+          0,
+          1,
+          2
+        ],
+        "review_status": "NEEDS_REVIEW",
+        "decision_eligible": false
+      }
+    ],
+    "source_completeness": "PARTIAL",
+    "review_status": "NEEDS_REVIEW",
+    "decision_eligible": false
+  },
+  "unresolved_conditions": [],
+  "raw_logic_groups": [
+    {
+      "group_id": "G1",
+      "operator": "AND",
+      "children": [
+        {
+          "node_type": "CONDITION_REF",
+          "condition_index": 0
+        },
+        {
+          "node_type": "CONDITION_REF",
+          "condition_index": 1
+        },
+        {
+          "node_type": "CONDITION_REF",
+          "condition_index": 2
+        }
+      ],
+      "evidence_quote": "대구시에 주소와 사업장을 둔 소상공인\n- 2024. 1. 1. 이전부터 대구시에 사업자등록증명원 소재지 및 주소지 유지"
+    }
+  ],
+  "raw_logic_sections": [
+    {
+      "section_id": "S1",
+      "section_type": "ELIGIBILITY",
+      "evaluation_phase": "APPLICATION",
+      "fulfillment_phase": "APPLICATION",
+      "root_ref": {
+        "node_type": "GROUP_REF",
+        "group_id": "G1"
+      }
+    }
+  ],
+  "exceptions": [],
+  "unresolved_relations": [],
+  "held_refs": [
+    {
+      "node_type": "CONDITION_REF",
+      "condition_index": 0
+    },
+    {
+      "node_type": "CONDITION_REF",
+      "condition_index": 1
+    },
+    {
+      "node_type": "CONDITION_REF",
+      "condition_index": 2
+    }
+  ],
+  "unvalidated_condition_indexes": [
+    0,
+    1,
+    2
+  ],
+  "logic_completeness": "INCOMPLETE",
+  "evaluation_record": {
+    "notice_id": "BIZINFO:PBLN_000000000117168",
+    "logic_sections": [],
+    "decision_eligible": false,
+    "logical_roots": []
+  },
+  "reference_audit": {
+    "adapter_version": "condition-logic-evaluation-adapter-v1",
+    "root_selection": "EXISTING_LOGIC_SECTIONS_ROOTS",
+    "integrity_status": "PASS",
+    "errors": [],
+    "warnings": [],
+    "group_definitions": 0,
+    "used_group_ids": [],
+    "source_sections": [],
+    "source_roots": [],
+    "evaluation_counts": {
+      "groups": 0,
+      "edges": 0,
+      "nested_groups": 0,
+      "condition_reference_occurrences": 0,
+      "root_count": 0
+    },
+    "source_proposal": {},
+    "unresolved_condition_indexes": [],
+    "unexecutable_groups": [],
+    "exceptions": [],
+    "unresolved_relations": [],
+    "logical_completeness": "NOT_AVAILABLE_IN_SOURCE",
+    "unsupported_semantics": {
+      "exception_effects": "NOT_MEASURED_UNSUPPORTED",
+      "exception_scope": "PRESERVED_NOT_SCORED",
+      "unresolved_relation_meaning": "NOT_MEASURED_UNSUPPORTED",
+      "completeness": "PRESERVED_NOT_SCORED",
+      "phase_dependent_logic": "NOT_MEASURED_UNSUPPORTED"
+    },
+    "decision_eligible": false
+  },
+  "normalization": [],
+  "existing_intermediate_projection": {
+    "status": "CONDITIONS_FOUND",
+    "conditions": [
+      {
+        "condition_type": "ELIGIBILITY",
+        "category_id": "BUSINESS_TYPE",
+        "field": "BUSINESS_TYPE",
+        "operator": "EQ",
+        "value": "소상공인",
+        "value_type": "STRING",
+        "unit": null,
+        "evidence_quotes": [
+          "대구시에 주소와 사업장을 둔 소상공인"
+        ],
+        "source_field": "소상공인",
+        "applicability_scope": "사업체",
+        "evaluation_phase": "APPLICATION",
+        "fulfillment_phase": "APPLICATION",
+        "requirement_kind": "CURRENT_STATE",
+        "reference_date_type": "UNKNOWN",
+        "reference_date": null,
+        "temporal_constraint": null,
+        "uncertainty": {
+          "is_uncertain": false,
+          "reason": null
+        },
+        "external_reference": null
+      },
+      {
+        "condition_type": "ELIGIBILITY",
+        "category_id": "APPLICANT_ADDRESS",
+        "field": "APPLICANT_ADDRESS",
+        "operator": "EQ",
+        "value": "대구시",
+        "value_type": "STRING",
+        "unit": null,
+        "evidence_quotes": [
+          "대구시에 주소와 사업장을 둔 소상공인",
+          "2024. 1. 1. 이전부터 대구시에 사업자등록증명원 소재지 및 주소지 유지"
+        ],
+        "source_field": "주소지",
+        "applicability_scope": "신청자 주소지",
+        "evaluation_phase": "APPLICATION",
+        "fulfillment_phase": "APPLICATION",
+        "requirement_kind": "CURRENT_STATE",
+        "reference_date_type": "SPECIFIC_DATE",
+        "reference_date": "2024-01-01",
+        "temporal_constraint": {
+          "anchor_event": "FIXED_DATE",
+          "fixed_reference_date": "2024-01-01",
+          "offset_value": null,
+          "offset_unit": null,
+          "operator": "LT",
+          "inclusive": false,
+          "applies_to": "주소지 유지 시작 시점",
+          "anchor_date_known": true
+        },
+        "uncertainty": {
+          "is_uncertain": false,
+          "reason": null
+        },
+        "external_reference": null
+      },
+      {
+        "condition_type": "ELIGIBILITY",
+        "category_id": "BUSINESS_LOCATION",
+        "field": "BUSINESS_LOCATION",
+        "operator": "EQ",
+        "value": "대구시",
+        "value_type": "STRING",
+        "unit": null,
+        "evidence_quotes": [
+          "대구시에 주소와 사업장을 둔 소상공인",
+          "2024. 1. 1. 이전부터 대구시에 사업자등록증명원 소재지 및 주소지 유지"
+        ],
+        "source_field": "사업자등록증명원 소재지",
+        "applicability_scope": "사업장 소재지",
+        "evaluation_phase": "APPLICATION",
+        "fulfillment_phase": "APPLICATION",
+        "requirement_kind": "CURRENT_STATE",
+        "reference_date_type": "SPECIFIC_DATE",
+        "reference_date": "2024-01-01",
+        "temporal_constraint": {
+          "anchor_event": "FIXED_DATE",
+          "fixed_reference_date": "2024-01-01",
+          "offset_value": null,
+          "offset_unit": null,
+          "operator": "LT",
+          "inclusive": false,
+          "applies_to": "사업장 소재지 유지 시작 시점",
+          "anchor_date_known": true
+        },
+        "uncertainty": {
+          "is_uncertain": false,
+          "reason": null
+        },
+        "external_reference": null
+      }
+    ],
+    "logic_sections": [],
+    "exceptions": [],
+    "unresolved_relations": []
+  },
+  "decision_eligible": false,
+  "review_status": "UNREVIEWED"
+}

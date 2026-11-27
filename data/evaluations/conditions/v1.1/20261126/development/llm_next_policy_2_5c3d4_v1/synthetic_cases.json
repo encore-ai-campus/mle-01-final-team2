@@ -1,0 +1,755 @@
+[
+  {
+    "name": "nested_standard_conditions",
+    "source": {
+      "notice_id": "SYNTHETIC:NEXT_POLICY",
+      "source_system": "KSTARTUP",
+      "raw_text": "사업장이 울산광역시에 있어야 한다.\n연구기관 또는 창업 4년 미만 기업만 신청할 수 있다.\n사업장 증빙서류를 신청 시 제출해야 한다.\n환경산업 기업은 우대한다.\n다른 시설에 중복 입주한 기업은 신청할 수 없다.",
+      "completeness_status": "UNKNOWN",
+      "source_snapshot": "synthetic-v1"
+    },
+    "response": {
+      "schema_version": "condition-next-extraction-policy-v1",
+      "status": "CONDITIONS_FOUND",
+      "source_state": "CONDITIONS_PRESENT",
+      "conditions": [
+        {
+          "condition_type": "ELIGIBILITY",
+          "category_id": "BUSINESS_LOCATION",
+          "field": "BUSINESS_LOCATION",
+          "operator": "EQ",
+          "value": "울산광역시",
+          "value_type": "STRING",
+          "unit": null,
+          "evidence_quotes": [
+            "사업장이 울산광역시에 있어야 한다."
+          ],
+          "source_field": "condition_texts.eligibility.text",
+          "applicability_scope": null,
+          "evaluation_phase": "APPLICATION",
+          "fulfillment_phase": "APPLICATION",
+          "requirement_kind": "CURRENT_STATE",
+          "reference_date_type": "UNKNOWN",
+          "reference_date": null,
+          "temporal_constraint": null,
+          "uncertainty": {
+            "is_uncertain": false,
+            "reason": null
+          },
+          "external_reference": null
+        },
+        {
+          "condition_type": "ELIGIBILITY",
+          "category_id": "APPLICANT_TYPE",
+          "field": "APPLICANT_TYPE",
+          "operator": "EQ",
+          "value": "연구기관",
+          "value_type": "STRING",
+          "unit": null,
+          "evidence_quotes": [
+            "연구기관 또는 창업 4년 미만 기업만 신청할 수 있다."
+          ],
+          "source_field": "condition_texts.eligibility.text",
+          "applicability_scope": null,
+          "evaluation_phase": "APPLICATION",
+          "fulfillment_phase": "APPLICATION",
+          "requirement_kind": "CURRENT_STATE",
+          "reference_date_type": "UNKNOWN",
+          "reference_date": null,
+          "temporal_constraint": null,
+          "uncertainty": {
+            "is_uncertain": false,
+            "reason": null
+          },
+          "external_reference": null
+        },
+        {
+          "condition_type": "ELIGIBILITY",
+          "category_id": "BUSINESS_AGE",
+          "field": "BUSINESS_AGE",
+          "operator": "LT",
+          "value": 4,
+          "value_type": "NUMBER",
+          "unit": "YEAR",
+          "evidence_quotes": [
+            "연구기관 또는 창업 4년 미만 기업만 신청할 수 있다."
+          ],
+          "source_field": "condition_texts.eligibility.text",
+          "applicability_scope": null,
+          "evaluation_phase": "APPLICATION",
+          "fulfillment_phase": "APPLICATION",
+          "requirement_kind": "CURRENT_STATE",
+          "reference_date_type": "UNKNOWN",
+          "reference_date": null,
+          "temporal_constraint": null,
+          "uncertainty": {
+            "is_uncertain": false,
+            "reason": null
+          },
+          "external_reference": null
+        },
+        {
+          "condition_type": "ELIGIBILITY",
+          "category_id": "DOCUMENT_SUBMISSION",
+          "field": "DOCUMENT_SUBMISSION",
+          "operator": "EQ",
+          "value": "사업장 증빙서류 제출",
+          "value_type": "STRING",
+          "unit": null,
+          "evidence_quotes": [
+            "사업장 증빙서류를 신청 시 제출해야 한다."
+          ],
+          "source_field": "condition_texts.eligibility.text",
+          "applicability_scope": null,
+          "evaluation_phase": "APPLICATION",
+          "fulfillment_phase": "APPLICATION",
+          "requirement_kind": "CURRENT_STATE",
+          "reference_date_type": "UNKNOWN",
+          "reference_date": null,
+          "temporal_constraint": null,
+          "uncertainty": {
+            "is_uncertain": false,
+            "reason": null
+          },
+          "external_reference": null
+        },
+        {
+          "condition_type": "PREFERENCE",
+          "category_id": "INDUSTRY",
+          "field": "INDUSTRY",
+          "operator": "EQ",
+          "value": "환경산업",
+          "value_type": "STRING",
+          "unit": null,
+          "evidence_quotes": [
+            "환경산업 기업은 우대한다."
+          ],
+          "source_field": "condition_texts.eligibility.text",
+          "applicability_scope": null,
+          "evaluation_phase": "APPLICATION",
+          "fulfillment_phase": "APPLICATION",
+          "requirement_kind": "CURRENT_STATE",
+          "reference_date_type": "UNKNOWN",
+          "reference_date": null,
+          "temporal_constraint": null,
+          "uncertainty": {
+            "is_uncertain": false,
+            "reason": null
+          },
+          "external_reference": null
+        },
+        {
+          "condition_type": "EXCLUSION",
+          "category_id": "DUPLICATE_OCCUPANCY",
+          "field": "DUPLICATE_OCCUPANCY",
+          "operator": "EQ",
+          "value": true,
+          "value_type": "BOOLEAN",
+          "unit": null,
+          "evidence_quotes": [
+            "다른 시설에 중복 입주한 기업은 신청할 수 없다."
+          ],
+          "source_field": "condition_texts.eligibility.text",
+          "applicability_scope": null,
+          "evaluation_phase": "APPLICATION",
+          "fulfillment_phase": "APPLICATION",
+          "requirement_kind": "CURRENT_STATE",
+          "reference_date_type": "UNKNOWN",
+          "reference_date": null,
+          "temporal_constraint": null,
+          "uncertainty": {
+            "is_uncertain": false,
+            "reason": null
+          },
+          "external_reference": null
+        }
+      ],
+      "unresolved_conditions": [],
+      "logic_groups": [
+        {
+          "group_id": "g-choice",
+          "operator": "OR",
+          "children": [
+            {
+              "node_type": "CONDITION_REF",
+              "condition_index": 1
+            },
+            {
+              "node_type": "CONDITION_REF",
+              "condition_index": 2
+            }
+          ],
+          "evidence_quote": "연구기관 또는 창업 4년 미만 기업만 신청할 수 있다."
+        },
+        {
+          "group_id": "g-required",
+          "operator": "AND",
+          "children": [
+            {
+              "node_type": "CONDITION_REF",
+              "condition_index": 0
+            },
+            {
+              "node_type": "GROUP_REF",
+              "group_id": "g-choice"
+            },
+            {
+              "node_type": "CONDITION_REF",
+              "condition_index": 3
+            }
+          ],
+          "evidence_quote": null
+        }
+      ],
+      "logic_sections": [
+        {
+          "section_id": "elig",
+          "section_type": "ELIGIBILITY",
+          "root_ref": {
+            "node_type": "GROUP_REF",
+            "group_id": "g-required"
+          },
+          "evaluation_phase": "APPLICATION",
+          "fulfillment_phase": "APPLICATION"
+        },
+        {
+          "section_id": "pref",
+          "section_type": "PREFERENCE",
+          "root_ref": {
+            "node_type": "CONDITION_REF",
+            "condition_index": 4
+          },
+          "evaluation_phase": "SELECTION",
+          "fulfillment_phase": "SELECTION"
+        },
+        {
+          "section_id": "excl",
+          "section_type": "EXCLUSION",
+          "root_ref": {
+            "node_type": "CONDITION_REF",
+            "condition_index": 5
+          },
+          "evaluation_phase": "APPLICATION",
+          "fulfillment_phase": "APPLICATION"
+        }
+      ],
+      "exceptions": [],
+      "unresolved_relations": [],
+      "logic_completeness": "PROPOSAL_ONLY",
+      "decision_eligible": false
+    },
+    "expected": "VALIDATED_UNREVIEWED"
+  },
+  {
+    "name": "unsupported_team_role",
+    "source": {
+      "notice_id": "SYNTHETIC:NEXT_POLICY",
+      "source_system": "KSTARTUP",
+      "raw_text": "사업장이 울산광역시에 있어야 한다.\n연구기관 또는 창업 4년 미만 기업만 신청할 수 있다.\n사업장 증빙서류를 신청 시 제출해야 한다.\n환경산업 기업은 우대한다.\n다른 시설에 중복 입주한 기업은 신청할 수 없다.\n팀원은 만 26세 이상이어야 한다.",
+      "completeness_status": "UNKNOWN",
+      "source_snapshot": "synthetic-v1"
+    },
+    "response": {
+      "schema_version": "condition-next-extraction-policy-v1",
+      "status": "CONDITIONS_FOUND",
+      "source_state": "CONDITIONS_PRESENT",
+      "conditions": [
+        {
+          "condition_type": "ELIGIBILITY",
+          "category_id": "BUSINESS_LOCATION",
+          "field": "BUSINESS_LOCATION",
+          "operator": "EQ",
+          "value": "울산광역시",
+          "value_type": "STRING",
+          "unit": null,
+          "evidence_quotes": [
+            "사업장이 울산광역시에 있어야 한다."
+          ],
+          "source_field": "condition_texts.eligibility.text",
+          "applicability_scope": null,
+          "evaluation_phase": "APPLICATION",
+          "fulfillment_phase": "APPLICATION",
+          "requirement_kind": "CURRENT_STATE",
+          "reference_date_type": "UNKNOWN",
+          "reference_date": null,
+          "temporal_constraint": null,
+          "uncertainty": {
+            "is_uncertain": false,
+            "reason": null
+          },
+          "external_reference": null
+        },
+        {
+          "condition_type": "ELIGIBILITY",
+          "category_id": "APPLICANT_TYPE",
+          "field": "APPLICANT_TYPE",
+          "operator": "EQ",
+          "value": "연구기관",
+          "value_type": "STRING",
+          "unit": null,
+          "evidence_quotes": [
+            "연구기관 또는 창업 4년 미만 기업만 신청할 수 있다."
+          ],
+          "source_field": "condition_texts.eligibility.text",
+          "applicability_scope": null,
+          "evaluation_phase": "APPLICATION",
+          "fulfillment_phase": "APPLICATION",
+          "requirement_kind": "CURRENT_STATE",
+          "reference_date_type": "UNKNOWN",
+          "reference_date": null,
+          "temporal_constraint": null,
+          "uncertainty": {
+            "is_uncertain": false,
+            "reason": null
+          },
+          "external_reference": null
+        },
+        {
+          "condition_type": "ELIGIBILITY",
+          "category_id": "BUSINESS_AGE",
+          "field": "BUSINESS_AGE",
+          "operator": "LT",
+          "value": 4,
+          "value_type": "NUMBER",
+          "unit": "YEAR",
+          "evidence_quotes": [
+            "연구기관 또는 창업 4년 미만 기업만 신청할 수 있다."
+          ],
+          "source_field": "condition_texts.eligibility.text",
+          "applicability_scope": null,
+          "evaluation_phase": "APPLICATION",
+          "fulfillment_phase": "APPLICATION",
+          "requirement_kind": "CURRENT_STATE",
+          "reference_date_type": "UNKNOWN",
+          "reference_date": null,
+          "temporal_constraint": null,
+          "uncertainty": {
+            "is_uncertain": false,
+            "reason": null
+          },
+          "external_reference": null
+        },
+        {
+          "condition_type": "ELIGIBILITY",
+          "category_id": "DOCUMENT_SUBMISSION",
+          "field": "DOCUMENT_SUBMISSION",
+          "operator": "EQ",
+          "value": "사업장 증빙서류 제출",
+          "value_type": "STRING",
+          "unit": null,
+          "evidence_quotes": [
+            "사업장 증빙서류를 신청 시 제출해야 한다."
+          ],
+          "source_field": "condition_texts.eligibility.text",
+          "applicability_scope": null,
+          "evaluation_phase": "APPLICATION",
+          "fulfillment_phase": "APPLICATION",
+          "requirement_kind": "CURRENT_STATE",
+          "reference_date_type": "UNKNOWN",
+          "reference_date": null,
+          "temporal_constraint": null,
+          "uncertainty": {
+            "is_uncertain": false,
+            "reason": null
+          },
+          "external_reference": null
+        },
+        {
+          "condition_type": "PREFERENCE",
+          "category_id": "INDUSTRY",
+          "field": "INDUSTRY",
+          "operator": "EQ",
+          "value": "환경산업",
+          "value_type": "STRING",
+          "unit": null,
+          "evidence_quotes": [
+            "환경산업 기업은 우대한다."
+          ],
+          "source_field": "condition_texts.eligibility.text",
+          "applicability_scope": null,
+          "evaluation_phase": "APPLICATION",
+          "fulfillment_phase": "APPLICATION",
+          "requirement_kind": "CURRENT_STATE",
+          "reference_date_type": "UNKNOWN",
+          "reference_date": null,
+          "temporal_constraint": null,
+          "uncertainty": {
+            "is_uncertain": false,
+            "reason": null
+          },
+          "external_reference": null
+        },
+        {
+          "condition_type": "EXCLUSION",
+          "category_id": "DUPLICATE_OCCUPANCY",
+          "field": "DUPLICATE_OCCUPANCY",
+          "operator": "EQ",
+          "value": true,
+          "value_type": "BOOLEAN",
+          "unit": null,
+          "evidence_quotes": [
+            "다른 시설에 중복 입주한 기업은 신청할 수 없다."
+          ],
+          "source_field": "condition_texts.eligibility.text",
+          "applicability_scope": null,
+          "evaluation_phase": "APPLICATION",
+          "fulfillment_phase": "APPLICATION",
+          "requirement_kind": "CURRENT_STATE",
+          "reference_date_type": "UNKNOWN",
+          "reference_date": null,
+          "temporal_constraint": null,
+          "uncertainty": {
+            "is_uncertain": false,
+            "reason": null
+          },
+          "external_reference": null
+        }
+      ],
+      "unresolved_conditions": [
+        {
+          "raw_condition": "팀원은 만 26세 이상이어야 한다.",
+          "evidence_quotes": [
+            "팀원은 만 26세 이상이어야 한다."
+          ],
+          "proposed_field": "team_member_age",
+          "entity_scope": "TEAM_MEMBER",
+          "condition_type": "ELIGIBILITY",
+          "operator": null,
+          "reason_code": "UNSUPPORTED_ATTRIBUTE",
+          "reason": "기존 표준 속성으로 의미를 확정하지 못함",
+          "review_status": "NEEDS_REVIEW",
+          "decision_eligible": false
+        }
+      ],
+      "logic_groups": [
+        {
+          "group_id": "g-choice",
+          "operator": "OR",
+          "children": [
+            {
+              "node_type": "CONDITION_REF",
+              "condition_index": 1
+            },
+            {
+              "node_type": "CONDITION_REF",
+              "condition_index": 2
+            }
+          ],
+          "evidence_quote": "연구기관 또는 창업 4년 미만 기업만 신청할 수 있다."
+        },
+        {
+          "group_id": "g-required",
+          "operator": "AND",
+          "children": [
+            {
+              "node_type": "CONDITION_REF",
+              "condition_index": 0
+            },
+            {
+              "node_type": "GROUP_REF",
+              "group_id": "g-choice"
+            },
+            {
+              "node_type": "CONDITION_REF",
+              "condition_index": 3
+            }
+          ],
+          "evidence_quote": null
+        }
+      ],
+      "logic_sections": [
+        {
+          "section_id": "elig",
+          "section_type": "ELIGIBILITY",
+          "root_ref": {
+            "node_type": "GROUP_REF",
+            "group_id": "g-required"
+          },
+          "evaluation_phase": "APPLICATION",
+          "fulfillment_phase": "APPLICATION"
+        },
+        {
+          "section_id": "pref",
+          "section_type": "PREFERENCE",
+          "root_ref": {
+            "node_type": "CONDITION_REF",
+            "condition_index": 4
+          },
+          "evaluation_phase": "SELECTION",
+          "fulfillment_phase": "SELECTION"
+        },
+        {
+          "section_id": "excl",
+          "section_type": "EXCLUSION",
+          "root_ref": {
+            "node_type": "CONDITION_REF",
+            "condition_index": 5
+          },
+          "evaluation_phase": "APPLICATION",
+          "fulfillment_phase": "APPLICATION"
+        }
+      ],
+      "exceptions": [],
+      "unresolved_relations": [],
+      "logic_completeness": "INCOMPLETE",
+      "decision_eligible": false
+    },
+    "expected": "UNRESOLVED_DISCOVERY_NO_PROMOTION"
+  },
+  {
+    "name": "no_regional_restriction",
+    "source": {
+      "notice_id": "SYNTHETIC:NEXT_POLICY",
+      "source_system": "KSTARTUP",
+      "raw_text": "사업장이 울산광역시에 있어야 한다.\n연구기관 또는 창업 4년 미만 기업만 신청할 수 있다.\n사업장 증빙서류를 신청 시 제출해야 한다.\n환경산업 기업은 우대한다.\n다른 시설에 중복 입주한 기업은 신청할 수 없다.\n대표자 거주 지역에는 제한이 없다.",
+      "completeness_status": "UNKNOWN",
+      "source_snapshot": "synthetic-v1"
+    },
+    "response": {
+      "schema_version": "condition-next-extraction-policy-v1",
+      "status": "CONDITIONS_FOUND",
+      "source_state": "CONDITIONS_PRESENT",
+      "conditions": [
+        {
+          "condition_type": "ELIGIBILITY",
+          "category_id": "BUSINESS_LOCATION",
+          "field": "BUSINESS_LOCATION",
+          "operator": "EQ",
+          "value": "울산광역시",
+          "value_type": "STRING",
+          "unit": null,
+          "evidence_quotes": [
+            "사업장이 울산광역시에 있어야 한다."
+          ],
+          "source_field": "condition_texts.eligibility.text",
+          "applicability_scope": null,
+          "evaluation_phase": "APPLICATION",
+          "fulfillment_phase": "APPLICATION",
+          "requirement_kind": "CURRENT_STATE",
+          "reference_date_type": "UNKNOWN",
+          "reference_date": null,
+          "temporal_constraint": null,
+          "uncertainty": {
+            "is_uncertain": false,
+            "reason": null
+          },
+          "external_reference": null
+        },
+        {
+          "condition_type": "ELIGIBILITY",
+          "category_id": "APPLICANT_TYPE",
+          "field": "APPLICANT_TYPE",
+          "operator": "EQ",
+          "value": "연구기관",
+          "value_type": "STRING",
+          "unit": null,
+          "evidence_quotes": [
+            "연구기관 또는 창업 4년 미만 기업만 신청할 수 있다."
+          ],
+          "source_field": "condition_texts.eligibility.text",
+          "applicability_scope": null,
+          "evaluation_phase": "APPLICATION",
+          "fulfillment_phase": "APPLICATION",
+          "requirement_kind": "CURRENT_STATE",
+          "reference_date_type": "UNKNOWN",
+          "reference_date": null,
+          "temporal_constraint": null,
+          "uncertainty": {
+            "is_uncertain": false,
+            "reason": null
+          },
+          "external_reference": null
+        },
+        {
+          "condition_type": "ELIGIBILITY",
+          "category_id": "BUSINESS_AGE",
+          "field": "BUSINESS_AGE",
+          "operator": "LT",
+          "value": 4,
+          "value_type": "NUMBER",
+          "unit": "YEAR",
+          "evidence_quotes": [
+            "연구기관 또는 창업 4년 미만 기업만 신청할 수 있다."
+          ],
+          "source_field": "condition_texts.eligibility.text",
+          "applicability_scope": null,
+          "evaluation_phase": "APPLICATION",
+          "fulfillment_phase": "APPLICATION",
+          "requirement_kind": "CURRENT_STATE",
+          "reference_date_type": "UNKNOWN",
+          "reference_date": null,
+          "temporal_constraint": null,
+          "uncertainty": {
+            "is_uncertain": false,
+            "reason": null
+          },
+          "external_reference": null
+        },
+        {
+          "condition_type": "ELIGIBILITY",
+          "category_id": "DOCUMENT_SUBMISSION",
+          "field": "DOCUMENT_SUBMISSION",
+          "operator": "EQ",
+          "value": "사업장 증빙서류 제출",
+          "value_type": "STRING",
+          "unit": null,
+          "evidence_quotes": [
+            "사업장 증빙서류를 신청 시 제출해야 한다."
+          ],
+          "source_field": "condition_texts.eligibility.text",
+          "applicability_scope": null,
+          "evaluation_phase": "APPLICATION",
+          "fulfillment_phase": "APPLICATION",
+          "requirement_kind": "CURRENT_STATE",
+          "reference_date_type": "UNKNOWN",
+          "reference_date": null,
+          "temporal_constraint": null,
+          "uncertainty": {
+            "is_uncertain": false,
+            "reason": null
+          },
+          "external_reference": null
+        },
+        {
+          "condition_type": "PREFERENCE",
+          "category_id": "INDUSTRY",
+          "field": "INDUSTRY",
+          "operator": "EQ",
+          "value": "환경산업",
+          "value_type": "STRING",
+          "unit": null,
+          "evidence_quotes": [
+            "환경산업 기업은 우대한다."
+          ],
+          "source_field": "condition_texts.eligibility.text",
+          "applicability_scope": null,
+          "evaluation_phase": "APPLICATION",
+          "fulfillment_phase": "APPLICATION",
+          "requirement_kind": "CURRENT_STATE",
+          "reference_date_type": "UNKNOWN",
+          "reference_date": null,
+          "temporal_constraint": null,
+          "uncertainty": {
+            "is_uncertain": false,
+            "reason": null
+          },
+          "external_reference": null
+        },
+        {
+          "condition_type": "EXCLUSION",
+          "category_id": "DUPLICATE_OCCUPANCY",
+          "field": "DUPLICATE_OCCUPANCY",
+          "operator": "EQ",
+          "value": true,
+          "value_type": "BOOLEAN",
+          "unit": null,
+          "evidence_quotes": [
+            "다른 시설에 중복 입주한 기업은 신청할 수 없다."
+          ],
+          "source_field": "condition_texts.eligibility.text",
+          "applicability_scope": null,
+          "evaluation_phase": "APPLICATION",
+          "fulfillment_phase": "APPLICATION",
+          "requirement_kind": "CURRENT_STATE",
+          "reference_date_type": "UNKNOWN",
+          "reference_date": null,
+          "temporal_constraint": null,
+          "uncertainty": {
+            "is_uncertain": false,
+            "reason": null
+          },
+          "external_reference": null
+        }
+      ],
+      "unresolved_conditions": [
+        {
+          "raw_condition": "대표자 거주 지역에는 제한이 없다.",
+          "evidence_quotes": [
+            "대표자 거주 지역에는 제한이 없다."
+          ],
+          "proposed_field": "residence",
+          "entity_scope": "REPRESENTATIVE_PERSON",
+          "condition_type": "ELIGIBILITY",
+          "operator": null,
+          "reason_code": "EXPLICIT_NO_RESTRICTION",
+          "reason": "기존 표준 속성으로 의미를 확정하지 못함",
+          "review_status": "NEEDS_REVIEW",
+          "decision_eligible": false
+        }
+      ],
+      "logic_groups": [
+        {
+          "group_id": "g-choice",
+          "operator": "OR",
+          "children": [
+            {
+              "node_type": "CONDITION_REF",
+              "condition_index": 1
+            },
+            {
+              "node_type": "CONDITION_REF",
+              "condition_index": 2
+            }
+          ],
+          "evidence_quote": "연구기관 또는 창업 4년 미만 기업만 신청할 수 있다."
+        },
+        {
+          "group_id": "g-required",
+          "operator": "AND",
+          "children": [
+            {
+              "node_type": "CONDITION_REF",
+              "condition_index": 0
+            },
+            {
+              "node_type": "GROUP_REF",
+              "group_id": "g-choice"
+            },
+            {
+              "node_type": "CONDITION_REF",
+              "condition_index": 3
+            }
+          ],
+          "evidence_quote": null
+        }
+      ],
+      "logic_sections": [
+        {
+          "section_id": "elig",
+          "section_type": "ELIGIBILITY",
+          "root_ref": {
+            "node_type": "GROUP_REF",
+            "group_id": "g-required"
+          },
+          "evaluation_phase": "APPLICATION",
+          "fulfillment_phase": "APPLICATION"
+        },
+        {
+          "section_id": "pref",
+          "section_type": "PREFERENCE",
+          "root_ref": {
+            "node_type": "CONDITION_REF",
+            "condition_index": 4
+          },
+          "evaluation_phase": "SELECTION",
+          "fulfillment_phase": "SELECTION"
+        },
+        {
+          "section_id": "excl",
+          "section_type": "EXCLUSION",
+          "root_ref": {
+            "node_type": "CONDITION_REF",
+            "condition_index": 5
+          },
+          "evaluation_phase": "APPLICATION",
+          "fulfillment_phase": "APPLICATION"
+        }
+      ],
+      "exceptions": [],
+      "unresolved_relations": [],
+      "logic_completeness": "INCOMPLETE",
+      "decision_eligible": false
+    },
+    "expected": "SOURCE_ASSERTION_NOT_POSITIVE_REGION"
+  }
+]

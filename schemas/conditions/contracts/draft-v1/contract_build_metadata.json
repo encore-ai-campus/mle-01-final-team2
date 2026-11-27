@@ -1,0 +1,33 @@
+{
+  "sources": {
+    "schemas/conditions/condition-common-v1.schema.json": "0d774c599273a1bf3476ad59e84f0b6c7efeae6a6532ac3927bafc9ad9554f7d",
+    "schemas/conditions/condition-common-v1.1.schema.json": "8ec78fb1ebe340d11b814319c4dbc4d6848b6aac9f91c602079969cf366e04cf",
+    "schemas/conditions/condition-vocabularies-v1.schema.json": "ef45ef46b3ec459b46691e208fbe77f6b50d4feb800dbabee9fc24fcdd8e4be8",
+    "docs/condition/CONDITION_SCHEMA_V1.md": "29d5fbec8b3d9fbcfe0929633439d677b2f66c3192e0de3bd131ba6573f50097",
+    "tools/extract_condition_candidates.py": "06c006ac20fe1157c7476cad52eb310002efc69e6d84df8069595d9548f67a66",
+    "tools/extract_condition_candidates_rules_v2.py": "bf19d1e06901d2bb0beb0ecd81c79f75920b5b012c4aa067a78cf560f52068e8",
+    "tools/extract_condition_candidates_legacy_augmented.py": "be02f8628bd5e0feb600bceff9e66a399369b6c9f244cf9ae38d7477e5d6976c",
+    "tools/extract_condition_candidates_llm.py": "573953c98856e19bc9af3126ac33a2e751832b92da09b414ba3df03572bf6679",
+    "tools/graphrag/condition_schema.py": "99fa37470f331abf6541f5ba9990b20cbdc039def0fe4e94ec7ab84dc20fc7b0",
+    "schemas/conditions/source-field-mapping-v1.csv": "d4b4cce8f77d2b85619debc1b0cb2698dd1ba65ef8548f4596ec1332567544aa",
+    "tools/evaluate_condition_pipeline.py": "f59d38477794aaf259e67ee4115b606ec50663d6afbac7f3222b14866a9d32b4",
+    "tools/evaluate_condition_pipeline_v11.py": "7e41d2fb1393d4a99e89f16b7f08b128e9c8e3e6c00cc57f7d4c0ebbb5d0da07",
+    "tools/run_condition_llm_openai_pilot.py": "9772fc57745455089d0f1558006d5084b38a47fe491d9e79d49c22893156b061"
+  },
+  "baseline_fixed": {
+    "notices": 10,
+    "gold_conditions": 62,
+    "rule_v1_f1_percent": 13.64,
+    "rule_e_f1_percent": 14.12,
+    "llm_pre_f1_percent": 1.67,
+    "llm_post_f1_percent": 2.13,
+    "llm_post_tp": 1,
+    "llm_post_fp": 31,
+    "llm_post_fn": 61,
+    "requests_used": 13,
+    "request_limit": 13,
+    "remaining": 0
+  },
+  "gold_records_loaded": false,
+  "api_calls": 0
+}

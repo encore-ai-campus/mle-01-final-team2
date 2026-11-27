@@ -1,0 +1,366 @@
+{
+  "status": "PILOT_EVALUATED",
+  "notice_ids": [
+    "BIZINFO:PBLN_000000000117168",
+    "BIZINFO:PBLN_000000000118182",
+    "BIZINFO:PBLN_000000000119490",
+    "BIZINFO:PBLN_000000000126490",
+    "BIZINFO:PBLN_000000000128028",
+    "KSTARTUP:176001",
+    "KSTARTUP:176813",
+    "KSTARTUP:177447",
+    "KSTARTUP:178507",
+    "KSTARTUP:179386"
+  ],
+  "gold_condition_count": 62,
+  "evaluation": {
+    "baseline_v1": {
+      "micro": {
+        "tp": 6,
+        "fp": 20,
+        "fn": 56,
+        "precision": 0.23076923076923078,
+        "recall": 0.0967741935483871,
+        "f1": 0.13636363636363635,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED",
+        "notice_count": 10,
+        "macro_f1": 0.12714285714285717,
+        "partial_match_count": 5,
+        "notices_with_misses": 10,
+        "notices_with_false_positives": 8,
+        "zero_prediction_notices": 2
+      },
+      "by_source": {
+        "BIZINFO": {
+          "tp": 1,
+          "fp": 6,
+          "fn": 34,
+          "precision": 0.14285714285714285,
+          "recall": 0.02857142857142857,
+          "f1": 0.04761904761904761,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED",
+          "notice_count": 5,
+          "macro_f1": 0.05714285714285715,
+          "partial_match_count": 1,
+          "notices_with_misses": 5,
+          "notices_with_false_positives": 3,
+          "zero_prediction_notices": 2
+        },
+        "KSTARTUP": {
+          "tp": 5,
+          "fp": 14,
+          "fn": 22,
+          "precision": 0.2631578947368421,
+          "recall": 0.18518518518518517,
+          "f1": 0.21739130434782608,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED",
+          "notice_count": 5,
+          "macro_f1": 0.19714285714285715,
+          "partial_match_count": 4,
+          "notices_with_misses": 5,
+          "notices_with_false_positives": 5,
+          "zero_prediction_notices": 0
+        }
+      },
+      "by_condition_type": {
+        "ELIGIBILITY": {
+          "tp": 6,
+          "fp": 14,
+          "fn": 50,
+          "precision": 0.3,
+          "recall": 0.10714285714285714,
+          "f1": 0.15789473684210525,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "EXCLUSION": {
+          "tp": 0,
+          "fp": 4,
+          "fn": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "PREFERENCE": {
+          "tp": 0,
+          "fp": 2,
+          "fn": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        }
+      }
+    },
+    "rule_experiment_E": {
+      "micro": {
+        "tp": 6,
+        "fp": 17,
+        "fn": 56,
+        "precision": 0.2608695652173913,
+        "recall": 0.0967741935483871,
+        "f1": 0.1411764705882353,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED",
+        "notice_count": 10,
+        "macro_f1": 0.12532467532467534,
+        "partial_match_count": 6,
+        "notices_with_misses": 10,
+        "notices_with_false_positives": 7,
+        "zero_prediction_notices": 3
+      },
+      "by_source": {
+        "BIZINFO": {
+          "tp": 1,
+          "fp": 2,
+          "fn": 34,
+          "precision": 0.3333333333333333,
+          "recall": 0.02857142857142857,
+          "f1": 0.05263157894736842,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED",
+          "notice_count": 5,
+          "macro_f1": 0.05714285714285715,
+          "partial_match_count": 0,
+          "notices_with_misses": 5,
+          "notices_with_false_positives": 2,
+          "zero_prediction_notices": 3
+        },
+        "KSTARTUP": {
+          "tp": 5,
+          "fp": 15,
+          "fn": 22,
+          "precision": 0.25,
+          "recall": 0.18518518518518517,
+          "f1": 0.2127659574468085,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED",
+          "notice_count": 5,
+          "macro_f1": 0.19350649350649352,
+          "partial_match_count": 6,
+          "notices_with_misses": 5,
+          "notices_with_false_positives": 5,
+          "zero_prediction_notices": 0
+        }
+      },
+      "by_condition_type": {
+        "ELIGIBILITY": {
+          "tp": 6,
+          "fp": 11,
+          "fn": 50,
+          "precision": 0.35294117647058826,
+          "recall": 0.10714285714285714,
+          "f1": 0.1643835616438356,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "EXCLUSION": {
+          "tp": 0,
+          "fp": 4,
+          "fn": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "PREFERENCE": {
+          "tp": 0,
+          "fp": 2,
+          "fn": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        }
+      }
+    },
+    "llm_pre_validation": {
+      "micro": {
+        "tp": 1,
+        "fp": 57,
+        "fn": 61,
+        "precision": 0.017241379310344827,
+        "recall": 0.016129032258064516,
+        "f1": 0.016666666666666666,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED",
+        "notice_count": 10,
+        "macro_f1": 0.025,
+        "partial_match_count": 3,
+        "notices_with_misses": 10,
+        "notices_with_false_positives": 10,
+        "zero_prediction_notices": 0
+      },
+      "by_source": {
+        "BIZINFO": {
+          "tp": 0,
+          "fp": 29,
+          "fn": 35,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED",
+          "notice_count": 5,
+          "macro_f1": 0.0,
+          "partial_match_count": 1,
+          "notices_with_misses": 5,
+          "notices_with_false_positives": 5,
+          "zero_prediction_notices": 0
+        },
+        "KSTARTUP": {
+          "tp": 1,
+          "fp": 28,
+          "fn": 26,
+          "precision": 0.034482758620689655,
+          "recall": 0.037037037037037035,
+          "f1": 0.03571428571428571,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED",
+          "notice_count": 5,
+          "macro_f1": 0.05,
+          "partial_match_count": 2,
+          "notices_with_misses": 5,
+          "notices_with_false_positives": 5,
+          "zero_prediction_notices": 0
+        }
+      },
+      "by_condition_type": {
+        "ELIGIBILITY": {
+          "tp": 1,
+          "fp": 50,
+          "fn": 55,
+          "precision": 0.0196078431372549,
+          "recall": 0.017857142857142856,
+          "f1": 0.018691588785046728,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "EXCLUSION": {
+          "tp": 0,
+          "fp": 3,
+          "fn": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "PREFERENCE": {
+          "tp": 0,
+          "fp": 4,
+          "fn": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        }
+      }
+    },
+    "llm_post_validation": {
+      "micro": {
+        "tp": 1,
+        "fp": 31,
+        "fn": 61,
+        "precision": 0.03125,
+        "recall": 0.016129032258064516,
+        "f1": 0.02127659574468085,
+        "precision_status": "DEFINED",
+        "recall_status": "DEFINED",
+        "notice_count": 10,
+        "macro_f1": 0.025,
+        "partial_match_count": 16,
+        "notices_with_misses": 10,
+        "notices_with_false_positives": 7,
+        "zero_prediction_notices": 3
+      },
+      "by_source": {
+        "BIZINFO": {
+          "tp": 0,
+          "fp": 23,
+          "fn": 35,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED",
+          "notice_count": 5,
+          "macro_f1": 0.0,
+          "partial_match_count": 11,
+          "notices_with_misses": 5,
+          "notices_with_false_positives": 4,
+          "zero_prediction_notices": 1
+        },
+        "KSTARTUP": {
+          "tp": 1,
+          "fp": 8,
+          "fn": 26,
+          "precision": 0.1111111111111111,
+          "recall": 0.037037037037037035,
+          "f1": 0.05555555555555555,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED",
+          "notice_count": 5,
+          "macro_f1": 0.05,
+          "partial_match_count": 5,
+          "notices_with_misses": 5,
+          "notices_with_false_positives": 3,
+          "zero_prediction_notices": 2
+        }
+      },
+      "by_condition_type": {
+        "ELIGIBILITY": {
+          "tp": 1,
+          "fp": 30,
+          "fn": 55,
+          "precision": 0.03225806451612903,
+          "recall": 0.017857142857142856,
+          "f1": 0.022988505747126436,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        },
+        "EXCLUSION": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 3,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "NO_PREDICTIONS",
+          "recall_status": "DEFINED"
+        },
+        "PREFERENCE": {
+          "tp": 0,
+          "fp": 1,
+          "fn": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "precision_status": "DEFINED",
+          "recall_status": "DEFINED"
+        }
+      }
+    }
+  },
+  "execution_counts": {
+    "http_response_notice_ids": 10,
+    "technical_pass_notice_ids": 9,
+    "evaluation_eligible_notice_ids": 10,
+    "schema_failure_notice_ids": 1
+  },
+  "api_response_success_rate": 1.0,
+  "technical_extraction_success_rate": 0.9,
+  "evaluation_inclusion_rate": 1.0,
+  "zero_validated_candidate_count": 3,
+  "prevalidation_policy": "EXISTING_ADAPTER_RAW_PROPOSALS_INCLUDING_SCHEMA_INVALID_RESPONSE",
+  "decision_eligible": false
+}

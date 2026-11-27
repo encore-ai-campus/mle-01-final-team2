@@ -1,0 +1,25 @@
+{
+  "status": "OFFLINE_REPLAY_COMPLETE",
+  "notice_id": "BIZINFO:PBLN_000000000126490",
+  "proposal_count": 3,
+  "accepted_unreviewed_count": 0,
+  "held_for_review_count": 0,
+  "rejected_count": 3,
+  "v11_schema_error_count": 0,
+  "incomplete_logic": true,
+  "decision_eligible_true_count": 0,
+  "api_call_count": 0,
+  "goldset_read": false,
+  "evaluation_data_read": false,
+  "source_response_sha256": "d9d0c6beb6ae0bb45117a06b99d3271c3da120d11606a5d51f369edfcd011e2b",
+  "intermediate_response_sha256": "9d9f3a663899f71c5cacdcb44c32dcb33c5c3344a329d6034a4eb7cc1bcfeb33",
+  "output_hashes": {
+    "attribute_normalization.jsonl": "8dc11d34a4b6c0447aa38f5fe889e553147d09f2821a817d94901b751e92fb40",
+    "predictions_before_validation.jsonl": "86a195bd81a4fd1f948b291a158a839fc8242242cd7a7b0643bebf18f0657496",
+    "predictions_after_validation.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "validation_details.jsonl": "324dd4325c513b652269546a4857da8a395508faf6b1ea912f82ba77afa6bd1c",
+    "rejected_candidates.jsonl": "a631706872f63924d29e9f29ae54287ff40a0ef711870506bf4db55b558e33fd",
+    "review_queue.jsonl": "03432fb8eee94aae92ff47eeb8ba57be6b519cfb0602094b9b25c1001e270c12",
+    "logic_proposals.jsonl": "a06b1d24f01911c01e379b7d3304488c283176f84ec9deb9b771190b2e4f01fd"
+  }
+}

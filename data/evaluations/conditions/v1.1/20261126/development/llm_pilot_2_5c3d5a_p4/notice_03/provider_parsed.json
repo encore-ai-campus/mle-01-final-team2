@@ -1,0 +1,239 @@
+{
+  "schema_version": "condition-next-extraction-policy-v1",
+  "status": "CONDITIONS_FOUND",
+  "source_state": "CONDITIONS_PRESENT",
+  "conditions": [
+    {
+      "condition_type": "ELIGIBILITY",
+      "category_id": "BUSINESS_LOCATION",
+      "field": "BUSINESS_LOCATION",
+      "operator": "IN",
+      "value": [
+        "서울특별시",
+        "인천광역시",
+        "경기도"
+      ],
+      "value_type": "ARRAY",
+      "unit": null,
+      "evidence_quotes": [
+        "(수도권) 수도권(서울특별시, 인천광역시, 경기도)에 소재하는 기업"
+      ],
+      "source_field": "BUSINESS_LOCATION",
+      "applicability_scope": "수도권",
+      "evaluation_phase": "APPLICATION",
+      "fulfillment_phase": "APPLICATION",
+      "requirement_kind": "CURRENT_STATE",
+      "reference_date_type": "UNKNOWN",
+      "reference_date": null,
+      "temporal_constraint": null,
+      "uncertainty": {
+        "is_uncertain": false,
+        "reason": null
+      },
+      "external_reference": null
+    },
+    {
+      "condition_type": "ELIGIBILITY",
+      "category_id": "EMPLOYEE_COUNT",
+      "field": "EMPLOYEE_COUNT",
+      "operator": "GTE",
+      "value": 5,
+      "value_type": "NUMBER",
+      "unit": "PERSON",
+      "evidence_quotes": [
+        "5인 이상 우선지원대상기업"
+      ],
+      "source_field": "EMPLOYEE_COUNT",
+      "applicability_scope": "수도권",
+      "evaluation_phase": "APPLICATION",
+      "fulfillment_phase": "APPLICATION",
+      "requirement_kind": "CURRENT_STATE",
+      "reference_date_type": "UNKNOWN",
+      "reference_date": null,
+      "temporal_constraint": null,
+      "uncertainty": {
+        "is_uncertain": false,
+        "reason": null
+      },
+      "external_reference": null
+    },
+    {
+      "condition_type": "ELIGIBILITY",
+      "category_id": "BUSINESS_LOCATION",
+      "field": "BUSINESS_LOCATION",
+      "operator": "NOT_IN",
+      "value": [
+        "서울특별시",
+        "인천광역시",
+        "경기도"
+      ],
+      "value_type": "ARRAY",
+      "unit": null,
+      "evidence_quotes": [
+        "(비수도권) 수도권 제외한 지역에 소재하는 기업"
+      ],
+      "source_field": "BUSINESS_LOCATION",
+      "applicability_scope": "비수도권",
+      "evaluation_phase": "APPLICATION",
+      "fulfillment_phase": "APPLICATION",
+      "requirement_kind": "CURRENT_STATE",
+      "reference_date_type": "UNKNOWN",
+      "reference_date": null,
+      "temporal_constraint": null,
+      "uncertainty": {
+        "is_uncertain": false,
+        "reason": null
+      },
+      "external_reference": null
+    },
+    {
+      "condition_type": "ELIGIBILITY",
+      "category_id": "EMPLOYEE_COUNT",
+      "field": "EMPLOYEE_COUNT",
+      "operator": "GTE",
+      "value": 5,
+      "value_type": "NUMBER",
+      "unit": "PERSON",
+      "evidence_quotes": [
+        "5인 이상 우선지원대상기업"
+      ],
+      "source_field": "EMPLOYEE_COUNT",
+      "applicability_scope": "비수도권",
+      "evaluation_phase": "APPLICATION",
+      "fulfillment_phase": "APPLICATION",
+      "requirement_kind": "CURRENT_STATE",
+      "reference_date_type": "UNKNOWN",
+      "reference_date": null,
+      "temporal_constraint": null,
+      "uncertainty": {
+        "is_uncertain": false,
+        "reason": null
+      },
+      "external_reference": null
+    }
+  ],
+  "unresolved_conditions": [
+    {
+      "raw_condition": "우선지원대상기업",
+      "evidence_quotes": [
+        "5인 이상 우선지원대상 기업",
+        "5인 이상 우선지원대상기업에서"
+      ],
+      "proposed_field": null,
+      "entity_scope": "BUSINESS",
+      "condition_type": "ELIGIBILITY",
+      "operator": null,
+      "reason_code": "UNSUPPORTED_ATTRIBUTE",
+      "reason": "우선지원대상기업 여부를 22개 canonical field 중 어느 필드로 구조화할지 명확하지 않음",
+      "review_status": "NEEDS_REVIEW",
+      "decision_eligible": false
+    },
+    {
+      "raw_condition": "취업애로청년을 정규직으로 채용 후",
+      "evidence_quotes": [
+        "취업애로청년을 정규직으로 채용 후"
+      ],
+      "proposed_field": null,
+      "entity_scope": "BUSINESS",
+      "condition_type": "ELIGIBILITY",
+      "operator": null,
+      "reason_code": "UNSUPPORTED_ATTRIBUTE",
+      "reason": "청년 채용 및 정규직 채용 후 요건은 canonical field로 직접 구조화할 수 없음",
+      "review_status": "NEEDS_REVIEW",
+      "decision_eligible": false
+    },
+    {
+      "raw_condition": "청년을 정규직으로 채용 후",
+      "evidence_quotes": [
+        "청년을 정규직으로 채용 후"
+      ],
+      "proposed_field": null,
+      "entity_scope": "BUSINESS",
+      "condition_type": "ELIGIBILITY",
+      "operator": null,
+      "reason_code": "UNSUPPORTED_ATTRIBUTE",
+      "reason": "청년 채용 및 정규직 채용 후 요건은 canonical field로 직접 구조화할 수 없음",
+      "review_status": "NEEDS_REVIEW",
+      "decision_eligible": false
+    }
+  ],
+  "logic_groups": [
+    {
+      "group_id": "g_metropolitan_branch",
+      "operator": "AND",
+      "children": [
+        {
+          "node_type": "CONDITION_REF",
+          "condition_index": 0
+        },
+        {
+          "node_type": "CONDITION_REF",
+          "condition_index": 1
+        },
+        {
+          "node_type": "UNRESOLVED_REF",
+          "unresolved_index": 0
+        },
+        {
+          "node_type": "UNRESOLVED_REF",
+          "unresolved_index": 1
+        }
+      ],
+      "evidence_quote": "(수도권) 수도권(서울특별시, 인천광역시, 경기도)에 소재하는 기업이며 5인 이상 우선지원대상기업에서 취업애로청년을 정규직으로 채용 후"
+    },
+    {
+      "group_id": "g_nonmetropolitan_branch",
+      "operator": "AND",
+      "children": [
+        {
+          "node_type": "CONDITION_REF",
+          "condition_index": 2
+        },
+        {
+          "node_type": "CONDITION_REF",
+          "condition_index": 3
+        },
+        {
+          "node_type": "UNRESOLVED_REF",
+          "unresolved_index": 0
+        },
+        {
+          "node_type": "UNRESOLVED_REF",
+          "unresolved_index": 2
+        }
+      ],
+      "evidence_quote": "(비수도권) 수도권 제외한 지역에 소재하는 기업이며 5인 이상 우선지원대상기업에서 청년을 정규직으로 채용 후"
+    },
+    {
+      "group_id": "g_location_branches",
+      "operator": "OR",
+      "children": [
+        {
+          "node_type": "GROUP_REF",
+          "group_id": "g_metropolitan_branch"
+        },
+        {
+          "node_type": "GROUP_REF",
+          "group_id": "g_nonmetropolitan_branch"
+        }
+      ],
+      "evidence_quote": "(수도권) 수도권(서울특별시, 인천광역시, 경기도)에 소재하는 기업이며 5인 이상 우선지원대상기업에서 취업애로청년을 정규직으로 채용 후\n- (비수도권) 수도권 제외한 지역에 소재하는 기업이며 5인 이상 우선지원대상기업에서 청년을 정규직으로 채용 후"
+    }
+  ],
+  "logic_sections": [
+    {
+      "section_id": "eligibility_main",
+      "section_type": "ELIGIBILITY",
+      "evaluation_phase": "APPLICATION",
+      "fulfillment_phase": "APPLICATION",
+      "root_ref": {
+        "node_type": "GROUP_REF",
+        "group_id": "g_location_branches"
+      }
+    }
+  ],
+  "exceptions": [],
+  "unresolved_relations": [],
+  "logic_completeness": "INCOMPLETE",
+  "decision_eligible": false
+}
