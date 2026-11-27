@@ -16,7 +16,7 @@ from referencing import Registry, Resource
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
-from tests.local_data import G2B_SNAPSHOT, needs
+from tests.local_data import G2B_FULL, G2B_SNAPSHOT, needs
 from tools.normalize_support_data import pii_findings
 
 SCHEMA_DIR = ROOT / "schemas" / "conditions"
@@ -306,7 +306,7 @@ class ConditionSchemaTests(unittest.TestCase):
         for kind, count in EXPECTED_COUNTS.items():
             self.assertEqual(report["output_counts"][kind], count)
 
-    @needs(G2B_SNAPSHOT)
+    @needs(*G2B_FULL)
     def test_g2b_snapshot_report_is_clean_and_samples_are_distinct(self):
         report = _json(G2B_DATA_DIR / "normalization_report.json")
         self.assertEqual(report["output_counts"], {"notices": 197180, "chunks": 32947, "issues": 0})

@@ -1,0 +1,40 @@
+# 실행: 2026-11-27 16:05 KST, python tools/check_graph_neo4j.py --check-definitions (읽기 전용)
+DB: 4fcaaade.databases.neo4j.io (읽기 전용)
+노드 32,605, 관계 56,999  (2026-11-27T07:05:44+00:00)
+노드: Concept 354, Condition 17,366, Definition 23, ExternalLaw 44, LawAppendix 59, LawArticle 2,325, Notice 5,116, Organization 1,399, Region 321, Requirement 5,900, SupportCategory 19
+관계: ABOUT 19,766, ANNOUNCED_BY 5,116, CITES_LAW 27, DEFINED_BY 21, EXECUTED_BY 947, HAS_CONDITION 17,366, HAS_REQUIREMENT 5,900, IN_SUPPORT_CATEGORY 5,116, IS_A 2, MEMBER_OF 35, PART_OF 2,384, SUCCEEDED_BY 35, WITHIN 284
+
+점검
+  V0  키 결측·중복 (10개 레이블): 0
+  V1   서로 다른 scheme 사이 WITHIN·IS_A: 0  [0이어야 함]
+  V2   계층 순환(IS_A·WITHIN·MEMBER_OF, 6 hop): 0  [0이어야 함]
+  V3   금지된 방향 관계(HAS_SUBREGION): 0  [0이어야 함]
+  V4   고아 조건: 0  [0이어야 함]
+  V5   근거(evidence) 없는 요건·조건 관계: 0  [0이어야 함]
+  V6   그룹 중첩 3단 초과: 0  [0이어야 함]
+  V7   SUPERSEDES 방향 오류: 0  [0이어야 함]
+  V8   행정 WITHIN 상위가 둘 이상인 지역: 0  [0이어야 함]
+  V9   ABOUT 없는 개념형 조건: 546  [알려진 값 546]
+  V10  대칭 관계 양방향: 0  [0이어야 함]
+  V11  같은 쌍의 중복 HAS_CONDITION·ABOUT: 0  [0이어야 함]
+  V12  조건 없는 요건: 0  [0이어야 함]
+  V13  지역 조건이 지역 아닌 개념을 가리킴: 0  [0이어야 함]
+  V14  법령에 안 붙은 조문·별표: 0  [0이어야 함]
+  V15  요건이 하나도 없는 공고: 330  [알려진 값 330]
+  V16  상위(WITHIN)가 없는 현행 시군구·구: 0  [0이어야 함]
+  V16a 상위(WITHIN)가 없는 비시도 지역(폐지 시군구 31·권역 3 포함): 34  [알려진 값 34]
+  V17  개념에 안 붙은 정의: 2  [알려진 값 2]
+  V20  계층 관계 끝점 위반(WITHIN: 지역·구역→지역, MEMBER_OF·SUCCEEDED_BY: 지역→지역, IS_A: 지역 아닌 개념끼리): 0  [0이어야 함]
+  V21  자기 자신을 가리키는 계층 관계: 0  [0이어야 함]
+  V22  MEMBER_OF 양쪽 모두 묶음(GROUP)이 아님(지역→묶음, 묶음→상위 지역만 허용): 0  [0이어야 함]
+  V23  SUCCEEDED_BY 순환(승계가 되돌아옴, 6 hop): 0  [0이어야 함]
+  V24  SUCCEEDED_BY 출발이 폐지 지역이 아님: 0  [0이어야 함]
+  V25  위임 별표를 가리키는 정의 관계(Definition-CITES_LAW->LawAppendix, 검수 확인분): 4  [알려진 값 4]
+  D1   조문·별표를 인용하지 않은 정의: 0  [0이어야 함]
+  D2   옛 형식 법령 링크(lsInfoP.do?lsiSeq= 아님): 0  [0이어야 함]
+  개념→정의→조문→법령 경로: 25
+
+정의 원문 해시: 불일치 0
+
+
+결과: 정상

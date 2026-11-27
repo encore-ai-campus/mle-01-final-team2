@@ -10,6 +10,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 G2B_SNAPSHOT = ROOT / "data" / "normalized" / "v1" / "20261125_g2b"
 API_SAMPLES = ROOT / "api_samples" / "normalized"
+# notices.jsonl만 git(LFS)에 있다(PR #39). 청크·정규화 보고서까지 있어야 하는 시험은 이 묶음으로 건너뛴다
+G2B_FULL = (G2B_SNAPSHOT / "notices.jsonl", G2B_SNAPSHOT / "chunks.jsonl", G2B_SNAPSHOT / "normalization_report.json")
 
 
 def needs(*paths: Path):
