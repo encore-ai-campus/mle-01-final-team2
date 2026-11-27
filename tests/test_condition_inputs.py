@@ -1,7 +1,7 @@
 import hashlib, json, tempfile, unittest
 from collections import Counter
 from pathlib import Path
-from tests.local_data import G2B_SNAPSHOT, needs
+from tests.local_data import G2B_FULL, needs
 from tools.prepare_condition_inputs import OUT, SNAP, FACTS, KS, ROOT, run, candidate_ref
 
 def jl(path):
@@ -9,7 +9,7 @@ def jl(path):
         for line in f:
             if line.strip(): yield json.loads(line)
 
-@needs(G2B_SNAPSHOT)
+@needs(*G2B_FULL)
 class ConditionInputTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
