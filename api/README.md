@@ -7,10 +7,10 @@
 | 폴더 | 역할 | 상태 |
 |---|---|---|
 | `api/core/` | 설정(`config.py`, 기존 `.env` 이름을 읽음) | 있음 |
-| `api/routers/` | 엔드포인트 | `GET /health`, `/health/llm`, `/health/graph`, `POST /api/eligibility`, `POST /api/chat`(SSE), `GET /api/graph/path`, `GET /api/concepts` |
+| `api/routers/` | 엔드포인트 | 구현: `GET /health`, `/health/llm`, `/health/graph`, `POST /api/eligibility`, `POST /api/chat`(SSE), `GET /api/graph/path`, `GET /api/concepts`, `GET /api/me`(개발용 로그인). 뼈대(501): 공고 N-01~03, 판정 E-02~04, 운영 M-01·M-03, 메타 S-01. 현황표는 [개발 시작 안내 §7](../docs/GUIDE_개발시작_v0.1.md#7-기능별-시작점) |
 | `api/schemas/` | 요청·응답 모델(Pydantic) | 판정·채팅 |
 | `api/services/` | 판정 엔진 어댑터. 판정 로직은 여기 다시 쓰지 않고 엔진을 호출한다 | 엔진 어댑터, 공고 지목 판정 |
-| `api/dependencies/` | FastAPI 의존성(시험에서 가짜로 교체) | 판정 서비스, 모델 라우터, 그래프 저장소, 에이전트 그래프 |
+| `api/dependencies/` | FastAPI 의존성(시험에서 가짜로 교체) | 판정 서비스, 모델 라우터, 그래프 저장소, 에이전트 그래프, 로그인·역할(`auth.py`, JWT 검증 전) |
 | `api/repositories/` | Neo4j·Supabase 접근 | Neo4j 읽기 전용(`graph.py`): 지역 목록·경로·정의·판정 서브그래프. Supabase는 아직 |
 | `agent/graph.py` | LangGraph 에이전트(§7.1): 입력 가드 → 의도·조건 → 후보·규칙 평가 → 경로(`trace_path`) → 정의(`fetch_definition`) → 부족 조건 → 근거 검증 → 설명(문장 단위 출력 가드) | 있음 |
 | `agent/llm/` | provider 어댑터(OpenAI 호환·템플릿), 역할별 폴백, 서킷브레이커, 데이터 정책 게이트(§3) | 있음 |
@@ -52,7 +52,7 @@ API는 모델을 **OpenAI 호환 API**(`/v1/chat/completions`)로만 부른다. 
 
 ## 그래프 (Neo4j Aura, 읽기 전용)
 
-`.env`에 `NEO4J_URI`·`NEO4J_USER`·`NEO4J_PASSWORD`가 있으면 요청 때 Aura를 읽는다. 없으면 경로는 평가기 결과로, 정의는 생략하고 판정은 그대로 나온다.
+`.env`에 `NEO4J_URI`·`NEO4J_USERNAME`(또는 `NEO4J_USER`)·`NEO4J_PASSWORD`가 있으면 요청 때 Aura를 읽는다. 없으면 경로는 평가기 결과로, 정의는 생략하고 판정은 그대로 나온다.
 
 - `GET /api/concepts?scheme=region`: 입력 폼 지역 목록(그래프가 없으면 내장 지역 사전). 지역 id는 `REGION:<법정동코드>` 형식이다.
 - `GET /api/graph/path?notice_id=&region=`: 공고 → 요건 → 조건 → 개념(→ 사용자 지역 경로) → 정의 → 조문 → 법령 서브그래프(`nodes`, `edges`). 그래프 미설정 503, 공고 없음 404.

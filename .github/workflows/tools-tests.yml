@@ -39,10 +39,14 @@ jobs:
         run: |
           python -m pip install -r requirements-dev.txt
           python -m pip install "ruff==0.17.6"
+      - name: uv.lock이 pyproject.toml과 맞는지
+        run: |
+          python -m pip install "uv==0.11.29"
+          uv lock --check
       - name: 문법 오류(전체)
         run: ruff check . --select E9
       - name: 확실한 오류(그래프 도구)
-        run: ruff check tools/graphrag tools/check_graph_neo4j.py tools/load_graph_partial.py tools/load_graph_neo4j.py tools/test_graphrag.py tools/test_graph_ops.py --select F,E9
+        run: ruff check tools/graphrag tools/check_graph_neo4j.py tools/load_graph_partial.py tools/load_graph_neo4j.py tools/test_graphrag.py tools/test_graph_ops.py tools/test_project_deps.py api tests/test_api_skeleton.py tests/local_data.py --select F,E9
       - name: 도구 시험
         run: |
           for t in tools/test_*.py; do
@@ -51,4 +55,4 @@ jobs:
           done
       - name: 서버·에이전트·조건 시험(로컬 데이터 없이 도는 것)
         run: |
-          python -m unittest tests.test_api tests.test_agent tests.test_condition_evaluation tests.test_condition_extractor tests.test_g2b_normalization tests.test_normalize_support_data
+          python -m unittest tests.test_api tests.test_api_skeleton tests.test_agent tests.test_condition_evaluation tests.test_condition_extractor tests.test_g2b_normalization tests.test_normalize_support_data

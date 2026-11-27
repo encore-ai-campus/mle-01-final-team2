@@ -1,0 +1,50 @@
+# uv로 파이썬 환경을 맞춘다. 설치: uv sync (서버 + 도구 + 시험 도구 전부). 안내: docs/GUIDE_개발시작_v0.1.md
+# 패키지로 배포하지 않는 저장소라 package = false다. 의존성 범위는 requirements*.txt와 같게 둔다(tools/test_project_deps.py가 확인한다).
+# Docker 이미지(api/Dockerfile)와 CI는 지금처럼 requirements*.txt를 쓴다. 범위를 바꿀 때는 두 곳을 같이 고치고 uv lock을 다시 한다.
+[project]
+name = "jiwongak"
+version = "0.1.0"
+description = "지원각: 지원사업 공고 자격 판정(온톨로지·규칙 평가기)"
+requires-python = ">=3.12,<3.13"
+# 서버·에이전트(requirements.txt)
+dependencies = [
+    "fastapi>=0.115,<1",
+    "uvicorn[standard]>=0.32,<1",
+    "pydantic>=2.9,<3",
+    "pydantic-settings>=2.6,<3",
+    "langgraph>=1.0,<2",
+    "neo4j>=5.20",
+    "truststore>=0.10",
+    "python-dotenv>=1.0",
+    "openai>=1.60,<3",
+    "PyYAML>=6.0",
+]
+
+[dependency-groups]
+# 수집·정규화·첨부 추출·문서 생성 도구(requirements-tools.txt)
+tools = [
+    "requests>=2.31",
+    "beautifulsoup4>=4.12",
+    "jsonschema>=4.23",
+    "referencing>=0.35",
+    "neo4j>=5.20",
+    "truststore>=0.10",
+    "python-dotenv>=1.0",
+    "openpyxl>=3.1",
+    "python-docx>=1.1",
+    "pymupdf>=1.24",
+    "olefile>=0.47",
+    "pillow>=10",
+    "numpy>=2",
+    "matplotlib>=3.9",
+]
+# 시험·검사 도구(requirements-dev.txt + CI의 ruff)
+dev = [
+    { include-group = "tools" },
+    "httpx>=0.27",
+    "ruff==0.17.6",
+]
+
+[tool.uv]
+package = false
+default-groups = ["tools", "dev"]

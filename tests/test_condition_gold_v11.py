@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from tests.local_data import G2B_SNAPSHOT, needs
 from tools.build_condition_gold_v11_precheck import build
 from tools.evaluate_condition_pipeline import preflight
 from tools.ingest_condition_gold_reviews import schema_validators, validate_review_packets
@@ -26,6 +27,7 @@ class GoldV11Tests(unittest.TestCase):
         cls.c = {r["notice_id"]: r for r in cls.conditions}
         cls.l = {r["notice_id"]: r for r in cls.logics}
 
+    @needs(G2B_SNAPSHOT)
     def test_v11_schema_and_references(self):
         _, _, report = validate_review_packets(V11, "development")
         self.assertEqual((report["schema_version"], report["unreviewed_records"]), ("1.1", 0))
