@@ -1187,14 +1187,14 @@ def main(argv: list[str] | None = None) -> int:
         output_dir = args.output_dir or (OUTPUT_BASE / "20261125_g2b")
         report = normalize_g2b_archive(args.g2b_monthly_dir, args.support_normalized_dir, output_dir,
                                        schema_dir=args.schema_dir)
-        print(json.dumps({"output_dir": str(output_dir), **report}, ensure_ascii=False, indent=2))
+        print(json.dumps({"output_dir": output_dir.as_posix(), **report}, ensure_ascii=False, indent=2))
         return 0 if report["publishable"] else 1
     if args.support_normalized_dir:
         parser.error("--support-normalized-dir is only valid with --g2b-monthly-dir")
     input_dir = args.input_dir or (ROOT / "data" / "cleaned" / args.snapshot)
     output_dir = args.output_dir or (OUTPUT_BASE / args.snapshot)
     report = normalize_snapshot(input_dir, output_dir, schema_dir=args.schema_dir)
-    print(json.dumps({"output_dir": str(output_dir), **report}, ensure_ascii=False, indent=2))
+    print(json.dumps({"output_dir": output_dir.as_posix(), **report}, ensure_ascii=False, indent=2))
     return 0 if report["publishable"] else 1
 
 
