@@ -5,7 +5,8 @@
 그래프 비용은 "근거를 받는 질의가 몇 번 왕복하느냐"로 거의 정해진다. 이 도구는 같은 입력으로 두 방식을 잰다.
   old  trace_path(condition_paths) + fetch_definition(definitions_for_notices) = 질의 2번
   new  근거 카드 evidence = 질의 1번 (api/repositories/graph.py, E1 실험의 카드)
-또 후보 검색의 지역 질의(region_candidates)를 예전 3번(split)과 합친 1번(merged)으로 잰다.
+또 후보 검색의 지역 질의(region_candidates)를 예전 3번(split)과 합친 1번(merged)으로 잰다. 이 질의는 지금 서비스가
+부르지 않는다(후보 검색은 규칙 엔진). 후보 검색을 그래프로 옮길 때의 비용을 보려는 것이다.
 두 방식의 결과가 같은지도 확인한다(경로·정의 행, 후보 집합). 다르면 종료 코드 1.
 
 입력: 규칙 엔진으로 무작위 프로필(시드 고정)의 상위 5건을 뽑는다. 실제 요청과 같은 공고·조건 묶음이다.
