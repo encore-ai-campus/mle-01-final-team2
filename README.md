@@ -171,6 +171,8 @@ pip install -r requirements-dev.txt                  # 서버 + 도구 + 시험
 # .env 를 직접 만들어 채운다: BIZINFO_API_KEY · KSTARTUP_SERVICE_KEY · NEO4J_* · SUPABASE_* (커밋 금지)
 ```
 
+uv를 쓰면 위 두 줄 대신 `uv sync` 한 번이면 된다(Python 3.12와 `uv.lock`의 버전 그대로 설치). 설치·실행·시험·기능별 시작점은 [개발 시작 안내](docs/GUIDE_개발시작_v0.1.md)에 있다.
+
 ```bash
 # 1) 수집
 python tools/collect_bizinfo.py                 # 기업마당 전체
@@ -202,7 +204,7 @@ uvicorn api.main:app --reload                   # http://localhost:8000/docs
 | 데이터 | [기업마당 명세서](docs/data/DATA_SPEC_기업마당_v0.1.md) · [EDA · 용어 표준화](docs/data/DOMAIN_ANALYSIS_EDA_용어표준화_v0.1.md) · [정리층](docs/data/PREPROCESS_정리층_설계와_결과_v0.1.md) · [값 정규화](docs/data/NORMALIZE_값정규화층과_첨부_읽기_v0.1.md) · [공통 스키마 v1](docs/SUPPORT_DATA_NORMALIZATION_V1.md) |
 | 그래프 · 평가 | [Neo4j 적재 기록](docs/LOAD_Neo4j_적재기록_v0.1.md) · [SQL 대 그래프 비교 결과](docs/ontology/BASELINE_SQL_그래프_비교측정결과_v0.1.md) · [베이스라인 측정 방법](docs/BASELINE_SQL_벡터RAG_측정방법_KPI산정근거_v0.1.md) |
 | 조건 추출 | [조건 스키마 v1](docs/condition/CONDITION_SCHEMA_V1.md) · [조건 평가기 v1](docs/condition/CONDITION_EVALUATION_PROGRAM_V1.md) · [작업 기록](docs/condition/WORKLOG_20261125_CONDITION_PIPELINE.md) |
-| API | [API 뼈대 안내](api/README.md) |
+| 개발 | [개발 시작 안내](docs/GUIDE_개발시작_v0.1.md) · [API 뼈대 안내](api/README.md) · [kordoc 설치](docs/GUIDE_kordoc_설치_v0.1.md) |
 | 정답셋 | [라벨링 가이드](docs/GOLDSET_라벨링_가이드_v0.1.md) · [수기 정규화 작업 안내](docs/PILOT_수기정규화_작업안내_v0.1.md) · [첨부 공고문 추출 가이드](docs/data/GUIDE_첨부_공고문_추출_가이드_v0.1.md) |
 
 ## 🗺️ 저장소 구조

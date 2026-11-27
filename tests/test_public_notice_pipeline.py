@@ -7,6 +7,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
+sys.path.insert(0, str(ROOT))
+from tests.local_data import API_SAMPLES, needs  # noqa: E402
 from public_notice_pipeline import (  # noqa: E402
     PrivacyReport, condition_search_approved, sanitize_tree, scope_matches, searchable_text,
 )
@@ -56,6 +58,7 @@ class PrivacyAndReviewTests(unittest.TestCase):
         self.assertFalse(scope_matches("review_required", ["KR:REGION:1100000000"], seongdong))
 
 
+@needs(API_SAMPLES)
 class RealSamplePipelineTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

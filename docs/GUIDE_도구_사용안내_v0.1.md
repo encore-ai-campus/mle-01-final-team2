@@ -4,8 +4,8 @@
 |---|---|
 | 목적 | 그래프 내보내기, Aura 점검·부분 적재, 검수 준비, 판정 회귀를 명령 한 줄씩 정리했다 |
 | 대상 | `tools/` 아래 그래프·판정 도구. 수집·정규화 도구는 각 파일의 설명을 본다 |
-| 설치 | `python -m pip install -r requirements-tools.txt` (서버 시험까지는 `requirements-dev.txt`) |
-| 접속 정보 | Aura 도구는 `.env`의 `NEO4J_URI`·`NEO4J_USER`·`NEO4J_PASSWORD`를 읽는다. 값은 출력하지 않는다 |
+| 설치 | `uv sync`([개발 시작 안내](GUIDE_개발시작_v0.1.md)). pip라면 `python -m pip install -r requirements-tools.txt` |
+| 접속 정보 | Aura 도구는 `.env`의 `NEO4J_URI`·`NEO4J_USERNAME`(또는 `NEO4J_USER`)·`NEO4J_PASSWORD`를 읽는다. 값은 출력하지 않는다 |
 | 공용 DB | Aura는 팀 공용이다. **쓰기(`--apply`)는 승인을 받은 뒤에만** 한다. 점검·dry-run은 읽기 전용이다 |
 
 ## 한눈에
@@ -45,7 +45,7 @@ python tools/check_graph_neo4j.py --check-definitions    # 정의 원문 해시�
 
 - `zero` 점검은 0이어야 정상이다. 실패하면 종료 코드 1.
 - `known` 점검은 알려진 값(V9 546, V15 330, V16a 34, V17 2)에서 바뀌었는지만 경고한다.
-- 2026-11-26 기준: 노드 32,605, 관계 56,995. 정의 5개(창업기업·예비창업자·초기창업기업·청년창업기업·중장년창업기업)는 `source` 속성이 없다(`--select laws`로 맞출 수 있음, 승인 대상).
+- 2026-11-26 기준: 노드 32,605, 관계 56,995. 2026-11-27에 정의 23개의 검수 결과(`needs_review`·`review_status` 등)와 빠져 있던 정의 5개의 `source`를 올렸다(`--select ids --ids "^DEF:"`).
 
 ## 3. 부분 적재 (기본 dry-run)
 

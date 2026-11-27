@@ -128,7 +128,7 @@ export default function Home() {
   return (
     <main>
       <h1>지원각</h1>
-      <div className="muted">조건을 넣으면 규칙 평가기가 판정하고, 모델은 그 근거를 설명만 합니다. 결과는 참고용입니다. <a href="/eligibility">규칙 판정만 보기</a></div>
+      <div className="muted">조건을 넣으면 규칙 평가기가 판정하고, 모델은 그 근거를 설명만 합니다. 결과는 참고용입니다. <a href="/eligibility">규칙 판정만 보기</a> · 준비 중: <a href="/notices">공고 목록</a> · <a href="/admin">운영자</a></div>
 
       <form className="panel" onSubmit={(e) => submit(e, 0)}>
         <div className="grid">

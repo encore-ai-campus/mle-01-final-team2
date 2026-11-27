@@ -25,6 +25,8 @@ class Settings(BaseSettings):
     use_cleaned: bool | None = Field(default=None, validation_alias="APP_USE_CLEANED")
     # 브라우저는 Next.js 서버(Vercel)만 호출한다. 로컬 개발용 허용 출처만 둔다
     cors_origins: list[str] = Field(default=["http://localhost:3000"], validation_alias="APP_CORS_ORIGINS")
+    # 로컬 개발용 가짜 로그인(api/dependencies/auth.py). APP_ENV=local일 때만 효과가 있다
+    dev_auth: bool = Field(default=False, validation_alias="APP_DEV_AUTH")
 
     # Neo4j Aura(기존 .env 이름)
     neo4j_uri: str | None = _env("NEO4J_URI")
