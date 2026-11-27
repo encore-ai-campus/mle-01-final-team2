@@ -41,8 +41,9 @@ class TestStructured(unittest.TestCase):
 
     def test_applicant(self):
         v = applicant_structured("일반기업,1인 창조기업")
-        self.assertEqual(v["concept_ids"], ["APPLICANT_TYPE:1인 창조기업"])
-        self.assertEqual(v["unmapped_options"], ["일반기업"])  # 일반기업은 중소기업과 동일시하지 않는다
+        self.assertEqual(v["concept_ids"], ["APPLICANT_TYPE:일반기업", "APPLICANT_TYPE:1인 창조기업"])  # B-1: 정의 없는 별도 개념
+        self.assertEqual(v["unmapped_options"], [])
+        self.assertNotIn("APPLICANT_TYPE:중소기업", v["concept_ids"])  # 일반기업은 중소기업과 동일시하지 않는다
         self.assertEqual(applicant_structured("외계인")["parse_status"], "UNPARSED_OPTION")
 
 

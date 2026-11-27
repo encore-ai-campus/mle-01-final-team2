@@ -17,8 +17,8 @@ def unify(attribute: str, legacy: dict) -> tuple[str, str | None, dict]:
         return "region", "WITHIN", {"concept_id": legacy["concept_id"]}
     if attribute == "business_age":
         if legacy.get("all_options"):
-            # 체크박스를 전부 고른 것은 제한 없음이 아니라 필터가 정보를 주지 않는 것이다(설계서 4.2). 조건으로 쓰지 않고 UNKNOWN으로 둔다.
-            return "business_age", None, {"all_options": True}
+            # C-2 ②(2026-11-27): 체크박스를 전부 고르면 업력 제한 없음이다. 비교할 값이 없어 연산자는 ANY로 둔다.
+            return "business_age", "ANY", {"all_options": True}
         if legacy.get("max_years") is not None:
             return "business_age", "LT", {"value": legacy["max_years"], "unit": "YEAR"}
         return "applicant_type", "IN", {"labels": [PRE_FOUNDER]}  # 예비창업자만 고른 경우
@@ -49,13 +49,14 @@ def split_pre_founder(conditions: list[dict]) -> tuple[list[dict], dict | None]:
 def requirement_groups(notice_id: str, conditions: list[dict]) -> list[tuple[str, str, str, list[dict]]]:
     """공고의 구조화 조건을 요건 노드 단위로 묶는다. 그래프 내보내기(`build.export`)와 평가기(`evaluator.evaluate_notice`)가 같이 쓴다.
 
-    반환: [(req_id, logic, logic_basis, [조건 dict])]. R1은 나머지 조건의 AND(근거 없이 가정), R2는 예비창업자 허용 업력의 OR(옵션 원문이 근거).
+    반환: [(req_id, logic, logic_basis, [조건 dict])]. R1은 나머지 조건의 AND, R2는 예비창업자 허용 업력의 OR(옵션 원문이 근거).
+    R1은 C-5 ②(2026-11-27)로 `explicit`이다. 구조화 API 필드는 필드마다 따로 정한 요건이라 모두 맞아야 한다(검수 정답의 논리 미검수 AND는 `assumed` 유지).
     R2의 예비창업자 조건은 원문 필드가 따로 없어 업력 조건에서 만든다(`pre_founder=True`, cond_id `#C-pre_founder`).
     """
     rest, age = split_pre_founder(conditions)
     groups = []
     if rest:
-        groups.append((f"{notice_id}#R1", "AND", "assumed", rest))
+        groups.append((f"{notice_id}#R1", "AND", "explicit", rest))
     if age:
         pre = {"cond_id": f"{notice_id}#C-pre_founder", "attribute": "applicant_type", "strength": age["strength"],
                "value": {"labels": [PRE_FOUNDER]}, "legacy": None, "source_field": age.get("source_field"), "evidence": age.get("evidence", ""),

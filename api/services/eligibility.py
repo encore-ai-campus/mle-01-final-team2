@@ -44,12 +44,15 @@ class EngineEligibilityService:
 
     def judge_notice(self, notice_id: str, profile: ApplicantProfile) -> EligibilityResponse:
         """사용자가 공고를 지목하면 검색 없이 그 공고만 판정한다(§7, 마감 여부와 관계없이)."""
+        from datetime import date
+
+        from tools.graphrag.engine import TODAY
         from tools.graphrag.evaluator import Profile, evaluate_notice
 
         n = self._engine.by_id.get(notice_id)
         if n is None:
             raise NoticeNotFound(notice_id)
-        r = evaluate_notice(n, Profile(**profile.model_dump()), self._engine.rg)
+        r = evaluate_notice(n, Profile(**profile.model_dump()), self._engine.rg, today=date.fromisoformat(TODAY))
         return EligibilityResponse(evaluated=1, candidates=int(r["verdict"] != "NOT_ELIGIBLE"), counts={r["verdict"]: 1},
                                    results=[self._row(r)], input_layer=self._engine.input_layer)
 

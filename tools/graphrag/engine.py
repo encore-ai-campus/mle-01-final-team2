@@ -6,6 +6,7 @@ LLM은 쓰지 않는다. 설명 생성은 이 출력(근거 문장·경로)을 �
 from __future__ import annotations
 
 from collections import Counter
+from datetime import date
 
 from . import cleaned, gold_bridge
 from .data import load_all
@@ -38,7 +39,7 @@ class Engine:
         for n in self.notices:
             if not include_closed and not self.is_open(n):
                 continue
-            out.append(evaluate_notice(n, prof, self.rg, opts))
+            out.append(evaluate_notice(n, prof, self.rg, opts, today=date.fromisoformat(TODAY)))
         return out
 
     def query(self, prof: Profile, question: str = "", top: int = 10, include_closed: bool = False, source: str | None = None) -> dict:

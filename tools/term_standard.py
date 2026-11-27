@@ -128,9 +128,12 @@ def main() -> None:
         ty("청소년", group="PERSON", note="K-Startup 신청 대상 값"),
         ty("대학", group="INSTITUTION", note="K-Startup 신청 대상 값", variants_key="대학생"),
         ty("연구기관", group="INSTITUTION", note="K-Startup 신청 대상 값", variants_key="대학생"),
+        ty("일반기업", group="ORGANIZATION", note="K-Startup 신청 대상 값. 예비창업자·대학생 등 개인과 구분하려고 쓰는 말이며 법령 정의가 없다. "
+           "중소기업과 동일시하지 않는다(B-1, 2026-11-27 결정). 기업마당 본문의 '일반기업'(우대기업과 구분한 지원 금액 차등)과는 다른 뜻이다",
+           variants_key="대학생"),
     ]
     for t in types:  # 값이 없는 유형(법령용어가 아닌 K-Startup 값)의 집계는 의미가 없으므로 비운다
-        if t["label"] in ("일반인", "대학", "연구기관"):
+        if t["label"] in ("일반인", "대학", "연구기관", "일반기업"):
             t["mentions_in_notices"] = {"BIZINFO": None, "KSTARTUP": None, "total": None}
     spec = {
         "version": "v0.1", "date": "2026-11-24", "status": "proposed(검수 전)",
@@ -139,7 +142,7 @@ def main() -> None:
         "applicant_types": types,
         "source_value_mapping": {
             "kstartup_aply_trgt": {"청소년": "APPLICANT_TYPE:청소년", "대학생": "APPLICANT_TYPE:대학생", "일반인": "APPLICANT_TYPE:일반인", "대학": "APPLICANT_TYPE:대학", "연구기관": "APPLICANT_TYPE:연구기관",
-                                   "일반기업": "(미정: 기업 일반. 중소기업과 동일시하지 않는다)", "1인 창조기업": "APPLICANT_TYPE:1인 창조기업"},
+                                   "일반기업": "APPLICANT_TYPE:일반기업", "1인 창조기업": "APPLICANT_TYPE:1인 창조기업"},
             "bizinfo_trgetNm": {"중소기업": "APPLICANT_TYPE:중소기업", "소상공인": "APPLICANT_TYPE:소상공인", "창업벤처": "(복합 값: 창업기업 + 벤처기업. 판정에 쓰지 않음)", "사회적기업": "APPLICANT_TYPE:사회적기업",
                                 "장애인기업": "APPLICANT_TYPE:장애인기업", "여성기업": "APPLICANT_TYPE:여성기업", "제조업": "INDUSTRY:제조업 (업종이므로 신청자 유형이 아님)"},
         },
@@ -163,10 +166,12 @@ def main() -> None:
         },
         "support_field_mapping(proposed)": {
             "standard": ["금융", "기술", "인력", "수출", "내수", "창업", "경영", "기타"],
-            "kstartup_to_standard": {"사업화": ["창업"], "시설ㆍ공간ㆍ보육": ["창업"], "멘토링ㆍ컨설팅ㆍ교육": ["경영"], "행사ㆍ네트워크": ["경영"], "창업교육": ["창업"], "판로ㆍ해외진출": ["내수", "수출"],
+            "kstartup_to_standard": {"사업화": ["창업"], "시설ㆍ공간ㆍ보육": ["창업"], "멘토링ㆍ컨설팅ㆍ교육": ["경영"], "행사ㆍ네트워크": ["기타"], "창업교육": ["창업"], "판로ㆍ해외진출": ["내수", "수출"],
                                      "글로벌": ["수출"], "기술개발(R&D)": ["기술"], "인력": ["인력"], "정책자금": ["금융"], "융자ㆍ보증": ["금융"]},
-            "confidence": {"high": ["기술개발(R&D)", "인력", "정책자금", "융자ㆍ보증", "글로벌"], "low": ["사업화", "시설ㆍ공간ㆍ보육", "멘토링ㆍ컨설팅ㆍ교육", "행사ㆍ네트워크", "창업교육", "판로ㆍ해외진출"]},
-            "note": "기업마당 대분류 8개를 표준 기준으로 삼고 K-Startup 11개를 대응시킨 제안이다. 낮은 신뢰 항목은 이름만으로 정한 것이라 팀 검토가 필요하다.",
+            "per_notice_split": {"판로ㆍ해외진출": {"수출": "해외|수출|글로벌|국제|현지|바이어", "내수": "입점|판로|쇼핑몰|라이브커머스|홈쇼핑|유통|구매상담|기획전|팝업",
+                                                  "rule": "해외 키워드가 있으면 수출, 국내 판로 키워드만 있으면 내수, 둘 다 없으면 내수·수출(제목·지원 내용 기준)"}},
+            "confidence": {"high": ["기술개발(R&D)", "인력", "정책자금", "융자ㆍ보증", "글로벌", "사업화", "시설ㆍ공간ㆍ보육", "멘토링ㆍ컨설팅ㆍ교육", "행사ㆍ네트워크", "창업교육", "판로ㆍ해외진출"], "low": []},
+            "note": "기업마당 대분류 8개를 표준 기준으로 삼고 K-Startup 11개를 대응시켰다. 낮은 신뢰 6개는 2026-11-27 회의에서 실제 공고를 보고 확정했다(B-5). 검색 필터 전용이다.",
         },
         "corpus": {"notices": dict(tot), "note": "표현 변이는 기업마당(API 자격 문구 + 첨부 자격·제외 구간)과 K-Startup 최근 1년 자격 문구에서 센 공고 수"},
     }

@@ -7,7 +7,8 @@
 - 지금은 본문 요건이 없어 ELIGIBLE이 나오지 않는다(REQ_UNPARSED). 그래서 전환은 NOT_ELIGIBLE ↔ NEEDS_CHECK뿐이다.
   조건 단위 변화(충족 → UNKNOWN 등)는 `condition_changes`로 따로 센다.
 
-사용: python tools/graphrag/rule_options_impact.py   -> data/eval/rule_options_impact.json, 표 출력
+사용: python tools/graphrag/rule_options_impact.py              -> data/eval/rule_options_impact.json, 표 출력
+     python tools/graphrag/rule_options_impact.py --decision   -> data/eval/meeting_decision_impact.json(회의 전 → 결정 비교)
 """
 from __future__ import annotations
 
@@ -21,12 +22,17 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from graphrag.engine import Engine  # noqa: E402
-from graphrag.evaluator import DEFAULT_OPTIONS, OPTION_CHOICES, Profile, evaluate_notice  # noqa: E402
+from graphrag.evaluator import DEFAULT_OPTIONS, OPTION_CHOICES, Profile, RuleOptions, evaluate_notice  # noqa: E402
 
 OUT = Path(__file__).resolve().parents[2] / "data" / "eval" / "rule_options_impact.json"
 LABEL = {"c1_pre_founder_not_in_options": "C-1", "c2_business_age_all_options": "C-2", "c3_age_all_options": "C-3",
          "c4_applicant_all_options": "C-4", "c6_bizinfo_org_region": "C-6", "a1_kstartup_region": "A-1",
-         "a3_pre_founder_missing_with_age": "A-3", "a6_unreviewed_group": "A-6"}
+         "a3_pre_founder_missing_with_age": "A-3", "a6_unreviewed_group": "A-6", "body_priority": "본문 우선", "d2_gold_strength": "D-2",
+         "e2_sales_margin": "E-2"}
+# 2026-11-27 회의 전 기본값. `--decision`은 이 값과 회의 결정(DEFAULT_OPTIONS)을 비교한다
+BEFORE_MEETING = RuleOptions(c2_business_age_all_options="unknown", c6_bizinfo_org_region="soft", a6_unreviewed_group="flag",
+                             body_priority="off", d2_gold_strength="soft", e2_sales_margin="exact")
+DECISION_OUT = OUT.with_name("meeting_decision_impact.json")
 
 
 def named_profiles(e: Engine) -> dict[str, Profile]:
@@ -49,13 +55,13 @@ def random_profiles(e: Engine, n: int = 300, seed: int = 20261124) -> list[Profi
                     applicant_type=rng.choice([None, "일반인", "일반기업"])) for _ in range(n)]
 
 
-def compare(e: Engine, notices: list[dict], profiles: list[Profile], opts) -> dict:
+def compare(e: Engine, notices: list[dict], profiles: list[Profile], opts, base=DEFAULT_OPTIONS) -> dict:
     trans, cond_changes = Counter(), Counter()
     notices_hit, profiles_hit = set(), 0
     for prof in profiles:
         hit = False
         for n in notices:
-            a, b = evaluate_notice(n, prof, e.rg), evaluate_notice(n, prof, e.rg, opts)
+            a, b = evaluate_notice(n, prof, e.rg, base), evaluate_notice(n, prof, e.rg, opts)
             for x, y in zip(a["conditions"], b["conditions"], strict=False):
                 if x.cond_id == y.cond_id and x.status != y.status:
                     cond_changes[f"{x.attribute}: {x.status} → {y.status}"] += 1
@@ -91,7 +97,22 @@ def run() -> dict:
     return out
 
 
+def run_decision() -> dict:
+    """회의 전 기본값(BEFORE_MEETING) → 회의 결정(DEFAULT_OPTIONS) 판정 전후 비교."""
+    e = Engine()
+    notices = [n for n in e.notices if e.is_open(n)]
+    rand = random_profiles(e)
+    out = {"open_notices": len(notices), "random_profiles": len(rand), "pairs_random": len(notices) * len(rand),
+           "before": asdict(BEFORE_MEETING), "after": asdict(DEFAULT_OPTIONS),
+           "random": compare(e, notices, rand, DEFAULT_OPTIONS, BEFORE_MEETING),
+           "named": {k: compare(e, notices, [p], DEFAULT_OPTIONS, BEFORE_MEETING)["verdict_transitions"] for k, p in named_profiles(e).items()}}
+    DECISION_OUT.parent.mkdir(parents=True, exist_ok=True)
+    DECISION_OUT.write_text(json.dumps(out, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    print(json.dumps(out["random"], ensure_ascii=False, indent=1))
+    return out
+
+
 if __name__ == "__main__":
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
-    run()
+    run_decision() if "--decision" in sys.argv else run()

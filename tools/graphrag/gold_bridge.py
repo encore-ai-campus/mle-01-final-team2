@@ -3,10 +3,10 @@
 입력은 `tools/ingest_condition_gold_reviews.py`가 만든 `reviewed_condition_gold.jsonl`·`reviewed_logic_gold.jsonl`이다.
 검수 도구가 VERIFIED로 반영한 행만 들어 있으므로 이 모듈은 검수 상태를 다시 판단하지 않는다. 조건 하나하나도 `review_status=VERIFIED`인 것만 쓴다.
 
-보수적으로 옮긴다(팀 검토 전, `docs/RULES_판정_정규화_검토목록_v0.1.md` D-1~D-5):
-- 검수 범위는 공고 전체가 아니라 발췌 문장이다(`whole_notice_conditions_complete=false`). 그래서 공고의 `text_requirements`는
-  `partially_reviewed`가 되고, 평가기는 여전히 ELIGIBLE을 만들지 않는다(REQ_UNPARSED).
-- 정답셋 가이드는 `decision_possible`이 판정 허용이 아니라고 한다. 검수 조건은 모두 soft로 두어 불충족이어도 NOT_ELIGIBLE을 만들지 않는다.
+2026-11-27 팀 결정(`docs/RULES_판정_정규화_검토목록_v0.1.md` D-1~D-5)대로 옮긴다:
+- D-1 ②: 검수 범위가 발췌 문장이면(`whole_notice_conditions_complete=false`) 공고의 `text_requirements`는 `partially_reviewed`이고
+  ELIGIBLE을 만들지 않는다(REQ_UNPARSED). 검수 양식의 "자격 조건 전체 확인"이 참인 공고만 `reviewed`로 올린다.
+- D-2 ③: 조건 강도는 구조화 필드와 같은 속성 규칙이다(`evaluator.gold_strength`, 업력만 hard). 그래프에도 같은 강도를 적는다.
 - 우대(PREFERENCE)는 자격 요건이 아니라 옮기지 않는다. 의미를 정하지 못한 조건(UNCLASSIFIED)도 옮기지 않는다.
 - 제외(EXCLUSION) 조건은 `negate=True`다. 해당하면(SATISFIED) 요건 불충족이다.
 - 기본은 개발용(development) 정답만 쓴다. 평가용(evaluation) 정답을 서비스 그래프에 넣을지는 팀이 정한다.
@@ -34,7 +34,8 @@ def to_condition(g: dict, notice_id: str, resolve_region) -> dict | None:
     field = g.get("field") or g.get("category")
     attr = FIELD_ATTR.get(field, (field or "unclassified").lower())
     op, val = g.get("operator"), g.get("value")
-    cond = {"cond_id": g["gold_condition_id"], "notice_id": notice_id, "attribute": attr, "strength": "soft", "gold": True,
+    from .evaluator import gold_strength
+    cond = {"cond_id": g["gold_condition_id"], "notice_id": notice_id, "attribute": attr, "strength": gold_strength(attr), "gold": True,
             "negate": g["condition_type"] == "EXCLUSION", "operator": op, "unit": g.get("unit"), "raw_value": val,
             "source_field": g["source_field"], "evidence": g["raw_text"], "reference_date_type": g.get("reference_date_type"),
             "review_comment": g.get("review_comment")}
