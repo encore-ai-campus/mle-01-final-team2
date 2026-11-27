@@ -104,8 +104,8 @@ CI(`.github/workflows/tools-tests.yml`)는 PR마다 `tools/test_*.py`와 데이�
 | 기능 | 명세 | 우선 | API 파일 | 웹 화면 | 데이터·참고 | 상태 |
 |---|---|---|---|---|---|---|
 | 로그인·역할 | A-01 `GET /api/me` | P0 | `api/dependencies/auth.py`, `api/routers/me.py` | (Supabase Auth, 프론트 SDK) | Supabase JWT, `profiles.role`. 기초 설계서 §8 | 뼈대(개발용 가짜 로그인만) |
-| 공고 목록·검색 | N-01 `GET /api/notices` | P0 | `api/routers/notices.py` | `web/app/notices/page.tsx` | `data/cleaned/`, `tools/graphrag/engine.py` | 뼈대 |
-| 공고 상세·원문 | N-02 `GET /api/notices/{id}` | P0 | `api/routers/notices.py` | `web/app/notices/[id]/page.tsx` | 정리층 원문 구역 | 뼈대 |
+| 공고 목록·검색 | N-01 `GET /api/notices` | P0 | `api/routers/notices.py` | `web/app/notices/page.tsx` | `data/cleaned/`, `tools/graphrag/engine.py` | 있음(API, `api/services/notices.py`. 웹 화면 전) |
+| 공고 상세·원문 | N-02 `GET /api/notices/{id}` | P0 | `api/routers/notices.py` | `web/app/notices/[id]/page.tsx` | 정리층 원문 구역 | 있음(API, `api/services/notices.py`. 웹 화면 전) |
 | 근거 문장 위치 | N-03 `.../spans` | P0 | `api/routers/notices.py` | 상세 화면 | 조건 evidence | 뼈대 |
 | 개념 검색 | C-01 `GET /api/concepts` | P0 | `api/routers/graph.py` | 판정 폼 | 지역 사전, 그래프 | 지역만 있음 |
 | 조건으로 판정 | E-01 `POST /api/eligibility` | P0 | `api/routers/eligibility.py` | `web/app/eligibility/page.tsx` | 규칙 평가기 | 있음 |

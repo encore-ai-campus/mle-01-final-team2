@@ -7,11 +7,18 @@ from fastapi import Depends
 
 from ..core.config import get_settings
 from ..services.eligibility import EligibilityService, EngineEligibilityService, judge_for_agent
+from ..services.notices import NoticeService
 
 
 @lru_cache
 def get_eligibility_service() -> EligibilityService:
     return EngineEligibilityService(use_cleaned=get_settings().use_cleaned)
+
+
+@lru_cache
+def get_notice_service() -> NoticeService:
+    """공고 목록(N-01). 판정 서비스와 같은 엔진을 써서 데이터를 한 번만 읽는다."""
+    return NoticeService(get_eligibility_service()._engine)
 
 
 @lru_cache
