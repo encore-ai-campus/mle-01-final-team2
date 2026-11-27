@@ -98,6 +98,7 @@ def export(e: Engine) -> dict:
                         node["about_pending"] = bool(missing)
                         if missing:
                             node["about_unmapped"] = missing
+        gold_seen: set[str] = set()  # 같은 조건이 공고의 다른 요건에도 걸리면 노드는 하나, HAS_CONDITION은 요건마다(요건 안 중복은 gold_bridge가 없앤다)
         for g in n.get("gold_requirements", []):  # 사람이 검수한 본문 요건(gold_bridge). 발췌 검수라 공고 전체 요건은 아니다
             rv = n["gold_review"]
             nodes.append({"label": "Requirement", "req_id": g["req_id"], "kind": "ELIGIBILITY", "logic": g["logic_tree"].get("operator", "ATOM"),
@@ -105,6 +106,10 @@ def export(e: Engine) -> dict:
                           "extraction_method": "human_review", "review_split": rv["split"], "reviewed_at": rv["reviewed_at"]})
             edges.append({"type": "HAS_REQUIREMENT", "from": nid, "to": g["req_id"], "evidence": "검수 정답(발췌)", "source": rv["source_field"]})
             for c in g["conditions"]:
+                edges.append({"type": "HAS_CONDITION", "from": g["req_id"], "to": c["cond_id"], "evidence": c["evidence"], "source": c["source_field"]})
+                if c["cond_id"] in gold_seen:
+                    continue
+                gold_seen.add(c["cond_id"])
                 v = c["value"]
                 node = {"label": "Condition", "cond_id": c["cond_id"], "cond_type": "ATOM", "attribute": c["attribute"],
                         "operator": None if v.get("unsupported") else c["operator"], "strength": c["strength"], "negate": c["negate"],
@@ -113,7 +118,6 @@ def export(e: Engine) -> dict:
                 if v.get("unsupported"):
                     node["unknown_reason"] = "no_evaluation_rule"
                 nodes.append(node)
-                edges.append({"type": "HAS_CONDITION", "from": g["req_id"], "to": c["cond_id"], "evidence": c["evidence"], "source": c["source_field"]})
                 for cid in v.get("concept_ids", []):
                     edges.append({"type": "ABOUT", "from": c["cond_id"], "to": cid})
     l_nodes, l_edges, article_index, pending = concepts_laws.laws()

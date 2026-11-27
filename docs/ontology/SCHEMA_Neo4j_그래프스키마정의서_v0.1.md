@@ -129,7 +129,12 @@ flowchart LR
 
 ### 3.4 검수 요건 (본문 발췌, 2026-11-26 추가)
 
-사람이 검수한 조건 정답(2-4 정답셋, `data/goldsets/conditions/v1/…/reviewed_condition_gold.jsonl`·`reviewed_logic_gold.jsonl`)을 `tools/graphrag/gold_bridge.py`가 요건·조건으로 바꿔 내보낸다(`build.py export`). **Aura에는 아직 0건이다**(검수 반영 0건).
+사람이 검수한 조건 정답(2-4 정답셋, `reviewed_condition_gold.jsonl`·`reviewed_logic_gold.jsonl`)을 `tools/graphrag/gold_bridge.py`가 요건·조건으로 바꿔 내보낸다(`build.py export`).
+
+- **정답 판(2026-11-28):** 개발용 v1.1 최종 30건 `data/goldsets/conditions/v1.1/20261126/final30/development`. 예전 v1/20261125는 검수 반영 0건이었다.
+- **그래프 파일:** 공고 30건, 검수 요건 39개, 검수 조건 113개(논리 트리 참조 116개, 같은 조건을 두 가지에서 다시 가리키는 3개는 노드 하나), 조건 중 평가 규칙이 있는 것 56개·없는 것 60개(참조 기준).
+- **Aura:** 아직 0건이다. 읽기 전용 비교 결과 새 노드 152개(요건 39 + 조건 113), 새 관계 166개, `Notice.text_requirements` 바뀜 30개, 지울 것 0개. 적재는 승인 후 `sync_graph_neo4j.py --apply`로 한다.
+- **판정 영향(`tools/graphrag/gold_impact.py`, 30건 × 무작위 프로필 300개 = 9,000쌍):** ELIGIBLE 0건(D-1 ②). NOT_ELIGIBLE → NEEDS_CHECK 768쌍, NEEDS_CHECK → NOT_ELIGIBLE 138쌍, 바뀐 공고 9건(모집 중 2건). NOT_ELIGIBLE → NEEDS_CHECK 중 516쌍은 예비창업자다. 정형 필드 "7년미만"은 예비창업자를 불충족으로 보지만, 본문 정답의 업력 조건이 정형 필드를 대체하면 예비창업자 해석은 D-4 보류라 UNKNOWN이 된다. 나머지는 본문 검수값이 정형 필드와 다른 경우다. 서비스 판정(`engine.py`)도 같은 정답을 쓰므로 Aura 적재와 상관없이 이 변화가 서비스에 반영된다.
 
 | 항목 | 규칙 |
 |---|---|
@@ -137,7 +142,8 @@ flowchart LR
 | 속성 | `BUSINESS_AGE` → `business_age`, `REPRESENTATIVE_AGE` → `founder_age`(숫자 비교), `BUSINESS_LOCATION` → `region`(지역 개념으로 해소, `ABOUT` 간선). 그 밖의 필드는 소문자 이름으로 두고 `unknown_reason=no_evaluation_rule`(평가기 UNKNOWN) |
 | 제외 조건 | `negate=true`. 해당하면(SATISFIED) 요건 불충족 |
 | 요건 논리 | 검수된 논리 트리를 `logic_tree`에 그대로 두고 `logic_basis=explicit`. 논리 검수가 없거나 트리에 없는 조건은 AND 한 요건(`assumed`) |
-| 강도 | 모두 `soft`. 불충족이어도 NOT_ELIGIBLE이 아니다(팀 검토 D-2) |
+| 강도 | 구조화 필드와 같은 속성 규칙(`evaluator.gold_strength`). 업력만 `hard`이고 나머지는 `soft`(팀 결정 D-2 ③, 2026-11-27) |
+| 요건 안 중복 | 논리 트리의 여러 가지가 같은 조건을 가리키면 조건 노드와 `HAS_CONDITION`은 하나다(트리는 그대로) |
 | 공고 상태 | 검수가 자격 문구 발췌라 `text_requirements=partially_reviewed`. 평가기는 계속 `REQ_UNPARSED`를 붙인다(팀 검토 D-1) |
 | 범위 | 개발용(development) 정답만. 평가용 20건은 넣지 않는다(팀 검토 D-3) |
 

@@ -1,0 +1,64 @@
+{
+ "gold_root": "data/goldsets/conditions/v1.1/20261126/final30",
+ "gold_notices": 30,
+ "gold_notices_open": 16,
+ "requirements": 39,
+ "text_requirements": {
+  "partially_reviewed": 30
+ },
+ "random_profiles": 300,
+ "pairs": 9000,
+ "random": {
+  "verdict_transitions": {
+   "NEEDS_CHECK → NOT_ELIGIBLE": 138,
+   "NOT_ELIGIBLE → NEEDS_CHECK": 768
+  },
+  "verdict_changed": 906,
+  "notices_changed": 9,
+  "by_notice": {
+   "KSTARTUP:176001": 182,
+   "KSTARTUP:176813": 164,
+   "KSTARTUP:177292": 113,
+   "KSTARTUP:179386": 101,
+   "KSTARTUP:177051": 101,
+   "KSTARTUP:176387": 101,
+   "KSTARTUP:178507": 63,
+   "KSTARTUP:177857": 63,
+   "BIZINFO:PBLN_000000000126715": 18
+  }
+ },
+ "random_open_only": {
+  "verdict_transitions": {
+   "NOT_ELIGIBLE → NEEDS_CHECK": 101,
+   "NEEDS_CHECK → NOT_ELIGIBLE": 18
+  },
+  "verdict_changed": 119,
+  "notices_changed": 2,
+  "by_notice": {
+   "KSTARTUP:179386": 101,
+   "BIZINFO:PBLN_000000000126715": 18
+  }
+ },
+ "verdicts_after": {
+  "NEEDS_CHECK": 7908,
+  "NOT_ELIGIBLE": 1092
+ },
+ "named": {
+  "예비창업자·서울 성동구·28세": {
+   "NOT_ELIGIBLE → NEEDS_CHECK": 6
+  },
+  "업력 2년·대구·35세·일반기업": {
+   "NEEDS_CHECK → NOT_ELIGIBLE": 1
+  },
+  "업력 12년·경기·45세·일반기업": {
+   "NOT_ELIGIBLE → NEEDS_CHECK": 4
+  },
+  "업력 4년·광주 남구·예비창업 여부 미입력": {},
+  "대학생·부산·22세·예비창업자": {
+   "NOT_ELIGIBLE → NEEDS_CHECK": 5
+  },
+  "지역만 입력(세종)": {
+   "NEEDS_CHECK → NOT_ELIGIBLE": 1
+  }
+ }
+}

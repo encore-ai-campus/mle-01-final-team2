@@ -416,6 +416,14 @@ class GoldBridgeTests(unittest.TestCase):
         r = evaluate_notice(n, Profile(region="REGION:2700000000"), RG)
         self.assertEqual({c.cond_id: c.status for c in r["conditions"]}, {"GOLD:R": UNK, "GOLD:D": UNK})  # 매출 규칙 없음, 동구는 모호
 
+    def test_condition_shared_by_two_branches_is_listed_once(self):
+        conds = [gold("GOLD:S", "ELIGIBILITY", "BUSINESS_TYPE", "EQ", "사회적기업", "사회적기업"),
+                 gold("GOLD:F", "ELIGIBILITY", "FOR_PROFIT_STATUS", "EQ", "영리기업", "영리기업"),
+                 gold("GOLD:N", "ELIGIBILITY", "FOR_PROFIT_STATUS", "EQ", "비영리사업자", "비영리사업자")]
+        grp = lambda op, *kids: {"node_type": "LOGICAL_GROUP", "group_id": op, "operator": op, "children": list(kids)}  # noqa: E731
+        n = self.notice(conds, [grp("OR", grp("AND", ref("GOLD:F"), ref("GOLD:S")), grp("AND", ref("GOLD:N"), ref("GOLD:S")))])
+        self.assertEqual([c["cond_id"] for c in n["gold_requirements"][0]["conditions"]], ["GOLD:F", "GOLD:S", "GOLD:N"])
+
     def test_no_reviewed_gold_changes_nothing(self):
         from graphrag import gold_bridge
         self.assertEqual(gold_bridge.load(Path("does-not-exist")), {})
