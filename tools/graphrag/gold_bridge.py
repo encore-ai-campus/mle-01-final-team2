@@ -16,7 +16,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-GOLD_ROOT = Path(__file__).resolve().parents[2] / "data" / "goldsets" / "conditions" / "v1" / "20261125"
+# 개발용 정답 v1.1 최종 30건(조건 116개, 2026-11-26 확정). 예전 v1/20261125는 검수 반영 0건이었다
+GOLD_ROOT = Path(__file__).resolve().parents[2] / "data" / "goldsets" / "conditions" / "v1.1" / "20261126" / "final30"
 NUMERIC = {"LT", "LTE", "GT", "GTE", "EQ"}
 FIELD_ATTR = {"BUSINESS_AGE": "business_age", "REPRESENTATIVE_AGE": "founder_age", "BUSINESS_LOCATION": "region"}
 
@@ -81,7 +82,7 @@ def load(root: Path = GOLD_ROOT, splits: tuple[str, ...] = ("development",), res
             if lg:
                 roots = [r for r in (_prune(x, set(by_id)) for x in lg["gold_logic_roots"]) if r]
                 for i, tree in enumerate(roots, 1):
-                    ids = _refs(tree)
+                    ids = list(dict.fromkeys(_refs(tree)))  # 트리 안 여러 가지가 같은 조건을 가리킬 수 있다(v1.1 118182). 조건 목록은 한 번씩
                     reqs.append({"req_id": f"{nid}#G{i}", "logic_tree": tree, "logic_basis": "explicit", "conditions": [by_id[x] for x in ids]})
                 rest = [c for c in conds if c["cond_id"] not in {x for r in reqs for x in _refs(r["logic_tree"])}]
             else:

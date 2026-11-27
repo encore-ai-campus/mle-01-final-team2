@@ -1,10 +1,10 @@
 {
- "built": "2026-11-27",
+ "built": "2026-11-28",
  "nodes": {
   "Concept": 355,
   "Notice": 5116,
-  "Requirement": 4936,
-  "Condition": 16402,
+  "Requirement": 4975,
+  "Condition": 16515,
   "ExternalLaw": 44,
   "LawArticle": 2325,
   "LawAppendix": 59,
@@ -19,9 +19,9 @@
   "ANNOUNCED_BY": 5116,
   "EXECUTED_BY": 947,
   "IN_SUPPORT_CATEGORY": 5116,
-  "HAS_REQUIREMENT": 4936,
-  "HAS_CONDITION": 16402,
-  "ABOUT": 22326,
+  "HAS_REQUIREMENT": 4975,
+  "HAS_CONDITION": 16515,
+  "ABOUT": 22340,
   "IS_A": 2,
   "PART_OF": 2384,
   "CITES_LAW": 27,
@@ -30,6 +30,6 @@
  "skipped": {
   "bizinfo_no_region_condition": 330
  },
- "gold_requirements": 0,
+ "gold_requirements": 39,
  "note": "구조화 필드 조건과 사람이 검수한 본문 요건(발췌)만 담는다. Aura 적재 여부는 docs/LOAD_Neo4j_적재기록_v0.1.md를 본다."
 }
