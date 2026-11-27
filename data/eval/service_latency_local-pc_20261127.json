@@ -1,0 +1,49 @@
+{
+  "label": "local-pc",
+  "measured_on": "2026-11-27",
+  "requests": 100,
+  "warmup": 5,
+  "top": 5,
+  "seed": 20261127,
+  "neo4j_ping_ms": {
+    "n": 100,
+    "p50_ms": 171.8,
+    "p95_ms": 388.4,
+    "mean_ms": 193.7
+  },
+  "evidence_per_request": {
+    "old_2_queries": {
+      "n": 100,
+      "p50_ms": 160.4,
+      "p95_ms": 409.2,
+      "mean_ms": 204.9
+    },
+    "new_1_query": {
+      "n": 100,
+      "p50_ms": 156.1,
+      "p95_ms": 332.5,
+      "mean_ms": 177.7
+    }
+  },
+  "region_candidates": {
+    "split_3_queries": {
+      "n": 100,
+      "p50_ms": 557.1,
+      "p95_ms": 942.2,
+      "mean_ms": 582.5
+    },
+    "merged_1_query": {
+      "n": 100,
+      "p50_ms": 165.2,
+      "p95_ms": 412.5,
+      "mean_ms": 202.4
+    }
+  },
+  "mismatched_requests": {
+    "evidence_paths": 0,
+    "evidence_definitions": 0,
+    "candidates": 0
+  },
+  "mismatch_examples": [],
+  "note": "규칙 판정(같은 프로세스)과 모델 설명 생성은 들어 있지 않다. 그래프 근거를 받는 비용만 잰다."
+}

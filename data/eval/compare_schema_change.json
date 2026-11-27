@@ -1,0 +1,493 @@
+{
+  "criterion": "시나리오 3개 중 2개 이상에서 그래프 수정 줄 수가 적다",
+  "scenarios": {
+    "S1": {
+      "title": "새 계층 관계: 업종 KSIC 상하위(SUBCLASS_OF)와 업종 조건 검색",
+      "cost": {
+        "sql": {
+          "schema": {
+            "added": 0,
+            "removed": 0
+          },
+          "load": {
+            "added": 1,
+            "removed": 1
+          },
+          "queries": {
+            "added": 12,
+            "removed": 0
+          },
+          "per_query": {
+            "Q5": {
+              "added": 12,
+              "removed": 0
+            }
+          },
+          "files_touched": 2,
+          "changed_lines": 14,
+          "schema_and_load_lines": 2
+        },
+        "cypher": {
+          "schema": {
+            "added": 0,
+            "removed": 0
+          },
+          "load": {
+            "added": 2,
+            "removed": 1
+          },
+          "queries": {
+            "added": 3,
+            "removed": 0
+          },
+          "per_query": {
+            "Q5": {
+              "added": 3,
+              "removed": 0
+            }
+          },
+          "files_touched": 2,
+          "changed_lines": 6,
+          "schema_and_load_lines": 3
+        },
+        "sql_best": "sql",
+        "graph_less": true,
+        "tie": false
+      },
+      "fixture": [
+        {
+          "query": "Q5",
+          "input": {
+            "k": "KSIC:C1011"
+          },
+          "ok": true,
+          "got": [
+            [
+              "N5"
+            ]
+          ],
+          "before_change": null
+        },
+        {
+          "query": "Q5",
+          "input": {
+            "k": "KSIC:C"
+          },
+          "ok": true,
+          "got": [],
+          "before_change": null
+        }
+      ]
+    },
+    "S2": {
+      "title": "하위 조건: 조건 아래 조건(HAS_CHILD, 3단까지)",
+      "cost": {
+        "sql": {
+          "schema": {
+            "added": 2,
+            "removed": 1
+          },
+          "load": {
+            "added": 1,
+            "removed": 1
+          },
+          "queries": {
+            "added": 49,
+            "removed": 9
+          },
+          "per_query": {
+            "Q0": {
+              "added": 9,
+              "removed": 1
+            },
+            "Q1": {
+              "added": 10,
+              "removed": 2
+            },
+            "Q2": {
+              "added": 10,
+              "removed": 2
+            },
+            "Q3": {
+              "added": 10,
+              "removed": 2
+            },
+            "Q4": {
+              "added": 10,
+              "removed": 2
+            }
+          },
+          "files_touched": 3,
+          "changed_lines": 63,
+          "schema_and_load_lines": 5
+        },
+        "cypher": {
+          "schema": {
+            "added": 0,
+            "removed": 0
+          },
+          "load": {
+            "added": 2,
+            "removed": 1
+          },
+          "queries": {
+            "added": 5,
+            "removed": 5
+          },
+          "per_query": {
+            "Q0": {
+              "added": 1,
+              "removed": 1
+            },
+            "Q1": {
+              "added": 1,
+              "removed": 1
+            },
+            "Q2": {
+              "added": 1,
+              "removed": 1
+            },
+            "Q3": {
+              "added": 1,
+              "removed": 1
+            },
+            "Q4": {
+              "added": 1,
+              "removed": 1
+            }
+          },
+          "files_touched": 2,
+          "changed_lines": 13,
+          "schema_and_load_lines": 3
+        },
+        "sql_view": {
+          "schema": {
+            "added": 11,
+            "removed": 1
+          },
+          "load": {
+            "added": 1,
+            "removed": 1
+          },
+          "queries": {
+            "added": 10,
+            "removed": 5
+          },
+          "per_query": {
+            "Q0": {
+              "added": 2,
+              "removed": 1
+            },
+            "Q1": {
+              "added": 2,
+              "removed": 1
+            },
+            "Q2": {
+              "added": 2,
+              "removed": 1
+            },
+            "Q3": {
+              "added": 2,
+              "removed": 1
+            },
+            "Q4": {
+              "added": 2,
+              "removed": 1
+            }
+          },
+          "files_touched": 3,
+          "changed_lines": 29,
+          "schema_and_load_lines": 14
+        },
+        "sql_best": "sql_view",
+        "graph_less": true,
+        "tie": false
+      },
+      "fixture": [
+        {
+          "query": "Q0",
+          "input": {
+            "nid": "N2"
+          },
+          "ok": true,
+          "got": [
+            [
+              "N2#R",
+              "N2#C2a",
+              "region"
+            ],
+            [
+              "N2#R",
+              "N2#C2b",
+              "applicant_type"
+            ],
+            [
+              "N2#R",
+              "N2#G",
+              "group"
+            ]
+          ],
+          "before_change": []
+        },
+        {
+          "query": "Q1",
+          "input": {
+            "u": "R:GANGNAM"
+          },
+          "ok": true,
+          "got": [
+            [
+              "N1"
+            ],
+            [
+              "N2"
+            ],
+            [
+              "N4"
+            ]
+          ],
+          "before_change": [
+            [
+              "N1"
+            ],
+            [
+              "N4"
+            ]
+          ]
+        },
+        {
+          "query": "Q2",
+          "input": {
+            "nid": "N2"
+          },
+          "ok": true,
+          "got": [
+            [
+              "N2#C2b",
+              "중소기업",
+              "중소기업기본법",
+              "제2조"
+            ]
+          ],
+          "before_change": []
+        },
+        {
+          "query": "Q3",
+          "input": {
+            "nid": "N2",
+            "u": "R:GANGNAM"
+          },
+          "ok": true,
+          "got": [
+            [
+              "N2#C2a",
+              "강남구 > 서울"
+            ]
+          ],
+          "before_change": []
+        },
+        {
+          "query": "Q4",
+          "input": {
+            "aid": "A2"
+          },
+          "ok": true,
+          "got": [
+            [
+              "N1"
+            ],
+            [
+              "N2"
+            ],
+            [
+              "N4"
+            ]
+          ],
+          "before_change": [
+            [
+              "N1"
+            ],
+            [
+              "N4"
+            ]
+          ]
+        }
+      ]
+    },
+    "S3": {
+      "title": "정정 공고: 새 공고가 예전 공고를 대신함(SUPERSEDES)",
+      "cost": {
+        "sql": {
+          "schema": {
+            "added": 2,
+            "removed": 0
+          },
+          "load": {
+            "added": 1,
+            "removed": 0
+          },
+          "queries": {
+            "added": 2,
+            "removed": 0
+          },
+          "per_query": {
+            "Q1": {
+              "added": 1,
+              "removed": 0
+            },
+            "Q4": {
+              "added": 1,
+              "removed": 0
+            }
+          },
+          "files_touched": 3,
+          "changed_lines": 5,
+          "schema_and_load_lines": 3
+        },
+        "cypher": {
+          "schema": {
+            "added": 0,
+            "removed": 0
+          },
+          "load": {
+            "added": 2,
+            "removed": 1
+          },
+          "queries": {
+            "added": 2,
+            "removed": 0
+          },
+          "per_query": {
+            "Q1": {
+              "added": 1,
+              "removed": 0
+            },
+            "Q4": {
+              "added": 1,
+              "removed": 0
+            }
+          },
+          "files_touched": 2,
+          "changed_lines": 5,
+          "schema_and_load_lines": 3
+        },
+        "sql_best": "sql",
+        "graph_less": false,
+        "tie": true
+      },
+      "fixture": [
+        {
+          "query": "Q1",
+          "input": {
+            "u": "R:GANGNAM"
+          },
+          "ok": true,
+          "got": [
+            [
+              "N4"
+            ]
+          ],
+          "before_change": [
+            [
+              "N1"
+            ],
+            [
+              "N4"
+            ]
+          ]
+        },
+        {
+          "query": "Q4",
+          "input": {
+            "aid": "A2"
+          },
+          "ok": true,
+          "got": [
+            [
+              "N4"
+            ]
+          ],
+          "before_change": [
+            [
+              "N1"
+            ],
+            [
+              "N4"
+            ]
+          ]
+        }
+      ]
+    }
+  },
+  "graph_less_in": 2,
+  "criterion_met": true,
+  "fixture_all_ok": true,
+  "regression_on_aura": {
+    "neo4j_host": "4fcaaade.databases.neo4j.io",
+    "S1": {
+      "inputs": 2,
+      "sql_changed_vs_before": 0,
+      "cypher_changed_vs_before": 0,
+      "sql_vs_cypher": 0,
+      "result_rows": 0
+    },
+    "S2": {
+      "inputs": 69,
+      "sql_changed_vs_before": 0,
+      "cypher_changed_vs_before": 0,
+      "sql_vs_cypher": 0,
+      "result_rows": 30436
+    },
+    "S3": {
+      "inputs": 31,
+      "sql_changed_vs_before": 0,
+      "cypher_changed_vs_before": 0,
+      "sql_vs_cypher": 0,
+      "result_rows": 30362
+    }
+  },
+  "code": {
+    "S1": {
+      "sql": {
+        "Q5": "WITH RECURSIVE up(id, hops) AS (\n  SELECT :k, 0\n  UNION\n  SELECT e.parent, up.hops + 1\n  FROM concept_edge e JOIN up ON e.child = up.id\n  WHERE e.rel = 'SUBCLASS_OF' AND up.hops < 4\n)\nSELECT DISTINCT r.notice_id\nFROM up\nJOIN condition_concept cc ON cc.concept_id = up.id\nJOIN condition c ON c.cond_id = cc.cond_id AND c.attribute = 'industry'\nJOIN requirement r ON r.req_id = c.req_id"
+      },
+      "cypher": {
+        "Q5": "MATCH (:Concept {concept_id: $k})-[:SUBCLASS_OF*0..4]->(:Concept)\n      <-[:ABOUT]-(:Condition {attribute: 'industry'})<-[:HAS_CONDITION]-(:Requirement)<-[:HAS_REQUIREMENT]-(n:Notice)\nRETURN DISTINCT n.notice_id"
+      }
+    },
+    "S2": {
+      "sql_view": {
+        "view": "CREATE VIEW condition_tree AS\nWITH RECURSIVE tree(req_id, cond_id, depth) AS (\n  SELECT c.req_id, c.cond_id, 0 FROM condition c WHERE c.req_id IS NOT NULL\n  UNION ALL\n  SELECT tree.req_id, c.cond_id, tree.depth + 1\n  FROM condition c JOIN tree ON c.parent_cond_id = tree.cond_id\n  WHERE tree.depth < 3\n)\nSELECT req_id, cond_id FROM tree;",
+        "Q0": "SELECT r.req_id, c.cond_id, c.attribute\nFROM requirement r\nJOIN condition_tree t ON t.req_id = r.req_id\nJOIN condition c ON c.cond_id = t.cond_id\nWHERE r.notice_id = :nid",
+        "Q1": "WITH RECURSIVE up(id, hops) AS (\n  SELECT :u, 0\n  UNION\n  SELECT e.parent, up.hops + 1\n  FROM concept_edge e JOIN up ON e.child = up.id\n  WHERE e.rel IN ('WITHIN', 'MEMBER_OF') AND up.hops < 3\n)\nSELECT DISTINCT r.notice_id\nFROM up\nJOIN condition_concept cc ON cc.concept_id = up.id\nJOIN condition c ON c.cond_id = cc.cond_id AND c.attribute = 'region'\nJOIN condition_tree t ON t.cond_id = c.cond_id\nJOIN requirement r ON r.req_id = t.req_id",
+        "Q2": "WITH RECURSIVE sup(start, id, hops) AS (\n  SELECT concept_id, concept_id, 0 FROM concept\n  UNION\n  SELECT sup.start, e.parent, sup.hops + 1\n  FROM concept_edge e JOIN sup ON e.child = sup.id\n  WHERE e.rel = 'IS_A' AND sup.hops < 2\n)\nSELECT DISTINCT c.cond_id, d.term, l.name, a.article_no\nFROM requirement r\nJOIN condition_tree t ON t.req_id = r.req_id\nJOIN condition c ON c.cond_id = t.cond_id\nJOIN condition_concept cc ON cc.cond_id = c.cond_id\nJOIN sup ON sup.start = cc.concept_id\nJOIN concept_definition kd ON kd.concept_id = sup.id\nJOIN definition d ON d.def_id = kd.def_id\nJOIN definition_article da ON da.def_id = d.def_id\nJOIN law_article a ON a.article_id = da.article_id\nJOIN external_law l ON l.law_id = a.law_id\nWHERE r.notice_id = :nid",
+        "Q3": "WITH RECURSIVE up(id, hops, path) AS (\n  SELECT k.concept_id, 0, k.name FROM concept k WHERE k.concept_id = :u\n  UNION ALL\n  SELECT e.parent, up.hops + 1, up.path || ' > ' || p.name\n  FROM concept_edge e JOIN up ON e.child = up.id\n  JOIN concept p ON p.concept_id = e.parent\n  WHERE e.rel IN ('WITHIN', 'MEMBER_OF') AND up.hops < 3\n)\nSELECT c.cond_id, up.path\nFROM requirement r\nJOIN condition_tree t ON t.req_id = r.req_id\nJOIN condition c ON c.cond_id = t.cond_id AND c.attribute = 'region'\nJOIN condition_concept cc ON cc.cond_id = c.cond_id\nJOIN up ON up.id = cc.concept_id\nWHERE r.notice_id = :nid",
+        "Q4": "WITH RECURSIVE sub(id, hops) AS (\n  SELECT kd.concept_id, 0\n  FROM definition_article da JOIN concept_definition kd ON kd.def_id = da.def_id\n  WHERE da.article_id = :aid\n  UNION\n  SELECT e.child, sub.hops + 1\n  FROM concept_edge e JOIN sub ON e.parent = sub.id\n  WHERE e.rel = 'IS_A' AND sub.hops < 2\n)\nSELECT DISTINCT r.notice_id\nFROM sub\nJOIN condition_concept cc ON cc.concept_id = sub.id\nJOIN condition c ON c.cond_id = cc.cond_id\nJOIN condition_tree t ON t.cond_id = c.cond_id\nJOIN requirement r ON r.req_id = t.req_id"
+      },
+      "sql": {
+        "Q0": "WITH RECURSIVE tree(req_id, cond_id, depth) AS (\n  SELECT c.req_id, c.cond_id, 0 FROM condition c WHERE c.req_id IS NOT NULL\n  UNION ALL\n  SELECT tree.req_id, c.cond_id, tree.depth + 1\n  FROM condition c JOIN tree ON c.parent_cond_id = tree.cond_id\n  WHERE tree.depth < 3\n)\nSELECT r.req_id, c.cond_id, c.attribute\nFROM requirement r\nJOIN tree t ON t.req_id = r.req_id\nJOIN condition c ON c.cond_id = t.cond_id\nWHERE r.notice_id = :nid",
+        "Q1": "WITH RECURSIVE tree(req_id, cond_id, depth) AS (\n  SELECT c.req_id, c.cond_id, 0 FROM condition c WHERE c.req_id IS NOT NULL\n  UNION ALL\n  SELECT tree.req_id, c.cond_id, tree.depth + 1\n  FROM condition c JOIN tree ON c.parent_cond_id = tree.cond_id\n  WHERE tree.depth < 3\n),\nup(id, hops) AS (\n  SELECT :u, 0\n  UNION\n  SELECT e.parent, up.hops + 1\n  FROM concept_edge e JOIN up ON e.child = up.id\n  WHERE e.rel IN ('WITHIN', 'MEMBER_OF') AND up.hops < 3\n)\nSELECT DISTINCT r.notice_id\nFROM up\nJOIN condition_concept cc ON cc.concept_id = up.id\nJOIN condition c ON c.cond_id = cc.cond_id AND c.attribute = 'region'\nJOIN tree t ON t.cond_id = c.cond_id\nJOIN requirement r ON r.req_id = t.req_id",
+        "Q2": "WITH RECURSIVE tree(req_id, cond_id, depth) AS (\n  SELECT c.req_id, c.cond_id, 0 FROM condition c WHERE c.req_id IS NOT NULL\n  UNION ALL\n  SELECT tree.req_id, c.cond_id, tree.depth + 1\n  FROM condition c JOIN tree ON c.parent_cond_id = tree.cond_id\n  WHERE tree.depth < 3\n),\nsup(start, id, hops) AS (\n  SELECT concept_id, concept_id, 0 FROM concept\n  UNION\n  SELECT sup.start, e.parent, sup.hops + 1\n  FROM concept_edge e JOIN sup ON e.child = sup.id\n  WHERE e.rel = 'IS_A' AND sup.hops < 2\n)\nSELECT DISTINCT c.cond_id, d.term, l.name, a.article_no\nFROM requirement r\nJOIN tree t ON t.req_id = r.req_id\nJOIN condition c ON c.cond_id = t.cond_id\nJOIN condition_concept cc ON cc.cond_id = c.cond_id\nJOIN sup ON sup.start = cc.concept_id\nJOIN concept_definition kd ON kd.concept_id = sup.id\nJOIN definition d ON d.def_id = kd.def_id\nJOIN definition_article da ON da.def_id = d.def_id\nJOIN law_article a ON a.article_id = da.article_id\nJOIN external_law l ON l.law_id = a.law_id\nWHERE r.notice_id = :nid",
+        "Q3": "WITH RECURSIVE tree(req_id, cond_id, depth) AS (\n  SELECT c.req_id, c.cond_id, 0 FROM condition c WHERE c.req_id IS NOT NULL\n  UNION ALL\n  SELECT tree.req_id, c.cond_id, tree.depth + 1\n  FROM condition c JOIN tree ON c.parent_cond_id = tree.cond_id\n  WHERE tree.depth < 3\n),\nup(id, hops, path) AS (\n  SELECT k.concept_id, 0, k.name FROM concept k WHERE k.concept_id = :u\n  UNION ALL\n  SELECT e.parent, up.hops + 1, up.path || ' > ' || p.name\n  FROM concept_edge e JOIN up ON e.child = up.id\n  JOIN concept p ON p.concept_id = e.parent\n  WHERE e.rel IN ('WITHIN', 'MEMBER_OF') AND up.hops < 3\n)\nSELECT c.cond_id, up.path\nFROM requirement r\nJOIN tree t ON t.req_id = r.req_id\nJOIN condition c ON c.cond_id = t.cond_id AND c.attribute = 'region'\nJOIN condition_concept cc ON cc.cond_id = c.cond_id\nJOIN up ON up.id = cc.concept_id\nWHERE r.notice_id = :nid",
+        "Q4": "WITH RECURSIVE tree(req_id, cond_id, depth) AS (\n  SELECT c.req_id, c.cond_id, 0 FROM condition c WHERE c.req_id IS NOT NULL\n  UNION ALL\n  SELECT tree.req_id, c.cond_id, tree.depth + 1\n  FROM condition c JOIN tree ON c.parent_cond_id = tree.cond_id\n  WHERE tree.depth < 3\n),\nsub(id, hops) AS (\n  SELECT kd.concept_id, 0\n  FROM definition_article da JOIN concept_definition kd ON kd.def_id = da.def_id\n  WHERE da.article_id = :aid\n  UNION\n  SELECT e.child, sub.hops + 1\n  FROM concept_edge e JOIN sub ON e.parent = sub.id\n  WHERE e.rel = 'IS_A' AND sub.hops < 2\n)\nSELECT DISTINCT r.notice_id\nFROM sub\nJOIN condition_concept cc ON cc.concept_id = sub.id\nJOIN condition c ON c.cond_id = cc.cond_id\nJOIN tree t ON t.cond_id = c.cond_id\nJOIN requirement r ON r.req_id = t.req_id"
+      },
+      "cypher": {
+        "Q0": "MATCH (n:Notice {notice_id: $nid})-[:HAS_REQUIREMENT]->(r:Requirement)-[:HAS_CONDITION]->(:Condition)-[:HAS_CHILD*0..3]->(c:Condition)\nRETURN r.req_id, c.cond_id, c.attribute",
+        "Q1": "MATCH (u:Concept {concept_id: $u})-[:WITHIN|MEMBER_OF*0..3]->(:Concept)\n      <-[:ABOUT]-(:Condition {attribute: 'region'})<-[:HAS_CHILD*0..3]-(:Condition)<-[:HAS_CONDITION]-(:Requirement)<-[:HAS_REQUIREMENT]-(n:Notice)\nRETURN DISTINCT n.notice_id",
+        "Q2": "MATCH (:Notice {notice_id: $nid})-[:HAS_REQUIREMENT]->(:Requirement)-[:HAS_CONDITION]->(:Condition)-[:HAS_CHILD*0..3]->(c:Condition)\n      -[:ABOUT]->(:Concept)-[:IS_A*0..2]->(:Concept)-[:DEFINED_BY]->(d:Definition)\n      -[:CITES_LAW]->(a:LawArticle)-[:PART_OF]->(l:ExternalLaw)\nRETURN DISTINCT c.cond_id, d.term, l.name, a.article_no",
+        "Q3": "MATCH (:Notice {notice_id: $nid})-[:HAS_REQUIREMENT]->(:Requirement)-[:HAS_CONDITION]->(:Condition)-[:HAS_CHILD*0..3]->(c:Condition {attribute: 'region'})-[:ABOUT]->(t:Concept)\nMATCH p = (:Concept {concept_id: $u})-[:WITHIN|MEMBER_OF*0..3]->(t)\nRETURN c.cond_id, [x IN nodes(p) | x.name] AS path",
+        "Q4": "MATCH (:LawArticle {article_id: $aid})<-[:CITES_LAW]-(:Definition)<-[:DEFINED_BY]-(:Concept)<-[:IS_A*0..2]-(:Concept)\n      <-[:ABOUT]-(:Condition)<-[:HAS_CHILD*0..3]-(:Condition)<-[:HAS_CONDITION]-(:Requirement)<-[:HAS_REQUIREMENT]-(n:Notice)\nRETURN DISTINCT n.notice_id"
+      }
+    },
+    "S3": {
+      "sql": {
+        "Q1": "WITH RECURSIVE up(id, hops) AS (\n  SELECT :u, 0\n  UNION\n  SELECT e.parent, up.hops + 1\n  FROM concept_edge e JOIN up ON e.child = up.id\n  WHERE e.rel IN ('WITHIN', 'MEMBER_OF') AND up.hops < 3\n)\nSELECT DISTINCT r.notice_id\nFROM up\nJOIN condition_concept cc ON cc.concept_id = up.id\nJOIN condition c ON c.cond_id = cc.cond_id AND c.attribute = 'region'\nJOIN requirement r ON r.req_id = c.req_id\nWHERE r.notice_id NOT IN (SELECT old_id FROM notice_supersedes)",
+        "Q4": "WITH RECURSIVE sub(id, hops) AS (\n  SELECT kd.concept_id, 0\n  FROM definition_article da JOIN concept_definition kd ON kd.def_id = da.def_id\n  WHERE da.article_id = :aid\n  UNION\n  SELECT e.child, sub.hops + 1\n  FROM concept_edge e JOIN sub ON e.parent = sub.id\n  WHERE e.rel = 'IS_A' AND sub.hops < 2\n)\nSELECT DISTINCT r.notice_id\nFROM sub\nJOIN condition_concept cc ON cc.concept_id = sub.id\nJOIN condition c ON c.cond_id = cc.cond_id\nJOIN requirement r ON r.req_id = c.req_id\nWHERE r.notice_id NOT IN (SELECT old_id FROM notice_supersedes)"
+      },
+      "cypher": {
+        "Q1": "MATCH (u:Concept {concept_id: $u})-[:WITHIN|MEMBER_OF*0..3]->(:Concept)\n      <-[:ABOUT]-(:Condition {attribute: 'region'})<-[:HAS_CONDITION]-(:Requirement)<-[:HAS_REQUIREMENT]-(n:Notice)\nWHERE NOT EXISTS { (n)<-[:SUPERSEDES]-(:Notice) }\nRETURN DISTINCT n.notice_id",
+        "Q4": "MATCH (:LawArticle {article_id: $aid})<-[:CITES_LAW]-(:Definition)<-[:DEFINED_BY]-(:Concept)<-[:IS_A*0..2]-(:Concept)\n      <-[:ABOUT]-(:Condition)<-[:HAS_CONDITION]-(:Requirement)<-[:HAS_REQUIREMENT]-(n:Notice)\nWHERE NOT EXISTS { (n)<-[:SUPERSEDES]-(:Notice) }\nRETURN DISTINCT n.notice_id"
+      }
+    }
+  }
+}

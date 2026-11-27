@@ -55,6 +55,7 @@ class AgentState(TypedDict, total=False):
     results: list[dict]
     gaps: list[dict]
     definitions: list[dict]
+    evidence_defs: list[dict] | None   # trace_path가 근거 카드(evidence)로 미리 받은 정의 행. None이면 fetch_definition이 따로 묻는다
     banners: list[str]
     provider: str | None
     fallback_depth: int | None
@@ -127,7 +128,8 @@ def _as_of(results: list[dict]) -> str | None:
 def build_graph(judge: Judge, router: LLMRouter | None, graph: Any = None,
                 now: Callable[[], datetime] = lambda: datetime.now(timezone.utc)):
     """judge: 규칙 판정 함수. router: 모델 라우터(None이면 설명 없음). graph: Neo4j 저장소(condition_paths·
-    definitions_for_notices를 가진 객체, None이면 경로는 평가기 결과로·정의는 생략)."""
+    definitions_for_notices를 가진 객체, None이면 경로는 평가기 결과로·정의는 생략). graph에 evidence가 있으면
+    경로와 정의를 질의 한 번으로 받는다(Aura 왕복 2번 → 1번)."""
     async def call_judge(**kw) -> dict:
         if inspect.iscoroutinefunction(judge):
             return await judge(**kw)
@@ -180,8 +182,19 @@ def build_graph(judge: Judge, router: LLMRouter | None, graph: Any = None,
         region_conds = [c for r in results for c in r.get("conditions", []) if c["attribute"] == "region"]
         owner = {c["cond_id"]: r["notice_id"] for r in results for c in r.get("conditions", [])}
         failures = dict(s.get("failures", {}))
-        rows = None
-        if graph is not None and region and region_conds:
+        rows, evidence_defs = None, None
+        if graph is not None and hasattr(graph, "evidence") and results:
+            # 근거 카드 한 번으로 경로와 정의를 같이 받는다. 정의 행은 fetch_definition이 그대로 쓴다
+            try:
+                cards = await asyncio.to_thread(graph.evidence, [r["notice_id"] for r in results], region)
+                wanted = {c["cond_id"] for c in region_conds}
+                rows = [c for c in cards if c["cond_id"] in wanted] if region else None
+                evidence_defs = [{"notice_id": c["notice_id"], "cond_id": c["cond_id"], "concept": c["concept"], **b}
+                                 for c in cards for b in c.get("basis") or []]
+            except Exception as e:
+                failures["trace_path"] = type(e).__name__
+                _emit("banner", code="GRAPH_UNAVAILABLE", text="그래프 DB에 닿지 않아 경로는 내장 지역 사전으로 표시합니다.")
+        elif graph is not None and region and region_conds:
             try:
                 rows = await asyncio.to_thread(graph.condition_paths, region, [c["cond_id"] for c in region_conds])
             except Exception as e:
@@ -196,20 +209,22 @@ def build_graph(judge: Judge, router: LLMRouter | None, graph: Any = None,
                 if c.get("path"):
                     _emit("path", notice_id=owner.get(c["cond_id"]), cond_id=c["cond_id"], source="evaluator", reached=True,
                           nodes=[{"id": None, "name": n} for n in c["path"]], rels=[])
-        return {"failures": failures, "tools_used": ["trace_path"]}
+        return {"failures": failures, "evidence_defs": evidence_defs, "tools_used": ["trace_path"]}
 
     async def n_fetch_definition(s: AgentState) -> dict:
         """조건 개념의 정의 → 법령 조문(P1). 모델이 법령을 외워 답하지 않게 원문 위치만 준다."""
         if graph is None or not s.get("results"):
             return {"definitions": [], "tools_used": ["fetch_definition"]}
-        try:
-            rows = await asyncio.to_thread(graph.definitions_for_notices, [r["notice_id"] for r in s["results"]])
-        except Exception as e:
-            return {"definitions": [], "failures": {**s.get("failures", {}), "fetch_definition": type(e).__name__},
-                    "tools_used": ["fetch_definition"]}
+        rows = s.get("evidence_defs")
+        if rows is None:  # 근거 카드를 못 받았으면(메서드 없음·장애) 예전처럼 따로 묻는다
+            try:
+                rows = await asyncio.to_thread(graph.definitions_for_notices, [r["notice_id"] for r in s["results"]])
+            except Exception as e:
+                return {"definitions": [], "failures": {**s.get("failures", {}), "fetch_definition": type(e).__name__},
+                        "tools_used": ["fetch_definition"]}
         seen, defs = set(), []
         for d in rows:
-            key = (d["notice_id"], d["def_id"])
+            key = (d["notice_id"], d["def_id"], d.get("article_id"))  # 한 정의가 조문·별표를 함께 인용하면 둘 다 보인다
             if key in seen:
                 continue
             seen.add(key)
