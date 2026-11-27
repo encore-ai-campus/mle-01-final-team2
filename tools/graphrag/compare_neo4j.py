@@ -9,8 +9,21 @@
   G    Neo4j(Cypher)  적재한 그래프에서 `[:WITHIN|MEMBER_OF*0..3]` 경로 질의
 
 공정성: 모든 구성이 같은 공고 집합(모집 중, 지역 조건 있음), 같은 지역 코드표·묶음 사전, 같은 3값 규칙(충족·불충족·미확인)과 hop 한도 3을 쓴다.
-시간은 같은 기기에서 워밍업을 빼고 프로필당 질의 묶음의 p50·p95를 3회 반복해 잰다. Neo4j는 원격(Aura)이라 왕복 시간이 섞이므로
-서버가 보고한 처리 시간(result_available_after + result_consumed_after)을 따로 적는다.
+시간은 같은 기기에서 워밍업을 빼고 프로필당 질의 묶음의 p50·p95를 3회 반복해 잰다.
+
+지연 비교의 공정성(2026-11-27 보강)
+  SQLite(A·A2·A3)는 같은 프로세스의 메모리 안에서 돌아 네트워크·직렬화 비용이 없다. Neo4j(G)는 드라이버가 Bolt로 서버에 묻는다.
+  그래서 G는 세 가지를 따로 적는다.
+    - 서버 처리 시간: 서버가 보고한 result_available_after + result_consumed_after(정수 ms). 네트워크가 빠진다.
+    - 왕복 시간: 호출 쪽 perf_counter. 네트워크·드라이버·직렬화가 들어간다.
+    - 빈 질의 왕복(`RETURN 1`): 질의 한 번에 드는 고정 비용. G는 프로필당 질의를 2번(SAT·UNK) 보낸다.
+  같은 기기 비교는 로컬 Neo4j(Docker)에 같은 그래프를 적재해 잰다(Aura는 원격이라 같은 기기 조건이 아니다).
+    docker run -d --name neo4j-bench -p 17687:7687 -e NEO4J_AUTH=neo4j/<시험용 비밀번호> neo4j:5.26-community
+    $env:NEO4J_URI="bolt://localhost:17687"; $env:NEO4J_USERNAME="neo4j"; $env:NEO4J_PASSWORD="<시험용 비밀번호>"; $env:NEO4J_DATABASE="neo4j"
+    python tools/sync_graph_neo4j.py --apply --confirm-host localhost
+    python tools/graphrag/compare_neo4j.py            # 결과: data/eval/compare_sql_graph_<날짜>_local.json
+    docker rm -f neo4j-bench
+  Aura에서 그냥 돌리면 결과는 data/eval/compare_sql_graph_<날짜>_aura.json. --out으로 바꿀 수 있다.
 
 해석 기준(결과를 보기 전에 정했다)
   1. 일치: 구성 X의 3값 판정이 기준 C와 한 쌍도 다르지 않으면 "같은 결과". 다르면 원인을 분해하기 전에는 우열을 주장하지 않는다.
@@ -21,6 +34,7 @@
 """
 from __future__ import annotations
 
+import argparse
 import json
 import random
 import sqlite3
@@ -43,6 +57,8 @@ SEED = 20261124
 N_PROFILES = 300
 REPEATS = 3
 WARMUP = 5
+PING_N = 100
+LOCAL_HOSTS = ("localhost", "127.0.0.1", "::1")
 NATIONWIDE = "REGION:NATIONWIDE"
 
 
@@ -198,9 +214,23 @@ def definition_paths(nodes, edges, session):
 
 
 # ----------------------------------------------------------------------------- 실행
-def main() -> int:
+def ping(session, n: int = PING_N) -> list[float]:
+    """빈 질의(`RETURN 1`) 왕복 시간. 질의 한 번에 드는 네트워크·드라이버 고정 비용이다."""
+    out = []
+    for _ in range(n):
+        t = time.perf_counter()
+        session.run("RETURN 1").consume()
+        out.append((time.perf_counter() - t) * 1000)
+    return out
+
+
+def main(argv: list[str] | None = None) -> int:
     import sync_graph_neo4j as L
     from neo4j import READ_ACCESS
+
+    ap = argparse.ArgumentParser(description="SQL 대 그래프 비교 측정(읽기 전용)")
+    ap.add_argument("--out", type=Path, help="결과 JSON 경로(기본: data/eval/compare_sql_graph_<날짜>_<aura|local>.json)")
+    args = ap.parse_args(argv)
 
     hier, notice_region, nodes, edges = load_inputs()
     rg = RegionGraph()
@@ -234,6 +264,10 @@ def main() -> int:
             f(r)
         run_c(rg, cond_by_notice, r)
         run_neo4j(sess, r)
+    ping(sess, 10)  # 워밍업
+    ping_ms = ping(sess)
+    location = "local" if host.split(":")[0] in LOCAL_HOSTS else "remote"
+    print(f"Neo4j {host}({location}) 빈 질의 왕복 p50 {statistics.median(ping_ms):.2f}ms")
 
     for i, region in enumerate(profiles):
         level = rg.nodes[region]["level"] if region else "NONE"
@@ -288,17 +322,20 @@ def main() -> int:
     pairs = len(universe) * len(profiles)
     report = {
         "snapshot": {"graph_nodes": len(nodes), "graph_edges": len(edges), "notices_with_region_condition_open": len(universe), "profiles": len(profiles), "seed": SEED,
-                     "repeats": REPEATS, "warmup_profiles": WARMUP, "neo4j_host": host},
+                     "repeats": REPEATS, "warmup_profiles": WARMUP, "neo4j_host": host,
+                     "neo4j_location": location, "measured_on": time.strftime("%Y-%m-%d")},
         "hierarchy": {"pairs_checked_per_arm": pairs, "mismatch_vs_C": mism, "mismatch_status_pairs": {k: {f"{a}->{b}": v for (a, b), v in c.items()} for k, c in mism_pairs.items()},
                       "profiles_with_any_mismatch_by_region_level": {k: v for k, v in by_level.items()}, "mismatch_examples": examples,
                       "hierarchy_pairs_A_could_not_match": {"pairs_needing_hierarchy": hier_pairs, "A_found_sat": a_hier_sat,
                                                             "A_recall": round(a_hier_sat / hier_pairs, 4) if hier_pairs else None}},
         "latency_per_profile_query": {k: summarize(v) for k, v in times.items()},
         "neo4j_server_ms_per_profile": summarize(server_ms),
+        "neo4j_ping_roundtrip_ms": summarize(ping_ms),
+        "neo4j_queries_per_profile": {"with_region": 2, "without_region": 1},
         "definition_path": definition,
     }
     OUT.mkdir(parents=True, exist_ok=True)
-    path = OUT / "compare_sql_graph_20261125.json"
+    path = args.out or OUT / f"compare_sql_graph_{time.strftime('%Y%m%d')}_{'local' if location == 'local' else 'aura'}.json"
     path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report, ensure_ascii=False, indent=2))
     print("저장:", path)
