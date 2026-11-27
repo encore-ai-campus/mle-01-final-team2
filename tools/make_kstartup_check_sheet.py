@@ -8,7 +8,7 @@
 - 출력: data/goldset/kstartup_api_vs_page_check_v0.1.csv (Excel에서 열 수 있게 UTF-8 BOM)
 
 사용 예:
-    python tools/make_kstartup_check_sheet.py --jsonl C:\\Users\\Playdata\\Downloads\\kstartup_cleaned.jsonl
+    python tools/make_kstartup_check_sheet.py --jsonl data/kstartup/processed/kstartup_cleaned.jsonl
 """
 from __future__ import annotations
 
@@ -44,7 +44,7 @@ def pick(pool: list[dict], k: int, n_open: int, rng: random.Random) -> list[dict
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--jsonl", default=r"C:\Users\Playdata\Downloads\kstartup_cleaned.jsonl")
+    ap.add_argument("--jsonl", default=str(REPO / "data" / "kstartup" / "processed" / "kstartup_cleaned.jsonl"))
     ap.add_argument("--seed", type=int, default=20261124)
     ap.add_argument("--out", default=str(REPO / "data" / "goldset" / "kstartup_api_vs_page_check_v0.1.csv"))
     args = ap.parse_args()

@@ -159,7 +159,8 @@ def main() -> None:
     ap.add_argument("--kstartup", type=int, default=15)
     ap.add_argument("--backup", type=int, default=10, help="출처별 예비 후보 수")
     ap.add_argument("--pilot", type=int, default=5, help="출처별 파일럿(1단계 일치율 측정) 건수")
-    ap.add_argument("--kstartup-json", default=r"C:\Users\Playdata\Downloads\neo4j_import.json")
+    ap.add_argument("--kstartup-json", required=True,
+                    help="Path to the shared neo4j_import.json input (use a path valid on the current OS)")
     ap.add_argument("--out", default=str(REPO / "data" / "goldset"))
     args = ap.parse_args()
 
