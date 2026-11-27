@@ -45,11 +45,11 @@ CHECKS: list[tuple[str, str, str, object]] = [
     ("V8", "행정 WITHIN 상위가 둘 이상인 지역",
      "MATCH (a:Concept {scheme:'REGION'})-[r:WITHIN]->(:Concept) WITH a, count(r) AS p WHERE p > 1 RETURN count(a) AS c", "zero"),
     ("V9", "ABOUT 없는 개념형 조건",
-     "MATCH (c:Condition) WHERE c.attribute IN ['region','applicant_type','company_size','industry','certification'] "
+     "MATCH (c:Condition) WHERE c.attribute IN ['region','applicant_type','company_size','industry','certification','business_type'] "
      "AND NOT (c)-[:ABOUT]->(:Concept) AND coalesce(c.about_pending, false) = false RETURN count(c) AS c", "zero"),  # 2026-11-27 일반기업 개념 추가로 546 → 0
     ("V9b", "개념 연결 보류로 표시한 조건(about_pending, ABOUT 없음)",
-     "MATCH (c:Condition) WHERE c.attribute IN ['region','applicant_type','company_size','industry','certification'] "
-     "AND NOT (c)-[:ABOUT]->(:Concept) AND c.about_pending = true RETURN count(c) AS c", 12),  # 2026-11-28 검수 정답 v1.1: 업종 7·신청자 유형 2·인증 1·지역 2
+     "MATCH (c:Condition) WHERE c.attribute IN ['region','applicant_type','company_size','industry','certification','business_type'] "
+     "AND NOT (c)-[:ABOUT]->(:Concept) AND c.about_pending = true RETURN count(c) AS c", 10),  # 2026-11-28 검수 정답 v1.1: 12(업종 7·신청자 유형 2·인증 1·지역 2) → 별칭 사전·업종 개념 후 10(기업 유형 8·신청자 유형 1·지역 1)
     ("V10", "대칭 관계 양방향", "MATCH (a:Notice)-[:SAME_AS]->(b:Notice), (b)-[:SAME_AS]->(a) RETURN count(*) AS c", "zero"),
     ("V11", "같은 쌍의 중복 HAS_CONDITION·ABOUT",
      "MATCH (a)-[r:HAS_CONDITION|ABOUT]->(b) WITH a, b, type(r) AS t, count(*) AS n WHERE n > 1 RETURN count(*) AS c", "zero"),

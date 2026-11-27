@@ -94,9 +94,9 @@ MATCH (n:Notice)-[:SUPERSEDES]->(o:Notice) WHERE n = o OR n.version <= o.version
 // V8 행정 WITHIN 상위가 둘 이상인 지역 (기대: 0)
 MATCH (a:Concept {scheme:'REGION'})-[r:WITHIN]->(:Concept) WITH a, count(r) AS p WHERE p > 1 RETURN count(a) AS c;
 // V9 ABOUT 없는 개념형 조건 (기대: 0)
-MATCH (c:Condition) WHERE c.attribute IN ['region','applicant_type','company_size','industry','certification'] AND NOT (c)-[:ABOUT]->(:Concept) AND coalesce(c.about_pending, false) = false RETURN count(c) AS c;
-// V9b 개념 연결 보류로 표시한 조건(about_pending, ABOUT 없음) (기대: 12, 검수 정답 v1.1의 업종·신청자 유형·인증·지역)
-MATCH (c:Condition) WHERE c.attribute IN ['region','applicant_type','company_size','industry','certification'] AND NOT (c)-[:ABOUT]->(:Concept) AND c.about_pending = true RETURN count(c) AS c;
+MATCH (c:Condition) WHERE c.attribute IN ['region','applicant_type','company_size','industry','certification','business_type'] AND NOT (c)-[:ABOUT]->(:Concept) AND coalesce(c.about_pending, false) = false RETURN count(c) AS c;
+// V9b 개념 연결 보류로 표시한 조건(about_pending, ABOUT 없음) (기대: 10, 검수 정답 v1.1의 기업 유형 8·신청자 유형 1·지역 1)
+MATCH (c:Condition) WHERE c.attribute IN ['region','applicant_type','company_size','industry','certification','business_type'] AND NOT (c)-[:ABOUT]->(:Concept) AND c.about_pending = true RETURN count(c) AS c;
 // V10 대칭 관계 양방향 (기대: 0)
 MATCH (a:Notice)-[:SAME_AS]->(b:Notice), (b)-[:SAME_AS]->(a) RETURN count(*) AS c;
 // V11 같은 쌍의 중복 HAS_CONDITION·ABOUT (기대: 0)

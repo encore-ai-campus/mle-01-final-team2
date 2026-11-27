@@ -67,6 +67,10 @@ def concepts() -> tuple[list[dict], list[dict], dict[str, str]]:
         nodes.append({"label": "Concept", "concept_id": cid, "scheme": scheme, "name": name, "group": group, "reviewed": False,
                       "source": "지원사업 법령 데이터명세서 v0.3", "note": note})
         by_label[name] = cid
+    from .concept_aliases import new_concepts  # 업종(데이터에 나온 값만)·기업부설연구소. 사용자 결정 2026-11-28, 팀 검토 전
+    for node in new_concepts():
+        nodes.append(node)
+        by_label[node["name"]] = node["concept_id"]
     return nodes, edges, by_label
 
 

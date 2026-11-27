@@ -11,7 +11,7 @@
 
 | 항목 | 현재 상태 |
 |---|---|
-| 적재 | 노드 30,830 · 관계 57,797 (2026-11-28 검수 요건 적재 후, 저장소 빌드와 같음. 점검 기록 §14.3). 공고 5,116건 전량(기업마당·K-Startup), 정형 API 필드에서 만든 요건·조건과 검수 정답 v1.1의 요건 39·조건 113 |
+| 적재 | 노드 30,845 · 관계 57,843 (2026-11-28 검수 요건·업종 개념 적재 후, 저장소 빌드와 같음. 점검 기록 §14.3). 공고 5,116건 전량(기업마당·K-Startup), 정형 API 필드에서 만든 요건·조건과 검수 정답 v1.1의 요건 39·조건 113 |
 | 식별·중복 | 노드 10종에 유일키 제약. 키 결측 0, 중복 0, 중복 간선 0 |
 | 관계 방향 | 모든 관계가 정의한 방향(하위→상위, 공고→요건→조건→개념)만 가짐. 계층 순환 0 |
 | 추론 경로 | 조건 → 개념 → (IS_A) → 정의 → 조문 → 법령이 실제로 이어짐. API `/api/chat`이 요청마다 이 경로를 읽는다. 정의에 닿는 공고는 **3,143건**이고 두 갈래뿐이다: `예비창업자`(1,252건)와 `1인 창조기업`(2,903건, 겹침 1,012건). 중소기업 등 다른 정의 개념을 가리키는 조건은 0개(§8) |
@@ -73,7 +73,7 @@ flowchart LR
 
 | 노드 | 건수 | 관계 | 건수 |
 |---|---:|---|---:|
-| Condition | 16,515 | ABOUT | 22,340 |
+| Condition | 16,515 | ABOUT | 22,386 |
 | Requirement | 4,975 | HAS_CONDITION | 16,515 |
 | Notice | 5,116 | HAS_REQUIREMENT | 4,975 |
 | Organization | 1,399 | ANNOUNCED_BY | 5,116 |
@@ -159,7 +159,7 @@ flowchart LR
 |---|---|---|---|---:|---|
 | `HAS_REQUIREMENT` | Notice → Requirement | 공고가 가진 자격 요건 묶음(정형 필드, 검수 정답) | `evidence`, `source` | 4,975 | 예 |
 | `HAS_CONDITION` | Requirement → Condition | 요건을 이루는 원자 조건(`logic`으로 결합) | `evidence`, `source` | 16,515 | 예 |
-| `ABOUT` | Condition → Concept / Region | 조건이 가리키는 개념 | `option`(원문 선택지) | 22,340 | 예 |
+| `ABOUT` | Condition → Concept / Region | 조건이 가리키는 개념 | `option`(원문 선택지) | 22,386 | 예 |
 | `WITHIN` | Region → Region | 행정 포함(구 → 시 → 도) | `basis` | 284 | 예 |
 | `MEMBER_OF` | Region → Region(GROUP) | 공고가 정의한 권역·통합 이전 지역 묶음 소속 | `basis` | 35 | 예 |
 | `SUCCEEDED_BY` | Region(폐지) → Region(현행) | 행정구역 개편 승계 | `partial`, `reviewed` | 35 | 아니오(검수 전) |
@@ -247,7 +247,7 @@ CREATE INDEX concept_scheme      IF NOT EXISTS FOR (k:Concept)   ON (k.scheme);
 | V13 | 지역 조건이 지역이 아닌 개념을 가리킴 | 0 | 정상 |
 | V14 | 법령에 안 붙은 조문 | 0 | 정상 |
 | V9 | 개념형 조건인데 `ABOUT` 없음(`about_pending` 표시 없는 것) | **0** | 해결(2026-11-27): `일반기업` 개념을 추가해 546건을 이었다. 이제 0이어야 하는 점검이다 |
-| V9b | 개념 연결 보류로 표시한 조건(`about_pending=true`, `ABOUT` 없음) | **12** | 2026-11-28 검수 정답 v1.1: 업종 7·신청자 유형 2·인증 1·지역 2. 개념(업종 등)이 생기면 줄어든다 |
+| V9b | 개념 연결 보류로 표시한 조건(`about_pending=true`, `ABOUT` 없음) | **10** | 2026-11-28 검수 정답 v1.1 적재 때 12(업종 7·신청자 유형 2·인증 1·지역 2). 같은 날 업종·인증 개념과 별칭 사전을 더하고 기업 유형(`business_type`)도 점검 대상에 넣어 10(기업 유형 8·신청자 유형 1·지역 1) |
 | V15 | 요건이 하나도 없는 공고 | **1,279** | 확인함: 기업마당 공고 중 정형 필드에 판정 조건이 없는 330건 + C-6으로 소관 기관 시도 조건만 있던 964건 = 1,294에서, 2026-11-28 검수 요건이 붙은 15건을 뺐다 |
 | V16 | 상위(`WITHIN`)가 없는 비시도 지역 | **34** | 31개는 폐지된 시군구(`SUCCEEDED_BY`로만 연결, 검수 전), 3개는 권역 묶음(정상). 현행 시군구·구만 보면 0 |
 | V17 | 개념에 안 붙은 정의 | **2** | `청년창업기업`·`중장년창업기업` 정의는 있는데 대응 개념이 없다(연령 조건으로 다룸). 2026-11-26 추가 정의 17개는 모두 개념에 연결 |
@@ -522,7 +522,7 @@ E1~E3은 지금 데이터로 바로 할 수 있다. E4는 업종 코드표와 �
 |---|---|---|---|---|
 | 메타 층 | Notice 5,116 · Organization 1,399 · SupportCategory 19 | Notice → Organization `ANNOUNCED_BY` 5,116 · `EXECUTED_BY` 947, Notice → SupportCategory `IN_SUPPORT_CATEGORY` 5,116 | Notice → Requirement `HAS_REQUIREMENT` 4,936 | 공고만 판정의 시작점. 기관·분야는 검색·필터 |
 | 요건 층 | Requirement 4,936 · Condition 16,402 | `HAS_CONDITION` 16,402 · `HAS_CHILD` 0(그룹 조건, §13.3) | Condition → Concept·Region `ABOUT` 22,326 | 예 |
-| 개념 계층 | Concept 355(그중 Region 321) | `IS_A` 2 · `WITHIN` 284 · `MEMBER_OF` 35 · `SUCCEEDED_BY` 35 | Concept → Definition `DEFINED_BY` 21 | 예 |
+| 개념 계층 | Concept 370(그중 Region 321, 업종 14) | `IS_A` 2 · `WITHIN` 284 · `MEMBER_OF` 35 · `SUCCEEDED_BY` 35 | Concept → Definition `DEFINED_BY` 21 | 예 |
 | └ 법령 근거 | Definition 23 · LawArticle 2,325 · LawAppendix 59 · ExternalLaw 44 | `CITES_LAW` 27(조문 23 · 별표 4, §13.4) · `PART_OF` 2,384 | 없음(끝) | 근거 표시 |
 
 층을 건너는 관계는 **메타 → 요건(`HAS_REQUIREMENT`)**, **요건 → 개념(`ABOUT`)**, **개념 → 법령 근거(`DEFINED_BY`)** 세 개다(온톨로지 설계서 §1 개념 모델 그림과 같은 배치). 메타 층에서는 공고(`Notice`)만 판정 경로의 시작점이고, 기관·분야는 판정 경로에 들어오지 않으므로 틀려도 판정은 바뀌지 않는다.
@@ -790,6 +790,7 @@ Condition -ABOUT-> Concept -IS_A*0..2-> Concept -DEFINED_BY-> Definition -CITES_
 - 판정은 바뀌지 않는다. 회의 결정 영향 측정에서 공고 판정 변화가 0이었다(`data/eval/meeting_decision_impact.json`).
 - 팀 승인 후 `tools/sync_graph_neo4j.py --apply --prune`으로 반영했다(2026-11-27). 요건·조건 964개씩과 붙은 관계 2,892개를 지우고 `일반기업` 개념과 ABOUT 3,524개를 더했다. 반영 뒤 노드 30,678·관계 57,631로 저장소와 같고, 점검은 정상이다(V9 546 → 0, V15 330 → 1,294). 기록: `docs/ontology/evidence/sync_graph_neo4j_20261127_apply.txt`, `check_graph_neo4j_20261127_after_sync.txt`.
 - 검수 정답 v1.1 적재(2026-11-28, 사용자 결정·팀 검토 전): 읽기 전용 비교 → 승인 → `--apply`(지우기 없음). 노드 30,678 → 30,830, 관계 57,631 → 57,797. 적재 후 V9가 12로 올라 검수 조건 12개에 `about_pending`을 표시하고 다시 적용했다(V9 0, V9b 12). V15 1,294 → 1,279. 점검 결과 정상. 기록: `docs/ontology/evidence/check_graph_neo4j_20261128_gold_v11.txt`(적재 전 스냅숏 `data/eval/aura_snapshots/before_gold_v11.json`, 로컬 전용).
+- 2026-11-28 업종·인증 개념과 별칭 사전(`data/ref/concept_aliases_v0.1.json`, 사용자 결정·팀 검토 전): 개념 15개(업종 14 = KSIC 대분류 C·M 2 + 공고식 묶음 12, 인증 `기업부설연구소` 1)와 검수 조건의 ABOUT 46개를 더했다. 판정은 바뀌지 않는다(그래프 연결과 근거 경로에만 쓴다). `--apply --prune --drop-extra-props`(지운 노드·관계 0, 이어진 조건 8개의 낡은 `about_pending`·`about_unmapped` 속성만 지움). 노드 30,830 → 30,845, 관계 57,797 → 57,843, V9 0, V9b 10, 점검 정상. 기록: `docs/ontology/evidence/check_graph_neo4j_20261128_concept_aliases.txt`.
 
 ### 14.4 온톨로지 설계서와 Neo4j 스키마의 일관성 (가이드 1)
 
