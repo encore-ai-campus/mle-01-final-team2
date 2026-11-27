@@ -481,7 +481,7 @@ E1~E3은 지금 데이터로 바로 할 수 있다. E4는 업종 코드표와 �
 
 | # | 강사 체크 항목 | 상태 | 이 절 |
 |---|---|---|---|
-| ① | 메타·요건·개념 층의 노드와 관계 매핑 | 매핑 완료. 층 사이 관계는 `ABOUT`·`DEFINED_BY` 두 개뿐 | §13.1 |
+| ① | 메타·요건·개념 층의 노드와 관계 매핑 | 매핑 완료. 층을 건너는 관계는 `HAS_REQUIREMENT`·`ABOUT`·`DEFINED_BY` 세 개 | §13.1 |
 | ② | `IS_A`·`WITHIN`·`MEMBER_OF`·`SUCCEEDED_BY`의 방향과 제약 | 관계별 제약 점검 6개 추가(V20~V25), Aura 위반 0 | §13.2 |
 | ③ | `AND`·`OR`·`NONE_OF`·`AT_LEAST` 논리와 조건 트리 | 저장 구조·3값 진리표 확정. **Aura에는 AND·OR만 있고 그룹 조건 0건**, 서비스 판정기는 NONE_OF·AT_LEAST 미지원 | §13.3 |
 | ④ | 조건 → 개념 → 정의 → 법령·조문·**별표** 경로 | 조문까지는 연결(21경로). **별표는 정의와 연결 0** → 기존 `CITES_LAW`로 4건 **적재 완료**(경로 21 → 25) | §13.4 |
@@ -493,12 +493,12 @@ E1~E3은 지금 데이터로 바로 할 수 있다. E4는 업종 코드표와 �
 
 | 층 | 노드(건수) | 층 안 관계 | 다른 층으로 가는 관계 | 판정에 쓰나 |
 |---|---|---|---|---|
-| 메타 층 | Organization 1,399 · SupportCategory 19 | 없음 | Notice → Organization `ANNOUNCED_BY` 5,116 · `EXECUTED_BY` 947, Notice → SupportCategory `IN_SUPPORT_CATEGORY` 5,116 | 아니오(검색·필터) |
-| 요건 층 | Notice 5,116 · Requirement 5,900 · Condition 17,366 | `HAS_REQUIREMENT` 5,900 · `HAS_CONDITION` 17,366 · `HAS_CHILD` 0(그룹 조건, §13.3) | Condition → Concept·Region `ABOUT` 19,766 | 예 |
+| 메타 층 | Notice 5,116 · Organization 1,399 · SupportCategory 19 | Notice → Organization `ANNOUNCED_BY` 5,116 · `EXECUTED_BY` 947, Notice → SupportCategory `IN_SUPPORT_CATEGORY` 5,116 | Notice → Requirement `HAS_REQUIREMENT` 5,900 | 공고만 판정의 시작점. 기관·분야는 검색·필터 |
+| 요건 층 | Requirement 5,900 · Condition 17,366 | `HAS_CONDITION` 17,366 · `HAS_CHILD` 0(그룹 조건, §13.3) | Condition → Concept·Region `ABOUT` 19,766 | 예 |
 | 개념 계층 | Concept 354(그중 Region 321) | `IS_A` 2 · `WITHIN` 284 · `MEMBER_OF` 35 · `SUCCEEDED_BY` 35 | Concept → Definition `DEFINED_BY` 21 | 예 |
 | └ 법령 근거 | Definition 23 · LawArticle 2,325 · LawAppendix 59 · ExternalLaw 44 | `CITES_LAW` 27(조문 23 · 별표 4, §13.4) · `PART_OF` 2,384 | 없음(끝) | 근거 표시 |
 
-층을 건너는 관계는 **요건 → 개념(`ABOUT`)**과 **개념 → 법령 근거(`DEFINED_BY`)** 두 개뿐이다. 메타 층은 판정 경로에 들어오지 않으므로, 메타 정보가 틀려도 판정은 바뀌지 않는다.
+층을 건너는 관계는 **메타 → 요건(`HAS_REQUIREMENT`)**, **요건 → 개념(`ABOUT`)**, **개념 → 법령 근거(`DEFINED_BY`)** 세 개다(온톨로지 설계서 §1 개념 모델 그림과 같은 배치). 메타 층에서는 공고(`Notice`)만 판정 경로의 시작점이고, 기관·분야는 판정 경로에 들어오지 않으므로 틀려도 판정은 바뀌지 않는다.
 
 ### 13.2 계층 관계의 방향과 제약 (②)
 

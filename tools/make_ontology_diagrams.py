@@ -50,7 +50,7 @@ def concept(path: Path) -> None:
     ax.set_xlim(0, 100)
     ax.set_ylim(-11, 64)
     ax.axis("off")
-    for y0, y1, label, col in ((38, 62, "메타 층 (규칙으로 생성)", "#dbe8f7"), (17, 36, "요건 층 (추출 + 검수)", "#fdebd0"), (-2, 15, "개념 층 (코드표·사전)", "#dff0df")):
+    for y0, y1, label, col in ((38, 62, "메타 층 (규칙으로 생성)", "#dbe8f7"), (17, 36, "요건 층 (추출 + 검수)", "#fdebd0"), (-2, 15, "개념 계층 (코드표·사전) + 법령 근거", "#dff0df")):
         ax.add_patch(FancyBboxPatch((1, y0), 98, y1 - y0, boxstyle="round,pad=0.2,rounding_size=1.5", fc=col, ec="none", alpha=0.55))
         ax.text(2.2, y1 - 2.2, label, fontsize=9, weight="bold", color="#334")
     P = {"Organization": (3, 47), "Notice": (33, 47), "SupportCategory": (64, 54), "Attachment": (64, 41),
@@ -73,7 +73,7 @@ def concept(path: Path) -> None:
     arrow(ax, (P["Requirement"][0] + 3, P["Requirement"][1]), mid(*P["LawArticle"], "t"), "CITES", dx=-5, dy=2)
     ax.text(3, -4.5, "Concept(scheme) 내부: IS_A(종류) · WITHIN(행정 포함) · MEMBER_OF(권역 묶음) · SUCCEEDED_BY(개편), 하위→상위", fontsize=8.5, color="#254")
     ax.text(3, -6.8, "공고 간: SUPERSEDES(새→이전) · SAME_AS(포털 간 중복)  |  공고→지역: TARGETS_REGION", fontsize=8.5, color="#254")
-    ax.text(3, -9.1, "점선 상자(Program, Track)는 미구축. 실선은 정리 파일에서 만들 수 있는 것(Condition·Definition은 요건 추출 후, 법령 3종은 수집했으나 미적재).", fontsize=7.5, color="#555")
+    ax.text(3, -9.1, "점선 상자(Program, Track)는 설계만, Attachment·CITES는 데이터만 있고 적재 전. 나머지 상자·관계는 Aura에 적재했다(2026-11-27, 요건·조건은 구조화 필드분).", fontsize=7.5, color="#555")
     fig.savefig(path, dpi=160, bbox_inches="tight", facecolor="white")
     plt.close(fig)
 
