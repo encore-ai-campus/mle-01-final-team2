@@ -15,6 +15,14 @@ def get_eligibility_service() -> EligibilityService:
 
 
 @lru_cache
+def get_notice_engine():
+    """공고 목록·상세 라우터가 공유하는 로컬 데이터 엔진."""
+    from tools.graphrag.engine import Engine
+
+    return Engine(use_cleaned=get_settings().use_cleaned)
+
+
+@lru_cache
 def get_llm_router():
     """config/models.yaml + 환경변수로 만든 모델 라우터. VLLM_BASE_URL이 없으면 템플릿 단계만 남는다(설명 없이 판정만)."""
     from agent.llm import load_router

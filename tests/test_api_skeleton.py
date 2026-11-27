@@ -9,8 +9,6 @@ HAS_DEPS = all(importlib.util.find_spec(m) for m in ("fastapi", "httpx", "pydant
 
 # (메서드, 경로, 명세 ID, 관리자 전용)
 STUBS = [
-    ("GET", "/api/notices", "N-01", False),
-    ("GET", "/api/notices/N:1", "N-02", False),
     ("GET", "/api/notices/N:1/spans", "N-03", False),
     ("GET", "/api/eligibility/N:1", "E-02", False),
     ("GET", "/api/eligibility/N:1/path", "E-03", False),
