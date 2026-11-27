@@ -27,7 +27,30 @@ from graphrag.engine import Engine  # noqa: E402
 from graphrag.evaluator import BOUNDARY_YEARS, DEFAULT_OPTIONS, NOT_ELIGIBLE, Profile, evaluate_notice  # noqa: E402
 
 OUT = Path(__file__).resolve().parents[2] / "data" / "graph"
-CONCEPT_ATTRS = ("region", "applicant_type", "company_size", "industry", "certification")  # ABOUT로 개념을 가리켜야 하는 조건 속성(점검 V9)
+CONCEPT_ATTRS = ("region", "applicant_type", "company_size", "industry", "certification", "business_type")  # ABOUT로 개념을 가리켜야 하는 조건 속성(점검 V9)
+
+
+def gold_about(c: dict) -> tuple[list[str], list[str]]:
+    """검수 조건 -> (ABOUT으로 이을 개념 ID, 못 이은 표기). 판정에는 쓰지 않는다(2026-11-28 사용자 결정, 팀 검토 전).
+
+    지역은 gold_bridge가 해소한 개념을 쓰고, 연산자가 지원되지 않아 해소하지 않은 지역(NOT_IN 등)은 같은 지역 해소기로 잇는다.
+    그 밖의 개념형 속성은 별칭 사전(concept_aliases)으로 잇는다.
+    """
+    from graphrag.concept_aliases import resolve_all
+    a, v, raw = c["attribute"], c["value"], c["raw_value"]
+    if a not in CONCEPT_ATTRS:
+        return [], []
+    if a == "region":
+        if "concept_ids" in v:
+            return list(v["concept_ids"]), list(v.get("unresolved", []))
+        from graphrag.label_eval import resolve_region
+        ids, missing = [], []
+        for x in (raw if isinstance(raw, list) else [raw]):
+            if isinstance(x, str):
+                cid = resolve_region(x)[0]
+                (ids if cid else missing).append(cid or x)
+        return list(dict.fromkeys(ids)), missing
+    return resolve_all(v.get("labels") or raw)
 
 
 def export(e: Engine) -> dict:
@@ -118,11 +141,13 @@ def export(e: Engine) -> dict:
                         "reviewed": True, "ref_date_kind": c.get("reference_date_type") or "UNKNOWN"}
                 if v.get("unsupported"):
                     node["unknown_reason"] = "no_evaluation_rule"
-                if c["attribute"] in CONCEPT_ATTRS and not v.get("concept_ids"):  # 가리킬 개념이 아직 없다(V9가 아니라 V9b로 센다)
+                ids, missing = gold_about(c)
+                if c["attribute"] in CONCEPT_ATTRS and (missing or not ids):  # 개념을 못 이은 값이 있다. 하나도 못 이으면 V9가 아니라 V9b로 센다
                     node["about_pending"] = True
-                    node["about_unmapped"] = v.get("unresolved") or v.get("labels") or [str(x) for x in (c["raw_value"] if isinstance(c["raw_value"], list) else [c["raw_value"]]) if x is not None]
+                    if missing:
+                        node["about_unmapped"] = missing
                 nodes.append(node)
-                for cid in v.get("concept_ids", []):
+                for cid in ids:
                     edges.append({"type": "ABOUT", "from": c["cond_id"], "to": cid})
     l_nodes, l_edges, article_index, pending = concepts_laws.laws()
     d_nodes, d_edges, def_notes = concepts_laws.definitions(by_label, article_index)

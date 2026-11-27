@@ -1,0 +1,50 @@
+{
+ "version": "0.1",
+ "date": "2026-11-28",
+ "decision": "사용자 결정(2026-11-28, 팀 검토 전). 업종은 데이터(검수 정답 v1.1)에 나온 값만 개념으로 만든다. 검수 정답의 기업 유형 조건도 별칭으로 개념에 잇는다",
+ "note": "표기 -> 개념 ID 별칭 사전. 개념 이름과 term_standard_v0.1.json의 aliases는 자동으로 포함되므로 여기에는 그 밖의 표기만 적는다. 판정 규칙은 바꾸지 않는다(ABOUT 연결과 근거 경로에만 쓴다)",
+ "new_concepts": [
+  {"concept_id": "INDUSTRY:제조업", "scheme": "INDUSTRY", "name": "제조업", "group": "KSIC_SECTION", "ksic_section": "C",
+   "source": "한국표준산업분류 대분류(원문 미수집)", "note": "중소기업창업 지원법 제45조가 '한국표준산업분류상의 제조업'을 인용한다. 분류 이름·코드는 KSIC 원문으로 검수 필요"},
+  {"concept_id": "INDUSTRY:전문, 과학 및 기술 서비스업", "scheme": "INDUSTRY", "name": "전문, 과학 및 기술 서비스업", "group": "KSIC_SECTION", "ksic_section": "M",
+   "source": "한국표준산업분류 대분류(원문 미수집)", "note": "분류 이름·코드는 KSIC 원문으로 검수 필요"},
+  {"concept_id": "INDUSTRY:정보통신산업", "scheme": "INDUSTRY", "name": "정보통신산업", "group": "NOTICE_GROUP", "source": "검수 정답 v1.1 공고 표기", "note": "KSIC 대분류 '정보통신업'과 같다고 보지 않는다(근거 없음)"},
+  {"concept_id": "INDUSTRY:지식기반산업", "scheme": "INDUSTRY", "name": "지식기반산업", "group": "NOTICE_GROUP", "source": "검수 정답 v1.1 공고 표기"},
+  {"concept_id": "INDUSTRY:핀테크", "scheme": "INDUSTRY", "name": "핀테크", "group": "NOTICE_GROUP", "source": "검수 정답 v1.1 공고 표기"},
+  {"concept_id": "INDUSTRY:바이오·헬스", "scheme": "INDUSTRY", "name": "바이오·헬스", "group": "NOTICE_GROUP", "source": "검수 정답 v1.1 공고 표기"},
+  {"concept_id": "INDUSTRY:AI·빅데이터", "scheme": "INDUSTRY", "name": "AI·빅데이터", "group": "NOTICE_GROUP", "source": "검수 정답 v1.1 공고 표기"},
+  {"concept_id": "INDUSTRY:Physical AI", "scheme": "INDUSTRY", "name": "Physical AI", "group": "NOTICE_GROUP", "source": "검수 정답 v1.1 공고 표기"},
+  {"concept_id": "INDUSTRY:로보틱스", "scheme": "INDUSTRY", "name": "로보틱스", "group": "NOTICE_GROUP", "source": "검수 정답 v1.1 공고 표기"},
+  {"concept_id": "INDUSTRY:반도체", "scheme": "INDUSTRY", "name": "반도체", "group": "NOTICE_GROUP", "source": "검수 정답 v1.1 공고 표기"},
+  {"concept_id": "INDUSTRY:모빌리티 및 스마트 인프라", "scheme": "INDUSTRY", "name": "모빌리티 및 스마트 인프라", "group": "NOTICE_GROUP", "source": "검수 정답 v1.1 공고 표기"},
+  {"concept_id": "INDUSTRY:게임·e스포츠", "scheme": "INDUSTRY", "name": "게임·e스포츠", "group": "NOTICE_GROUP", "source": "검수 정답 v1.1 공고 표기"},
+  {"concept_id": "INDUSTRY:생물의학 및 의료", "scheme": "INDUSTRY", "name": "생물의학 및 의료", "group": "NOTICE_GROUP", "source": "검수 정답 v1.1 공고 표기"},
+  {"concept_id": "INDUSTRY:항공우주 및 방위", "scheme": "INDUSTRY", "name": "항공우주 및 방위", "group": "NOTICE_GROUP", "source": "검수 정답 v1.1 공고 표기"},
+  {"concept_id": "CERTIFICATION:기업부설연구소", "scheme": "CERTIFICATION", "name": "기업부설연구소", "group": "CERTIFICATION",
+   "source": "기업부설연구소등의 연구개발 지원에 관한 법률 제7조제1항(인정)", "note": "중소기업창업 지원법 시행령 제10조가 이 인정을 인용한다. 법률 원문은 미수집"}
+ ],
+ "aliases": {
+  "전문·과학·기술 서비스업": "INDUSTRY:전문, 과학 및 기술 서비스업",
+  "전문·과학·기술 서비스업 등": "INDUSTRY:전문, 과학 및 기술 서비스업",
+  "전문과학기술서비스업": "INDUSTRY:전문, 과학 및 기술 서비스업",
+  "기업부설연구소 인정서": "CERTIFICATION:기업부설연구소",
+  "기업부설연구소 보유": "CERTIFICATION:기업부설연구소",
+  "소상공인 확인": "CERTIFICATION:소상공인확인",
+  "소상공인 확인서": "CERTIFICATION:소상공인확인",
+  "이노비즈 인증": "CERTIFICATION:이노비즈",
+  "기술혁신형 중소기업": "CERTIFICATION:이노비즈",
+  "메인비즈 인증": "CERTIFICATION:메인비즈",
+  "경영혁신형 중소기업": "CERTIFICATION:메인비즈",
+  "벤처기업 확인": "CERTIFICATION:벤처기업",
+  "벤처기업확인서": "CERTIFICATION:벤처기업",
+  "여성기업 확인": "CERTIFICATION:여성기업",
+  "장애인기업 확인": "CERTIFICATION:장애인기업",
+  "등록 어업인 등": "APPLICANT_TYPE:어업인",
+  "등록 어업인": "APPLICANT_TYPE:어업인"
+ },
+ "not_concepts": {
+  "generic": ["등록증", "인증", "확인서", "인증서"],
+  "open_ended": ["기타 시스템 또는 첨단 산업"],
+  "note": "일반 단어와 열린 목록은 개념에 잇지 않는다(설계서 4.2 CERTIFICATION 원칙). 예비사회적기업·예비마을기업·소셜벤처기업·소비자생활협동조합·대학원생 등 개념이 없는 값은 about_unmapped에 남는다"
+ }
+}

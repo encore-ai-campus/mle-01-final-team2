@@ -280,3 +280,15 @@ python tools/check_graph_neo4j.py --compare before.json                     # �
 | 적재 후 합계 | 노드 30,678 → 30,830, 관계 57,631 → 57,797. Condition 16,515, Requirement 4,975, ABOUT 22,340 |
 | 점검 | 정상. V9 0, V9b 12, V15 1,294 → 1,279(알려진 값 갱신). 기록: `docs/ontology/evidence/check_graph_neo4j_20261128_gold_v11.txt` |
 | 판정 영향 | `tools/graphrag/gold_impact.py`: 9,000쌍에서 ELIGIBLE 0, 바뀐 쌍 906(`data/eval/gold_v11_impact.json`). 서비스 판정은 Aura가 아니라 같은 정답 파일을 읽으므로 적재 전부터 반영돼 있었다 |
+
+## 12. 추가 적재: 업종·인증 개념과 검수 조건 ABOUT (2026-11-28, 사용자 결정·팀 검토 전)
+
+| 항목 | 내용 |
+|---|---|
+| 대상 | 별칭 사전 `data/ref/concept_aliases_v0.1.json`의 새 개념 15개(업종 14: KSIC 대분류 C·M + 공고식 묶음 12, 인증 `기업부설연구소`)와 검수 조건 → 개념 `ABOUT` 46개(기업 유형 24개 조건 포함) |
+| 결정 | 업종은 데이터에 나온 값만 개념으로 만든다. 검수 정답의 기업 유형 조건도 개념에 잇는다. 판정 규칙은 바꾸지 않는다(`gold_impact.py` 9,000쌍 결과 동일) |
+| 적재 전 | `check_graph_neo4j.py --save data/eval/aura_snapshots/before_concept_aliases.json`. 점검 대상에 `business_type`을 더한 V9는 적재 전 32(예상된 값). 읽기 전용 비교: 새 노드 15, 새 관계 46, 지울 것 0 |
+| 적재 | `sync_graph_neo4j.py --apply --prune --drop-extra-props --confirm-host <호스트>`(사용자 승인). 지운 노드·관계 0. 개념에 이어진 조건 8개의 낡은 `about_pending`·`about_unmapped`만 지웠다 |
+| 적재 후 합계 | 노드 30,830 → 30,845, 관계 57,797 → 57,843. Concept 370, ABOUT 22,386 |
+| 점검 | 정상. V9 32 → 0, V9b 12 → 10(기업 유형 8·신청자 유형 1·지역 1). 기록: `docs/ontology/evidence/check_graph_neo4j_20261128_concept_aliases.txt` |
+| 본문 후보 연결 비율 | `tools/graphrag/concept_aliases.py`: 기업 규모 3,660/3,660, 인증 804 연결·일반 단어 2,122 제외·미연결 0(`data/eval/concept_alias_coverage.json`). 본문 후보는 검수 전이라 적재하지 않는다 |

@@ -429,6 +429,41 @@ class GoldBridgeTests(unittest.TestCase):
         self.assertEqual(gold_bridge.load(Path("does-not-exist")), {})
 
 
+class ConceptAliasTests(unittest.TestCase):
+    """별칭 사전(data/ref/concept_aliases_v0.1.json)과 검수 조건 ABOUT 연결. 판정은 바꾸지 않는다."""
+
+    def test_resolve_normalizes_spacing_and_dots_only(self):
+        from graphrag.concept_aliases import resolve, resolve_all
+        self.assertEqual(resolve("소상공인 확인"), "CERTIFICATION:소상공인확인")
+        self.assertEqual(resolve("사회적 기업"), "CERTIFICATION:사회적기업")  # term_standard 별칭
+        self.assertEqual(resolve("바이오ㆍ헬스"), "INDUSTRY:바이오·헬스")  # 가운뎃점 변이
+        self.assertEqual(resolve("전문·과학·기술 서비스업 등"), "INDUSTRY:전문, 과학 및 기술 서비스업")
+        self.assertIsNone(resolve("인증"))  # 일반 단어는 개념이 아니다
+        self.assertIsNone(resolve("기타 시스템 또는 첨단 산업"))  # 열린 목록
+        self.assertIsNone(resolve("벤처"))  # 부분 일치는 하지 않는다
+        self.assertEqual(resolve_all(["중소기업", "스타트업", "중소기업"]), (["APPLICANT_TYPE:중소기업"], ["스타트업"]))
+
+    def test_new_concepts_are_unreviewed_and_unique(self):
+        from graphrag import concepts_laws
+        nodes, _, _ = concepts_laws.concepts()
+        ids = [n["concept_id"] for n in nodes]
+        self.assertEqual(len(ids), len(set(ids)))
+        ind = [n for n in nodes if n["scheme"] == "INDUSTRY"]
+        self.assertEqual({n["ksic_section"] for n in ind if n["group"] == "KSIC_SECTION"}, {"C", "M"})
+        self.assertTrue(all(n["reviewed"] is False for n in ind))
+        self.assertIn("CERTIFICATION:기업부설연구소", ids)
+
+    def test_gold_about_links_region_not_in_and_business_type(self):
+        from graphrag import build
+        region = {"attribute": "region", "value": {"unsupported": True}, "raw_value": ["서울특별시", "상주올래 입주공간"]}
+        ids, missing = build.gold_about(region)
+        self.assertEqual(ids, ["REGION:1100000000"])
+        self.assertEqual(missing, ["상주올래 입주공간"])
+        bt = {"attribute": "business_type", "value": {"labels": ["사회적기업", "예비사회적기업"]}, "raw_value": ["사회적기업", "예비사회적기업"]}
+        self.assertEqual(build.gold_about(bt), (["CERTIFICATION:사회적기업"], ["예비사회적기업"]))
+        self.assertEqual(build.gold_about({"attribute": "revenue", "value": {"unsupported": True}, "raw_value": 3}), ([], []))
+
+
 class SmeRuleTests(unittest.TestCase):
     """중소기업 판정 기준 초안: 별표 1·3을 수집 원문에서 행으로 풀었는지, 판정이 3값 원칙을 지키는지."""
 

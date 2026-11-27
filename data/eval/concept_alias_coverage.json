@@ -1,0 +1,13 @@
+{
+ "source": "data/normalized/20261124/notices_normalized.jsonl",
+ "by_category": {
+  "company_size": {
+   "mapped": 3660
+  },
+  "certification": {
+   "generic_not_concept": 2122,
+   "mapped": 804
+  }
+ },
+ "unmapped_top": {}
+}
