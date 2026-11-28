@@ -1,6 +1,7 @@
 "use client";
 // 운영 화면(시스템 상태). /health·/health/llm·/health/graph·/health/index를 카드로 보인다. 상태는 글자로도 적는다(색에만 의존하지 않음).
-// 수집 현황·검수 큐(/admin/runs·/admin/review)는 관리자 로그인(A-01) 뒤에 붙인다.
+// 요건 검수 큐는 /admin/reviews. 수집 현황(/admin/runs)은 관리자 로그인(A-01) 뒤에 붙인다.
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
 import { errorMessage, s } from "@/lib/labels";
@@ -98,6 +99,8 @@ export default function AdminPage() {
         <button type="button" className="link" onClick={refresh}>
           다시 확인
         </button>
+        {" · "}
+        <Link href="/admin/reviews">요건 검수 큐</Link>
       </div>
       <div className="status-grid">
         {KINDS.map(({ kind, title, desc }) => {

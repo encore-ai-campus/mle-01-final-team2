@@ -26,3 +26,35 @@ export async function proxyGet(path: string, req: Request, allow: string[]): Pro
     return degraded();
   }
 }
+
+/**
+ * 관리자 API 중계(검수 큐). 메서드·본문을 그대로 넘긴다.
+ * 로컬 개발(DEV_ADMIN=1)에서만 `x-dev-role: admin`을 붙인다. API는 APP_ENV=local + APP_DEV_AUTH=1일 때만 이 헤더를 본다.
+ * 관리자 로그인(A-01)이 붙으면 이 헤더 대신 토큰만 넘긴다.
+ */
+export async function proxyAdmin(path: string, req: Request, allow: string[] = []): Promise<Response> {
+  const src = new URL(req.url).searchParams;
+  const qs = new URLSearchParams();
+  for (const k of allow) {
+    const v = src.get(k);
+    if (v) qs.set(k, v);
+  }
+  const headers: Record<string, string> = {};
+  const auth = req.headers.get("authorization");
+  if (auth) headers.authorization = auth;
+  if (process.env.DEV_ADMIN === "1") headers["x-dev-role"] = "admin";
+  const hasBody = req.method !== "GET" && req.method !== "HEAD";
+  if (hasBody) headers["content-type"] = "application/json";
+  try {
+    const r = await fetch(`${API_BASE_URL}${path}${qs.size ? `?${qs}` : ""}`, {
+      method: req.method,
+      cache: "no-store",
+      signal: req.signal,
+      headers,
+      body: hasBody ? await req.text() : undefined,
+    });
+    return new Response(r.body, { status: r.status, headers: { "content-type": r.headers.get("content-type") ?? "application/json" } });
+  } catch {
+    return degraded();
+  }
+}

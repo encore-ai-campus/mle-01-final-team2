@@ -100,3 +100,13 @@ def get_orchestrator(agent_graph=Depends(get_agent_graph), router=Depends(get_ll
         dg = build_definition(router, terms)
         _ORCH[key] = build_orchestrator(make_runners(agent_graph, qa, dg), router, is_term=lambda q: find_term(q, terms()) is not None)
     return _ORCH[key]
+
+
+@lru_cache
+def get_review_store():
+    """요건 검수 큐(B-3 ②). Q-1 임시 기본값으로 로컬 jsonl(data/reviews/requirements/queue.jsonl)을 쓴다."""
+    from tools.requirement_review_queue import QUEUE
+
+    from ..repositories.review_queue import ReviewQueueStore
+
+    return ReviewQueueStore(QUEUE)
