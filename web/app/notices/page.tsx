@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { day, errorMessage, s, SOURCE } from "@/lib/labels";
+import { apiFetch } from "@/lib/auth";
 
 type NoticeSummary = {
   notice_id: string;
@@ -35,7 +36,7 @@ export default function NoticesPage() {
     if (f.source) qs.set("source", f.source);
     if (f.include_closed) qs.set("include_closed", "true");
     try {
-      const r = await fetch(`/api/notices?${qs}`, { signal });
+      const r = await apiFetch(`/api/notices?${qs}`, { signal });
       const d = await r.json().catch(() => null);
       if (!r.ok) {
         setResp(null);

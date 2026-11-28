@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
 import { errorMessage } from "@/lib/labels";
+import { apiFetch } from "@/lib/auth";
 
 type Item = {
   notice_id: string;
@@ -43,7 +44,7 @@ export default function ReviewListPage() {
     if (openOnly) p.set("open_only", "true");
     if (q.trim()) p.set("q", q.trim());
     setError("");
-    fetch(`/api/admin/reviews?${p}`)
+    apiFetch(`/api/admin/reviews?${p}`)
       .then(async (r) => {
         const d = await r.json().catch(() => null);
         if (!r.ok) throw new Error(errorMessage(d, r.status));
@@ -59,7 +60,7 @@ export default function ReviewListPage() {
 
   const runIngest = async () => {
     setIngest("반영 중…");
-    const r = await fetch("/api/admin/reviews/ingest", { method: "POST" });
+    const r = await apiFetch("/api/admin/reviews/ingest", { method: "POST" });
     const d = await r.json().catch(() => null);
     if (!r.ok) return setIngest(errorMessage(d, r.status));
     setIngest(`검수 완료 ${d.verified}건 중 ${d.applied}건 반영, ${d.rejected?.length ?? 0}건 거절. ${d.note}`);
@@ -98,7 +99,11 @@ export default function ReviewListPage() {
           </button>
         </div>
         {ingest && <div className="banner">{ingest}</div>}
-        {error && <div className="banner">{error}</div>}
+        {error && (
+          <div className="banner">
+            {error} <Link href="/login">로그인</Link>
+          </div>
+        )}
         {data && (
           <>
             <div className="muted" style={{ marginTop: 8 }}>

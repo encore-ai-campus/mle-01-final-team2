@@ -1,6 +1,7 @@
 // /api/chat 호출과 이벤트 묶기. 홈 대화 패널과 공고 상세(판정·질문)가 같이 쓴다.
 import { readSse, type AgentEvent } from "@/lib/sse";
 import { errorMessage, s } from "@/lib/labels";
+import { apiFetch } from "@/lib/auth";
 
 export type AgentMode = "auto" | "eligibility" | "notice_qa" | "definition";
 
@@ -25,7 +26,7 @@ export type ChatBody = {
 /** 스트림을 읽어 이벤트마다 onEvent를 부른다. 실패하면 사용자에게 보일 문구를 돌려준다. */
 export async function streamChat(body: ChatBody, onEvent: (e: AgentEvent) => void, signal: AbortSignal): Promise<string> {
   try {
-    const res = await fetch("/api/chat", {
+    const res = await apiFetch("/api/chat", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(body),

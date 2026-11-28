@@ -48,7 +48,8 @@ class TestApiSkeleton(unittest.TestCase):
                 continue
             with self.subTest(path=path):
                 self.assertEqual(c.request(method, path).status_code, 401)
-        self.assertEqual(c.get("/api/me", headers={"Authorization": "Bearer x"}).status_code, 401)  # 검증 전에는 토큰도 통과 못 한다
+        c = self.client(APP_ENV="local", SUPABASE_URL="https://example.supabase.co")
+        self.assertEqual(c.get("/api/me", headers={"Authorization": "Bearer x"}).status_code, 401)  # 서명 없는 토큰은 통과 못 한다
 
     def test_dev_auth_only_in_local(self):
         self.assertEqual(self.client(APP_ENV="prod", APP_DEV_AUTH=True).get("/api/me").status_code, 401)

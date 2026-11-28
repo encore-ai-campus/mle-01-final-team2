@@ -8,6 +8,7 @@ import RegionSelect from "@/components/RegionSelect";
 import { streamChat, type AgentMode, type ChatProfile } from "@/lib/chat";
 import { day, errorMessage, num, PII_WARNING, s, SOURCE } from "@/lib/labels";
 import type { AgentEvent } from "@/lib/sse";
+import { apiFetch } from "@/lib/auth";
 
 type Section = { chunk_id: string; section: string; origin: string; text: string };
 type Detail = {
@@ -64,7 +65,7 @@ export default function NoticeDetail({ id }: { id: string }) {
 
   useEffect(() => {
     const ctl = new AbortController();
-    fetch(`/api/notices/${encodeURIComponent(id)}`, { signal: ctl.signal })
+    apiFetch(`/api/notices/${encodeURIComponent(id)}`, { signal: ctl.signal })
       .then(async (r) => {
         const d = await r.json().catch(() => null);
         if (r.ok) setDetail(d as Detail);

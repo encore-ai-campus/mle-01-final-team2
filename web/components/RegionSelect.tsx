@@ -1,6 +1,7 @@
 "use client";
 // 사업장 소재지 선택. 목록은 GET /api/concepts?scheme=region(그래프가 없으면 내장 지역 사전).
 import { useEffect, useState } from "react";
+import { apiFetch } from "@/lib/auth";
 
 type Region = { id: string; name: string; full_name: string | null; level: string | null };
 
@@ -9,7 +10,7 @@ export default function RegionSelect({ value, onChange }: { value: string; onCha
   const [source, setSource] = useState("");
 
   useEffect(() => {
-    fetch("/api/concepts?scheme=region")
+    apiFetch("/api/concepts?scheme=region")
       .then((r) => r.json())
       .then((d) => {
         setRegions((d.items ?? []).filter((r: Region) => r.level !== "GROUP"));

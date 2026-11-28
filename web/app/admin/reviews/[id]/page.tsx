@@ -6,6 +6,7 @@ import Link from "next/link";
 import { use, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { errorMessage } from "@/lib/labels";
+import { apiFetch } from "@/lib/auth";
 
 type Segment = { chunk_id: string; section: string; label: string; condition_type: string; start: number; end: number };
 type Candidate = {
@@ -161,7 +162,7 @@ export default function ReviewPage({ params }: { params: Promise<{ id: string }>
   }, []);
 
   useEffect(() => {
-    fetch(`/api/admin/reviews/${encodeURIComponent(nid)}`)
+    apiFetch(`/api/admin/reviews/${encodeURIComponent(nid)}`)
       .then(async (r) => {
         const d = await r.json().catch(() => null);
         if (!r.ok) throw new Error(errorMessage(d, r.status));
@@ -217,13 +218,13 @@ export default function ReviewPage({ params }: { params: Promise<{ id: string }>
     });
     const body = { action, conditions, logic, whole_notice_conditions_complete: whole, none_in_text: noneInText, review_comment: comment };
     try {
-      const r = await fetch(`/api/admin/reviews/${encodeURIComponent(nid)}`, { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+      const r = await apiFetch(`/api/admin/reviews/${encodeURIComponent(nid)}`, { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
       const d = await r.json().catch(() => null);
       if (!r.ok) {
         setMsg(errorMessage(d, r.status));
         setErrs(d?.detail?.error?.errors ?? []);
         if (d?.detail?.error?.code === "REVIEW_CHECK_FAILED") {
-          const again = await fetch(`/api/admin/reviews/${encodeURIComponent(nid)}`).then((x) => x.json());
+          const again = await apiFetch(`/api/admin/reviews/${encodeURIComponent(nid)}`).then((x) => x.json());
           apply(again.review);
         }
         return;

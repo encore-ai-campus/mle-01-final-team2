@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
 import { errorMessage, s } from "@/lib/labels";
+import { apiFetch } from "@/lib/auth";
 
 type Kind = "app" | "llm" | "graph" | "index";
 type Result = { loading: boolean; httpOk: boolean; status: number; data: Record<string, unknown> | null; error: string };
@@ -80,7 +81,7 @@ export default function AdminPage() {
     setCheckedAt(new Date().toLocaleString("ko-KR"));
     for (const { kind } of KINDS) {
       setRes((r) => ({ ...r, [kind]: { ...r[kind], loading: true } }));
-      fetch(`/api/health/${kind}`)
+      apiFetch(`/api/health/${kind}`)
         .then(async (r) => {
           const d = await r.json().catch(() => null);
           setRes((x) => ({ ...x, [kind]: { loading: false, httpOk: r.ok, status: r.status, data: d, error: r.ok ? "" : errorMessage(d, r.status) } }));

@@ -10,3 +10,4 @@ python-dotenv>=1.0
 openai>=1.60,<3        # vLLM·대역 서버를 OpenAI 호환 API로 부른다(agent/llm)
 PyYAML>=6.0            # config/models.yaml
 numpy>=2.0,<3           # RAG 벡터 색인(agent/rag)
+PyJWT[crypto]>=2.9,<3   # Supabase Auth JWT 검증(ES256, JWKS). api/dependencies/auth.py
