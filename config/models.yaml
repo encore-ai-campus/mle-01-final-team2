@@ -14,6 +14,7 @@ providers:
     api_key_env: VLLM_API_KEY
     timeout_s_env: VLLM_TIMEOUT_S
     data_policy: self_hosted
+    data_policy_env: VLLM_DATA_POLICY # 로컬 게이트웨이(gpt-6-luna, 외부 모델)를 쓸 때 external로 둔다
     capabilities:
       json_schema: false              # vLLM 구조화 출력은 PoC 전(§6.4). false면 프롬프트 JSON + Pydantic 검증 + 1회 재시도
   vllm_alt:
@@ -36,6 +37,19 @@ roles:
   extract:
     primary: vllm_primary
     fallbacks: [vllm_alt]
+  route:              # 오케스트레이터의 의도 분류 보조·질의 재작성(질문 문장만 보낸다). 실패하면 규칙 라우팅으로 내린다
+    primary: vllm_primary
+    fallbacks: [vllm_alt]
+
+# 임베딩(RAG 벡터 검색, 기초 설계서 §3 "Embedder"). 비어 있으면 BM25 전문 검색만 쓴다.
+# 로컬: 게이트웨이의 /v1/embeddings(text-embedding-3-small, 512차원). 운영 모델(KURE-v1·bge-m3·e5)은 ADR-1로 정한다.
+# 모델·차원을 바꾸면 색인을 다시 만든다(python -m agent.rag.build_index).
+embedding:
+  base_url_env: EMBED_BASE_URL        # 비우면 VLLM_BASE_URL을 쓴다
+  model_env: EMBED_MODEL
+  api_key_env: EMBED_API_KEY
+  dim_env: EMBED_DIM
+  index_dir_env: RAG_INDEX_DIR        # 기본 data/index
 
 circuit_breaker:
   failures: 3        # 연속 실패가 이만큼이면 차단

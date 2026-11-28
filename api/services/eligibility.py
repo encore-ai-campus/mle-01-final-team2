@@ -25,10 +25,14 @@ class NoticeNotFound(KeyError):
 class EngineEligibilityService:
     """tools.graphrag.engine.Engine 위의 얇은 어댑터. 엔진은 처음 쓸 때 한 번만 데이터를 읽는다."""
 
-    def __init__(self, use_cleaned: bool | None = None):
+    def __init__(self, use_cleaned: bool | None = None, retriever=None):
         from tools.graphrag.engine import Engine  # 무거운 데이터 적재를 import 시점으로 당기지 않는다
 
         self._engine = Engine(use_cleaned=use_cleaned)
+        self.retriever = retriever  # agent.rag.HybridRetriever. None이면 엔진의 BM25만 쓴다(attach_retriever로 붙인다)
+
+    def attach_retriever(self, retriever) -> None:
+        self.retriever = retriever
 
     def _row(self, r: dict) -> dict:
         n = self._engine.by_id.get(r["notice_id"], {})
@@ -38,7 +42,8 @@ class EngineEligibilityService:
     def judge(self, req: EligibilityRequest) -> EligibilityResponse:
         from tools.graphrag.evaluator import Profile
 
-        res = self._engine.query(Profile(**req.profile.model_dump()), req.question, req.top, req.include_closed, req.source)
+        res = self._engine.query(Profile(**req.profile.model_dump()), req.question, req.top, req.include_closed, req.source,
+                                 search=self.retriever.search if self.retriever is not None else None)
         return EligibilityResponse(evaluated=res["evaluated"], candidates=res["candidates"], counts=res["counts"],
                                    results=[self._row(r) for r in res["results"]], input_layer=self._engine.input_layer)
 

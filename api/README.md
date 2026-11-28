@@ -1,6 +1,6 @@
 # 지원각 API (FastAPI)
 
-판정은 규칙 평가기 코드가 하고(ADR-12), 모델은 추출·설명만 맡는다. 지금은 `tools/graphrag`의 엔진을 감싼 뼈대 위에 LangGraph 에이전트(`agent/`)와 모델 라우터(`agent/llm/`)를 붙였다.
+판정은 규칙 평가기 코드가 하고(ADR-12), 모델은 추출·설명만 맡는다. 지금은 `tools/graphrag`의 엔진을 감싼 뼈대 위에 **오케스트레이터(감독)** 와 내부 에이전트 3개(자격 판정·공고 질의 RAG·용어 정의), 하이브리드 검색(`agent/rag/`), 모델 라우터(`agent/llm/`)를 붙였다.
 
 ## 구조 (기초 설계서 §13)
 
@@ -12,23 +12,31 @@
 | `api/services/` | 판정 엔진 어댑터. 판정 로직은 여기 다시 쓰지 않고 엔진을 호출한다 | 엔진 어댑터, 공고 지목 판정 |
 | `api/dependencies/` | FastAPI 의존성(시험에서 가짜로 교체) | 판정 서비스, 모델 라우터, 그래프 저장소, 에이전트 그래프, 로그인·역할(`auth.py`, JWT 검증 전) |
 | `api/repositories/` | Neo4j·Supabase 접근 | Neo4j 읽기 전용(`graph.py`): 지역 목록·경로·정의·판정 서브그래프. Supabase는 아직 |
-| `agent/graph.py` | LangGraph 에이전트(§7.1): 입력 가드 → 의도·조건 → 후보·규칙 평가 → 경로(`trace_path`) → 정의(`fetch_definition`) → 부족 조건 → 근거 검증 → 설명(문장 단위 출력 가드) | 있음 |
+| `agent/orchestrator.py` | **감독 오케스트레이터**(LangGraph): 입력 가드 → 계획(규칙 → 모호하면 모델 `route` 역할 구조화 출력 → 기본 판정) → 에이전트 실행 → 반성(다시 계획·다음·멈춤, 최대 3단계) → 마무리(`done` 1개). 판정 후보 상위 3개를 공고 질의 범위로 넘긴다 | 있음 |
+| `agent/agents/notice_qa.py` | **공고 질의 에이전트**(CRAG): 검색 → 근거 채점 → (질의 재작성 1회) → 근거 없으면 보류(`NO_EVIDENCE`) → 답변(`[청크id]` 인용) → 인용 검증 | 있음 |
+| `agent/agents/definition.py` | **용어 정의 에이전트**: 법령 원문 정의(`[def#용어]` 인용). 사전에 없으면 공고 질의로 다시 계획 | 있음 |
+| `agent/rag/` | 하이브리드 검색: BM25(`tools/graphrag/search.py`) + 밀집 벡터(numpy 색인) → RRF 결합. 색인·임베딩이 없으면 BM25만 | 있음 |
+| `agent/graph.py` | 자격 판정 에이전트(§7.1): 입력 가드 → 의도·조건 → 후보·규칙 평가 → 경로(`trace_path`) → 정의(`fetch_definition`) → 부족 조건 → 근거 검증 → 설명(문장 단위 출력 가드) | 있음 |
 | `agent/llm/` | provider 어댑터(OpenAI 호환·템플릿), 역할별 폴백, 서킷브레이커, 데이터 정책 게이트(§3) | 있음 |
 | `config/models.yaml` | 모델 레지스트리. 주소·모델 이름은 환경변수로 가리킨다 | 있음 |
-| `deploy/mock_vllm/` | **vLLM 대역 서버**(OpenAI 호환, 진짜 모델 아님) | 있음 |
-| `deploy/docker-compose.yml` | 로컬 구성: 웹 + API + 대역 서버 | 있음 |
-| `web/` | 최소 사용자 웹(Next.js): 조건 입력 → 판정 카드·요건·경로·정의·설명. `/api/chat`은 Next 서버가 API로 SSE 중계. `/eligibility`는 모델 없이 규칙 판정만 하는 PoC 화면(2026-11-27 회의 결정 입력 포함) | 최소 화면 |
+| `deploy/llm_gateway/` | **LLM 게이트웨이**(vLLM 자리, OpenAI 호환): 뒤에서 외부 모델 gpt-6-luna(설명)·text-embedding-3-small(임베딩)을 부른다. 추론 모델 차이(`max_tokens`→`max_completion_tokens`, `temperature` 미지원)를 흡수한다 | 있음 |
+| `deploy/mock_vllm/` | **vLLM 대역 서버**(OpenAI 호환, 진짜 모델 아님, 키 없이 시험) | 있음 |
+| `deploy/docker-compose.yml` | 로컬 구성: 웹 + API + LLM 게이트웨이(대역 서버는 `--profile mock`) | 있음 |
+| `web/` | 사용자 웹(Next.js): 채팅(오케스트레이션 진행·판정 카드·검색 근거·인용), 공고 목록·상세(섹션·경로 그래프·공고 질의), 운영 상태(`/admin`). `/api/chat`은 Next 서버가 API로 SSE 중계. `/eligibility`는 모델 없이 규칙 판정만 하는 PoC 화면(2026-11-27 회의 결정 입력 포함) | 최소 화면 |
 
 ## 모델 호출 방식
 
-API는 모델을 **OpenAI 호환 API**(`/v1/chat/completions`)로만 부른다. 로컬 LLM이 준비되기 전에는 대역 서버(`deploy/mock_vllm`)를 띄워 같은 방식으로 부르고, RunPod vLLM이 뜨면 환경변수만 바꾼다.
+API는 모델을 **OpenAI 호환 API**(`/v1/chat/completions`, `/v1/embeddings`)로만 부른다. RunPod vLLM(Qwen)이 뜨기 전에는 LLM 게이트웨이(외부 gpt-6-luna)나 대역 서버를 같은 방식으로 부르고, RunPod가 뜨면 환경변수만 바꾼다.
 
-| 상황 | `VLLM_BASE_URL` | `VLLM_MODEL` |
-|---|---|---|
-| Docker 구성 안(자동) | `http://llm:8001/v1` | `mock-qwen` |
-| 로컬에서 대역 서버 직접 실행 | `http://localhost:8001/v1` | `mock-qwen` |
-| RunPod vLLM | `https://<pod-id>-8000.proxy.runpod.net/v1` | 서빙한 모델 이름 |
+| 상황 | `VLLM_BASE_URL` | `VLLM_MODEL` | `VLLM_DATA_POLICY` |
+|---|---|---|---|
+| Docker 구성 안(자동, 게이트웨이) | `http://llm:8001/v1` | `gpt-6-luna` | `external` + `LLM_ALLOW_EXTERNAL_ANSWER=1` |
+| Docker 대역 서버(`--profile mock`, `LLM_URL`·`LLM_MODEL` 덮어쓰기) | `http://llm-mock:8001/v1` | `mock-qwen` | 비움 |
+| 로컬에서 대역 서버 직접 실행 | `http://localhost:8001/v1` | `mock-qwen` | 비움 |
+| RunPod vLLM | `https://<pod-id>-8000.proxy.runpod.net/v1` | 서빙한 모델 이름 | `self_hosted`(기본) |
 
+- 외부 모델 허용은 **사용자 결정(2026-11-28, 로컬 시험 전용, 팀 검토 전)** 이다. 보내는 것은 질문 문장·조건별 평가 결과·공개 공고 원문이며, 입력 가드가 번호·연락처를 먼저 막는다. 허용이 없으면 외부 provider는 설명 역할에서 건너뛴다.
+- 역할: `answer`(설명·공고 질의·정의), `route`(모호한 질문 분류, 구조화 출력), 임베딩은 `config/models.yaml`의 `embedding`.
 - `VLLM_BASE_URL`이 비어 있으면 모델 없이 **규칙 판정만** 낸다(`outcome=degraded`, "설명 생성 불가" 배너).
 - 재시도는 한 계층에서만 한다. SDK 재시도는 끄고, 장애면 라우터가 다음 provider로, 구조화 출력 검증 실패면 1회만 다시 묻는다.
 - 스트리밍은 첫 조각이 오기 전까지만 다음 provider로 넘긴다.
@@ -36,19 +44,23 @@ API는 모델을 **OpenAI 호환 API**(`/v1/chat/completions`)로만 부른다. 
 
 ## `POST /api/chat` 이벤트 (SSE)
 
-`event: <종류>` + `data: {"type": "<종류>", ...}`. 판정·요건 이벤트가 설명 토큰보다 먼저 나간다.
+`event: <종류>` + `data: {"type": "<종류>", ...}`. 요청 `agent`는 `auto`(기본)·`eligibility`·`notice_qa`·`definition`. 에이전트마다 근거 이벤트(판정·검색)가 설명 토큰보다 먼저 나가고, `done`은 마지막에 1개만 나간다.
 
 | 이벤트 | 내용 |
 |---|---|
+| `route` | 계획: `plan`(에이전트 순서), `method`(`rule`·`llm`·`default`·`replan`), `intent` |
+| `agent` | 에이전트 시작·끝(`name`, `status`, 끝이면 `outcome`·`reason_code`) |
+| `retrieval` | 공고 질의 검색 결과: 청크 id·공고 제목·섹션·밀집 유사도·BM25/밀집 순위·본문 앞부분, `mode`(`hybrid`·`bm25`) |
+| `citation` | 답변이 실제로 인용한 청크 id |
 | `ask` | 되묻기(조건이 하나도 없을 때, 최대 2회) |
 | `verdict` | 공고별 판정, 미확인 조건 id, 출처 주소, 수집 시각 |
 | `requirement` | 조건별 평가 값, 사유, 원문 근거 |
 | `path` | 지역 계층 경로. Neo4j가 있으면 `source: "neo4j"`(사용자 지역 → `WITHIN`·`MEMBER_OF` ≤3 hop → 조건 지역), 없거나 장애면 `source: "evaluator"` |
 | `definition` | 조건 개념의 정의 → 법령 조문(`law`, `article_no`, `law_url`). 법령이 끊기면 `broken: true` |
-| `token` | 설명 문장. 출력 가드를 통과한 문장만 나간다. 고정 문구는 `source: "template"` |
+| `token` | 설명 문장(`agent`로 어느 에이전트 답인지 표시). 출력 가드를 통과한 문장만 나간다. 고정 문구는 `source: "template"` |
 | `banner` | `SERVICE_DEGRADED`, `OUTPUT_BLOCKED`, `STALE_DATA`, `EVIDENCE_MISSING`, `GRAPH_UNAVAILABLE` |
 | `usage` | 입력·출력 토큰 수 |
-| `done` | `outcome`, `reason_code`, `tools_used`, `provider`, `fallback_depth`, `prompt_version` |
+| `done` | `outcome`, `reason_code`(마지막 에이전트 기준), `agents`, `plan`, `route_method`, `intent`, `runs`(에이전트별 결과), `tools_used`, `provider`, `fallback_depth`, `prompt_version` |
 
 ## 그래프 (Neo4j Aura, 읽기 전용)
 
@@ -57,6 +69,18 @@ API는 모델을 **OpenAI 호환 API**(`/v1/chat/completions`)로만 부른다. 
 - `GET /api/concepts?scheme=region`: 입력 폼 지역 목록(그래프가 없으면 내장 지역 사전). 지역 id는 `REGION:<법정동코드>` 형식이다.
 - `GET /api/graph/path?notice_id=&region=`: 공고 → 요건 → 조건 → 개념(→ 사용자 지역 경로) → 정의 → 조문 → 법령 서브그래프(`nodes`, `edges`). 그래프 미설정 503, 공고 없음 404.
 - `GET /health/graph`: 연결만 확인한다(주소는 내보내지 않는다).
+
+## RAG 색인
+
+공고 청크(약 3.3만 개)의 밀집 벡터 색인을 호스트에서 한 번 만든다(`data/index/`, git 제외). 바뀐 청크만 다시 임베딩한다.
+
+```powershell
+$env:EMBED_BASE_URL="http://localhost:8001/v1"; .venv\Scripts\python -m agent.rag.build_index
+```
+
+- 게이트웨이(`docker compose ... up llm`)가 떠 있어야 한다. `--open-only`는 접수 중 공고만 색인한다.
+- 색인 상태: `GET /health/index`(`dense`, 청크 수, 마지막 오류). 색인이 없거나 임베딩이 실패하면 BM25만 쓴다.
+- 근거 채점 기준(실측): 밀집 유사도 0.50 이상(공고를 지목했으면 0.30), BM25만일 때는 질의어 겹침 0.50 이상.
 
 아직 없는 것: `GET /api/notices/{id}`, `/admin/*`, 로그인(JWT 검증), what-if(P1), 출력 가드 1회 재생성, Langfuse 기록, 그래프 시각화(지금 웹은 간선 표로만 보여 준다).
 
@@ -68,9 +92,10 @@ API는 모델을 **OpenAI 호환 API**(`/v1/chat/completions`)로만 부른다. 
 docker compose -f deploy/docker-compose.yml up --build
 ```
 
-- 웹: `http://localhost:3000` (브라우저 → web → api → 대역 서버)
+- 웹: `http://localhost:3000` (브라우저 → web → api → LLM 게이트웨이 → gpt-6-luna). `.env`에 `OPEN_API`(또는 `OPENAI_API_KEY`)가 있어야 한다
+- 키 없이: `docker compose -f deploy/docker-compose.yml --profile mock up --build`에 셸 환경변수 `LLM_URL=http://llm-mock:8001/v1`, `LLM_MODEL=mock-qwen`, `LLM_DATA_POLICY=self_hosted`, `LLM_ALLOW_EXTERNAL=`
 - API: `http://localhost:8000/docs`, 모델 연결 확인: `http://localhost:8000/health/llm`, 그래프 연결 확인: `http://localhost:8000/health/graph`
-- 대역 서버: `http://localhost:8001/v1/models`
+- 게이트웨이: `http://localhost:8001/v1/models`, 대역 서버(mock): `http://localhost:8002/v1/models`, 검색 색인: `http://localhost:8000/health/index`
 - 끄기:
 
 ```powershell
@@ -110,7 +135,7 @@ cd web; npm install; npm run dev
 ## 시험
 
 ```powershell
-.venv\Scripts\python -m unittest tests.test_api tests.test_agent -v
+.venv\Scripts\python -m unittest tests.test_api tests.test_agent tests.test_orchestration -v
 ```
 
 대역 서버를 같은 프로세스에서 OpenAI 호환 API로 부르므로 네트워크·GPU·데이터 없이 돈다. 패키지가 없으면 건너뛴다.

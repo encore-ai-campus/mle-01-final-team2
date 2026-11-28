@@ -36,3 +36,14 @@ async def health_graph(repo=Depends(get_graph_repo)) -> dict:
     if repo is None:
         return {"configured": False, "reachable": False}
     return {"configured": True, "reachable": await asyncio.to_thread(repo.ping)}
+
+
+@router.get("/health/index")
+def health_index() -> dict:
+    """RAG 검색 색인 상태(벡터 색인 유무·청크 수·임베딩 모델). 실제 엔진이 없으면 dense=false."""
+    from ..dependencies import get_retriever
+
+    r = get_retriever()
+    if r is None:
+        return {"dense": False, "chunks": 0, "indexed": 0, "model": None}
+    return r.status()

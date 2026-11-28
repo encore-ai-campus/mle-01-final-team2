@@ -46,6 +46,17 @@ def _context(messages: list[dict]) -> dict | None:
     return None
 
 
+def _sources(messages: list[dict]) -> list[dict]:
+    for m in reversed(messages):
+        found = re.search(r"<sources>(.*?)</sources>", m.get("content") or "", re.S)
+        if found:
+            try:
+                return json.loads(found.group(1))
+            except ValueError:
+                return []
+    return []
+
+
 def _explain(ctx: dict) -> str:
     out = []
     for n in ctx.get("notices", [])[:5]:
@@ -94,6 +105,11 @@ def _reply(body: dict) -> str:
     ctx = _context(messages)
     if ctx is not None:
         return _explain(ctx)
+    src = _sources(messages)
+    if src:  # 공고 질의(RAG) 프롬프트: 첫 구역을 인용해 답한다
+        first = src[0]
+        return (f"「{first.get('공고') or '공고'}」의 {first.get('구역') or '원문'}에 관련 내용이 있습니다 [{first.get('id')}]. "
+                "자세한 내용은 공고 원문과 주관 기관 안내를 확인해 주세요.")
     return f"(대역 서버 응답) 질문을 받았습니다: {last_user[:80]}"
 
 

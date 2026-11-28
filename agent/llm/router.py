@@ -2,6 +2,8 @@
 
 - 스트리밍은 **첫 조각이 오기 전까지만** 다음 provider로 넘긴다. 이미 화면에 나간 문장을 다른 모델로 이어 쓰지 않는다.
 - answer 역할은 사용자 조건·판정 결과를 담으므로 external provider를 쓰지 않는다.
+  예외: 로컬 시험에서 외부 모델(gpt-6-luna 게이트웨이)을 쓸 때만 LLM_ALLOW_EXTERNAL_ANSWER=1로 허용한다
+  (사용자 결정 2026-11-28, 로컬 시험 전용, 팀 검토 전). 이때 provider의 data_policy는 external로 표시한다.
 - 연속 N회 실패하면 cooldown_s 동안 그 provider를 건너뛰고, 시간이 지나면 한 건씩 다시 시도한다.
 """
 from __future__ import annotations
@@ -53,8 +55,9 @@ class StreamHandle:
 
 class LLMRouter:
     def __init__(self, providers: Mapping[str, Provider], roles: Mapping[str, list[str]], fail_threshold: int = 3,
-                 cooldown_s: float = 30.0, clock=time.monotonic):
+                 cooldown_s: float = 30.0, clock=time.monotonic, allow_external_roles: frozenset[str] | set[str] = frozenset()):
         self.providers, self.roles = dict(providers), {k: list(v) for k, v in roles.items()}
+        self.allow_external_roles = frozenset(allow_external_roles)
         self.fail_threshold, self.cooldown_s, self._clock = fail_threshold, cooldown_s, clock
         self._breakers: dict[str, _Breaker] = {n: _Breaker() for n in self.providers}
 
@@ -65,7 +68,7 @@ class LLMRouter:
             p = self.providers.get(name)
             if p is None:
                 continue  # 설정에서 꺼진 provider(환경변수 없음)
-            if p.data_policy == "external" and role in EXTERNAL_FORBIDDEN_ROLES:
+            if p.data_policy == "external" and role in EXTERNAL_FORBIDDEN_ROLES and role not in self.allow_external_roles:
                 continue  # 사용자 조건·판정 결과는 외부로 보내지 않는다
             out.append(p)
         return out
@@ -165,10 +168,12 @@ def load_router(config_path: str | Path | None = None, env: Mapping[str, str] | 
             timeout = float(env.get(p.get("timeout_s_env", ""), "") or p.get("timeout_s", 60))
             providers[name] = OpenAICompatProvider(
                 name, base_url=base_url, model=model, api_key=env.get(p.get("api_key_env", "")) or None, timeout_s=timeout,
-                data_policy=p.get("data_policy", "self_hosted"), json_schema=bool((p.get("capabilities") or {}).get("json_schema")),
+                data_policy=env.get(p.get("data_policy_env", "")) or p.get("data_policy", "self_hosted"), json_schema=bool((p.get("capabilities") or {}).get("json_schema")),
                 http_client=http_client)
         else:
             raise ValueError(f"알 수 없는 provider type: {p['type']} ({name})")
     roles = {r: [v["primary"], *v.get("fallbacks", [])] for r, v in (cfg.get("roles") or {}).items()}
     cb = cfg.get("circuit_breaker") or {}
-    return LLMRouter(providers, roles, fail_threshold=int(cb.get("failures", 3)), cooldown_s=float(cb.get("cooldown_s", 30)))
+    allow = {"answer"} if env.get("LLM_ALLOW_EXTERNAL_ANSWER", "").strip() in ("1", "true", "yes") else set()
+    return LLMRouter(providers, roles, fail_threshold=int(cb.get("failures", 3)), cooldown_s=float(cb.get("cooldown_s", 30)),
+                     allow_external_roles=allow)
