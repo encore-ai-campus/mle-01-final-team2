@@ -3,7 +3,8 @@
   GET  /api/admin/reviews                 큐 목록(상태·출처·모집 중·검색어 필터, 우선순위 순)
   GET  /api/admin/reviews/{notice_id}     한 공고: 원문·구역·사전 채움·작성한 조건과 입력 목록
   PUT  /api/admin/reviews/{notice_id}     저장(action=save: 작업 중, verify: 검수 완료, reopen: 다시 작업)
-  POST /api/admin/reviews/ingest          VERIFIED 공고를 판정 입력(gold_bridge)으로 반영. 판정에 쓰려면 API를 다시 띄운다
+  POST /api/admin/reviews/ingest          VERIFIED 공고를 판정 입력(gold_bridge)으로 내보내고 판정 엔진이 바로 다시 읽는다
+  POST /api/admin/reviews/reload          반영 파일을 판정 엔진이 다시 읽기만 한다
 
 - 조건의 근거 문장은 서버가 원문[시작:끝]에서 잘라 쓰고, id도 서버가 만든다(검수자가 적은 근거·id는 믿지 않는다).
 - 검수 완료는 ingest와 같은 검사(check_row)를 통과해야 저장된다. 통과하지 못하면 422와 문제 목록을 돌려주고 작업 중으로 남긴다.
@@ -17,7 +18,7 @@ from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel, Field
 
 from ..core.errors import api_error
-from ..dependencies import get_review_store
+from ..dependencies import get_eligibility_service, get_review_store
 from ..dependencies.auth import CurrentUser, require_admin
 from ..repositories.review_queue import ReviewQueueStore
 
@@ -193,9 +194,28 @@ def save_review(notice_id: str, body: ReviewIn, user: CurrentUser = Depends(requ
     return {"review": saved, "errors": []}
 
 
+def _reload(service) -> dict | None:
+    engine = getattr(service, "_engine", None)
+    return engine.reload_reviews() if engine is not None and hasattr(engine, "reload_reviews") else None
+
+
 @router.post("/ingest")
-def ingest_reviews(user: CurrentUser = Depends(require_admin), store: ReviewQueueStore = Depends(get_review_store)) -> dict:
+def ingest_reviews(reload: bool = Query(True, description="반영 뒤 판정 엔진이 검수 결과를 다시 읽는다(API 재시작 불필요)"),
+                   user: CurrentUser = Depends(require_admin), store: ReviewQueueStore = Depends(get_review_store),
+                   service=Depends(get_eligibility_service)) -> dict:
     from tools.requirement_review_queue import ingest
 
     rep = ingest(_store(store).path)
-    return {**rep, "note": "판정 엔진은 시작할 때 검수 결과를 읽습니다. API를 다시 띄우면 반영됩니다."}
+    loaded = _reload(service) if reload else None
+    note = (f"판정에 반영했습니다. 검수 요건이 붙은 공고 {loaded['after']}건(공고 전체 확인 {loaded['reviewed']}건)." if loaded
+            else "판정 엔진이 없어 다시 읽지 않았습니다. API를 다시 띄우면 반영됩니다.")
+    return {**rep, "reloaded": loaded, "note": note}
+
+
+@router.post("/reload")
+def reload_reviews(user: CurrentUser = Depends(require_admin), service=Depends(get_eligibility_service)) -> dict:
+    """반영 파일(service/reviewed_*.jsonl)을 판정 엔진이 다시 읽는다. ingest 없이 파일을 바꿨을 때 쓴다."""
+    loaded = _reload(service)
+    if loaded is None:
+        raise api_error(503, "ENGINE_UNAVAILABLE", "판정 엔진이 없습니다.")
+    return loaded

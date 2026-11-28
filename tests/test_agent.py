@@ -317,6 +317,13 @@ class EvidenceGraph(FakeGraph):
                            {**base, "provision_kind": "LawAppendix", "article_id": "T1", "article_no": "[별표 1]", "article_title": "제외 업종"}]}]
 
 
+def login(app):
+    """API 시험은 로그인한 사용자로 부른다(A-01 뒤로 채팅·판정·그래프는 로그인 필요)."""
+    from api.dependencies.auth import CurrentUser, get_current_user
+
+    app.dependency_overrides[get_current_user] = lambda: CurrentUser("test-user", "user")
+
+
 @unittest.skipUnless(HAS_DEPS, "openai·langgraph·fastapi·httpx·pyyaml이 필요하다")
 class TestGraphApi(unittest.TestCase):
     def client(self, repo):
@@ -326,6 +333,7 @@ class TestGraphApi(unittest.TestCase):
         from api.main import create_app
 
         app = create_app()
+        login(app)
         app.dependency_overrides[get_graph_repo] = lambda: repo
         return TestClient(app)
 
@@ -368,6 +376,7 @@ class TestChatApi(unittest.TestCase):
                 return self.judge(None)
 
         app = create_app()
+        login(app)
         app.dependency_overrides[get_eligibility_service] = lambda: Svc()
         app.dependency_overrides[get_llm_router] = lambda: router(provider())
         app.dependency_overrides[get_graph_repo] = lambda: None  # 시험은 외부 DB에 닿지 않는다

@@ -17,7 +17,8 @@ router = APIRouter(prefix="/api", tags=["eligibility"])
 
 
 @router.post("/eligibility", response_model=EligibilityResponse)
-def eligibility(req: EligibilityRequest, service: EligibilityService = Depends(get_eligibility_service)) -> EligibilityResponse:
+def eligibility(req: EligibilityRequest, service: EligibilityService = Depends(get_eligibility_service),
+                user: CurrentUser = Depends(get_current_user)) -> EligibilityResponse:
     return service.judge(req)
 
 

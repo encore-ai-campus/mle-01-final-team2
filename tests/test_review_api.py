@@ -7,13 +7,15 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from fastapi.testclient import TestClient  # noqa: E402
 
-from api.dependencies import get_review_store  # noqa: E402
+from api.dependencies import get_eligibility_service, get_review_store  # noqa: E402
 from api.dependencies.auth import CurrentUser, get_current_user  # noqa: E402
 from api.main import create_app  # noqa: E402
 from api.repositories.review_queue import ReviewQueueStore  # noqa: E402
@@ -35,6 +37,9 @@ class ReviewApiTest(unittest.TestCase):
         self.app.dependency_overrides[get_review_store] = lambda: self.store
         self.role = "admin"
         self.app.dependency_overrides[get_current_user] = lambda: CurrentUser("검수자A", self.role)
+        self.engine = mock.Mock()
+        self.engine.reload_reviews.return_value = {"before": 30, "after": 31, "reviewed": 1}
+        self.app.dependency_overrides[get_eligibility_service] = lambda: SimpleNamespace(_engine=self.engine)
         self.c = TestClient(self.app)
 
     def tearDown(self):
@@ -87,6 +92,8 @@ class ReviewApiTest(unittest.TestCase):
         self.assertEqual(Q.check_row(v), [])
         rep = self.c.post("/api/admin/reviews/ingest").json()
         self.assertEqual((rep["verified"], rep["applied"]), (1, 1))
+        self.assertEqual(rep["reloaded"]["after"], 31)  # 엔진이 바로 다시 읽는다
+        self.engine.reload_reviews.assert_called_once()
         applied = Q.read_jsonl(Path(self.tmp.name) / "service" / "reviewed_condition_gold.jsonl")
         self.assertEqual(applied[0]["notice_id"], NID)
         # 다시 작업하면 반영 대상에서 빠진다
