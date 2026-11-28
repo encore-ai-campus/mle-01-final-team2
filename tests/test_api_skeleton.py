@@ -48,6 +48,11 @@ class TestApiSkeleton(unittest.TestCase):
                 continue
             with self.subTest(path=path):
                 self.assertEqual(c.request(method, path).status_code, 401)
+        for method, path in (("POST", "/api/chat"), ("POST", "/api/eligibility"), ("GET", "/api/graph/path?notice_id=N:1"),
+                             ("GET", "/api/concepts"), ("GET", "/api/notices"), ("GET", "/api/me")):
+            with self.subTest(path=path):  # 명세상 로그인이 필요한 사용자 API
+                self.assertEqual(c.request(method, path, json={} if method == "POST" else None).status_code, 401)
+        self.assertEqual(c.get("/api/auth/config").status_code, 200)  # 로그인 화면용 공개 설정
         c = self.client(APP_ENV="local", SUPABASE_URL="https://example.supabase.co")
         self.assertEqual(c.get("/api/me", headers={"Authorization": "Bearer x"}).status_code, 401)  # 서명 없는 토큰은 통과 못 한다
 

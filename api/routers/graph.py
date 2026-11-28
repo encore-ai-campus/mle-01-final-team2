@@ -10,6 +10,7 @@ from functools import lru_cache
 from fastapi import APIRouter, Depends, HTTPException, Query
 
 from ..dependencies import get_graph_repo
+from ..dependencies.auth import CurrentUser, get_current_user
 from ..repositories.graph import GraphUnavailable
 
 router = APIRouter(prefix="/api", tags=["graph"])
@@ -20,8 +21,8 @@ def _unavailable(detail: str = "그래프 DB에 연결할 수 없습니다.") ->
 
 
 @router.get("/graph/path")
-async def graph_path(notice_id: str = Query(max_length=80), region: str | None = Query(default=None, max_length=40),
-                     repo=Depends(get_graph_repo)) -> dict:
+async def graph_path(user: CurrentUser = Depends(get_current_user), notice_id: str = Query(max_length=80),
+                     region: str | None = Query(default=None, max_length=40), repo=Depends(get_graph_repo)) -> dict:
     """공고 → 요건 → 조건 → 개념(사용자 지역 → 조건 지역 경로 강조) → 정의 → 조문 → 법령."""
     if repo is None:
         raise _unavailable("그래프 DB가 설정되지 않았습니다(NEO4J_*).")
@@ -43,7 +44,8 @@ def _local_regions() -> list[dict]:
 
 
 @router.get("/concepts")
-async def concepts(scheme: str = Query(default="region", pattern="^region$"), repo=Depends(get_graph_repo)) -> dict:
+async def concepts(user: CurrentUser = Depends(get_current_user), scheme: str = Query(default="region", pattern="^region$"),
+                   repo=Depends(get_graph_repo)) -> dict:
     """입력 폼용 지역 목록. 그래프가 없거나 닿지 않으면 내장 지역 사전을 쓴다."""
     if repo is not None:
         try:

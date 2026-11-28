@@ -90,6 +90,8 @@ $env:EMBED_BASE_URL="http://localhost:8001/v1"; .venv\Scripts\python -m agent.ra
 - 역할은 서버 허용 목록 `ADMIN_EMAILS`·`ADMIN_USER_IDS`로 정한다. 토큰 안의 역할 값은 보지 않는다.
 - `GET /api/auth/config`: 로그인 화면용 공개 설정(Supabase 주소, publishable 키, 켜 둔 로그인 방법). 서비스·비밀 키는 내보내지 않는다.
 - `GET /api/me`: 로그인 사용자·역할·이메일.
+- 로그인 필요: `/api/me`, `/api/notices*`, `/api/eligibility*`, `/api/chat`, `/api/graph/path`, `/api/concepts`. 공개: `/health*`, `/api/meta`, `/api/auth/config`.
+- 배포 설정 점검: `python -m api.core.deploy_check --env prod --online`(값은 출력하지 않음). 안내는 `docs/GUIDE_배포점검_v0.1.md`.
 - 로컬 개발(`APP_ENV=local` + `APP_DEV_AUTH=1`)에서 토큰이 없으면 개발용 사용자(`X-Dev-Role: admin`이면 관리자)다. 토큰이 있으면 로컬에서도 검증한다.
 - 오류: 토큰 없음·잘못됨 401, 만료 401 `TOKEN_EXPIRED`, 관리자 아님 403 `ROLE_DENIED`, JWKS에 닿지 않음 503.
 
@@ -97,9 +99,9 @@ $env:EMBED_BASE_URL="http://localhost:8001/v1"; .venv\Scripts\python -m agent.ra
 
 `/api/admin/reviews`(`api/routers/reviews.py`)는 REQ_UNPARSED 공고의 요건을 사람이 조건으로 옮기는 검수 API다. 웹 화면은 `/admin/reviews`다. 설계·화면 설명은 `docs/DESIGN_요건검수큐_v0.1.md` §5-1에 있다.
 
-- `GET /api/admin/reviews`(`status`·`source`·`open_only`·`q`·`offset`·`limit`), `GET /api/admin/reviews/{id}`, `PUT /api/admin/reviews/{id}`(`action`: save·verify·reopen), `POST /api/admin/reviews/ingest`.
+- `GET /api/admin/reviews`(`status`·`source`·`open_only`·`q`·`offset`·`limit`), `GET /api/admin/reviews/{id}`, `PUT /api/admin/reviews/{id}`(`action`: save·verify·reopen), `POST /api/admin/reviews/ingest`(반영 뒤 판정 엔진이 바로 다시 읽음), `POST /api/admin/reviews/reload`.
 - 큐 파일(`data/reviews/requirements/queue.jsonl`)이 없으면 503이다. 관리자가 아니면 403이다. 로컬 개발에서는 `X-Dev-Role: admin`.
-- ingest 뒤 API를 다시 띄워야 판정에 반영된다.
+- ingest하면 API를 다시 띄우지 않아도 판정에 반영된다. 프로세스가 여러 개면 요청을 받은 프로세스만 다시 읽는다.
 
 아직 없는 것: `/admin/runs`·`/admin/reprocess`, `profiles`·`audit_logs` 표, what-if(P1), 출력 가드 1회 재생성, Langfuse 기록, 그래프 시각화(지금 웹은 간선 표로만 보여 준다).
 

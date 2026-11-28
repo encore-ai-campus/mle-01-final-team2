@@ -11,8 +11,20 @@ from .core.config import get_settings
 from .routers import admin, chat, eligibility, graph, health, me, meta, notices, reviews
 
 
+def _log_deploy_problems(settings) -> None:
+    """배포 설정 문제를 시작할 때 알린다(값은 남기지 않는다). 점검 내용은 api/core/deploy_check.py."""
+    import logging
+
+    from .core.deploy_check import problems
+
+    log = logging.getLogger("jiwongak.deploy")
+    for level, msg in problems(settings):
+        (log.error if level == "ERROR" else log.warning)("deploy check: %s", msg)
+
+
 def create_app() -> FastAPI:
     settings = get_settings()
+    _log_deploy_problems(settings)
     app = FastAPI(title=settings.app_name, version="0.1.0")
     app.add_middleware(CORSMiddleware, allow_origins=settings.cors_origins, allow_methods=["GET", "POST", "PUT"], allow_headers=["*"])
     app.include_router(health.router)

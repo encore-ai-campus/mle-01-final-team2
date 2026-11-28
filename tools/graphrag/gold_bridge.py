@@ -118,9 +118,23 @@ def attach(notices: list[dict], gold: dict[str, dict]) -> int:
         g = gold.get(notice["notice_id"])
         if not g:
             continue
+        notice.setdefault("_text_requirements_base", notice.get("text_requirements", "unparsed"))  # detach()가 되돌릴 값
         notice["gold_requirements"] = g["requirements"]
         notice["gold_review"] = g["review"]
         if notice.get("text_requirements") != "reviewed":
             notice["text_requirements"] = "reviewed" if g["review"]["whole_notice_complete"] else "partially_reviewed"
+        n += 1
+    return n
+
+
+def detach(notices: list[dict]) -> int:
+    """attach()가 붙인 검수 요건을 떼고 text_requirements를 붙이기 전 값으로 되돌린다. 다시 읽기(reload) 전에 쓴다."""
+    n = 0
+    for notice in notices:
+        if "_text_requirements_base" not in notice:
+            continue
+        notice.pop("gold_requirements", None)
+        notice.pop("gold_review", None)
+        notice["text_requirements"] = notice.pop("_text_requirements_base")
         n += 1
     return n

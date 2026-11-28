@@ -31,6 +31,11 @@ export const num = (v: string) => (v.trim() === "" ? null : Number(v));
 
 /** API 오류 본문에서 사람이 읽을 문구를 꺼낸다. */
 export function errorMessage(d: unknown, status: number): string {
+  const m = rawErrorMessage(d, status);
+  return status === 401 ? `${m} 오른쪽 위 '로그인'에서 로그인하세요.` : m;
+}
+
+function rawErrorMessage(d: unknown, status: number): string {
   const x = d as { error?: { message?: string }; detail?: { error?: { message?: string }; msg?: string }[] | { error?: { message?: string } } } | null;
   if (x?.error?.message) return x.error.message;
   const det = x?.detail;

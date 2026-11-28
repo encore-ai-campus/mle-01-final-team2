@@ -173,5 +173,36 @@ class TestToVerdict(unittest.TestCase):
         self.assertEqual(r["verdict"], "NEEDS_CHECK")
 
 
+class TestReload(unittest.TestCase):
+    """API 재시작 없이 검수 결과 다시 읽기(Engine.reload_reviews). 검수를 되돌리면 원래 상태로 돌아가야 한다."""
+
+    def test_reload_attaches_and_reverts(self):
+        from types import SimpleNamespace
+        from unittest import mock
+
+        from tools.graphrag import gold_bridge
+        from tools.graphrag.engine import Engine
+
+        r = row()
+        reviewed = verify(r, [cond(r, "창업 3년 이내", "ELIGIBILITY", "BUSINESS_AGE", "LTE", 3, "YEAR")])
+        with tempfile.TemporaryDirectory() as d:
+            q = Path(d) / "queue.jsonl"
+            Q.write_jsonl(q, [reviewed])
+            Q.ingest(q)
+            gold = gold_bridge.load_all(resolve_region=lambda x: (None,), service_root=Path(d))
+        notice = {**NOTICE, "conditions": []}
+        eng = SimpleNamespace(notices=[notice, {**NOTICE, "notice_id": "BIZINFO:OTHER", "text_requirements": "unparsed"}])
+        with mock.patch.object(gold_bridge, "load_all", return_value=gold):
+            rep = Engine.reload_reviews(eng)
+        self.assertEqual((rep["before"], rep["after"], rep["reviewed"]), (0, 1, 1))
+        self.assertEqual(notice["text_requirements"], "reviewed")
+        with mock.patch.object(gold_bridge, "load_all", return_value={}):  # 검수를 되돌림(다시 작업)
+            rep = Engine.reload_reviews(eng)
+        self.assertEqual((rep["before"], rep["after"]), (1, 0))
+        self.assertEqual(notice["text_requirements"], "unparsed")
+        self.assertNotIn("gold_requirements", notice)
+        self.assertNotIn("_text_requirements_base", notice)
+
+
 if __name__ == "__main__":
     unittest.main()

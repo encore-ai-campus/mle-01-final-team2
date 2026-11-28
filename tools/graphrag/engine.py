@@ -30,6 +30,16 @@ class Engine:
         self.by_id = {n["notice_id"]: n for n in self.notices}
         self.bm25 = BM25(self.chunks)
 
+    def reload_reviews(self, service_root=None) -> dict:
+        """검수 결과(정답셋 + 서비스 검수 큐 ingest)를 다시 읽어 붙인다. API를 다시 띄우지 않고 판정에 반영한다.
+        새 결과를 먼저 다 읽은 뒤 떼고 붙이므로 파일을 읽다 실패하면 지금 상태를 그대로 둔다."""
+        gold = gold_bridge.load_all() if service_root is None else gold_bridge.load_all(service_root=service_root)
+        before = sum(1 for n in self.notices if "gold_requirements" in n)
+        gold_bridge.detach(self.notices)
+        self.gold_notices = gold_bridge.attach(self.notices, gold)
+        return {"before": before, "after": self.gold_notices,
+                "reviewed": sum(1 for n in self.notices if n.get("gold_requirements") and n["text_requirements"] == "reviewed")}
+
     def is_open(self, n: dict) -> bool:
         if not n["is_open"]:
             return False

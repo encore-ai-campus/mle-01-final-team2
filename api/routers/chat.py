@@ -11,6 +11,7 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
 
 from ..dependencies import get_orchestrator
+from ..dependencies.auth import CurrentUser, get_current_user
 from ..schemas.chat import ChatRequest
 
 router = APIRouter(prefix="/api", tags=["chat"])
@@ -22,7 +23,7 @@ def sse(ev: dict) -> str:
 
 
 @router.post("/chat")
-async def chat(req: ChatRequest, graph=Depends(get_orchestrator)) -> StreamingResponse:
+async def chat(req: ChatRequest, graph=Depends(get_orchestrator), user: CurrentUser = Depends(get_current_user)) -> StreamingResponse:
     from agent.orchestrator import run_orchestrated as run_events
 
     async def stream():

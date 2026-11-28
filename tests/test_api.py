@@ -26,11 +26,13 @@ class TestApi(unittest.TestCase):
         from fastapi.testclient import TestClient
 
         from api.dependencies import get_eligibility_service
+        from api.dependencies.auth import CurrentUser, get_current_user
         from api.main import create_app
 
         self.fake = FakeService()
         app = create_app()
         app.dependency_overrides[get_eligibility_service] = lambda: self.fake
+        app.dependency_overrides[get_current_user] = lambda: CurrentUser("test-user", "user")  # 로그인한 사용자로 부른다
         self.client = TestClient(app)
 
     def test_health(self):
