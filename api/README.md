@@ -7,7 +7,7 @@
 | 폴더 | 역할 | 상태 |
 |---|---|---|
 | `api/core/` | 설정(`config.py`, 기존 `.env` 이름을 읽음) | 있음 |
-| `api/routers/` | 엔드포인트 | 구현: `GET /health`, `/health/llm`, `/health/graph`, `POST /api/eligibility`, `POST /api/chat`(SSE), `GET /api/graph/path`, `GET /api/concepts`, `GET /api/me`, `GET /api/meta`(S-01, 공개), `GET /api/admin/status`(M-01, 관리자), 공고 N-01·N-02, 검수 큐. 판정(E-01)·공고(N-01·N-02) 응답에는 명세 §2.1 공통 `meta`(수집 시각·버전·면책 문구)를 붙인다(`data`·`outcome`으로 감싸는 전체 틀은 아직). 뼈대(501): N-03, 판정 E-02~04, 운영 M-03. 현황표는 [개발 시작 안내 §7](../docs/GUIDE_개발시작_v0.1.md#7-기능별-시작점) |
+| `api/routers/` | 엔드포인트 | 구현: `GET /health`, `/health/llm`, `/health/graph`, `POST /api/eligibility`, `POST /api/chat`(SSE), `GET /api/graph/path`, `GET /api/concepts`, `GET /api/me`, `GET /api/meta`(S-01, 공개), `GET /api/admin/status`(M-01, 관리자), `POST /api/eligibility/{id}`(E-02 조건별 검증표, 프로필을 본문으로), 공고 N-01·N-02, 검수 큐. 판정(E-01)·공고(N-01·N-02) 응답에는 명세 §2.1 공통 `meta`(수집 시각·버전·면책 문구)를 붙인다(`data`·`outcome`으로 감싸는 전체 틀은 아직). 뼈대(501): N-03, `GET /api/eligibility/{id}`(evaluation_id), E-03·E-04, 운영 M-03. 현황표는 [개발 시작 안내 §7](../docs/GUIDE_개발시작_v0.1.md#7-기능별-시작점) |
 | `api/schemas/` | 요청·응답 모델(Pydantic) | 판정·채팅 |
 | `api/services/` | 판정 엔진 어댑터. 판정 로직은 여기 다시 쓰지 않고 엔진을 호출한다 | 엔진 어댑터, 공고 지목 판정 |
 | `api/dependencies/` | FastAPI 의존성(시험에서 가짜로 교체) | 판정 서비스, 모델 라우터, 그래프 저장소, 에이전트 그래프, 로그인·역할(`auth.py`, JWT 검증 전) |

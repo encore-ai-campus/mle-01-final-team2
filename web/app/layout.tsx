@@ -16,8 +16,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Link href="/" className="brand">
               지원각
             </Link>
-            <Link href="/">홈</Link>
-            <Link href="/notices">공고</Link>
+            <Link href="/">공고 찾기</Link>
+            <Link href="/chat">챗봇</Link>
+            <Link href="/notices">공고 목록</Link>
             <Link href="/admin">운영</Link>
             <AuthNav />
           </nav>

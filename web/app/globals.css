@@ -174,3 +174,25 @@ label.review-check { margin-top: 10px; color: var(--text); }
 /* 바닥글 수집 시각(S-01) */
 .site-foot .data-asof { margin-top: 4px; }
 .site-foot .stale { color: #b45309; font-weight: 600; }
+
+/* 화면설계서 v3.5: 탭, 예외 상태 화면(EX-01~06), 판정 요약 막대. 예외 배지는 테두리만 있는 네모라 판정 배지(채운 둥근 알약)와 다르게 보인다 */
+.tabs { gap: 4px; border-bottom: 1px solid var(--line); }
+button.tab { background: none; border: 1px solid transparent; border-bottom: none; border-radius: 8px 8px 0 0; padding: 6px 14px; cursor: pointer; color: var(--muted); font-size: 14px; }
+button.tab.on { border-color: var(--line); background: var(--panel); color: var(--text); font-weight: 600; margin-bottom: -1px; }
+button.tab:disabled { cursor: not-allowed; opacity: 0.6; }
+.ex-badge { display: inline-block; border: 1.5px solid currentColor; border-radius: 4px; padding: 0 8px; font-size: 12px; font-weight: 600; color: var(--muted); background: transparent; }
+.status-screen { border-style: dashed; }
+.status-screen .ex-badge { color: var(--warn); font-size: 14px; }
+.verdict-bar .badge { font-size: 14px; padding: 2px 12px; }
+.notice-card h2 { font-size: 17px; }
+ul.why { margin: 6px 0 0; padding-left: 18px; font-size: 13px; }
+.table-wrap { overflow-x: auto; }
+td.ev { font-size: 12px; color: var(--muted); max-width: 320px; }
+.src { font-size: 12px; border-bottom: 1px dotted currentColor; }
+.src.MISSING { color: var(--warn); }
+ol.steps { padding-left: 20px; }
+ol.steps > li { margin-top: 12px; }
+.chunk-text mark { background: var(--warn-bg); color: inherit; padding: 0 1px; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-top: 10px; }
+.kpi { border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
+.kpi strong { font-size: 22px; }

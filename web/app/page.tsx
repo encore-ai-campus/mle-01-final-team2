@@ -1,193 +1,239 @@
 "use client";
-// 홈: 조건 폼 + 대화 패널. 질문마다 /api/chat(SSE)로 멀티 에이전트를 부르고, 턴마다 오케스트레이션·판정 카드·검색 근거·정의·설명을 보인다.
-// 판정은 규칙 평가기가 하고, 모델은 설명만 한다.
-import { useEffect, useRef, useState } from "react";
+// SCR-01 공고 찾기(/): 내 기업 조건 → 버튼 판정(POST /api/eligibility, 모델·Router 없이 규칙 평가기만) → 3값 공고 카드.
+// 카드의 행동은 공고 상세(SCR-02)의 원문·조건별 검증·추론 과정 탭으로 이어진다. 화면설계서 v3.5 §5 SCR-01.
+import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 
-import ChatResult from "@/components/ChatResult";
-import RegionSelect from "@/components/RegionSelect";
-import { streamChat, type AgentMode, type ChatBody } from "@/lib/chat";
-import { AGENT, num, PII_WARNING } from "@/lib/labels";
-import type { AgentEvent } from "@/lib/sse";
+import ProfileFields from "@/components/ProfileFields";
+import StatusScreen from "@/components/StatusScreen";
+import { apiFetch } from "@/lib/auth";
+import { ATTR, REASON, SOURCE, VERDICT_MARK, day, errorMessage } from "@/lib/labels";
+import { EMPTY_PROFILE, hasPII, loadProfile, saveProfile, toApiProfile, type ProfileForm } from "@/lib/profile";
 
-type Turn = { id: string; question: string; mode: AgentMode; noticeId: string; askCount: number; events: AgentEvent[]; running: boolean; error: string };
-
-const MODES: AgentMode[] = ["auto", "eligibility", "notice_qa", "definition"];
-const EXAMPLES: Record<AgentMode, string> = {
-  auto: "서울에서 창업 2년 차인데 신청할 만한 지원사업 알려줘",
-  eligibility: "내 조건으로 신청 자격이 되는 공고를 찾아줘",
-  notice_qa: "신청 방법과 제출 서류가 뭐야?",
-  definition: "중소기업의 정의가 뭐야?",
+type Cond = { cond_id: string; attribute: string; status: string; strength: string; reason: string };
+type Result = {
+  notice_id: string;
+  verdict: string;
+  reasons: string[];
+  conditions: Cond[];
+  score: number | null;
+  title: string | null;
+  source: string | null;
+  detail_url: string | null;
+  deadline: string | null;
+  fetched_at: string | null;
 };
+type Resp = { evaluated: number; candidates: number; counts: Record<string, number>; results: Result[]; meta?: { stale?: boolean } };
+type Tab = "ALL" | "ELIGIBLE" | "NEEDS_CHECK" | "NOT_ELIGIBLE";
 
-let seq = 0;
+const TABS: { key: Tab; label: string }[] = [
+  { key: "ALL", label: "전체" },
+  { key: "ELIGIBLE", label: "✓ 조건 충족" },
+  { key: "NEEDS_CHECK", label: "? 확인 필요" },
+  { key: "NOT_ELIGIBLE", label: "✕ 조건 미충족" },
+];
+const TOP = 50;
 
-export default function Home() {
-  const [form, setForm] = useState({ region: "", business_age_years: "", founder_age: "", pre_founder: "", notice_id: "" });
-  const [question, setQuestion] = useState(EXAMPLES.auto);
-  const [mode, setMode] = useState<AgentMode>("auto");
-  const [turns, setTurns] = useState<Turn[]>([]);
-  const abort = useRef<AbortController | null>(null);
-  const bottom = useRef<HTMLDivElement | null>(null);
-  const running = turns.some((t) => t.running);
+/** 판정을 가른 사유: 미충족 조건 → 모르는 조건 → 공고 단위 사유 순 */
+function decisive(r: Result): string[] {
+  const bad = r.conditions.filter((c) => c.status === "UNSATISFIED").map((c) => `${ATTR[c.attribute] ?? c.attribute}: ${c.reason}`);
+  const unknown = r.conditions.filter((c) => c.status === "UNKNOWN" && c.strength === "hard").map((c) => `${ATTR[c.attribute] ?? c.attribute}: ${c.reason}`);
+  const why = r.reasons.map((x) => REASON[x] ?? x);
+  return [...bad, ...unknown, ...why].slice(0, 3);
+}
+
+export default function FindPage() {
+  const [form, setForm] = useState<ProfileForm>(EMPTY_PROFILE);
+  const [query, setQuery] = useState("");
+  const [source, setSource] = useState("");
+  const [includeClosed, setIncludeClosed] = useState(false);
+  const [resp, setResp] = useState<Resp | null>(null);
+  const [running, setRunning] = useState(false);
+  const [error, setError] = useState<{ code: "PII_BLOCKED" | "SERVICE_DEGRADED" | null; message: string }>({ code: null, message: "" });
+  const [tab, setTab] = useState<Tab>("ALL");
+  const [sort, setSort] = useState<"relevance" | "deadline">("relevance");
 
   useEffect(() => {
-    bottom.current?.scrollIntoView({ behavior: "smooth", block: "end" });
-  }, [turns.length]);
+    const p = loadProfile();
+    if (p) setForm(p);
+  }, []);
 
-  const patch = (id: string, f: (t: Turn) => Partial<Turn>) => setTurns((ts) => ts.map((t) => (t.id === id ? { ...t, ...f(t) } : t)));
-
-  async function send(q: string, m: AgentMode, askCount: number, noticeId: string) {
-    abort.current?.abort();
-    const ctl = new AbortController();
-    abort.current = ctl;
-    const id = `t${++seq}`;
-    setTurns((ts) => [...ts, { id, question: q, mode: m, noticeId, askCount, events: [], running: true, error: "" }]);
-    const body: ChatBody = {
-      question: q,
-      agent: m,
-      notice_id: noticeId || null,
-      ask_count: askCount,
-      profile: {
-        region: form.region || null,
-        business_age_years: num(form.business_age_years),
-        founder_age: num(form.founder_age),
-        pre_founder: form.pre_founder === "" ? null : form.pre_founder === "yes",
-      },
-    };
-    const err = await streamChat(body, (e) => patch(id, (t) => ({ events: [...t.events, e] })), ctl.signal);
-    patch(id, () => ({ running: false, error: err }));
+  async function find(ev?: React.FormEvent) {
+    ev?.preventDefault();
+    if (hasPII(query)) {
+      setError({ code: "PII_BLOCKED", message: "" });
+      return;
+    }
+    setRunning(true);
+    setError({ code: null, message: "" });
+    saveProfile(form);
+    try {
+      const r = await apiFetch("/api/eligibility", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ profile: toApiProfile(form), question: query, top: TOP, include_closed: includeClosed, source: source || null }),
+      });
+      const d = await r.json().catch(() => null);
+      if (!r.ok) {
+        setResp(null);
+        setError({ code: r.status === 502 ? "SERVICE_DEGRADED" : null, message: errorMessage(d, r.status) });
+        return;
+      }
+      setResp(d as Resp);
+      setTab("ALL");
+    } catch {
+      setError({ code: "SERVICE_DEGRADED", message: "" });
+    } finally {
+      setRunning(false);
+    }
   }
 
-  function submit(ev: React.FormEvent) {
-    ev.preventDefault();
-    if (!question.trim() || running) return;
-    send(question.trim(), mode, 0, form.notice_id.trim());
-    setQuestion("");
-  }
-
-  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
-    setForm((f) => ({ ...f, [k]: e.target.value }));
+  const shown = useMemo(() => {
+    const rows = (resp?.results ?? []).filter((r) => tab === "ALL" || r.verdict === tab);
+    if (sort === "deadline") return [...rows].sort((a, b) => (a.deadline ?? "9999").localeCompare(b.deadline ?? "9999"));
+    return rows;
+  }, [resp, tab, sort]);
+  const listed = (v: Tab) => (resp?.results ?? []).filter((r) => v === "ALL" || r.verdict === v).length;
 
   return (
     <main>
-      <h1>지원각</h1>
+      <h1>공고 찾기</h1>
       <div className="muted">
-        조건과 질문을 넣으면 규칙 평가기가 판정하고, 모델은 그 근거를 설명만 합니다. 판정 결과는 신청 가능 여부를 보장하지 않습니다.{" "}
-        <a href="/eligibility">규칙 판정만 보기</a>
+        조건을 넣고 찾기를 누르면 규칙 평가기가 모집 중 공고를 판정합니다(모델을 쓰지 않습니다). 결과는 참고용이며 신청 가능을 보장하지 않습니다.{" "}
+        <Link href="/chat">챗봇으로 묻기</Link>
       </div>
 
-      <details className="panel" open>
-        <summary>
-          <strong>내 조건</strong> <span className="muted">(비워 둔 칸은 &lsquo;모름&rsquo;이며 &lsquo;제한 없음&rsquo;으로 보지 않습니다)</span>
-        </summary>
-        <form className="grid-form" onSubmit={(e) => e.preventDefault()}>
-          <div className="grid">
-            <RegionSelect value={form.region} onChange={set("region")} />
-            <label>
-              업력(년)
-              <input type="number" min={0} step="0.5" value={form.business_age_years} onChange={set("business_age_years")} placeholder="모름" />
-            </label>
-            <label>
-              대표자 만 나이
-              <input type="number" min={0} max={120} value={form.founder_age} onChange={set("founder_age")} placeholder="모름" />
-            </label>
-            <label>
-              예비창업자
-              <select value={form.pre_founder} onChange={set("pre_founder")}>
-                <option value="">모름</option>
-                <option value="yes">예</option>
-                <option value="no">아니오</option>
-              </select>
-            </label>
-            <label>
-              공고 ID(선택)
-              <input value={form.notice_id} onChange={set("notice_id")} placeholder="예: KSTARTUP:179814" />
-            </label>
-          </div>
-        </form>
-      </details>
-
-      <div className="chat">
-        {turns.length === 0 && <div className="muted empty">아래에 질문을 입력하세요. 에이전트를 고르지 않으면 질문을 보고 자동으로 나눕니다.</div>}
-        {turns.map((t, i) => (
-          <div key={t.id}>
-            <div className="msg user">
-              <div className="msg-meta">
-                나 · {AGENT[t.mode]}
-                {t.noticeId ? ` · 공고 ${t.noticeId}` : ""}
-                {t.askCount ? ` · 되묻기 ${t.askCount}회 뒤` : ""}
-              </div>
-              {t.question}
-            </div>
-            <div className="msg assistant">
-              <div className="msg-meta">지원각{t.running ? " · 확인 중…" : ""}</div>
-              <ChatResult
-                events={t.events}
-                turnKey={t.id}
-                running={t.running}
-                onAskContinue={i === turns.length - 1 ? () => send(t.question, t.mode, t.askCount + 1, t.noticeId) : undefined}
-              />
-              {t.error && (
-                <div className="banner">
-                  {t.error}{" "}
-                  <button type="button" className="link" onClick={() => send(t.question, t.mode, t.askCount, t.noticeId)} disabled={running}>
-                    다시 시도
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        ))}
-        <div ref={bottom} />
+      <div className="row tabs" role="tablist" aria-label="공고 유형">
+        <button type="button" role="tab" aria-selected="true" className="tab on">
+          지원사업
+        </button>
+        <button type="button" role="tab" aria-selected="false" className="tab" disabled title="나라장터 입찰공고 판정은 P1(SCR-01-1)입니다">
+          입찰공고(준비 중)
+        </button>
       </div>
 
-      <form className="panel composer" onSubmit={submit}>
-        <div className="row modes" role="radiogroup" aria-label="에이전트 선택">
-          {MODES.map((m) => (
-            <label className="check" key={m}>
-              <input
-                type="radio"
-                name="mode"
-                checked={mode === m}
-                onChange={() => {
-                  setMode(m);
-                  if (!question.trim() || Object.values(EXAMPLES).includes(question)) setQuestion(EXAMPLES[m]);
-                }}
-              />{" "}
-              {AGENT[m]}
-            </label>
-          ))}
+      <form className="panel" onSubmit={find}>
+        <div className="card-head">
+          <h2>내 기업 조건</h2>
+          <span className="row" style={{ marginTop: 0 }}>
+            <button type="button" className="link" disabled title="조건 저장은 저장 동의·저장소(P-01)가 정해진 뒤 붙습니다">
+              저장 조건 불러오기
+            </button>
+            <button type="button" className="link" disabled title="조건 저장은 저장 동의·저장소(P-01)가 정해진 뒤 붙습니다">
+              이 조건 저장
+            </button>
+            <button type="button" className="link" onClick={() => setForm(EMPTY_PROFILE)}>
+              비우기
+            </button>
+          </span>
         </div>
-        <textarea
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
-              e.preventDefault();
-              (e.currentTarget.form as HTMLFormElement).requestSubmit();
-            }
-          }}
-          maxLength={1000}
-          aria-label="질문"
-          placeholder="질문을 입력하세요 (Enter 보내기, Shift+Enter 줄바꿈)"
-        />
+        <div className="muted">비워 둔 칸은 &lsquo;모름&rsquo;입니다. 조건은 이 브라우저 탭에만 남고 서버에 저장하지 않습니다.</div>
+        <ProfileFields form={form} onChange={setForm} />
+        <div className="grid">
+          <label>
+            검색어(공고명·내용)
+            <input value={query} onChange={(e) => setQuery(e.target.value)} maxLength={500} placeholder="비우면 판정만" />
+          </label>
+          <label>
+            출처
+            <select value={source} onChange={(e) => setSource(e.target.value)}>
+              <option value="">전체</option>
+              <option value="BIZINFO">기업마당</option>
+              <option value="KSTARTUP">K-Startup</option>
+            </select>
+          </label>
+          <label className="check">
+            <input type="checkbox" checked={includeClosed} onChange={(e) => setIncludeClosed(e.target.checked)} /> 마감 공고 포함
+          </label>
+        </div>
         <div className="row">
-          <button className="primary" disabled={running || !question.trim()}>
-            {running ? "확인 중…" : "보내기"}
+          <button className="primary" disabled={running}>
+            {running ? "판정 중…" : "맞는 공고 찾기"}
           </button>
-          {running && (
-            <button type="button" onClick={() => abort.current?.abort()}>
-              중지
-            </button>
-          )}
-          {turns.length > 0 && !running && (
-            <button type="button" className="link" onClick={() => setTurns([])}>
-              대화 지우기
-            </button>
-          )}
-          <span className="muted">{PII_WARNING}</span>
+          <span className="muted">사업자번호·주민번호·연락처 같은 식별 정보는 입력하지 마세요.</span>
         </div>
       </form>
+
+      {error.code && <StatusScreen code={error.code} />}
+      {!error.code && error.message && <div className="banner">{error.message}</div>}
+      {resp?.meta?.stale && <StatusScreen code="STALE_DATA" />}
+
+      {resp && (
+        <section className="panel">
+          <div>
+            판정한 공고 {resp.evaluated.toLocaleString()}건 ·{" "}
+            {Object.entries(resp.counts)
+              .map(([k, v]) => `${VERDICT_MARK[k] ?? k} ${v.toLocaleString()}`)
+              .join(" · ")}
+          </div>
+          <div className="muted">아래에는 관련도가 높은 {resp.results.length}건을 보입니다(최대 {TOP}건). 신청 불가 공고는 판정 사유만 보입니다.</div>
+          <div className="row" role="tablist" aria-label="판정 결과">
+            {TABS.map((t) => (
+              <button key={t.key} type="button" role="tab" aria-selected={tab === t.key} className={`tab ${tab === t.key ? "on" : ""}`} onClick={() => setTab(t.key)}>
+                {t.label} {listed(t.key)}
+              </button>
+            ))}
+            <label className="check" style={{ marginLeft: "auto" }}>
+              정렬
+              <select value={sort} onChange={(e) => setSort(e.target.value as "relevance" | "deadline")}>
+                <option value="relevance">관련순</option>
+                <option value="deadline">마감순</option>
+              </select>
+            </label>
+          </div>
+        </section>
+      )}
+
+      {resp && resp.results.length === 0 && <StatusScreen code="NO_MATCH" />}
+
+      <div className="notice-list">
+        {shown.map((r) => {
+          const c = r.conditions;
+          const sat = c.filter((x) => x.status === "SATISFIED").length;
+          const bad = c.filter((x) => x.status === "UNSATISFIED").length;
+          const unk = c.filter((x) => x.status === "UNKNOWN").length;
+          const href = (t: string) => `/notices/${encodeURIComponent(r.notice_id)}?tab=${t}`;
+          return (
+            <section className="panel notice-card" key={r.notice_id}>
+              <div className="card-head">
+                <h2>
+                  <Link href={href("source")}>{r.title || r.notice_id}</Link>
+                </h2>
+                <span className={`badge ${r.verdict}`}>{VERDICT_MARK[r.verdict] ?? r.verdict}</span>
+              </div>
+              <div className="meta">
+                출처 {SOURCE[r.source ?? ""] ?? r.source ?? "미상"} · 수집 {r.fetched_at ? day(r.fetched_at) : "미상"} · 마감 {r.deadline ?? "기간 확인"}
+                {r.detail_url && (
+                  <>
+                    {" · "}
+                    <a href={r.detail_url} target="_blank" rel="noreferrer">
+                      원본 사이트
+                    </a>
+                  </>
+                )}
+              </div>
+              <div className="muted">
+                조건 {c.length}개: ✓ 충족 {sat} · ✕ 미충족 {bad} · ? 모름 {unk}
+              </div>
+              {decisive(r).length > 0 && (
+                <ul className="why">
+                  {decisive(r).map((x, i) => (
+                    <li key={i}>{x}</li>
+                  ))}
+                </ul>
+              )}
+              <div className="row">
+                <Link href={href("source")}>원문 보기</Link>
+                <Link href={href("verify")}>조건별 검증</Link>
+                <Link href={href("reasoning")}>추론 과정</Link>
+                <button type="button" className="link" disabled title={r.verdict === "NOT_ELIGIBLE" ? "조건 미충족 공고는 신청 문서를 만들 수 없습니다" : "신청 문서 초안(SCR-03)은 P1입니다"}>
+                  신청 문서 작성
+                </button>
+              </div>
+            </section>
+          );
+        })}
+      </div>
     </main>
   );
 }
