@@ -27,3 +27,4 @@ data/지원사업_법령/_별표원본/
 
 # RAG 벡터 색인(로컬 생성물, python -m agent.rag.build_index)
 data/index/
+data/reviews/

@@ -18,6 +18,8 @@ from pathlib import Path
 
 # 개발용 정답 v1.1 최종 30건(조건 116개, 2026-11-26 확정). 예전 v1/20261125는 검수 반영 0건이었다
 GOLD_ROOT = Path(__file__).resolve().parents[2] / "data" / "goldsets" / "conditions" / "v1.1" / "20261126" / "final30"
+# 서비스 검수 큐(tools/requirement_review_queue.py ingest) 결과. 골든셋과 따로 두고 평가 정답으로 쓰지 않는다
+SERVICE_ROOT = Path(__file__).resolve().parents[2] / "data" / "reviews" / "requirements"
 NUMERIC = {"LT", "LTE", "GT", "GTE", "EQ"}
 FIELD_ATTR = {"BUSINESS_AGE": "business_age", "REPRESENTATIVE_AGE": "founder_age", "BUSINESS_LOCATION": "region"}
 
@@ -95,6 +97,12 @@ def load(root: Path = GOLD_ROOT, splits: tuple[str, ...] = ("development",), res
                                                          "adjudication_status": row["adjudication_status"], "source_field": row["source_field"],
                                                          "logic_reviewed": bool(lg), "whole_notice_complete": bool(row["whole_notice_conditions_complete"])}}
     return out
+
+
+def load_all(resolve_region=None, service_root: Path = SERVICE_ROOT) -> dict[str, dict]:
+    """개발용 정답 + 서비스 검수 결과. 같은 공고가 둘 다 있으면 정답(합의 검수)을 쓴다. 임시 기본값(2026-11-28, 팀 검토 전, docs/DESIGN_요건검수큐_v0.1.md Q-4)."""
+    service = load(service_root, ("service",), resolve_region)
+    return {**service, **load(resolve_region=resolve_region)}
 
 
 def _refs(node: dict) -> list[str]:

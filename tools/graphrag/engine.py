@@ -25,7 +25,8 @@ class Engine:
 
         self.rg, self.notices, self.chunks, self.skipped = d["rg"], d["notices"], d["chunks"], d["skipped"]
         # 사람이 검수한 본문 요건(2-4 정답셋)을 붙인다. 검수 반영 0건이면 아무것도 바뀌지 않는다
-        self.gold_notices = gold_bridge.attach(self.notices, gold_bridge.load())
+        # 서비스 검수 큐(B-3 ②)에서 VERIFIED로 반영된 공고도 붙인다. 공고 전체 확인이면 text_requirements=reviewed가 된다
+        self.gold_notices = gold_bridge.attach(self.notices, gold_bridge.load_all())
         self.by_id = {n["notice_id"]: n for n in self.notices}
         self.bm25 = BM25(self.chunks)
 
