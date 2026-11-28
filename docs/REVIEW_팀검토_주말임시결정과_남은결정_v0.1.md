@@ -211,12 +211,13 @@
 | 법령 정의 검수 | 22/23 확인, 1개 미기재 | `docs/ontology/REVIEW_법령정의_검수시트_v0.1.md` |
 | KSIC 대분류 이름·코드 대조 | 미대조 | U-5의 C·M 2개 |
 | AWS 서비스 지연 측정 | 미실행 | API 서버에서 `python tools/measure_service_latency.py --label aws` |
-| 로그인 설정 | 미설정 | ① `.env`에 `ADMIN_EMAILS`(관리자 이메일) 추가 ② Supabase 대시보드 Authentication → URL Configuration에 `http://localhost:3000/login`을 Redirect URL로 추가 ③ Google 로그인을 쓰려면 Providers → Google을 켜고 Google Cloud OAuth 클라이언트를 등록 |
+| 로그인 설정 | 이메일 로그인·관리자 허용 목록 확인 끝(2026-11-28). **Google 로그인은 2026-11-30(월)** | Supabase 프로젝트가 동료 계정이라 월요일에 함께 한다. ① Google Cloud Console: OAuth 동의 화면(External, 테스트 사용자) → OAuth client ID(Web), origin `http://localhost:3000`, redirect URI `https://<프로젝트>.supabase.co/auth/v1/callback` ② Supabase: Authentication → Sign In / Providers → Google 켜고 Client ID·Secret 입력 ③ API 재시작 뒤 `/login`에 Google 버튼이 보이는지 확인. 코드 변경은 필요 없다 |
 | 이번 주말 변경 공유 | 미공유 | U-1~U-10을 팀원에게 알리고 이 문서 결정 칸을 채운다 |
 
 ## 변경 이력
 
 | 날짜 | 내용 |
 |---|---|
+| 2026-11-28 | 로그인 설정: 이메일 로그인 확인, Google은 2026-11-30로 미룸 |
 | 2026-11-28 | 2-6 로그인(L-1~L-3)과 로그인 설정 사람 작업 추가 |
 | 2026-11-28 | 처음 작성(주말 임시 결정 9개, 남은 팀 결정 30개, 사람 작업 5개) |
