@@ -1,6 +1,10 @@
 // 화면 공통 문구. 판정은 "신청 가능"이라고 단정하지 않는다(ELIGIBLE = 조건 충족(참고)).
 export const VERDICT: Record<string, string> = { ELIGIBLE: "조건 충족(참고)", NOT_ELIGIBLE: "조건 미충족", NEEDS_CHECK: "확인 필요" };
 export const STATUS: Record<string, string> = { SATISFIED: "충족", UNSATISFIED: "미충족", UNKNOWN: "모름" };
+// 색만으로 구분하지 않도록 기호와 글자를 같이 쓴다(화면설계서 §6 접근성)
+export const VERDICT_MARK: Record<string, string> = { ELIGIBLE: "✓ 조건 충족(참고)", NOT_ELIGIBLE: "✕ 조건 미충족", NEEDS_CHECK: "? 확인 필요" };
+export const STATUS_MARK: Record<string, string> = { SATISFIED: "✓ 충족", UNSATISFIED: "✕ 미충족", UNKNOWN: "? 모름" };
+export const VALUE_SOURCE: Record<string, string> = { INPUT: "입력", DERIVED: "도출", MISSING: "미입력" };
 export const ATTR: Record<string, string> = {
   region: "지역",
   business_age: "업력",

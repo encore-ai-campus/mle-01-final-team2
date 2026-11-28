@@ -1,9 +1,10 @@
 "use client";
-// 운영 화면(시스템 상태). /health·/health/llm·/health/graph·/health/index를 카드로 보인다. 상태는 글자로도 적는다(색에만 의존하지 않음).
-// 요건 검수 큐는 /admin/reviews. 수집 현황(/admin/runs)은 관리자 로그인(A-01) 뒤에 붙인다.
+// SCR-06 운영 현황. 위: M-01 운영 지표·수집 상태·큐(OpsStatus). 아래: /health·/health/llm·/health/graph·/health/index 카드.
+// 상태는 글자로도 적는다(색에만 의존하지 않음). 요건 검수 큐는 /admin/reviews.
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
+import OpsStatus from "@/components/OpsStatus";
 import { errorMessage, s } from "@/lib/labels";
 import { apiFetch } from "@/lib/auth";
 
@@ -94,7 +95,9 @@ export default function AdminPage() {
 
   return (
     <main>
-      <h1>운영 · 시스템 상태</h1>
+      <h1>운영 현황</h1>
+      <OpsStatus />
+      <h2 className="sub">시스템 상태</h2>
       <div className="muted">
         주소·키는 보이지 않고 이름과 상태만 보입니다. 확인 시각 {checkedAt || "-"}{" "}
         <button type="button" className="link" onClick={refresh}>
@@ -143,7 +146,7 @@ export default function AdminPage() {
           );
         })}
       </div>
-      <div className="muted">수집 현황·검수 큐·감사 로그는 관리자 로그인(A-01)이 붙은 뒤 이 화면에 더합니다.</div>
+      <div className="muted">공고 업데이트 실행(M-02)·감사 로그(M-03)는 수집 실행 기록·감사 표가 정해진 뒤 붙습니다.</div>
     </main>
   );
 }

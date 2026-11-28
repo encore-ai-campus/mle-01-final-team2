@@ -104,19 +104,20 @@ CI(`.github/workflows/tools-tests.yml`)는 PR마다 `tools/test_*.py`와 데이�
 | 기능 | 명세 | 우선 | API 파일 | 웹 화면 | 데이터·참고 | 상태 |
 |---|---|---|---|---|---|---|
 | 로그인·역할 | A-01 `GET /api/me` | P0 | `api/dependencies/auth.py`, `api/routers/me.py` | (Supabase Auth, 프론트 SDK) | Supabase JWT, `profiles.role`. 기초 설계서 §8 | 구현(이메일 로그인, 관리자는 `ADMIN_EMAILS`. Google은 2026-11-30) |
-| 공고 목록·검색 | N-01 `GET /api/notices` | P0 | `api/routers/notices.py` | `web/app/notices/page.tsx` | `data/cleaned/`, `tools/graphrag/engine.py` | 있음(API, `api/services/notices.py`. 웹 화면 전) |
-| 공고 상세·원문 | N-02 `GET /api/notices/{id}` | P0 | `api/routers/notices.py` | `web/app/notices/[id]/page.tsx` | 정리층 원문 구역 | 있음(API, `api/services/notices.py`. 웹 화면 전) |
+| 공고 목록·검색 | N-01 `GET /api/notices` | P0 | `api/routers/notices.py` | `web/app/notices/page.tsx` | `data/cleaned/`, `tools/graphrag/engine.py` | 있음(API `api/services/notices.py`, 웹 목록 화면) |
+| 공고 상세·원문 | N-02 `GET /api/notices/{id}` | P0 | `api/routers/notices.py` | `web/app/notices/[id]/page.tsx`(SCR-02 원문 탭) | 정리층 원문 구역 | 있음(API, 웹 상세 화면의 원문 탭. 근거 문구는 조건 evidence와 글자가 같을 때만 표시) |
 | 근거 문장 위치 | N-03 `.../spans` | P0 | `api/routers/notices.py` | 상세 화면 | 조건 evidence | 뼈대(`evaluation_id`가 필요해 API-2 결정 뒤) |
 | 개념 검색 | C-01 `GET /api/concepts` | P0 | `api/routers/graph.py` | 판정 폼 | 지역 사전, 그래프 | 지역만 있음 |
-| 조건으로 판정 | E-01 `POST /api/eligibility` | P0 | `api/routers/eligibility.py` | `web/app/eligibility/page.tsx` | 규칙 평가기 | 있음 |
-| 조건별 검증표 | E-02 `GET /api/eligibility/{id}` | P0 | `api/routers/eligibility.py` | 상세 화면 | E-01 결과. `evaluation_id` 규칙(명세 §5.0) 먼저 | 뼈대 |
-| 추론 경로 | E-03 `.../path` | P0 | `api/routers/eligibility.py` | 상세 화면 | `GET /api/graph/path`(있음)를 감싼다 | 뼈대 |
+| 조건으로 판정 | E-01 `POST /api/eligibility` | P0 | `api/routers/eligibility.py` | SCR-01 공고 찾기(`web/app/page.tsx`, `/`). 상세 폼 PoC는 `/eligibility` | 규칙 평가기 | 있음 |
+| 조건별 검증표 | E-02 `POST /api/eligibility/{id}`(프로필을 본문으로, 저장 없음) / `GET`(evaluation_id) | P0 | `api/routers/eligibility.py`, `api/services/condition_checks.py` | SCR-02-1 상세 `?tab=verify` | 규칙 평가기 | POST 구현(조건마다 요구·내 값·값 출처 INPUT/DERIVED/MISSING·결과·판정 이유). GET은 `evaluation_id`(API-2) 결정 뒤 |
+| 추론 경로 | E-03 `.../path` | P0 | `api/routers/eligibility.py` | SCR-02-2 상세 `?tab=reasoning` | `GET /api/graph/path`(있음)를 감싼다 | 뼈대(화면은 E-02 결과와 `GET /api/graph/path`로 5단계를 그린다) |
 | 되묻기 재판정 | E-04 `POST /api/eligibility/clarify` | P0 | `api/routers/eligibility.py` | 상세 화면 | | 뼈대 |
-| 챗봇 | H-01 `POST /api/chat`(SSE) | P0 | `api/routers/chat.py`, `agent/` | 홈(`web/app/page.tsx`) | 모델 대역 서버 | 있음(대역 모델) |
-| 운영 현황 | M-01 `GET /api/admin/status` | P0 | `api/routers/admin.py` | `web/app/admin/page.tsx` | 수집 보고서, `/health/*` | 구현(출처별 수집 시각·건수, 검수·재처리 대기열, 기간 상태. 새로 들어온·바뀐 건수와 Langfuse·GPU는 수집 기록 표·관측 연결 전이라 null) |
+| 챗봇 | H-01 `POST /api/chat`(SSE) | P0 | `api/routers/chat.py`, `agent/` | SCR-04 챗봇(`web/app/chat/page.tsx`, `/chat`) | 모델 대역 서버 | 있음(대역 모델) |
+| 운영 현황 | M-01 `GET /api/admin/status` | P0 | `api/routers/admin.py` | SCR-06 `web/app/admin/page.tsx`(`components/OpsStatus.tsx`) | 수집 보고서, `/health/*` | 구현(웹 패널 포함. 출처별 수집 시각·건수, 검수·재처리 대기열, 기간 상태. 새로 들어온·바뀐 건수와 Langfuse·GPU는 수집 기록 표·관측 연결 전이라 null) |
 | 실패 건 재처리 | M-03 `POST /api/admin/reprocess` | P0 | `api/routers/admin.py` | 운영자 화면 | 첨부 추출 보고서 | 뼈대 |
 | 기준 시각·버전·면책 | S-01 `GET /api/meta` | P0 | `api/routers/meta.py` | 모든 화면 배지 | 수집 manifest | 구현(구간표는 API-9 확정 전 임시 기본값, 수집 시각은 공고 `fetched_at`). 웹 바닥글에 수집 시각·면책 문구 표시 |
 | P1 기능(동의·내 조건·대화 이력·신청 문서·what-if·검수) | 명세 §5~§9 | P1 | 새 라우터 파일 | | | 없음 |
+| 예외 상태 화면 | EX-01~06 | P0 | | `web/components/StatusScreen.tsx` | 고정 문구 | 있음(예외 배지는 테두리 네모, 판정 배지는 채운 알약으로 모양을 나눔) |
 
 오류 응답은 지금 `{"detail": {"error": {"code", "message"}}}` 모양이다(`api/core/errors.py`). 명세 §2.1의 공통 틀(`data`·`outcome`·`reason_codes`·`meta`)로 바꾸는 일은 따로 정해서 한 번에 한다.
 

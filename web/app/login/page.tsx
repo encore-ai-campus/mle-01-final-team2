@@ -76,6 +76,15 @@ export default function LoginPage() {
         </section>
       )}
       {msg && <div className="banner">{msg}</div>}
+      <section className="panel">
+        <h2>이용 전에</h2>
+        <ul>
+          <li>판정 결과는 참고용입니다. 신청 가능 여부의 최종 확인은 공고 원문과 주관기관이 합니다.</li>
+          <li>공고 찾기와 조건별 검증은 로그인 없이 쓸 수 있습니다. 입력한 기업 조건은 이 브라우저 탭에만 남고 서버에 저장하지 않습니다.</li>
+          <li>사업자등록번호·주민등록번호·연락처 같은 식별 정보는 받지 않습니다. 입력하면 보내기 전에 막습니다.</li>
+          <li>조건 저장·대화 기록 보관은 별도 동의를 받은 뒤에만 켭니다(준비 중).</li>
+        </ul>
+      </section>
     </main>
   );
 }
