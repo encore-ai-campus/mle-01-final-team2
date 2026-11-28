@@ -66,6 +66,8 @@ services:
       RAG_INDEX_DIR: /app/data/index
     volumes:
       - ../data:/app/data:ro
+      # 요건 검수 큐(검수 화면이 쓴다). 나머지 data는 읽기 전용
+      - ../data/reviews:/app/data/reviews
     ports:
       - "127.0.0.1:8000:8000"
     depends_on:
@@ -78,6 +80,8 @@ services:
       context: ../web
     environment:
       API_BASE_URL: http://api:8000
+      # 로컬 개발에서만: 관리자 API에 x-dev-role: admin을 붙인다(API도 APP_ENV=local + APP_DEV_AUTH=1일 때만 본다)
+      DEV_ADMIN: "1"
     ports:
       - "127.0.0.1:3000:3000"
     depends_on:

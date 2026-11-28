@@ -20,6 +20,7 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import hashlib
 import json
 import sys
@@ -32,7 +33,6 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tools.ingest_condition_gold_reviews import make_id  # noqa: E402  골든셋과 같은 결정적 id 규칙
 
 QUEUE_DIR = ROOT / "data" / "reviews" / "requirements"
 QUEUE = QUEUE_DIR / "queue.jsonl"
@@ -48,6 +48,13 @@ SEPARATOR = "\n\n"
 CONDITION_TYPES = {"ELIGIBILITY", "EXCLUSION"}  # 판정에 쓰는 종류. 우대·미분류는 gold_bridge가 옮기지 않는다
 DONE_STATUSES = {"REVIEWED_COMPLETE", "CONFIRMED_NONE_IN_PROVIDED_TEXT"}
 SOON_DAYS = 14
+
+
+def make_id(notice_id: str, kind: str, start: int, end: int, raw_text: str) -> str:
+    """골든셋과 같은 결정적 조건 id(tools/ingest_condition_gold_reviews.make_id와 같다, 시험으로 확인).
+    그 모듈은 jsonschema를 읽어 API 이미지에서 쓸 수 없어 여기 다시 둔다."""
+    payload = json.dumps([notice_id, kind, start, end, raw_text], ensure_ascii=False, separators=(",", ":"))
+    return "GOLD:" + base64.b32encode(hashlib.sha256(payload.encode("utf-8")).digest()[:15]).decode("ascii").rstrip("=")
 
 
 # ---------- 원문 구성 ----------

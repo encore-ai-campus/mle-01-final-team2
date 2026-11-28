@@ -22,7 +22,7 @@
 | `deploy/llm_gateway/` | **LLM 게이트웨이**(vLLM 자리, OpenAI 호환): 뒤에서 외부 모델 gpt-6-luna(설명)·text-embedding-3-small(임베딩)을 부른다. 추론 모델 차이(`max_tokens`→`max_completion_tokens`, `temperature` 미지원)를 흡수한다 | 있음 |
 | `deploy/mock_vllm/` | **vLLM 대역 서버**(OpenAI 호환, 진짜 모델 아님, 키 없이 시험) | 있음 |
 | `deploy/docker-compose.yml` | 로컬 구성: 웹 + API + LLM 게이트웨이(대역 서버는 `--profile mock`) | 있음 |
-| `web/` | 사용자 웹(Next.js): 채팅(오케스트레이션 진행·판정 카드·검색 근거·인용), 공고 목록·상세(섹션·경로 그래프·공고 질의), 운영 상태(`/admin`). `/api/chat`은 Next 서버가 API로 SSE 중계. `/eligibility`는 모델 없이 규칙 판정만 하는 PoC 화면(2026-11-27 회의 결정 입력 포함) | 최소 화면 |
+| `web/` | 사용자 웹(Next.js): 채팅(오케스트레이션 진행·판정 카드·검색 근거·인용), 공고 목록·상세(섹션·경로 그래프·공고 질의), 운영 상태(`/admin`), 요건 검수(`/admin/reviews`). `/api/chat`은 Next 서버가 API로 SSE 중계. `/eligibility`는 모델 없이 규칙 판정만 하는 PoC 화면(2026-11-27 회의 결정 입력 포함) | 최소 화면 |
 
 ## 모델 호출 방식
 
@@ -82,7 +82,15 @@ $env:EMBED_BASE_URL="http://localhost:8001/v1"; .venv\Scripts\python -m agent.ra
 - 색인 상태: `GET /health/index`(`dense`, 청크 수, 마지막 오류). 색인이 없거나 임베딩이 실패하면 BM25만 쓴다.
 - 근거 채점 기준(실측): 밀집 유사도 0.50 이상(공고를 지목했으면 0.30), BM25만일 때는 질의어 겹침 0.50 이상.
 
-아직 없는 것: `GET /api/notices/{id}`, `/admin/*`, 로그인(JWT 검증), what-if(P1), 출력 가드 1회 재생성, Langfuse 기록, 그래프 시각화(지금 웹은 간선 표로만 보여 준다).
+## 요건 검수 큐 (관리자)
+
+`/api/admin/reviews`(`api/routers/reviews.py`)는 REQ_UNPARSED 공고의 요건을 사람이 조건으로 옮기는 검수 API다. 웹 화면은 `/admin/reviews`다. 설계·화면 설명은 `docs/DESIGN_요건검수큐_v0.1.md` §5-1에 있다.
+
+- `GET /api/admin/reviews`(`status`·`source`·`open_only`·`q`·`offset`·`limit`), `GET /api/admin/reviews/{id}`, `PUT /api/admin/reviews/{id}`(`action`: save·verify·reopen), `POST /api/admin/reviews/ingest`.
+- 큐 파일(`data/reviews/requirements/queue.jsonl`)이 없으면 503이다. 관리자가 아니면 403이다. 로컬 개발에서는 `X-Dev-Role: admin`.
+- ingest 뒤 API를 다시 띄워야 판정에 반영된다.
+
+아직 없는 것: `/admin/runs`·`/admin/reprocess`, 로그인(JWT 검증), what-if(P1), 출력 가드 1회 재생성, Langfuse 기록, 그래프 시각화(지금 웹은 간선 표로만 보여 준다).
 
 ## 실행 (Docker, 권장)
 

@@ -8,13 +8,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .core.config import get_settings
-from .routers import admin, chat, eligibility, graph, health, me, meta, notices
+from .routers import admin, chat, eligibility, graph, health, me, meta, notices, reviews
 
 
 def create_app() -> FastAPI:
     settings = get_settings()
     app = FastAPI(title=settings.app_name, version="0.1.0")
-    app.add_middleware(CORSMiddleware, allow_origins=settings.cors_origins, allow_methods=["GET", "POST"], allow_headers=["*"])
+    app.add_middleware(CORSMiddleware, allow_origins=settings.cors_origins, allow_methods=["GET", "POST", "PUT"], allow_headers=["*"])
     app.include_router(health.router)
     app.include_router(eligibility.router)
     app.include_router(chat.router)
@@ -23,6 +23,7 @@ def create_app() -> FastAPI:
     app.include_router(notices.router)
     app.include_router(meta.router)
     app.include_router(admin.router)
+    app.include_router(reviews.router)
     return app
 
 

@@ -15,6 +15,7 @@ COPY api/ api/
 COPY agent/ agent/
 COPY config/ config/
 COPY tools/graphrag/ tools/graphrag/
+COPY tools/requirement_review_queue.py tools/
 
 RUN useradd --create-home --uid 10001 app
 USER app
