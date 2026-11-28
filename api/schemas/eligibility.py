@@ -44,6 +44,13 @@ class ConditionResult(BaseModel):
     flags: list[str] = []
 
 
+class UnparsedExcerpt(BaseModel):
+    chunk_id: str
+    section: str = Field(description="구역 이름(eligibility_api, att_eligibility@…, att_exclusion@…)")
+    label: str = Field(description="화면 표시용 구역 이름")
+    text: str
+
+
 class NoticeVerdict(BaseModel):
     notice_id: str
     verdict: Verdict
@@ -57,6 +64,8 @@ class NoticeVerdict(BaseModel):
     detail_url: str | None = None
     fetched_at: str | None = None
     deadline: str | None = None
+    # REQ_UNPARSED일 때 자동으로 해석하지 못한 자격 요건의 원문 구역(§7.3 #3). 판정에는 쓰지 않고 사용자가 직접 확인하도록 보인다
+    unparsed_text: list[UnparsedExcerpt] = []
 
 
 class EligibilityResponse(BaseModel):

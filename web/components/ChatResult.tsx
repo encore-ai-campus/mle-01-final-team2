@@ -3,8 +3,8 @@
 import { Fragment, useState } from "react";
 
 import type { AgentEvent } from "@/lib/sse";
-import { buildTurn, CITE_RE, type Chunk, type NoticeView, type TurnView } from "@/lib/chat";
-import { AGENT, ATTR, day, ROUTE_METHOD, s, SOURCE, STATUS, VERDICT } from "@/lib/labels";
+import { buildTurn, CITE_RE, UNPARSED, type Chunk, type NoticeView, type TurnView } from "@/lib/chat";
+import { AGENT, ATTR, day, REASON, ROUTE_METHOD, s, SOURCE, STATUS, VERDICT } from "@/lib/labels";
 
 type Props = {
   events: AgentEvent[];
@@ -48,7 +48,7 @@ export default function ChatResult({ events, turnKey, running, onAskContinue, sh
         </div>
       )}
       {v.notices.map((n) => (
-        <VerdictCard key={n.id} n={n} showLink={showNoticeLink} />
+        <VerdictCard key={n.id} n={n} showLink={showNoticeLink} turnKey={turnKey} hit={hit} />
       ))}
       {v.definitions.map((d, i) => (
         <DefinitionCard key={i} d={d} />
@@ -73,7 +73,7 @@ export default function ChatResult({ events, turnKey, running, onAskContinue, sh
           )}
         </div>
       )}
-      {v.chunks.length > 0 && <Retrieval v={v} turnKey={turnKey} hit={hit} />}
+      {v.chunks.some((c) => c.agent !== UNPARSED) && <Retrieval v={v} turnKey={turnKey} hit={hit} />}
     </div>
   );
 }
@@ -144,12 +144,13 @@ function Cited({ text, chunks, onJump }: { text: string; chunks: Chunk[]; onJump
 }
 
 function Retrieval({ v, turnKey, hit }: { v: TurnView; turnKey: string; hit: string | null }) {
+  const found = v.chunks.filter((c) => c.agent !== UNPARSED);
   return (
     <div className="panel">
-      <h2>검색 근거 ({v.chunks.length}건)</h2>
+      <h2>검색 근거 ({found.length}건)</h2>
       <div className="muted">답변의 번호를 누르면 해당 원문 구역으로 이동합니다. &lsquo;인용됨&rsquo;은 답변이 실제로 쓴 구역입니다.</div>
       <ol className="chunks">
-        {v.chunks.map((c) => (
+        {found.map((c) => (
           <li key={c.chunk_id} id={chunkDom(turnKey, c.chunk_id)} className={`chunk${hit === c.chunk_id ? " hit" : ""}`}>
             <div className="card-head">
               <span>
@@ -183,7 +184,9 @@ function Retrieval({ v, turnKey, hit }: { v: TurnView; turnKey: string; hit: str
   );
 }
 
-export function VerdictCard({ n, showLink = true }: { n: NoticeView; showLink?: boolean }) {
+type CardProps = { n: NoticeView; showLink?: boolean; turnKey?: string; hit?: string | null };
+
+export function VerdictCard({ n, showLink = true, turnKey = "card", hit = null }: CardProps) {
   return (
     <section className="panel">
       <div className="card-head">
@@ -213,9 +216,27 @@ export function VerdictCard({ n, showLink = true }: { n: NoticeView; showLink?: 
       {((n.verdict?.reasons as string[] | undefined) ?? []).length > 0 && (
         <ul>
           {(n.verdict!.reasons as string[]).map((r, i) => (
-            <li key={i}>{r}</li>
+            <li key={i}>
+              {REASON[r] ?? r} <span className="muted">({r})</span>
+            </li>
           ))}
         </ul>
+      )}
+      {n.unparsed.length > 0 && (
+        <div className="unparsed">
+          <strong>자동으로 해석하지 못한 자격 요건 원문</strong>
+          <div className="muted">이 요건이 있어 &lsquo;조건 충족&rsquo;으로 안내하지 않습니다. 아래 원문을 직접 확인해 주세요(판정에는 쓰지 않았습니다).</div>
+          <ol className="chunks">
+            {n.unparsed.map((c) => (
+              <li key={c.chunk_id} id={chunkDom(turnKey, c.chunk_id)} className={`chunk${hit === c.chunk_id ? " hit" : ""}`}>
+                <div className="meta">
+                  <span className="cite static">{c.n}</span> {s(c.label) || s(c.section)}
+                </div>
+                <div className="chunk-text">{s(c.text)}</div>
+              </li>
+            ))}
+          </ol>
+        </div>
       )}
       {n.requirements.length > 0 && <RequirementTable rows={n.requirements} />}
       {n.paths.map((p) => (

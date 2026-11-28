@@ -10,6 +10,29 @@ from typing import Protocol
 from ..schemas.eligibility import ApplicantProfile, EligibilityRequest, EligibilityResponse
 
 META = ("title", "source", "detail_url", "fetched_at", "deadline")
+# REQ_UNPARSED 공고에 붙일 자격 요건 원문 구역(앞 순서 우선). 판정은 바꾸지 않는다(결정 B-3: 검수 전에는 원문 표시)
+UNPARSED_SECTIONS = (("eligibility_api", "신청 자격(공고 요약)"), ("att_eligibility", "첨부 공고문 · 신청 자격"),
+                     ("att_exclusion", "첨부 공고문 · 신청 제외 대상"))
+MAX_UNPARSED = 3
+UNPARSED_CHARS = 600
+
+
+def unparsed_excerpts(chunks: list[dict]) -> list[dict]:
+    """한 공고의 청크에서 자격·제외 구역을 골라 원문 발췌로 돌려준다. 같은 글은 한 번만."""
+    out, seen = [], set()
+    for kind, label in UNPARSED_SECTIONS:
+        for c in chunks:
+            if c["section"].split("@")[0] != kind:
+                continue
+            text = " ".join(c["text"].split())
+            if len(text) < 15 or text[:80] in seen:
+                continue
+            seen.add(text[:80])
+            cut = text if len(text) <= UNPARSED_CHARS else text[:UNPARSED_CHARS].rstrip() + "…"
+            out.append({"chunk_id": c["chunk_id"], "section": c["section"], "label": label, "text": cut})
+            if len(out) >= MAX_UNPARSED:
+                return out
+    return out
 
 
 class EligibilityService(Protocol):
@@ -30,14 +53,24 @@ class EngineEligibilityService:
 
         self._engine = Engine(use_cleaned=use_cleaned)
         self.retriever = retriever  # agent.rag.HybridRetriever. None이면 엔진의 BM25만 쓴다(attach_retriever로 붙인다)
+        self._chunks_by: dict[str, list[dict]] | None = None
 
     def attach_retriever(self, retriever) -> None:
         self.retriever = retriever
 
+    def _notice_chunks(self, notice_id: str) -> list[dict]:
+        if self._chunks_by is None:
+            by: dict[str, list[dict]] = {}
+            for c in self._engine.chunks:
+                by.setdefault(c["notice_id"], []).append(c)
+            self._chunks_by = by
+        return self._chunks_by.get(notice_id, [])
+
     def _row(self, r: dict) -> dict:
         n = self._engine.by_id.get(r["notice_id"], {})
+        unparsed = unparsed_excerpts(self._notice_chunks(r["notice_id"])) if "REQ_UNPARSED" in r.get("reasons", []) else []
         return {**{k: v for k, v in r.items() if k not in ("conditions", "chunks")},
-                **{k: n.get(k) for k in META}, "conditions": [asdict(c) for c in r["conditions"]]}
+                **{k: n.get(k) for k in META}, "conditions": [asdict(c) for c in r["conditions"]], "unparsed_text": unparsed}
 
     def judge(self, req: EligibilityRequest) -> EligibilityResponse:
         from tools.graphrag.evaluator import Profile
