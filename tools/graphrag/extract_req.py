@@ -34,6 +34,8 @@ R_CERT = re.compile(r"벤처기업|이노비즈|메인비즈|확인서|인증서
 CERTIFIED_STATUS = {"사회적기업", "여성기업", "장애인기업"}  # 설계서 4.3 분류 원칙(O-07)
 R_SIZE = re.compile(r"(중소기업|소상공인|중견기업|소기업|중기업|사회적기업|여성기업|장애인기업)")
 R_LOC_KW = re.compile(r"소재|관내|거주|본사|주소|사업장|소재지|이전")
+R_LAW_NAME = re.compile(r"[「｢『][^」｣』\n]{1,60}[」｣』]")
+R_TAIL = re.compile(r"(?:의|인|된|한)?\s*(?:중소)?(?:기업|업체|사업자|창업자)")
 R_SENT_END = "에이가의은는을를로과와도내권시도구군,·/()[]\"'“”‘’ \n.:;"
 
 OP = {"이내": "LTE", "이하": "LTE", "미만": "LT", "이상": "GTE", "초과": "GT"}
@@ -60,7 +62,7 @@ def region_names() -> list[tuple[str, str | None, bool]]:
 NAMES = region_names()
 
 
-def find_regions(sent: str) -> list[tuple[str, str | None, bool]]:
+def find_regions(sent: str, with_pos: bool = False) -> list[tuple]:
     found, used = [], []
     for name, rid, amb in NAMES:
         i = sent.find(name)
@@ -69,7 +71,7 @@ def find_regions(sent: str) -> list[tuple[str, str | None, bool]]:
             nxt = sent[end] if end < len(sent) else " "
             prev = sent[i - 1] if i > 0 else " "
             if nxt in R_SENT_END and not ("가" <= prev <= "힣" and len(name) <= 2) and not any(a <= i < b for a, b in used):
-                found.append((name, rid, amb))
+                found.append((name, rid, amb, i) if with_pos else (name, rid, amb))
                 used.append((i, end))
                 break
             i = sent.find(name, i + 1)
@@ -92,23 +94,35 @@ def evid(line: str, m: re.Match | None = None) -> str:
     return line[a:m.end() + 150]
 
 
+def with_tail(line: str, m: re.Match) -> tuple[int, int]:
+    """업력 문구 뒤에 바로 붙은 대상 명사(…의 기업)까지 조건 문구로 본다."""
+    t = R_TAIL.match(line, m.end())
+    return m.start(), t.end() if t else m.end()
+
+
 def extract(text: str, notice_id: str, source: str, origin: str, section: str, kind: str) -> list[dict]:
     res = []
 
-    def add(rule, attr, op, value, concept, amb, ev, pos):
-        res.append({"notice_id": notice_id, "source": source, "evidence_origin": origin, "section": section, "kind": kind,
-                    "rule_id": rule, "attribute": attr, "operator": op, "value": value, "concept": concept, "ambiguous": amb,
-                    "evidence_text": ev, "char_start": pos, "extraction_method": "rule", "review_status": "unreviewed"})
+    def add(rule, attr, op, value, concept, amb, ev, pos, span=None):
+        row = {"notice_id": notice_id, "source": source, "evidence_origin": origin, "section": section, "kind": kind,
+               "rule_id": rule, "attribute": attr, "operator": op, "value": value, "concept": concept, "ambiguous": amb,
+               "evidence_text": ev, "char_start": pos, "extraction_method": "rule", "review_status": "unreviewed"}
+        if span:  # 조건 문구(근거 문장 안의 좁은 위치, text 기준)
+            row["phrase_start"], row["phrase_text"] = pos + span[0], line[span[0]:span[1]]
+        res.append(row)
 
     for pos, line in lines_of(text):
+        in_law = [(m.start(), m.end()) for m in R_LAW_NAME.finditer(line)]
         for m in list(R_BAGE.finditer(line)) + list(R_BAGE2.finditer(line)):
-            add("bage_years", "business_age", OP[m.group(2)], {"value": int(m.group(1)), "unit": "YEAR"}, None, False, evid(line, m), pos)
+            add("bage_years", "business_age", OP[m.group(2)], {"value": int(m.group(1)), "unit": "YEAR"}, None, False, evid(line, m), pos,
+                with_tail(line, m))
             break
         for m in R_AGE.finditer(line):
-            add("founder_age", "founder_age", OP[m.group(2)], {"value": int(m.group(1)), "unit": "YEAR"}, None, False, evid(line, m), pos)
+            add("founder_age", "founder_age", OP[m.group(2)], {"value": int(m.group(1)), "unit": "YEAR"}, None, False, evid(line, m), pos,
+                (m.start(), m.end()))
         if R_LOC_KW.search(line):
-            for name, rid, amb in find_regions(line):
-                add("region_loc", "region", "WITHIN", {"label": name}, rid, amb, evid(line), pos)
+            for name, rid, amb, at in find_regions(line, with_pos=True):
+                add("region_loc", "region", "WITHIN", {"label": name}, rid, amb, evid(line), pos, (at, at + len(name)))
         for m in R_LAW.finditer(line):
             add("law_cite", "law_reference", "CITES", {"law": m.group(1).strip(), "article": (m.group(2) or "").replace(" ", "") or None}, None, False, evid(line, m), pos)
         if kind == "EXCLUSION" or (kind == "ELIGIBILITY" and R_EXCL.search(line)):
@@ -116,13 +130,14 @@ def extract(text: str, notice_id: str, source: str, origin: str, section: str, k
                 add("exclusion_text", "exclusion", "TEXT_ONLY", {"text_only": True}, None, False, evid(line, R_EXCL.search(line)), pos)
         if R_CERT.search(line):
             m = R_CERT.search(line)
-            add("certification", "certification", "EXISTS", {"label": m.group(0)}, None, False, evid(line, m), pos)
-        m = R_SIZE.search(line)
+            add("certification", "certification", "EXISTS", {"label": m.group(0)}, None, False, evid(line, m), pos, (m.start(), m.end()))
+        # 「중소기업기본법」처럼 법령 이름 속 규모 낱말은 조건이 아니다(임시 기본값 2026-11-28, 팀 검토 전)
+        m = next((x for x in R_SIZE.finditer(line) if not any(a <= x.start() < b for a, b in in_law)), None)
         if m and kind == "ELIGIBILITY":
             if m.group(1) in CERTIFIED_STATUS:  # 인증·확인서를 발급받아야 성립하는 지위는 규모가 아니라 certification(CERTIFICATION)이다
-                add("certification", "certification", "EXISTS", {"label": m.group(1)}, None, False, evid(line, m), pos)
+                add("certification", "certification", "EXISTS", {"label": m.group(1)}, None, False, evid(line, m), pos, (m.start(), m.end()))
             else:
-                add("company_size", "company_size", "IS_A", {"label": m.group(1)}, None, False, evid(line, m), pos)
+                add("company_size", "company_size", "IS_A", {"label": m.group(1)}, None, False, evid(line, m), pos, (m.start(), m.end()))
     return res
 
 

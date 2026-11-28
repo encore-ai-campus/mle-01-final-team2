@@ -13,7 +13,6 @@ STUBS = [
     ("GET", "/api/eligibility/N:1", "E-02", False),
     ("GET", "/api/eligibility/N:1/path", "E-03", False),
     ("POST", "/api/eligibility/clarify", "E-04", False),
-    ("GET", "/api/admin/status", "M-01", True),
     ("POST", "/api/admin/reprocess", "M-03", True),
 ]
 

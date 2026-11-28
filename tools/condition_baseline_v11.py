@@ -10,7 +10,7 @@
   - 규칙 속성 → 정답 필드: business_age→BUSINESS_AGE, founder_age→APPLICANT_AGE, region→BUSINESS_LOCATION(EQ, 지역 이름),
     company_size→BUSINESS_TYPE(EQ), certification→CERTIFICATION(EQ). 법령 인용(law_reference)과 제외 문장 표시(exclusion)는
     조건이 아니라 검수자용 표시라 뺀다. LLM 후보는 필드·연산자·값·단위를 그대로 쓴다.
-  - 근거 위치: 큐 원문이 정답 원문과 같으면 위치를 그대로, 다르면 후보 문구를 정답 원문에서 찾아 옮긴다(못 찾으면 위치 없음).
+  - 근거 위치: 규칙 후보는 조건 문구 위치(condition_reference, 없으면 문장 위치)를 쓴다. 큐 원문이 정답 원문과 같으면 위치를 그대로, 다르면 후보 문구를 정답 원문에서 찾아 옮긴다(못 찾으면 위치 없음).
   - 큐에는 AND/OR 논리 예측이 없어 논리 지표는 내지 않는다.
 
 사용: python tools/condition_baseline_v11.py [--source queue] [--methods rule,llm]
@@ -64,7 +64,9 @@ def queue_predictions(gold_rows: list[dict], methods: set[str], queue: Path = QU
             if field is None:
                 continue
             value, unit = _value(p)
-            ref, text = p.get("evidence_reference"), p.get("raw_text") or ""
+            # 규칙 후보는 조건 문구 위치(condition_reference)가 있으면 그것을, 없으면 문장 위치를 근거로 쓴다
+            ref = p.get("condition_reference") or p.get("evidence_reference")
+            text = p.get("condition_text") or p.get("raw_text") or ""
             if ref and not same_text:  # 큐 원문 위치 → 정답 원문 위치
                 quote = row["source_text"][ref["start_char"]:ref["end_char"]]
                 at = g["source_text"].find(quote) if quote else -1

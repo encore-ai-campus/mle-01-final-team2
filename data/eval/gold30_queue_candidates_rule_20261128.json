@@ -3,56 +3,56 @@
  "status": "팀 검토 전",
  "goldset": "conditions-development-v1.1-20261126-final30",
  "policy_version": "1.1.0",
- "predictions": "검수 큐 자동 후보(rule), 125개",
+ "predictions": "검수 큐 자동 후보(rule), 122개",
  "preflight_errors": [
   "INPUT_HASH_MISMATCH:normalized_snapshot"
  ],
  "common": {
   "micro": {
-   "tp": 1,
-   "fp": 124,
-   "fn": 115,
-   "precision": 0.008,
-   "recall": 0.008620689655172414,
-   "f1": 0.008298755186721992,
+   "tp": 6,
+   "fp": 116,
+   "fn": 110,
+   "precision": 0.04918032786885246,
+   "recall": 0.05172413793103448,
+   "f1": 0.05042016806722689,
    "precision_status": "DEFINED",
    "recall_status": "DEFINED"
   },
   "macro_by_notice": {
-   "precision": 0.005681818181818182,
-   "recall": 0.03333333333333333,
-   "f1": 0.007407407407407407
+   "precision": 0.1655701754385965,
+   "recall": 0.05944444444444444,
+   "f1": 0.06059907834101383
   },
   "by_source": {
    "BIZINFO": {
-    "tp": 1,
-    "fp": 114,
-    "fn": 59,
-    "precision": 0.008695652173913044,
-    "recall": 0.016666666666666666,
-    "f1": 0.011428571428571427,
+    "tp": 2,
+    "fp": 110,
+    "fn": 58,
+    "precision": 0.017857142857142856,
+    "recall": 0.03333333333333333,
+    "f1": 0.023255813953488372,
     "precision_status": "DEFINED",
     "recall_status": "DEFINED"
    },
    "KSTARTUP": {
-    "tp": 0,
-    "fp": 10,
-    "fn": 56,
-    "precision": 0.0,
-    "recall": 0.0,
-    "f1": 0.0,
+    "tp": 4,
+    "fp": 6,
+    "fn": 52,
+    "precision": 0.4,
+    "recall": 0.07142857142857142,
+    "f1": 0.12121212121212122,
     "precision_status": "DEFINED",
     "recall_status": "DEFINED"
    }
   },
   "by_condition_type": {
    "ELIGIBILITY": {
-    "tp": 1,
-    "fp": 117,
-    "fn": 109,
-    "precision": 0.00847457627118644,
-    "recall": 0.00909090909090909,
-    "f1": 0.008771929824561403,
+    "tp": 6,
+    "fp": 109,
+    "fn": 104,
+    "precision": 0.05217391304347826,
+    "recall": 0.05454545454545454,
+    "f1": 0.05333333333333333,
     "precision_status": "DEFINED",
     "recall_status": "DEFINED"
    },
@@ -77,10 +77,10 @@
     "recall_status": "DEFINED"
    }
   },
-  "partial_count": 22,
+  "partial_count": 15,
   "notice_count": 30,
-  "notices_with_misses": 29,
-  "notices_with_false_positives": 22
+  "notices_with_misses": 30,
+  "notices_with_false_positives": 19
  },
  "by_field": {
   "APPLICANT_ADDRESS": {
@@ -94,12 +94,12 @@
    "recall_status": "DEFINED"
   },
   "APPLICANT_AGE": {
-   "tp": 0,
-   "fp": 1,
-   "fn": 3,
-   "precision": 0.0,
-   "recall": 0.0,
-   "f1": 0.0,
+   "tp": 1,
+   "fp": 0,
+   "fn": 2,
+   "precision": 1.0,
+   "recall": 0.3333333333333333,
+   "f1": 0.5,
    "precision_status": "DEFINED",
    "recall_status": "DEFINED"
   },
@@ -114,12 +114,12 @@
    "recall_status": "DEFINED"
   },
   "BUSINESS_AGE": {
-   "tp": 0,
-   "fp": 6,
-   "fn": 9,
-   "precision": 0.0,
-   "recall": 0.0,
-   "f1": 0.0,
+   "tp": 3,
+   "fp": 3,
+   "fn": 6,
+   "precision": 0.5,
+   "recall": 0.3333333333333333,
+   "f1": 0.4,
    "precision_status": "DEFINED",
    "recall_status": "DEFINED"
   },
@@ -134,12 +134,12 @@
    "recall_status": "DEFINED"
   },
   "BUSINESS_TYPE": {
-   "tp": 1,
-   "fp": 61,
-   "fn": 31,
-   "precision": 0.016129032258064516,
-   "recall": 0.03125,
-   "f1": 0.02127659574468085,
+   "tp": 2,
+   "fp": 57,
+   "fn": 30,
+   "precision": 0.03389830508474576,
+   "recall": 0.0625,
+   "f1": 0.04395604395604396,
    "precision_status": "DEFINED",
    "recall_status": "DEFINED"
   },
@@ -215,9 +215,9 @@
   }
  },
  "diagnostic_meaning_match_ignoring_evidence": {
-  "matches": 14,
-  "precision": 0.112,
-  "recall": 0.1206896551724138,
+  "matches": 15,
+  "precision": 0.12295081967213115,
+  "recall": 0.12931034482758622,
   "note": "근거 위치만 다른 부분 일치를 일치로 본 참고값. 공식 점수 아님"
  },
  "logic": null,

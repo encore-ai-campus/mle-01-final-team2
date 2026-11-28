@@ -48,6 +48,8 @@ SEPARATOR = "\n\n"
 CONDITION_TYPES = {"ELIGIBILITY", "EXCLUSION"}  # 판정에 쓰는 종류. 우대·미분류는 gold_bridge가 옮기지 않는다
 DONE_STATUSES = {"REVIEWED_COMPLETE", "CONFIRMED_NONE_IN_PROVIDED_TEXT"}
 SOON_DAYS = 14
+# 판정 일치율(KPI N-02) 측정용 파일럿 공고. 사람 판정(라벨 B)이 있어 검수하면 바로 다시 잴 수 있으므로 큐 맨 앞에 둔다
+PILOT_ASSIGNMENT = ROOT / "data" / "goldset" / "pilot" / "pilot_assignment.csv"
 
 
 def make_id(notice_id: str, kind: str, start: int, end: int, raw_text: str) -> str:
@@ -111,13 +113,48 @@ def rule_prefill(notice_id: str, source: str, source_text: str, segments: list[d
             span = _unique_span(source_text, c["evidence_text"], seg["start"] + c.get("char_start", 0), seg["end"])
             if span is None:
                 continue
+            phrase = None  # 조건 문구 위치(근거 문장 안의 좁은 위치). 채택하면 이 위치가 조건 근거가 된다
+            if c.get("phrase_text"):
+                at = seg["start"] + c["phrase_start"]
+                if source_text[at:at + len(c["phrase_text"])] == c["phrase_text"]:
+                    phrase = {"start_char": at, "end_char": at + len(c["phrase_text"])}
             out.append({"candidate_id": f"RULE:{source_hash(json.dumps([notice_id, c['rule_id'], span], ensure_ascii=False))}",
                         "extraction_method": "rule", "rule_id": c["rule_id"], "condition_type": seg["condition_type"],
                         "attribute": c["attribute"], "operator": c["operator"], "value": c["value"], "concept": c.get("concept"),
                         "ambiguous": bool(c.get("ambiguous")), "raw_text": c["evidence_text"],
                         "evidence_reference": {"start_char": span[0], "end_char": span[1]},
+                        "condition_reference": phrase, "condition_text": c.get("phrase_text") if phrase else None,
                         "review_status": "UNREVIEWED", "decision_possible": False})
     return out
+
+
+# 모델 후보 단위 표기 → 정답셋 단위 코드(임시 기본값 2026-11-28, 팀 검토 전). 금액은 원 단위로 바꾼다
+UNIT_CODES = {"명": ("PERSON", 1), "인": ("PERSON", 1), "%": ("PERCENT", 1), "퍼센트": ("PERCENT", 1),
+              "년": ("YEAR", 1), "세": ("YEAR", 1), "개월": ("MONTH", 1), "개": ("COUNT", 1), "건": ("COUNT", 1), "회": ("COUNT", 1),
+              "원": ("KRW", 1), "천원": ("KRW", 10**3), "만원": ("KRW", 10**4), "백만원": ("KRW", 10**6),
+              "천만원": ("KRW", 10**7), "억원": ("KRW", 10**8), "억": ("KRW", 10**8)}
+
+
+def normalize_unit(value: Any, unit: str | None) -> tuple[Any, str | None]:
+    """단위 표기를 코드로 바꾼다. 모르는 표기와 이미 코드인 값은 그대로 둔다."""
+    code = UNIT_CODES.get((unit or "").replace(" ", ""))
+    if code is None:
+        return value, unit
+    name, scale = code
+
+    def scaled(v: Any) -> Any:
+        if isinstance(v, bool) or not isinstance(v, (int, float)) or scale == 1:
+            return v
+        out = v * scale
+        return int(out) if float(out).is_integer() else out
+
+    if isinstance(value, dict):  # BETWEEN {"lower": {"value": …}, "upper": …}
+        value = {k: ({**b, "value": scaled(b.get("value"))} if isinstance(b, dict) else scaled(b)) for k, b in value.items()}
+    elif isinstance(value, list):
+        value = [scaled(v) for v in value]
+    else:
+        value = scaled(value)
+    return value, name
 
 
 def load_proposals(path: Path | None) -> dict[str, list[dict]]:
@@ -143,18 +180,30 @@ def proposal_prefill(notice_id: str, source_text: str, proposals: list[dict]) ->
         span = _unique_span(source_text, quote)
         if span is None:
             unanchored += 1
+        value, unit = normalize_unit(p.get("value"), p.get("unit"))
         out.append({"candidate_id": f"LLM:{p.get('condition_id') or source_hash(quote)}", "extraction_method": "llm",
                     "condition_type": p.get("condition_type"), "attribute": p.get("field") or p.get("category_id"),
-                    "operator": p.get("operator"), "value": p.get("value"), "unit": p.get("unit"), "raw_text": quote,
+                    "operator": p.get("operator"), "value": value, "unit": unit, "unit_raw": p.get("unit"), "raw_text": quote,
                     "evidence_reference": {"start_char": span[0], "end_char": span[1]} if span else None,
                     "anchored": span is not None, "review_status": "UNREVIEWED", "decision_possible": False})
     return out, unanchored
 
 
 # ---------- 우선순위 ----------
-def priority(notice: dict, is_open: bool, today: str) -> tuple[tuple, list[str]]:
-    """정렬 키와 사유. 모집 중 → 마감 임박(14일) → 마감일 → 기간 없음 순. 임시 기본값(2026-11-28, 팀 검토 전, 설계 문서 Q-2)."""
-    reasons = []
+def pilot_ids(path: Path = PILOT_ASSIGNMENT) -> set[str]:
+    """파일럿 배정표의 공고 ID. 없으면 빈 집합."""
+    if not path.exists():
+        return set()
+    import csv
+
+    with path.open(encoding="utf-8-sig", newline="") as f:
+        return {r["notice_id"] for r in csv.DictReader(f) if r.get("notice_id")}
+
+
+def priority(notice: dict, is_open: bool, today: str, focus: bool = False) -> tuple[tuple, list[str]]:
+    """정렬 키와 사유. (판정 일치율 측정 공고) → 모집 중 → 마감 임박(14일) → 마감일 → 기간 없음 순.
+    임시 기본값(2026-11-28, 팀 검토 전, 설계 문서 Q-2)."""
+    reasons = ["판정 일치율 측정 공고(파일럿)"] if focus else []
     deadline = notice.get("deadline")
     soon = False
     if is_open:
@@ -169,19 +218,19 @@ def priority(notice: dict, is_open: bool, today: str) -> tuple[tuple, list[str]]
             reasons.append(f"마감 {SOON_DAYS}일 이내")
     else:
         reasons.append("마감·상태 미상")
-    return (not is_open, not soon, deadline or "9999-99-99", notice["notice_id"]), reasons
+    return (not focus, not is_open, not soon, deadline or "9999-99-99", notice["notice_id"]), reasons
 
 
 # ---------- 큐 만들기 ----------
 def queue_row(notice: dict, chunks: list[dict], is_open: bool, today: str, proposals: list[dict] | None = None,
-              extract=None) -> dict | None:
+              extract=None, focus: bool = False) -> dict | None:
     source_text, segments = compose_source(chunks)
     if not source_text:
         return None
     nid = notice["notice_id"]
     cands = rule_prefill(nid, notice.get("source", ""), source_text, segments, extract)
     llm, unanchored = proposal_prefill(nid, source_text, proposals or [])
-    key, reasons = priority(notice, is_open, today)
+    key, reasons = priority(notice, is_open, today, focus)
     return {"schema_version": SCHEMA_VERSION, "record_type": "requirement_service_review", "dataset_split": "SERVICE",
             "notice_id": nid, "title": notice.get("title"), "source_system": notice.get("source"),
             "detail_url": notice.get("detail_url"), "is_open": is_open, "deadline": notice.get("deadline"),
@@ -240,16 +289,17 @@ def build(engine=None, *, open_only: bool = False, limit: int | None = None, pro
     for c in engine.chunks:
         by.setdefault(c["notice_id"], []).append(c)
     proposals = load_proposals(proposals_path)
+    focus = pilot_ids()
     rows, skipped = [], Counter()
     for n in engine.notices:
         if n.get("text_requirements", "unparsed") == "reviewed":
             skipped["already_reviewed"] += 1
             continue
         is_open = engine.is_open(n)
-        if open_only and not is_open:
+        if open_only and not is_open and n["notice_id"] not in focus:
             skipped["closed"] += 1
             continue
-        row = queue_row(n, by.get(n["notice_id"], []), is_open, today, proposals.get(n["notice_id"]))
+        row = queue_row(n, by.get(n["notice_id"], []), is_open, today, proposals.get(n["notice_id"]), focus=n["notice_id"] in focus)
         if row is None:
             skipped["no_source_text"] += 1
             continue
@@ -263,7 +313,8 @@ def build(engine=None, *, open_only: bool = False, limit: int | None = None, pro
               "rows": len(merged), "candidates_this_run": len(rows), "skipped": dict(skipped), "merge": dict(stats),
               "prefill": dict(Counter(c["extraction_method"] for r in rows for c in r["prefill_candidates"])),
               "prefill_unanchored_llm": sum(r["prefill_unanchored"] for r in rows),
-              "by_source": dict(Counter(r["source_system"] for r in rows)), "open": sum(r["is_open"] for r in rows)}
+              "by_source": dict(Counter(r["source_system"] for r in rows)), "open": sum(r["is_open"] for r in rows),
+              "pilot_first": sum(1 for r in rows if r["notice_id"] in focus)}
     (queue.parent / "queue_report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return report
 

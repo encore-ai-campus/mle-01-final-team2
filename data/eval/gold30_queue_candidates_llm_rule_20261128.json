@@ -3,56 +3,56 @@
  "status": "팀 검토 전",
  "goldset": "conditions-development-v1.1-20261126-final30",
  "policy_version": "1.1.0",
- "predictions": "검수 큐 자동 후보(llm, rule), 153개",
+ "predictions": "검수 큐 자동 후보(llm, rule), 150개",
  "preflight_errors": [
   "INPUT_HASH_MISMATCH:normalized_snapshot"
  ],
  "common": {
   "micro": {
-   "tp": 2,
-   "fp": 151,
-   "fn": 114,
-   "precision": 0.013071895424836602,
-   "recall": 0.017241379310344827,
-   "f1": 0.01486988847583643,
+   "tp": 9,
+   "fp": 141,
+   "fn": 107,
+   "precision": 0.06,
+   "recall": 0.07758620689655173,
+   "f1": 0.06766917293233082,
    "precision_status": "DEFINED",
    "recall_status": "DEFINED"
   },
   "macro_by_notice": {
-   "precision": 0.014130434782608696,
-   "recall": 0.041666666666666664,
-   "f1": 0.014814814814814814
+   "precision": 0.15184973302822274,
+   "recall": 0.08444444444444445,
+   "f1": 0.07782130056323604
   },
   "by_source": {
    "BIZINFO": {
-    "tp": 1,
-    "fp": 133,
-    "fn": 59,
-    "precision": 0.007462686567164179,
-    "recall": 0.016666666666666666,
-    "f1": 0.010309278350515464,
+    "tp": 2,
+    "fp": 129,
+    "fn": 58,
+    "precision": 0.015267175572519083,
+    "recall": 0.03333333333333333,
+    "f1": 0.020942408376963352,
     "precision_status": "DEFINED",
     "recall_status": "DEFINED"
    },
    "KSTARTUP": {
-    "tp": 1,
-    "fp": 18,
-    "fn": 55,
-    "precision": 0.05263157894736842,
-    "recall": 0.017857142857142856,
-    "f1": 0.02666666666666667,
+    "tp": 7,
+    "fp": 12,
+    "fn": 49,
+    "precision": 0.3684210526315789,
+    "recall": 0.125,
+    "f1": 0.18666666666666668,
     "precision_status": "DEFINED",
     "recall_status": "DEFINED"
    }
   },
   "by_condition_type": {
    "ELIGIBILITY": {
-    "tp": 2,
-    "fp": 143,
-    "fn": 108,
-    "precision": 0.013793103448275862,
-    "recall": 0.01818181818181818,
-    "f1": 0.01568627450980392,
+    "tp": 9,
+    "fp": 133,
+    "fn": 101,
+    "precision": 0.06338028169014084,
+    "recall": 0.08181818181818182,
+    "f1": 0.07142857142857144,
     "precision_status": "DEFINED",
     "recall_status": "DEFINED"
    },
@@ -77,10 +77,10 @@
     "recall_status": "DEFINED"
    }
   },
-  "partial_count": 28,
+  "partial_count": 19,
   "notice_count": 30,
-  "notices_with_misses": 29,
-  "notices_with_false_positives": 23
+  "notices_with_misses": 30,
+  "notices_with_false_positives": 21
  },
  "by_field": {
   "APPLICANT_ADDRESS": {
@@ -94,12 +94,12 @@
    "recall_status": "DEFINED"
   },
   "APPLICANT_AGE": {
-   "tp": 0,
-   "fp": 1,
-   "fn": 3,
-   "precision": 0.0,
-   "recall": 0.0,
-   "f1": 0.0,
+   "tp": 1,
+   "fp": 0,
+   "fn": 2,
+   "precision": 1.0,
+   "recall": 0.3333333333333333,
+   "f1": 0.5,
    "precision_status": "DEFINED",
    "recall_status": "DEFINED"
   },
@@ -114,12 +114,12 @@
    "recall_status": "DEFINED"
   },
   "BUSINESS_AGE": {
-   "tp": 0,
-   "fp": 9,
-   "fn": 9,
-   "precision": 0.0,
-   "recall": 0.0,
-   "f1": 0.0,
+   "tp": 4,
+   "fp": 5,
+   "fn": 5,
+   "precision": 0.4444444444444444,
+   "recall": 0.4444444444444444,
+   "f1": 0.4444444444444444,
    "precision_status": "DEFINED",
    "recall_status": "DEFINED"
   },
@@ -144,12 +144,12 @@
    "recall_status": "DEFINED"
   },
   "BUSINESS_TYPE": {
-   "tp": 2,
-   "fp": 64,
-   "fn": 30,
-   "precision": 0.030303030303030304,
-   "recall": 0.0625,
-   "f1": 0.04081632653061225,
+   "tp": 3,
+   "fp": 60,
+   "fn": 29,
+   "precision": 0.047619047619047616,
+   "recall": 0.09375,
+   "f1": 0.06315789473684211,
    "precision_status": "DEFINED",
    "recall_status": "DEFINED"
   },
@@ -224,12 +224,12 @@
    "recall_status": "DEFINED"
   },
   "INDUSTRY_REVENUE_SHARE": {
-   "tp": 0,
-   "fp": 1,
-   "fn": 1,
-   "precision": 0.0,
-   "recall": 0.0,
-   "f1": 0.0,
+   "tp": 1,
+   "fp": 0,
+   "fn": 0,
+   "precision": 1.0,
+   "recall": 1.0,
+   "f1": 1.0,
    "precision_status": "DEFINED",
    "recall_status": "DEFINED"
   },
@@ -265,9 +265,9 @@
   }
  },
  "diagnostic_meaning_match_ignoring_evidence": {
-  "matches": 18,
-  "precision": 0.11764705882352941,
-  "recall": 0.15517241379310345,
+  "matches": 22,
+  "precision": 0.14666666666666667,
+  "recall": 0.1896551724137931,
   "note": "근거 위치만 다른 부분 일치를 일치로 본 참고값. 공식 점수 아님"
  },
  "logic": null,
