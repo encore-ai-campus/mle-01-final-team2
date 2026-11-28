@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Depends, Query
 
-from ..core.errors import api_error, not_implemented
+from ..core.errors import api_error, guard_text, not_implemented
 from ..dependencies import get_notice_service, get_response_meta
 from ..dependencies.auth import CurrentUser, get_current_user
 from ..schemas.common import ResponseMeta
@@ -23,6 +23,7 @@ def list_notices(q: str | None = Query(default=None, max_length=100), source: st
                  user: CurrentUser = Depends(get_current_user),
                  service: NoticeService = Depends(get_notice_service), meta: ResponseMeta = Depends(get_response_meta)) -> NoticeListResponse:
     """N-01 공고 목록·검색. 판정은 하지 않는다(판정은 E-01). 페이지는 page/size."""
+    guard_text(q)
     return service.list(q, source, include_closed, page, size).model_copy(update={"meta": meta})
 
 

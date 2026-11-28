@@ -15,3 +15,19 @@ def api_error(status: int, code: str, message: str, **extra) -> HTTPException:
 def not_implemented(spec_id: str, todo: str) -> HTTPException:
     """뼈대만 있는 엔드포인트. 명세 ID(N-01 등)와 할 일을 알려 준다. 구현하면 이 호출을 지운다."""
     return api_error(501, "NOT_IMPLEMENTED", f"{spec_id}는 아직 구현 전입니다.", spec=spec_id, todo=todo)
+
+
+# 판정·목록 API의 자유 입력(검색어)도 챗봇과 같은 입력 가드를 거친다(명세 §2.2·§2.6, 기초 설계 §7.3 #7).
+# 식별 정보·지시 주입만 막는다. 범위 밖·법률 자문 규칙은 검색어에 맞지 않아 쓰지 않는다. 걸린 입력 값은 기록하지 않는다.
+BLOCK_CODES = ("PII_BLOCKED", "INJECTION_BLOCKED")
+
+
+def guard_text(text: str | None) -> None:
+    if not text:
+        return
+    from agent.guards import input_guard
+    from agent.templates import TEXT
+
+    code = input_guard(text)
+    if code in BLOCK_CODES:
+        raise api_error(422, code, TEXT[code])

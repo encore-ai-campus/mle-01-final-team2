@@ -70,5 +70,31 @@ class ChecksApiTest(unittest.TestCase):
         self.assertEqual(c.post("/api/eligibility/clarify", json={}).status_code, 501)  # 되묻기는 아직 뼈대
 
 
+@unittest.skipUnless(HAS_DEPS, "fastapi·httpx·pydantic-settings가 설치되지 않았다(uv sync)")
+class InputGuardTest(unittest.TestCase):
+    """판정·목록 API 검색어도 챗봇과 같은 입력 가드(식별 정보·지시 주입)를 거친다"""
+
+    def test_search_text_is_guarded(self):
+        from fastapi.testclient import TestClient
+
+        from api.core.config import Settings, get_settings
+        from api.dependencies import get_eligibility_service, get_notice_service
+        from api.main import create_app
+
+        def boom(*_a, **_k):
+            raise AssertionError("가드에 걸린 요청은 서비스까지 가면 안 된다")
+
+        app = create_app()
+        app.dependency_overrides[get_settings] = lambda: Settings(_env_file=None, APP_ENV="local", APP_DEV_AUTH=True)
+        app.dependency_overrides[get_eligibility_service] = lambda: SimpleNamespace(judge=boom)
+        app.dependency_overrides[get_notice_service] = lambda: SimpleNamespace(list=boom)
+        c = TestClient(app)
+        r = c.post("/api/eligibility", json={"profile": {}, "question": "제 번호는 010-1234-5678"})
+        self.assertEqual((r.status_code, r.json()["detail"]["error"]["code"]), (422, "PII_BLOCKED"))
+        self.assertNotIn("5678", r.text)
+        r = c.get("/api/notices", params={"q": "123-45-67890"})
+        self.assertEqual((r.status_code, r.json()["detail"]["error"]["code"]), (422, "PII_BLOCKED"))
+
+
 if __name__ == "__main__":
     unittest.main()
