@@ -3,6 +3,7 @@
 // 2026-11-27 회의 결정을 화면에 반영했다: 신청 대상 여러 개(A-5), 사업 개시일·생년월일(A-2·A-4),
 // 중소기업확인서·중소기업 예정(E-5), 상세 입력은 선택. 예비창업자(신규창업)는 확장 기능이라 입력만 받는다.
 import { useEffect, useState } from "react";
+import { apiFetch } from "@/lib/auth";
 
 type Region = { id: string; name: string; full_name: string | null; level: string | null };
 type Cond = { cond_id: string; attribute: string; status: string; strength: string; reason: string; evidence: string; flags: string[] };
@@ -74,7 +75,7 @@ export default function EligibilityPoc() {
   const [open, setOpen] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    fetch("/api/concepts?scheme=region")
+    apiFetch("/api/concepts?scheme=region")
       .then((r) => r.json())
       .then((d) => setRegions((d.items ?? []).filter((r: Region) => r.level !== "GROUP")))
       .catch(() => setRegions([]));
@@ -119,7 +120,7 @@ export default function EligibilityPoc() {
     const body = buildBody();
     setSent(body);
     try {
-      const r = await fetch("/api/eligibility", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+      const r = await apiFetch("/api/eligibility", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
       const d = await r.json().catch(() => null);
       if (!r.ok) {
         setResp(null);

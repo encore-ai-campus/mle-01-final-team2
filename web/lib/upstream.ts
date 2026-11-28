@@ -5,6 +5,12 @@ export function degraded(message = "API 서버에 닿지 않습니다.", status 
   return Response.json({ error: { code: "SERVICE_DEGRADED", message } }, { status });
 }
 
+/** 브라우저가 보낸 로그인 토큰만 넘긴다(다른 헤더·쿠키는 넘기지 않는다). */
+export function authHeader(req: Request): Record<string, string> {
+  const auth = req.headers.get("authorization");
+  return auth ? { authorization: auth } : {};
+}
+
 /** 허용한 쿼리 파라미터만 넘겨 GET을 중계한다. */
 export async function proxyGet(path: string, req: Request, allow: string[]): Promise<Response> {
   const src = new URL(req.url).searchParams;

@@ -82,6 +82,17 @@ $env:EMBED_BASE_URL="http://localhost:8001/v1"; .venv\Scripts\python -m agent.ra
 - 색인 상태: `GET /health/index`(`dense`, 청크 수, 마지막 오류). 색인이 없거나 임베딩이 실패하면 BM25만 쓴다.
 - 근거 채점 기준(실측): 밀집 유사도 0.50 이상(공고를 지목했으면 0.30), BM25만일 때는 질의어 겹침 0.50 이상.
 
+## 로그인 (A-01)
+
+웹(`/login`)이 Supabase Auth로 로그인하고, 우리 API를 부를 때 `Authorization: Bearer <액세스 토큰>`을 붙인다(`web/lib/auth.ts`의 `apiFetch`).
+
+- API는 토큰을 Supabase JWKS(ES256)로 검증한다. 발급자·대상(`authenticated`)·만료를 확인한다(`api/dependencies/auth.py`). 예전 HS256 프로젝트면 `SUPABASE_JWT_SECRET`.
+- 역할은 서버 허용 목록 `ADMIN_EMAILS`·`ADMIN_USER_IDS`로 정한다. 토큰 안의 역할 값은 보지 않는다.
+- `GET /api/auth/config`: 로그인 화면용 공개 설정(Supabase 주소, publishable 키, 켜 둔 로그인 방법). 서비스·비밀 키는 내보내지 않는다.
+- `GET /api/me`: 로그인 사용자·역할·이메일.
+- 로컬 개발(`APP_ENV=local` + `APP_DEV_AUTH=1`)에서 토큰이 없으면 개발용 사용자(`X-Dev-Role: admin`이면 관리자)다. 토큰이 있으면 로컬에서도 검증한다.
+- 오류: 토큰 없음·잘못됨 401, 만료 401 `TOKEN_EXPIRED`, 관리자 아님 403 `ROLE_DENIED`, JWKS에 닿지 않음 503.
+
 ## 요건 검수 큐 (관리자)
 
 `/api/admin/reviews`(`api/routers/reviews.py`)는 REQ_UNPARSED 공고의 요건을 사람이 조건으로 옮기는 검수 API다. 웹 화면은 `/admin/reviews`다. 설계·화면 설명은 `docs/DESIGN_요건검수큐_v0.1.md` §5-1에 있다.
@@ -90,7 +101,7 @@ $env:EMBED_BASE_URL="http://localhost:8001/v1"; .venv\Scripts\python -m agent.ra
 - 큐 파일(`data/reviews/requirements/queue.jsonl`)이 없으면 503이다. 관리자가 아니면 403이다. 로컬 개발에서는 `X-Dev-Role: admin`.
 - ingest 뒤 API를 다시 띄워야 판정에 반영된다.
 
-아직 없는 것: `/admin/runs`·`/admin/reprocess`, 로그인(JWT 검증), what-if(P1), 출력 가드 1회 재생성, Langfuse 기록, 그래프 시각화(지금 웹은 간선 표로만 보여 준다).
+아직 없는 것: `/admin/runs`·`/admin/reprocess`, `profiles`·`audit_logs` 표, what-if(P1), 출력 가드 1회 재생성, Langfuse 기록, 그래프 시각화(지금 웹은 간선 표로만 보여 준다).
 
 ## 실행 (Docker, 권장)
 

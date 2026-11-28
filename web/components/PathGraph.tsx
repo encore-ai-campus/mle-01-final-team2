@@ -4,6 +4,7 @@
 import { useEffect, useState } from "react";
 
 import { errorMessage, s } from "@/lib/labels";
+import { apiFetch } from "@/lib/auth";
 
 type GNode = { id: string; kind: string; label: string; broken?: boolean; user?: boolean; needs_review?: boolean; [k: string]: unknown };
 type GEdge = { from: string; to: string; type: string; highlight?: boolean; broken?: boolean };
@@ -48,7 +49,7 @@ export default function PathGraph({ noticeId, region, reloadKey = 0 }: { noticeI
     const ctl = new AbortController();
     setState({ loading: true, error: "", g: null });
     const qs = new URLSearchParams({ notice_id: noticeId, ...(region ? { region } : {}) });
-    fetch(`/api/graph/path?${qs}`, { signal: ctl.signal })
+    apiFetch(`/api/graph/path?${qs}`, { signal: ctl.signal })
       .then(async (r) => {
         const d = await r.json().catch(() => null);
         if (r.status === 503) setState({ loading: false, error: "그래프 DB가 꺼져 있거나 닿지 않습니다. 판정과 요건 카드는 그래프 없이도 그대로 볼 수 있습니다.", g: null });

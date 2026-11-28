@@ -38,13 +38,25 @@ class Settings(BaseSettings):
     supabase_url: str | None = _env("SUPABASE_URL")
     supabase_key: SecretStr | None = _env("SUPABASE_KEY")
     supabase_secret_key: SecretStr | None = _env("SUPABASE_SECRET_KEY")
-    supabase_jwt_secret: SecretStr | None = _env("SUPABASE_JWT_SECRET")
+    supabase_jwt_secret: SecretStr | None = _env("SUPABASE_JWT_SECRET")  # 예전 HS256 프로젝트만. 지금 프로젝트는 ES256(JWKS)라 비워 둔다
+    # 관리자 허용 목록(명세 §1 "역할은 서버 쪽 허용 목록으로 확인"). 쉼표로 구분. 비우면 관리자 없음
+    admin_emails: str = Field(default="", validation_alias="ADMIN_EMAILS")
+    admin_user_ids: str = Field(default="", validation_alias="ADMIN_USER_IDS")
 
     # RunPod vLLM(OpenAI 호환 엔드포인트). 모델 크기·GPU가 정해지기 전에는 비워 둔다
     vllm_base_url: str | None = _env("VLLM_BASE_URL")  # 예: https://<pod-id>-8000.proxy.runpod.net/v1
     vllm_api_key: SecretStr | None = _env("VLLM_API_KEY")
     vllm_model: str | None = _env("VLLM_MODEL")
     vllm_timeout_s: float = Field(default=60.0, validation_alias="VLLM_TIMEOUT_S")
+
+    @property
+    def auth_configured(self) -> bool:
+        return bool(self.supabase_url)
+
+    def is_admin(self, user_id: str, email: str | None) -> bool:
+        ids = {x.strip() for x in self.admin_user_ids.split(",") if x.strip()}
+        emails = {x.strip().lower() for x in self.admin_emails.split(",") if x.strip()}
+        return user_id in ids or bool(email and email.lower() in emails)
 
     @property
     def llm_configured(self) -> bool:

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import AuthNav from "@/components/AuthNav";
 import { DISCLAIMER } from "@/lib/labels";
 import "./globals.css";
 
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Link href="/">홈</Link>
             <Link href="/notices">공고</Link>
             <Link href="/admin">운영</Link>
+            <AuthNav />
           </nav>
         </header>
         {children}

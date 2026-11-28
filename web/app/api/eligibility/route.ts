@@ -1,5 +1,5 @@
 // 브라우저 → Next /api/eligibility → Python API POST /api/eligibility(규칙 판정, 모델 없음). JSON을 그대로 중계한다.
-import { API_BASE_URL, degraded } from "@/lib/upstream";
+import { API_BASE_URL, authHeader, degraded } from "@/lib/upstream";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -12,7 +12,7 @@ export async function POST(req: Request): Promise<Response> {
   try {
     const r = await fetch(`${API_BASE_URL}/api/eligibility`, {
       method: "POST",
-      headers: { "content-type": "application/json" },
+      headers: { ...authHeader(req), "content-type": "application/json" },
       body,
       cache: "no-store",
       signal: req.signal,
