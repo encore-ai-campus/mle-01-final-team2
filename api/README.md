@@ -7,7 +7,7 @@
 | 폴더 | 역할 | 상태 |
 |---|---|---|
 | `api/core/` | 설정(`config.py`, 기존 `.env` 이름을 읽음) | 있음 |
-| `api/routers/` | 엔드포인트 | 구현: `GET /health`, `/health/llm`, `/health/graph`, `POST /api/eligibility`, `POST /api/chat`(SSE), `GET /api/graph/path`, `GET /api/concepts`, `GET /api/me`(개발용 로그인). 뼈대(501): 공고 N-01~03, 판정 E-02~04, 운영 M-01·M-03, 메타 S-01. 현황표는 [개발 시작 안내 §7](../docs/GUIDE_개발시작_v0.1.md#7-기능별-시작점) |
+| `api/routers/` | 엔드포인트 | 구현: `GET /health`, `/health/llm`, `/health/graph`, `POST /api/eligibility`, `POST /api/chat`(SSE), `GET /api/graph/path`, `GET /api/concepts`, `GET /api/me`, `GET /api/meta`(S-01, 공개), 공고 N-01·N-02, 검수 큐. 뼈대(501): N-03, 판정 E-02~04, 운영 M-01·M-03. 현황표는 [개발 시작 안내 §7](../docs/GUIDE_개발시작_v0.1.md#7-기능별-시작점) |
 | `api/schemas/` | 요청·응답 모델(Pydantic) | 판정·채팅 |
 | `api/services/` | 판정 엔진 어댑터. 판정 로직은 여기 다시 쓰지 않고 엔진을 호출한다 | 엔진 어댑터, 공고 지목 판정 |
 | `api/dependencies/` | FastAPI 의존성(시험에서 가짜로 교체) | 판정 서비스, 모델 라우터, 그래프 저장소, 에이전트 그래프, 로그인·역할(`auth.py`, JWT 검증 전) |

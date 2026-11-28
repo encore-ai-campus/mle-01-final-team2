@@ -13,7 +13,6 @@ STUBS = [
     ("GET", "/api/eligibility/N:1", "E-02", False),
     ("GET", "/api/eligibility/N:1/path", "E-03", False),
     ("POST", "/api/eligibility/clarify", "E-04", False),
-    ("GET", "/api/meta", "S-01", False),
     ("GET", "/api/admin/status", "M-01", True),
     ("POST", "/api/admin/reprocess", "M-03", True),
 ]
@@ -44,8 +43,6 @@ class TestApiSkeleton(unittest.TestCase):
     def test_login_required_without_dev_auth(self):
         c = self.client(APP_ENV="local")
         for method, path, _, _ in STUBS:
-            if path == "/api/meta":  # 공개
-                continue
             with self.subTest(path=path):
                 self.assertEqual(c.request(method, path).status_code, 401)
         for method, path in (("POST", "/api/chat"), ("POST", "/api/eligibility"), ("GET", "/api/graph/path?notice_id=N:1"),

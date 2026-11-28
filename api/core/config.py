@@ -27,6 +27,8 @@ class Settings(BaseSettings):
     cors_origins: list[str] = Field(default=["http://localhost:3000"], validation_alias="APP_CORS_ORIGINS")
     # 로컬 개발용 가짜 로그인(api/dependencies/auth.py). APP_ENV=local일 때만 효과가 있다
     dev_auth: bool = Field(default=False, validation_alias="APP_DEV_AUTH")
+    # 수집 지연 한도(시간). 넘으면 S-01 meta.stale=true. 수집 주기 미정이라 기본 0(끔)
+    stale_hours: float = Field(default=0, validation_alias="APP_STALE_HOURS")
 
     # Neo4j Aura(기존 .env 이름)
     neo4j_uri: str | None = _env("NEO4J_URI")
