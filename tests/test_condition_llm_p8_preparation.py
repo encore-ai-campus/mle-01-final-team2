@@ -7,10 +7,12 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from unittest.mock import patch
 
+from tests.local_data import LLM_P8, needs
 from tools import run_condition_llm_openai_pilot_r2_norm_v2_p8 as p8
 
 
 class P8PreparationTests(unittest.TestCase):
+    @needs(*LLM_P8)
     def test_prepared_run_reuses_four_responses_and_reserves_six_notices(self):
         manifest = p8.read_json(p8.RUN_DIR / "manifest.json")
         ledger = p8.read_json(p8.RUN_DIR / "request_ledger.json")
@@ -22,6 +24,7 @@ class P8PreparationTests(unittest.TestCase):
         self.assertEqual(manifest["cumulative_used"], ledger["used"])
         self.assertEqual(manifest["remaining_request_count"], 6)
 
+    @needs(*LLM_P8)
     def test_126490_technical_gate_passes_while_quality_is_zero(self):
         gate = p8.read_json(p8.RUN_DIR / "notice_03/technical_gate.json")
         report = p8.read_json(p8.RUN_DIR / "notice_03/attribute_replay_v2/replay_report.json")
@@ -34,6 +37,7 @@ class P8PreparationTests(unittest.TestCase):
         self.assertEqual(report["accepted_unreviewed_count"], 0)
         self.assertEqual(report["rejected_count"], 3)
 
+    @needs(*LLM_P8)
     def test_source_response_and_ledger_fingerprints_are_unchanged(self):
         fp = p8.read_json(p8.RUN_DIR / "manifest.json")["fingerprint"]
         self.assertEqual(fp["source_manifest_sha256"], p8.digest(p8.SOURCE_DIR / "manifest.json"))

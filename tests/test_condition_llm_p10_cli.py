@@ -3,10 +3,13 @@ import json
 import subprocess
 import sys
 import unittest
+
+from tests.local_data import LLM_P8, needs
 from tools import run_condition_llm_p10 as p10
 
 
 class P10CLITests(unittest.TestCase):
+    @needs(*LLM_P8)
     def test_fingerprint_is_identical_inside_and_outside_engine_context(self):
         saved = p10.base.read_json(p10.OUT / 'manifest.json')['fingerprint']
         self.assertEqual(saved, p10.fingerprint())
@@ -15,6 +18,7 @@ class P10CLITests(unittest.TestCase):
             self.assertEqual(p10.engine.RUN_ID, p10.RUN_ID)
             self.assertEqual(saved['source_run_id'], p10.SOURCE_RUN_ID)
 
+    @needs(*LLM_P8)
     def test_actual_offline_cli_preflight(self):
         result = subprocess.run([sys.executable, str(p10.Path(p10.__file__)), '--check-execution'],
                                 capture_output=True, text=True, check=True)
@@ -22,6 +26,7 @@ class P10CLITests(unittest.TestCase):
         self.assertEqual(report['status'], 'EXECUTION_PREFLIGHT_PASS')
         self.assertEqual((report['requests_used'], report['remaining']), (10,3))
 
+    @needs(*LLM_P8)
     def test_live_cli_entry_uses_real_batch_and_sdk_with_mock_transport_and_temporary_ledger(self):
         # The child invokes the same main()/argparse entry with live-mode arguments.
         # Only HTTP transport, credential loading, and artifact locations are isolated.

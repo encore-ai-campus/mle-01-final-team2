@@ -1,0 +1,265 @@
+{
+ "measured_at": "2026-11-28",
+ "status": "팀 검토 전",
+ "goldset": "conditions-development-v1.1-20261126-final30",
+ "policy_version": "1.1.0",
+ "predictions": "검수 큐 자동 후보(llm), 28개",
+ "preflight_errors": [
+  "INPUT_HASH_MISMATCH:normalized_snapshot"
+ ],
+ "common": {
+  "micro": {
+   "tp": 1,
+   "fp": 27,
+   "fn": 115,
+   "precision": 0.03571428571428571,
+   "recall": 0.008620689655172414,
+   "f1": 0.013888888888888888,
+   "precision_status": "DEFINED",
+   "recall_status": "DEFINED"
+  },
+  "macro_by_notice": {
+   "precision": 0.041666666666666664,
+   "recall": 0.008333333333333333,
+   "f1": 0.008333333333333333
+  },
+  "by_source": {
+   "BIZINFO": {
+    "tp": 0,
+    "fp": 19,
+    "fn": 60,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "precision_status": "DEFINED",
+    "recall_status": "DEFINED"
+   },
+   "KSTARTUP": {
+    "tp": 1,
+    "fp": 8,
+    "fn": 55,
+    "precision": 0.1111111111111111,
+    "recall": 0.017857142857142856,
+    "f1": 0.03076923076923077,
+    "precision_status": "DEFINED",
+    "recall_status": "DEFINED"
+   }
+  },
+  "by_condition_type": {
+   "ELIGIBILITY": {
+    "tp": 1,
+    "fp": 26,
+    "fn": 109,
+    "precision": 0.037037037037037035,
+    "recall": 0.00909090909090909,
+    "f1": 0.0145985401459854,
+    "precision_status": "DEFINED",
+    "recall_status": "DEFINED"
+   },
+   "EXCLUSION": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 3,
+    "precision": null,
+    "recall": 0.0,
+    "f1": 0.0,
+    "precision_status": "NO_PREDICTIONS",
+    "recall_status": "DEFINED"
+   },
+   "PREFERENCE": {
+    "tp": 0,
+    "fp": 1,
+    "fn": 3,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "precision_status": "DEFINED",
+    "recall_status": "DEFINED"
+   }
+  },
+  "partial_count": 10,
+  "notice_count": 30,
+  "notices_with_misses": 30,
+  "notices_with_false_positives": 6
+ },
+ "by_field": {
+  "APPLICANT_ADDRESS": {
+   "tp": 0,
+   "fp": 0,
+   "fn": 2,
+   "precision": null,
+   "recall": 0.0,
+   "f1": 0.0,
+   "precision_status": "NO_PREDICTIONS",
+   "recall_status": "DEFINED"
+  },
+  "APPLICANT_AGE": {
+   "tp": 0,
+   "fp": 0,
+   "fn": 3,
+   "precision": null,
+   "recall": 0.0,
+   "f1": 0.0,
+   "precision_status": "NO_PREDICTIONS",
+   "recall_status": "DEFINED"
+  },
+  "APPLICANT_TYPE": {
+   "tp": 0,
+   "fp": 9,
+   "fn": 2,
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "precision_status": "DEFINED",
+   "recall_status": "DEFINED"
+  },
+  "BUSINESS_AGE": {
+   "tp": 0,
+   "fp": 3,
+   "fn": 9,
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "precision_status": "DEFINED",
+   "recall_status": "DEFINED"
+  },
+  "BUSINESS_LOCATION": {
+   "tp": 0,
+   "fp": 3,
+   "fn": 14,
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "precision_status": "DEFINED",
+   "recall_status": "DEFINED"
+  },
+  "BUSINESS_REGISTRATION": {
+   "tp": 0,
+   "fp": 1,
+   "fn": 1,
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "precision_status": "DEFINED",
+   "recall_status": "DEFINED"
+  },
+  "BUSINESS_TYPE": {
+   "tp": 1,
+   "fp": 3,
+   "fn": 31,
+   "precision": 0.25,
+   "recall": 0.03125,
+   "f1": 0.05555555555555555,
+   "precision_status": "DEFINED",
+   "recall_status": "DEFINED"
+  },
+  "DOCUMENT_SUBMISSION": {
+   "tp": 0,
+   "fp": 1,
+   "fn": 2,
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "precision_status": "DEFINED",
+   "recall_status": "DEFINED"
+  },
+  "DUPLICATE_OCCUPANCY": {
+   "tp": 0,
+   "fp": 0,
+   "fn": 2,
+   "precision": null,
+   "recall": 0.0,
+   "f1": 0.0,
+   "precision_status": "NO_PREDICTIONS",
+   "recall_status": "DEFINED"
+  },
+  "EMPLOYEE_COUNT": {
+   "tp": 0,
+   "fp": 1,
+   "fn": 1,
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "precision_status": "DEFINED",
+   "recall_status": "DEFINED"
+  },
+  "FOR_PROFIT_STATUS": {
+   "tp": 0,
+   "fp": 0,
+   "fn": 2,
+   "precision": null,
+   "recall": 0.0,
+   "f1": 0.0,
+   "precision_status": "NO_PREDICTIONS",
+   "recall_status": "DEFINED"
+  },
+  "HIRE_STATUS": {
+   "tp": 0,
+   "fp": 0,
+   "fn": 2,
+   "precision": null,
+   "recall": 0.0,
+   "f1": 0.0,
+   "precision_status": "NO_PREDICTIONS",
+   "recall_status": "DEFINED"
+  },
+  "INDUSTRY": {
+   "tp": 0,
+   "fp": 1,
+   "fn": 8,
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "precision_status": "DEFINED",
+   "recall_status": "DEFINED"
+  },
+  "INDUSTRY_REVENUE_SHARE": {
+   "tp": 0,
+   "fp": 1,
+   "fn": 1,
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "precision_status": "DEFINED",
+   "recall_status": "DEFINED"
+  },
+  "LICENSE_STATUS": {
+   "tp": 0,
+   "fp": 1,
+   "fn": 1,
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "precision_status": "DEFINED",
+   "recall_status": "DEFINED"
+  },
+  "QUALITATIVE_QUALIFICATION": {
+   "tp": 0,
+   "fp": 2,
+   "fn": 3,
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "precision_status": "DEFINED",
+   "recall_status": "DEFINED"
+  },
+  "REVENUE_FINANCIAL": {
+   "tp": 0,
+   "fp": 1,
+   "fn": 0,
+   "precision": 0.0,
+   "recall": null,
+   "f1": 0.0,
+   "precision_status": "DEFINED",
+   "recall_status": "NO_GOLD_CONDITIONS"
+  }
+ },
+ "diagnostic_meaning_match_ignoring_evidence": {
+  "matches": 7,
+  "precision": 0.25,
+  "recall": 0.0603448275862069,
+  "note": "근거 위치만 다른 부분 일치를 일치로 본 참고값. 공식 점수 아님"
+ },
+ "logic": null,
+ "safety_errors": {}
+}

@@ -12,6 +12,13 @@ G2B_SNAPSHOT = ROOT / "data" / "normalized" / "v1" / "20261125_g2b"
 API_SAMPLES = ROOT / "api_samples" / "normalized"
 # notices.jsonl만 git(LFS)에 있다(PR #39). 청크·정규화 보고서까지 있어야 하는 시험은 이 묶음으로 건너뛴다
 G2B_FULL = (G2B_SNAPSHOT / "notices.jsonl", G2B_SNAPSHOT / "chunks.jsonl", G2B_SNAPSHOT / "normalization_report.json")
+# LLM 파일럿 실행 기록(실제 OpenAI 호출 결과·요청 장부). 실행한 PC에만 있고 git에는 없다(2026-11-28 확인).
+# 가짜로 만들면 실제 실행 기록처럼 보이므로 만들지 않고, 없으면 해당 시험을 건너뛴다.
+LLM_DEV = ROOT / "data" / "evaluations" / "conditions" / "v1.1" / "20261126" / "development"
+LLM_R2_GATE = LLM_DEV / "llm_pilot_2_5c3_r2" / "lead_retry_gate.json"
+LLM_P8 = (LLM_DEV / "llm_pilot_2_5c3_r2_norm_v2_p8" / "manifest.json", LLM_DEV / "llm_pilot_2_5c3_r2_norm_v2_p8" / "request_ledger.json")
+LLM_RECOVERY = LLM_DEV / "llm_pilot_2_5c3_r2_norm_v2_recovery_v1" / "manifest.json"
+LLM_P12_CLAIM = LLM_DEV / ".llm_pilot_2_5c3_r2_p12_claim.json"
 
 
 def needs(*paths: Path):

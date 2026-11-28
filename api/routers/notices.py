@@ -8,8 +8,9 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, Query
 
 from ..core.errors import api_error, not_implemented
-from ..dependencies import get_notice_service
+from ..dependencies import get_notice_service, get_response_meta
 from ..dependencies.auth import CurrentUser, get_current_user
+from ..schemas.common import ResponseMeta
 from ..schemas.notices import NoticeDetail, NoticeListResponse
 from ..services.notices import NoticeService
 
@@ -20,19 +21,19 @@ router = APIRouter(prefix="/api", tags=["notices"])
 def list_notices(q: str | None = Query(default=None, max_length=100), source: str | None = Query(default=None, max_length=20),
                  include_closed: bool = False, page: int = Query(default=1, ge=1), size: int = Query(default=20, ge=1, le=100),
                  user: CurrentUser = Depends(get_current_user),
-                 service: NoticeService = Depends(get_notice_service)) -> NoticeListResponse:
+                 service: NoticeService = Depends(get_notice_service), meta: ResponseMeta = Depends(get_response_meta)) -> NoticeListResponse:
     """N-01 공고 목록·검색. 판정은 하지 않는다(판정은 E-01). 페이지는 page/size."""
-    return service.list(q, source, include_closed, page, size)
+    return service.list(q, source, include_closed, page, size).model_copy(update={"meta": meta})
 
 
 @router.get("/notices/{notice_id}", response_model=NoticeDetail)
 def get_notice(notice_id: str, user: CurrentUser = Depends(get_current_user),
-               service: NoticeService = Depends(get_notice_service)) -> NoticeDetail:
+               service: NoticeService = Depends(get_notice_service), meta: ResponseMeta = Depends(get_response_meta)) -> NoticeDetail:
     """N-02 공고 상세·원문 구역·첨부 상태. 없으면 404 NOT_FOUND."""
     detail = service.get(notice_id)
     if detail is None:
         raise api_error(404, "NOT_FOUND", "공고를 찾을 수 없습니다.", notice_id=notice_id)
-    return detail
+    return detail.model_copy(update={"meta": meta})
 
 
 @router.get("/notices/{notice_id}/spans")

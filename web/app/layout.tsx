@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import AuthNav from "@/components/AuthNav";
-import { DISCLAIMER } from "@/lib/labels";
+import MetaFooter from "@/components/MetaFooter";
 import "./globals.css";
 
 export const metadata: Metadata = { title: "지원각", description: "정부 지원사업 신청 자격 확인(참고용)" };
@@ -23,9 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </nav>
         </header>
         {children}
-        <footer className="site-foot" role="contentinfo">
-          ※ {DISCLAIMER} 선정을 보장하지 않습니다. 교육용 프로젝트(팀 근거 it).
-        </footer>
+        <MetaFooter />
       </body>
     </html>
   );
