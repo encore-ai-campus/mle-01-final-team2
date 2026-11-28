@@ -1,0 +1,255 @@
+{
+ "measured_at": "2026-11-28",
+ "status": "팀 검토 전",
+ "goldset": "conditions-development-v1.1-20261126-final30",
+ "policy_version": "1.1.0",
+ "predictions": "규칙 추출기 v1 고정 기준선(configs/condition_evaluation_v11_development.json의 condition_predictions)",
+ "preflight_errors": [
+  "INPUT_HASH_MISMATCH:normalized_snapshot"
+ ],
+ "common": {
+  "micro": {
+   "tp": 10,
+   "fp": 36,
+   "fn": 106,
+   "precision": 0.21739130434782608,
+   "recall": 0.08620689655172414,
+   "f1": 0.12345679012345678,
+   "precision_status": "DEFINED",
+   "recall_status": "DEFINED"
+  },
+  "macro_by_notice": {
+   "precision": 0.18939393939393942,
+   "recall": 0.08833333333333333,
+   "f1": 0.1034920634920635
+  },
+  "by_source": {
+   "BIZINFO": {
+    "tp": 3,
+    "fp": 14,
+    "fn": 57,
+    "precision": 0.17647058823529413,
+    "recall": 0.05,
+    "f1": 0.07792207792207792,
+    "precision_status": "DEFINED",
+    "recall_status": "DEFINED"
+   },
+   "KSTARTUP": {
+    "tp": 7,
+    "fp": 22,
+    "fn": 49,
+    "precision": 0.2413793103448276,
+    "recall": 0.125,
+    "f1": 0.16470588235294117,
+    "precision_status": "DEFINED",
+    "recall_status": "DEFINED"
+   }
+  },
+  "by_condition_type": {
+   "ELIGIBILITY": {
+    "tp": 10,
+    "fp": 30,
+    "fn": 100,
+    "precision": 0.25,
+    "recall": 0.09090909090909091,
+    "f1": 0.13333333333333333,
+    "precision_status": "DEFINED",
+    "recall_status": "DEFINED"
+   },
+   "EXCLUSION": {
+    "tp": 0,
+    "fp": 4,
+    "fn": 3,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "precision_status": "DEFINED",
+    "recall_status": "DEFINED"
+   },
+   "PREFERENCE": {
+    "tp": 0,
+    "fp": 2,
+    "fn": 3,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "precision_status": "DEFINED",
+    "recall_status": "DEFINED"
+   }
+  },
+  "partial_count": 18,
+  "notice_count": 30,
+  "notices_with_misses": 30,
+  "notices_with_false_positives": 21
+ },
+ "by_field": {
+  "APPLICANT_ADDRESS": {
+   "tp": 0,
+   "fp": 0,
+   "fn": 2,
+   "precision": null,
+   "recall": 0.0,
+   "f1": 0.0,
+   "precision_status": "NO_PREDICTIONS",
+   "recall_status": "DEFINED"
+  },
+  "APPLICANT_AGE": {
+   "tp": 0,
+   "fp": 0,
+   "fn": 3,
+   "precision": null,
+   "recall": 0.0,
+   "f1": 0.0,
+   "precision_status": "NO_PREDICTIONS",
+   "recall_status": "DEFINED"
+  },
+  "APPLICANT_TYPE": {
+   "tp": 0,
+   "fp": 0,
+   "fn": 2,
+   "precision": null,
+   "recall": 0.0,
+   "f1": 0.0,
+   "precision_status": "NO_PREDICTIONS",
+   "recall_status": "DEFINED"
+  },
+  "BUSINESS_AGE": {
+   "tp": 2,
+   "fp": 4,
+   "fn": 7,
+   "precision": 0.3333333333333333,
+   "recall": 0.2222222222222222,
+   "f1": 0.26666666666666666,
+   "precision_status": "DEFINED",
+   "recall_status": "DEFINED"
+  },
+  "BUSINESS_LOCATION": {
+   "tp": 0,
+   "fp": 13,
+   "fn": 14,
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "precision_status": "DEFINED",
+   "recall_status": "DEFINED"
+  },
+  "BUSINESS_TYPE": {
+   "tp": 8,
+   "fp": 11,
+   "fn": 24,
+   "precision": 0.42105263157894735,
+   "recall": 0.25,
+   "f1": 0.3137254901960784,
+   "precision_status": "DEFINED",
+   "recall_status": "DEFINED"
+  },
+  "DOCUMENT_SUBMISSION": {
+   "tp": 0,
+   "fp": 0,
+   "fn": 2,
+   "precision": null,
+   "recall": 0.0,
+   "f1": 0.0,
+   "precision_status": "NO_PREDICTIONS",
+   "recall_status": "DEFINED"
+  },
+  "DUPLICATE_OCCUPANCY": {
+   "tp": 0,
+   "fp": 0,
+   "fn": 2,
+   "precision": null,
+   "recall": 0.0,
+   "f1": 0.0,
+   "precision_status": "NO_PREDICTIONS",
+   "recall_status": "DEFINED"
+  },
+  "FOR_PROFIT_STATUS": {
+   "tp": 0,
+   "fp": 0,
+   "fn": 2,
+   "precision": null,
+   "recall": 0.0,
+   "f1": 0.0,
+   "precision_status": "NO_PREDICTIONS",
+   "recall_status": "DEFINED"
+  },
+  "HIRE_STATUS": {
+   "tp": 0,
+   "fp": 0,
+   "fn": 2,
+   "precision": null,
+   "recall": 0.0,
+   "f1": 0.0,
+   "precision_status": "NO_PREDICTIONS",
+   "recall_status": "DEFINED"
+  },
+  "INDUSTRY": {
+   "tp": 0,
+   "fp": 0,
+   "fn": 8,
+   "precision": null,
+   "recall": 0.0,
+   "f1": 0.0,
+   "precision_status": "NO_PREDICTIONS",
+   "recall_status": "DEFINED"
+  },
+  "None": {
+   "tp": 0,
+   "fp": 6,
+   "fn": 1,
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "precision_status": "DEFINED",
+   "recall_status": "DEFINED"
+  },
+  "QUALITATIVE_QUALIFICATION": {
+   "tp": 0,
+   "fp": 0,
+   "fn": 3,
+   "precision": null,
+   "recall": 0.0,
+   "f1": 0.0,
+   "precision_status": "NO_PREDICTIONS",
+   "recall_status": "DEFINED"
+  },
+  "REPRESENTATIVE_AGE": {
+   "tp": 0,
+   "fp": 1,
+   "fn": 0,
+   "precision": 0.0,
+   "recall": null,
+   "f1": 0.0,
+   "precision_status": "DEFINED",
+   "recall_status": "NO_GOLD_CONDITIONS"
+  },
+  "REVENUE_FINANCIAL": {
+   "tp": 0,
+   "fp": 1,
+   "fn": 0,
+   "precision": 0.0,
+   "recall": null,
+   "f1": 0.0,
+   "precision_status": "DEFINED",
+   "recall_status": "NO_GOLD_CONDITIONS"
+  }
+ },
+ "diagnostic_meaning_match_ignoring_evidence": {
+  "matches": 19,
+  "precision": 0.41304347826086957,
+  "recall": 0.16379310344827586,
+  "note": "근거 위치만 다른 부분 일치를 일치로 본 참고값. 공식 점수 아님"
+ },
+ "logic": {
+  "relations": {
+   "tp": 2,
+   "fp": 31,
+   "fn": 119
+  },
+  "operator_correct_groups": 1,
+  "gold_groups": 44,
+  "notice_structure_exact": 1,
+  "overcautious_unresolved": 11
+ },
+ "safety_errors": {}
+}

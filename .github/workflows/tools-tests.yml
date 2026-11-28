@@ -46,7 +46,7 @@ jobs:
       - name: 문법 오류(전체)
         run: ruff check . --select E9
       - name: 확실한 오류(그래프 도구)
-        run: ruff check tools/graphrag tools/check_graph_neo4j.py tools/sync_graph_neo4j.py tools/test_graphrag.py tools/test_graph_ops.py tools/test_sync_graph.py tools/test_compare_path_impact.py tools/test_compare_schema_change.py tools/test_measure_service_latency.py tools/measure_service_latency.py tools/test_project_deps.py api agent deploy tools/requirement_review_queue.py tests/test_orchestration.py tests/test_requirement_review_queue.py tests/test_review_api.py tests/test_auth.py tests/test_deploy_check.py tests/test_api_skeleton.py tests/local_data.py --select F,E9
+        run: ruff check tools/graphrag tools/check_graph_neo4j.py tools/sync_graph_neo4j.py tools/test_graphrag.py tools/test_graph_ops.py tools/test_sync_graph.py tools/test_compare_path_impact.py tools/test_compare_schema_change.py tools/test_measure_service_latency.py tools/measure_service_latency.py tools/test_project_deps.py api agent deploy tools/requirement_review_queue.py tests/test_orchestration.py tests/test_requirement_review_queue.py tests/test_review_api.py tests/test_auth.py tests/test_deploy_check.py tests/test_meta.py tests/test_api_skeleton.py tools/condition_baseline_v11.py tests/local_data.py --select F,E9
       - name: 도구 시험
         run: |
           for t in tools/test_*.py; do
@@ -55,4 +55,4 @@ jobs:
           done
       - name: 서버·에이전트·조건 시험(로컬 데이터 없이 도는 것)
         run: |
-          python -m unittest tests.test_api tests.test_api_skeleton tests.test_agent tests.test_orchestration tests.test_requirement_review_queue tests.test_review_api tests.test_auth tests.test_deploy_check tests.test_condition_evaluation tests.test_condition_extractor tests.test_g2b_normalization tests.test_normalize_support_data
+          python -m unittest tests.test_api tests.test_api_skeleton tests.test_agent tests.test_orchestration tests.test_requirement_review_queue tests.test_review_api tests.test_auth tests.test_deploy_check tests.test_meta tests.test_condition_evaluation tests.test_condition_extractor tests.test_g2b_normalization tests.test_normalize_support_data
