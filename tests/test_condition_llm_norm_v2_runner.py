@@ -11,6 +11,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from unittest.mock import patch
 
+from tests.local_data import LLM_R2_GATE, needs
 from tools import extract_condition_candidates_llm as llm
 from tools import run_condition_llm_openai_pilot_r2 as parent_runner
 from tools import run_condition_llm_openai_pilot_r2_norm_v2 as runner
@@ -67,6 +68,7 @@ class AttributeNormalizationV2Tests(unittest.TestCase):
 
 
 class ChildLineageAndBudgetTests(unittest.TestCase):
+    @needs(LLM_R2_GATE)  # 실행 PC의 r2 장부(사용 3건) 기준 시험
     def test_parent_r2_artifacts_remain_unchanged_and_blocked(self):
         paths = [runner.PARENT_MANIFEST, runner.PARENT_LEDGER, runner.PARENT_GATE, runner.PARENT_RAW]
         before = {p: runner.digest(p) for p in paths}
@@ -82,6 +84,7 @@ class ChildLineageAndBudgetTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "R2_CODE_CHANGE_RECORD_MISMATCH"):
             parent_runner.assert_same_run(runner.PARENT_MANIFEST, fp)
 
+    @needs(LLM_R2_GATE)  # 실행 PC의 r2 장부(사용 3건) 기준 시험
     def test_parent_usage_is_inherited_without_new_budget(self):
         parent = runner.read_json(runner.PARENT_LEDGER)
         inherited = {"limit": 12, "used": parent["used"], "parent_used": 3,
@@ -142,6 +145,7 @@ class ChildLineageAndBudgetTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "CHILD_FINGERPRINT_CHANGED"):
             runner.validate_saved_fingerprint({"extractor_sha256": "old"}, {"extractor_sha256": "new"})
 
+    @needs(LLM_R2_GATE)  # 실행 PC의 r2 장부(사용 3건) 기준 시험
     def test_preflight_runs_fourteen_checks_without_api(self):
         with patch.object(llm, "call_and_parse", side_effect=AssertionError("API path called")), \
                 patch.object(llm, "run_pilot", side_effect=AssertionError("live runner called")):

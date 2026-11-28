@@ -6,6 +6,8 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
+from .common import ResponseMeta
+
 Verdict = Literal["ELIGIBLE", "NOT_ELIGIBLE", "NEEDS_CHECK"]
 CondStatus = Literal["SATISFIED", "UNSATISFIED", "UNKNOWN"]
 
@@ -74,3 +76,4 @@ class EligibilityResponse(BaseModel):
     counts: dict[str, int]
     results: list[NoticeVerdict]
     input_layer: str = Field(description="판정에 쓴 데이터 층(cleaned / parsed)")
+    meta: ResponseMeta | None = Field(default=None, description="명세 §2.1 공통 meta(수집 시각·버전·면책 문구)")

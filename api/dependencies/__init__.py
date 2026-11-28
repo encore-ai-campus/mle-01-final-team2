@@ -16,6 +16,27 @@ def get_eligibility_service() -> EligibilityService:
 
 
 @lru_cache
+def data_snapshot() -> str | None:
+    """정리층 스냅샷 이름(data/cleaned/LATEST). 없으면 None."""
+    from tools.graphrag import cleaned
+
+    if not cleaned.available():
+        return None
+    return (cleaned.CLEANED / "LATEST").read_text().strip()
+
+
+def get_response_meta(service: EligibilityService = Depends(get_eligibility_service)):
+    """응답 공통 meta(명세 §2.1). 판정·공고 응답에 붙인다."""
+    from ..schemas.common import ResponseMeta
+    from ..services.meta import response_meta
+
+    settings = get_settings()
+    engine = getattr(service, "_engine", None)
+    return ResponseMeta(**response_meta(engine.notices if engine is not None else [], stale_hours=settings.stale_hours,
+                                        model=settings.vllm_model, data_snapshot=data_snapshot()))
+
+
+@lru_cache
 def get_notice_service() -> NoticeService:
     """공고 목록(N-01). 판정 서비스와 같은 엔진을 써서 데이터를 한 번만 읽는다."""
     return NoticeService(get_eligibility_service()._engine)

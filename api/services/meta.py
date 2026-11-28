@@ -80,9 +80,22 @@ def data_as_of(notices) -> dict[str, str]:
     return {s: dt.astimezone(KST).isoformat() for s, dt in sorted(latest.items())}
 
 
+_AS_OF_CACHE: dict[tuple[int, int], dict[str, str]] = {}
+
+
+def response_meta(notices, *, stale_hours: float = 0, model: str | None = None, data_snapshot: str | None = None) -> dict:
+    """응답 공통 meta(§2.1). 출처별 수집 시각은 같은 공고 목록이면 다시 세지 않는다."""
+    key = (id(notices), len(notices))
+    if key not in _AS_OF_CACHE:
+        _AS_OF_CACHE.clear()
+        _AS_OF_CACHE[key] = data_as_of(notices)
+    full = build_meta(notices, stale_hours=stale_hours, model=model, data_snapshot=data_snapshot, as_of=_AS_OF_CACHE[key])
+    return {k: full[k] for k in ("data_as_of", "stale", "versions", "disclaimer")}
+
+
 def build_meta(notices, *, stale_hours: float = 0, model: str | None = None, data_snapshot: str | None = None,
-               now: datetime | None = None) -> dict:
-    as_of = data_as_of(notices)
+               now: datetime | None = None, as_of: dict[str, str] | None = None) -> dict:
+    as_of = data_as_of(notices) if as_of is None else as_of
     now = now or datetime.now(KST)
     stale = bool(stale_hours) and any(now - datetime.fromisoformat(v) > timedelta(hours=stale_hours) for v in as_of.values())
     return {

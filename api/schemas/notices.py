@@ -7,6 +7,8 @@ from __future__ import annotations
 
 from pydantic import BaseModel, Field
 
+from .common import ResponseMeta
+
 
 class NoticeSummary(BaseModel):
     """목록 카드 1장."""
@@ -27,6 +29,7 @@ class NoticeListResponse(BaseModel):
     page: int
     size: int
     total: int = Field(description="필터를 적용한 뒤 전체 공고 수")
+    meta: ResponseMeta | None = Field(default=None, description="명세 §2.1 공통 meta")
 
 class NoticeSection(BaseModel):
     """원문 구역 1개(정리층 청크). N-03 근거 위치가 source_span을 쓴다."""
@@ -40,6 +43,8 @@ class NoticeSection(BaseModel):
 
 class NoticeDetail(NoticeSummary):
     """N-02 공고 상세. NoticeSummary를 물려받고 원문을 더한다."""
+
+    meta: ResponseMeta | None = Field(default=None, description="명세 §2.1 공통 meta")
 
     application_start: str | None = Field(default=None, description="접수 시작일")
     period_status: str | None = Field(default=None, description="OPEN_WITH_DEADLINE 등")

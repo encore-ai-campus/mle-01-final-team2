@@ -68,5 +68,33 @@ class MetaApiTest(unittest.TestCase):
         self.assertEqual({s["source"] for s in body["sources"]}, {"BIZINFO", "KSTARTUP", "G2B"})
 
 
+    def test_notice_and_eligibility_responses_carry_meta(self):
+        from fastapi.testclient import TestClient
+
+        from api.core.config import Settings, get_settings
+        from api.dependencies import get_eligibility_service, get_notice_service
+        from api.dependencies.auth import CurrentUser, get_current_user
+        from api.main import create_app
+        from api.schemas.eligibility import EligibilityResponse
+        from api.schemas.notices import NoticeListResponse
+
+        engine = SimpleNamespace(notices=NOTICES)
+        svc = SimpleNamespace(_engine=engine, judge=lambda req: EligibilityResponse(evaluated=0, candidates=0, counts={}, results=[],
+                                                                                    input_layer="cleaned"))
+        notices = SimpleNamespace(list=lambda *a: NoticeListResponse(items=[], page=1, size=20, total=0))
+        app = create_app()
+        app.dependency_overrides[get_settings] = lambda: Settings(_env_file=None)
+        app.dependency_overrides[get_eligibility_service] = lambda: svc
+        app.dependency_overrides[get_notice_service] = lambda: notices
+        app.dependency_overrides[get_current_user] = lambda: CurrentUser("u", "user")
+        c = TestClient(app)
+        for r in (c.get("/api/notices"), c.post("/api/eligibility", json={"profile": {}})):
+            with self.subTest(path=r.request.url.path):
+                self.assertEqual(r.status_code, 200)
+                meta = r.json()["meta"]
+                self.assertEqual(meta["data_as_of"]["BIZINFO"], "2026-11-24T09:16:01+09:00")
+                self.assertEqual(set(meta), {"data_as_of", "stale", "versions", "disclaimer"})
+
+
 if __name__ == "__main__":
     unittest.main()

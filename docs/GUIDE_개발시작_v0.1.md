@@ -115,7 +115,7 @@ CI(`.github/workflows/tools-tests.yml`)는 PR마다 `tools/test_*.py`와 데이�
 | 챗봇 | H-01 `POST /api/chat`(SSE) | P0 | `api/routers/chat.py`, `agent/` | 홈(`web/app/page.tsx`) | 모델 대역 서버 | 있음(대역 모델) |
 | 운영 현황 | M-01 `GET /api/admin/status` | P0 | `api/routers/admin.py` | `web/app/admin/page.tsx` | 수집 보고서, `/health/*` | 뼈대 |
 | 실패 건 재처리 | M-03 `POST /api/admin/reprocess` | P0 | `api/routers/admin.py` | 운영자 화면 | 첨부 추출 보고서 | 뼈대 |
-| 기준 시각·버전·면책 | S-01 `GET /api/meta` | P0 | `api/routers/meta.py` | 모든 화면 배지 | 수집 manifest | 구현(구간표는 API-9 확정 전 임시 기본값, 수집 시각은 공고 `fetched_at`) |
+| 기준 시각·버전·면책 | S-01 `GET /api/meta` | P0 | `api/routers/meta.py` | 모든 화면 배지 | 수집 manifest | 구현(구간표는 API-9 확정 전 임시 기본값, 수집 시각은 공고 `fetched_at`). 웹 바닥글에 수집 시각·면책 문구 표시 |
 | P1 기능(동의·내 조건·대화 이력·신청 문서·what-if·검수) | 명세 §5~§9 | P1 | 새 라우터 파일 | | | 없음 |
 
 오류 응답은 지금 `{"detail": {"error": {"code", "message"}}}` 모양이다(`api/core/errors.py`). 명세 §2.1의 공통 틀(`data`·`outcome`·`reason_codes`·`meta`)로 바꾸는 일은 따로 정해서 한 번에 한다.

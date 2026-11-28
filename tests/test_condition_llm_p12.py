@@ -9,10 +9,14 @@ from contextlib import contextmanager
 from pathlib import Path
 from unittest.mock import patch
 import httpx
+
+from tests.local_data import LLM_P12_CLAIM, needs
 from tools import run_condition_llm_p12 as p
 
 @contextmanager
 def isolated():
+    if not p.CLAIM.exists():  # 실행 PC에만 있는 p12 claim(tests/local_data.py)
+        raise unittest.SkipTest(f'로컬 전용 데이터 없음: {p.CLAIM.name}')
     with tempfile.TemporaryDirectory() as tmp:
         root=Path(tmp);out=root/'run';claim=root/'claim.json'
         shutil.copytree(p.OUT,out);shutil.copy2(p.CLAIM,claim)
@@ -86,6 +90,7 @@ class P12Tests(unittest.TestCase):
             with patch.object(sys,'argv',['p12','--check-execution']),self.assertRaisesRegex(RuntimeError,'CLAIM'):
                 p.main()
 
+    @needs(LLM_P12_CLAIM)
     def test_real_subprocess_cli_preflight(self):
         # CLI checks read immutable real inputs; all output/ledger locations are temporary.
         script='''

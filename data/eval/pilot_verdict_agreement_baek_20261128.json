@@ -1,0 +1,88 @@
+{
+ "measured_at": "2026-11-28",
+ "status": "팀 검토 전",
+ "labeler": "baek",
+ "rule_today": "2026-11-24",
+ "notices_labeled": 10,
+ "notices_compared": 6,
+ "notices_missing_in_engine": [
+  "KSTARTUP:171725",
+  "KSTARTUP:172947",
+  "KSTARTUP:173896",
+  "KSTARTUP:174935"
+ ],
+ "judgments": 30,
+ "agreement": 0.6333333333333333,
+ "kappa": 0.0,
+ "confusion_human_to_service": {
+  "ELIGIBLE": {
+   "ELIGIBLE": 0,
+   "NOT_ELIGIBLE": 0,
+   "NEEDS_CHECK": 0
+  },
+  "NOT_ELIGIBLE": {
+   "ELIGIBLE": 0,
+   "NOT_ELIGIBLE": 0,
+   "NEEDS_CHECK": 11
+  },
+  "NEEDS_CHECK": {
+   "ELIGIBLE": 0,
+   "NOT_ELIGIBLE": 0,
+   "NEEDS_CHECK": 19
+  }
+ },
+ "unsafe_eligible": 0,
+ "missed_opportunity": 0,
+ "human_decided_service_needs_check": 11,
+ "human_decided": 11,
+ "per_notice": {
+  "BIZINFO:PBLN_000000000121811": {
+   "text_requirements": "unparsed",
+   "judgments": 5,
+   "agree": 3,
+   "service": {
+    "NEEDS_CHECK": 5
+   }
+  },
+  "BIZINFO:PBLN_000000000125770": {
+   "text_requirements": "unparsed",
+   "judgments": 5,
+   "agree": 3,
+   "service": {
+    "NEEDS_CHECK": 5
+   }
+  },
+  "BIZINFO:PBLN_000000000127745": {
+   "text_requirements": "unparsed",
+   "judgments": 5,
+   "agree": 4,
+   "service": {
+    "NEEDS_CHECK": 5
+   }
+  },
+  "BIZINFO:PBLN_000000000127893": {
+   "text_requirements": "unparsed",
+   "judgments": 5,
+   "agree": 3,
+   "service": {
+    "NEEDS_CHECK": 5
+   }
+  },
+  "BIZINFO:PBLN_000000000128017": {
+   "text_requirements": "unparsed",
+   "judgments": 5,
+   "agree": 3,
+   "service": {
+    "NEEDS_CHECK": 5
+   }
+  },
+  "KSTARTUP:177107": {
+   "text_requirements": "unparsed",
+   "judgments": 5,
+   "agree": 3,
+   "service": {
+    "NEEDS_CHECK": 5
+   }
+  }
+ }
+}

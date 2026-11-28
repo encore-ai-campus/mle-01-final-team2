@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import unittest
 
+from tests.local_data import LLM_R2_GATE, LLM_RECOVERY, needs
 from tools import run_condition_llm_openai_pilot_r2_norm_v2 as base
 from tools import run_condition_llm_openai_pilot_r2_norm_v2_recovery as recovery
 
 
 class RecoveryPreparationTests(unittest.TestCase):
+    @needs(LLM_RECOVERY)
     def test_p7_branch_keeps_approved_limit_and_preserves_zero_candidate_block(self):
         manifest = recovery.read_json(recovery.RUN_DIR / "manifest.json")
         ledger = recovery.read_json(recovery.RUN_DIR / "request_ledger.json")
@@ -18,6 +20,7 @@ class RecoveryPreparationTests(unittest.TestCase):
         self.assertEqual(ledger["used"], 7)
         self.assertEqual(len(ledger["recovery_attempts"]), 2)
 
+    @needs(LLM_RECOVERY)
     def test_existing_success_and_failure_are_referenced_without_changing_source(self):
         manifest = recovery.read_json(recovery.RUN_DIR / "manifest.json")
         source_manifest = recovery.read_json(recovery.SOURCE_DIR / "manifest.json")
@@ -44,6 +47,7 @@ class RecoveryPreparationTests(unittest.TestCase):
                 self.assertFalse(budget.consume())
             self.assertEqual(recovery.read_json(path)["used"], 7)
 
+    @needs(LLM_R2_GATE)
     def test_old_blocked_run_and_parent_gate_are_unchanged(self):
         before = {path: base.digest(path) for path in (base.PARENT_MANIFEST, base.PARENT_LEDGER,
                                                         base.PARENT_GATE, recovery.SOURCE_DIR / "manifest.json",
