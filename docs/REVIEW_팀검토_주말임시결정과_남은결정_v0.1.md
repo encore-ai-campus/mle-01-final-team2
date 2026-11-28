@@ -15,7 +15,7 @@
 
 | 구분 | 건수 | 가장 먼저 볼 것 |
 |---|---:|---|
-| 1부 임시 결정 | 9 | U-1(서비스 판정 변화 906쌍), U-5·U-6(새 개념 15개) |
+| 1부 임시 결정 | 10 | U-1(서비스 판정 변화 906쌍), U-5·U-6(새 개념 15개) |
 | 2부 판정 규칙 보류 | 4 | B-4(용어 정규화가 끝나 이제 정할 수 있음) |
 | 2부 그래프·온톨로지 | 7 | G-1(그래프 후보 검색 채택), G-3(중소기업 판정 기준 적재) |
 | 2부 API | 11 | API-2(판정 E-02/E-03 구현의 선행 조건) |
@@ -111,6 +111,16 @@
 | 되돌리는 법 | U-5~U-8을 되돌린 파일로 `--apply --prune`(스냅숏 `before_concept_aliases.json`, 로컬 전용) |
 | 결정 | |
 
+### U-10. 로컬 시험에서 설명 역할에 외부 모델(gpt-6-luna) 허용
+
+| 항목 | 내용 |
+|---|---|
+| 결정 | RunPod vLLM(Qwen) 전까지 로컬 docker 구성은 LLM 게이트웨이(`deploy/llm_gateway`)가 외부 OpenAI 모델 gpt-6-luna(설명)·text-embedding-3-small(검색 임베딩)을 부른다. `VLLM_DATA_POLICY=external`, `LLM_ALLOW_EXTERNAL_ANSWER=1`로 설명 역할의 외부 모델 금지를 로컬에서만 푼다. 사용자 결정(2026-11-28, 팀 검토 전) |
+| 영향 | 보내는 것은 질문 문장·조건별 평가 결과·공개 공고 원문이다. 사용자 조건 원값은 보내지 않고, 입력 가드가 번호·연락처를 먼저 막는다. 배포(AWS·RunPod)는 `self_hosted`로 두고 허용을 비운다 |
+| 근거 | `deploy/docker-compose.yml` 머리말, `api/README.md` "모델 호출 방식", `agent/llm/router.py`(`allow_external_roles`) |
+| 되돌리는 법 | `LLM_ALLOW_EXTERNAL_ANSWER`를 비우면 설명은 규칙 판정·템플릿으로 내려간다(`SERVICE_DEGRADED`) |
+| 결정 | |
+
 ---
 
 ## 2부. 아직 팀 결정이 필요한 것
@@ -175,7 +185,7 @@
 | 법령 정의 검수 | 22/23 확인, 1개 미기재 | `docs/ontology/REVIEW_법령정의_검수시트_v0.1.md` |
 | KSIC 대분류 이름·코드 대조 | 미대조 | U-5의 C·M 2개 |
 | AWS 서비스 지연 측정 | 미실행 | API 서버에서 `python tools/measure_service_latency.py --label aws` |
-| 이번 주말 변경 공유 | 미공유 | U-1~U-9를 팀원에게 알리고 이 문서 결정 칸을 채운다 |
+| 이번 주말 변경 공유 | 미공유 | U-1~U-10을 팀원에게 알리고 이 문서 결정 칸을 채운다 |
 
 ## 변경 이력
 

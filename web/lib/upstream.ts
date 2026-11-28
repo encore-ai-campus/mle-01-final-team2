@@ -14,7 +14,13 @@ export async function proxyGet(path: string, req: Request, allow: string[]): Pro
     if (v) qs.set(k, v);
   }
   try {
-    const r = await fetch(`${API_BASE_URL}${path}${qs.size ? `?${qs}` : ""}`, { cache: "no-store", signal: req.signal });
+    // 로그인 토큰이 있으면 그대로 넘긴다(공고 상세 등 로그인 필요 API). 다른 헤더는 넘기지 않는다
+    const auth = req.headers.get("authorization");
+    const r = await fetch(`${API_BASE_URL}${path}${qs.size ? `?${qs}` : ""}`, {
+      cache: "no-store",
+      signal: req.signal,
+      headers: auth ? { authorization: auth } : undefined,
+    });
     return new Response(r.body, { status: r.status, headers: { "content-type": r.headers.get("content-type") ?? "application/json" } });
   } catch {
     return degraded();

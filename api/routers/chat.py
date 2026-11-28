@@ -1,4 +1,4 @@
-"""POST /api/chat (SSE): 질문·조건 → 에이전트 → 이벤트 스트림.
+"""POST /api/chat (SSE): 질문·조건 → 오케스트레이터(자격 판정·공고 질의·용어 정의 에이전트) → 이벤트 스트림.
 
 판정·요건 이벤트가 설명 토큰보다 먼저 나간다. 질문 본문·조건 값은 로그에 남기지 않는다.
 """
@@ -10,7 +10,7 @@ import logging
 from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
 
-from ..dependencies import get_agent_graph
+from ..dependencies import get_orchestrator
 from ..schemas.chat import ChatRequest
 
 router = APIRouter(prefix="/api", tags=["chat"])
@@ -22,8 +22,8 @@ def sse(ev: dict) -> str:
 
 
 @router.post("/chat")
-async def chat(req: ChatRequest, graph=Depends(get_agent_graph)) -> StreamingResponse:
-    from agent.graph import run_events
+async def chat(req: ChatRequest, graph=Depends(get_orchestrator)) -> StreamingResponse:
+    from agent.orchestrator import run_orchestrated as run_events
 
     async def stream():
         try:

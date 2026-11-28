@@ -57,7 +57,8 @@ def sentence_guard(sentence: str, known_ids: set[str], any_eligible: bool) -> st
     return None
 
 
-_END = re.compile(r"(?<=[.!?。])\s+")
+# 문장 끝 뒤에 오는 인용 표시([id#…])는 앞 문장에 붙이고, 인용 표시 뒤에서 끊는다
+_END = re.compile(r"(?<=[.!?。])\s+(?!\s|\[[^\[\]\s]+#)|(?<=\])\s+(?!\s)")
 
 
 def split_sentences(buffer: str) -> tuple[list[str], str]:

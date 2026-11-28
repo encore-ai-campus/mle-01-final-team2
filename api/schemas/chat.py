@@ -1,9 +1,11 @@
 """POST /api/chat 요청. 응답은 SSE 이벤트 스트림이다(기초 설계서 §8 스트리밍).
 
-이벤트: ask, verdict, requirement, path, token, banner, usage, done, error.
+이벤트: route, agent, ask, verdict, requirement, path, definition, retrieval, citation, token, banner, usage, done, error.
 각 이벤트는 `event: <종류>` 줄과 `data: {"type": "<종류>", ...}` 줄로 보낸다.
 """
 from __future__ import annotations
+
+from typing import Literal
 
 from pydantic import BaseModel, Field
 
@@ -17,3 +19,5 @@ class ChatRequest(BaseModel):
     top: int = Field(default=5, ge=1, le=20)
     include_closed: bool = False
     ask_count: int = Field(default=0, ge=0, le=2, description="이미 되물은 횟수(최대 2회)")
+    agent: Literal["auto", "eligibility", "notice_qa", "definition"] = Field(
+        default="auto", description="auto면 오케스트레이터가 고른다. 아니면 그 에이전트만 실행")

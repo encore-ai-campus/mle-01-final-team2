@@ -42,7 +42,9 @@ class Engine:
             out.append(evaluate_notice(n, prof, self.rg, opts, today=date.fromisoformat(TODAY)))
         return out
 
-    def query(self, prof: Profile, question: str = "", top: int = 10, include_closed: bool = False, source: str | None = None) -> dict:
+    def query(self, prof: Profile, question: str = "", top: int = 10, include_closed: bool = False, source: str | None = None,
+              search=None) -> dict:
+        """search: (질문, 허용 공고 id 집합, top) -> [(점수, 청크)]. 비우면 BM25. 하이브리드(BM25+벡터 RRF)는 agent.rag가 준다."""
         ev = self.evaluate_all(prof, include_closed)
         if source:
             ev = [e for e in ev if self.by_id[e["notice_id"]]["source"] == source]
@@ -50,7 +52,7 @@ class Engine:
         cand = {e["notice_id"]: e for e in ev if e["verdict"] != NOT_ELIGIBLE}
         ranked: list[dict] = []
         if question.strip():
-            hits = self.bm25.search(question, set(cand), top=top * 20)
+            hits = (search or self.bm25.search)(question, set(cand), top=top * 20)
             best: dict[str, tuple[float, list]] = {}
             for s, c in hits:
                 b = best.setdefault(c["notice_id"], (s, []))

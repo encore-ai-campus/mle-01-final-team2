@@ -376,8 +376,13 @@ class TestChatApi(unittest.TestCase):
             self.assertEqual(r.status_code, 200)
             self.assertTrue(r.headers["content-type"].startswith("text/event-stream"))
             events = [json.loads(line[6:]) for line in r.text.splitlines() if line.startswith("data: ")]
-            self.assertEqual(events[0]["type"], "verdict")
+            kinds = [e["type"] for e in events]
+            # 오케스트레이터: 계획(route) → 에이전트 시작 → 판정 → … → 응답 전체의 done 한 번
+            self.assertEqual(kinds[:3], ["route", "agent", "verdict"])
+            self.assertEqual(events[0]["plan"], ["eligibility"])
+            self.assertEqual(kinds.count("done"), 1)
             self.assertEqual(events[-1]["type"], "done")
+            self.assertEqual(events[-1]["agents"], ["eligibility"])
             self.assertIn("event: token", r.text)
             self.assertEqual(client.post("/api/chat", json={"question": ""}).status_code, 422)
 

@@ -1,15 +1,40 @@
-# 로컬 개발용 구성: 웹(Next.js) + API + vLLM 대역 서버. 저장소 루트에서 실행한다. 웹: http://localhost:3000
-#   docker compose -f deploy/docker-compose.yml up --build
+# 로컬 개발용 구성: 웹(Next.js) + API(FastAPI, AWS 서버와 같은 이미지) + LLM 서버(vLLM 자리). 저장소 루트에서 실행한다.
+#   docker compose -f deploy/docker-compose.yml up --build        웹: http://localhost:3000
 #
-# - api는 VLLM_BASE_URL=http://llm:8001/v1 로 대역 서버를 OpenAI 호환 API로 부른다.
-#   RunPod vLLM이 준비되면 llm 서비스를 빼고 .env의 VLLM_BASE_URL·VLLM_MODEL·VLLM_API_KEY만 RunPod 값으로 둔다.
+# - llm: RunPod vLLM(Qwen) 자리의 **LLM 게이트웨이**. vLLM과 같은 OpenAI 호환 API(/v1/chat/completions, /v1/embeddings)를 열고
+#   뒤에서 외부 OpenAI 모델 gpt-6-luna(설명)와 text-embedding-3-small(검색 임베딩)을 부른다. 키는 .env의 OPEN_API를 쓴다.
+#   사용자 결정(2026-11-28, 로컬 시험 전용, 팀 검토 전): 외부 모델이므로 VLLM_DATA_POLICY=external,
+#   LLM_ALLOW_EXTERNAL_ANSWER=1로 설명 역할에 외부 모델을 허용한다. 보내는 것은 질문 문장·조건별 평가 결과·공개 공고 원문이며
+#   사용자 조건 원값은 보내지 않는다(입력 가드가 번호·연락처를 먼저 막는다).
+# - RunPod vLLM이 뜨면 llm 서비스를 빼고 api의 VLLM_BASE_URL·VLLM_MODEL·VLLM_API_KEY를 RunPod 값으로, VLLM_DATA_POLICY=self_hosted,
+#   LLM_ALLOW_EXTERNAL_ANSWER를 비운다. 코드는 그대로다.
+# - 모델 없이(키 없이) 돌려 보려면 대역 서버를 쓴다:
+#   docker compose -f deploy/docker-compose.yml --profile mock up --build   후 api의 VLLM_BASE_URL을 http://llm-mock:8001/v1,
+#   VLLM_MODEL을 mock-qwen으로 바꾼다(또는 셸 환경변수 LLM_URL·LLM_MODEL로 덮어쓴다).
+# - 검색 벡터 색인(data/index)은 호스트에서 만든다: python -m agent.rag.build_index (api/README.md "RAG 색인").
+#   없으면 BM25 전문 검색만 쓴다.
 # - 판정 데이터(data/)는 이미지에 넣지 않고 읽기 전용으로 붙인다(원문·첨부는 git·이미지 밖, 로컬 전용).
 # - 비밀 값은 저장소 루트 .env에서 읽는다(파일이 없어도 뜬다). 이 파일에 값을 적지 않는다.
-# - AWS 서버 배포 구성(역방향 프록시·이미지 태그)은 아직 정하지 않았다(기초 설계서 §3, 미정).
 name: jiwongak
 
 services:
   llm:
+    build:
+      context: ..
+      dockerfile: deploy/llm_gateway/Dockerfile
+    env_file:
+      - path: ../.env
+        required: false
+    environment:
+      UPSTREAM_MODEL: gpt-6-luna
+      SERVED_MODEL: gpt-6-luna
+      UPSTREAM_EMBED_MODEL: text-embedding-3-small
+      UPSTREAM_REASONING_EFFORT: low
+    ports:
+      - "127.0.0.1:8001:8001"
+
+  llm-mock:
+    profiles: ["mock"]
     build:
       context: ..
       dockerfile: deploy/mock_vllm/Dockerfile
@@ -17,7 +42,7 @@ services:
       MOCK_MODEL: mock-qwen
       MOCK_TOKEN_DELAY_MS: "30"
     ports:
-      - "127.0.0.1:8001:8001"
+      - "127.0.0.1:8002:8001"
 
   api:
     build:
@@ -28,9 +53,17 @@ services:
         required: false
     environment:
       APP_ENV: local
-      VLLM_BASE_URL: http://llm:8001/v1
-      VLLM_MODEL: mock-qwen
+      APP_DEV_AUTH: "1"
+      VLLM_BASE_URL: ${LLM_URL:-http://llm:8001/v1}
+      VLLM_MODEL: ${LLM_MODEL:-gpt-6-luna}
       VLLM_API_KEY: ""
+      VLLM_TIMEOUT_S: "90"
+      VLLM_DATA_POLICY: ${LLM_DATA_POLICY:-external}
+      LLM_ALLOW_EXTERNAL_ANSWER: ${LLM_ALLOW_EXTERNAL:-1}
+      EMBED_BASE_URL: http://llm:8001/v1
+      EMBED_MODEL: text-embedding-3-small
+      EMBED_DIM: "512"
+      RAG_INDEX_DIR: /app/data/index
     volumes:
       - ../data:/app/data:ro
     ports:
