@@ -25,6 +25,14 @@ def data_snapshot() -> str | None:
     return (cleaned.CLEANED / "LATEST").read_text().strip()
 
 
+@lru_cache
+def cleaned_raw() -> dict[str, dict]:
+    """정리층 원본 공고(ID별). 운영 현황(M-01)의 기간 상태용. 한 번만 읽는다."""
+    from ..services.notices import load_cleaned_raw
+
+    return load_cleaned_raw()
+
+
 def get_response_meta(service: EligibilityService = Depends(get_eligibility_service)):
     """응답 공통 meta(명세 §2.1). 판정·공고 응답에 붙인다."""
     from ..schemas.common import ResponseMeta

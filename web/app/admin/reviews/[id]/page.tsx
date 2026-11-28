@@ -18,6 +18,10 @@ type Candidate = {
   value: unknown;
   raw_text: string;
   evidence_reference: { start_char: number; end_char: number } | null;
+  /** 규칙 후보의 조건 문구 위치(문장 안의 좁은 위치). 채택하면 이 위치를 근거로 쓴다 */
+  condition_reference?: { start_char: number; end_char: number } | null;
+  condition_text?: string | null;
+  unit?: string | null;
   anchored?: boolean;
 };
 type Gold = {
@@ -85,9 +89,10 @@ function toDraft(g: Gold): Draft {
 
 /** 후보 → 작성 중 조건. 규칙 속성은 검수 양식 속성으로 옮기고, 모르는 속성은 '기타'(평가 규칙 없음)로 둔다. */
 function fromCandidate(c: Candidate, fields: Record<string, Field>): Draft | null {
-  if (!c.evidence_reference) return null;
+  const ref = c.condition_reference ?? c.evidence_reference;
+  if (!ref) return null;
   const v = (c.value ?? {}) as Record<string, unknown>;
-  const base = { key: key(), condition_type: c.condition_type === "EXCLUSION" ? "EXCLUSION" : "ELIGIBILITY", start_char: c.evidence_reference.start_char, end_char: c.evidence_reference.end_char, review_comment: "" };
+  const base = { key: key(), condition_type: c.condition_type === "EXCLUSION" ? "EXCLUSION" : "ELIGIBILITY", start_char: ref.start_char, end_char: ref.end_char, review_comment: "" };
   const attr = c.attribute ?? "";
   const field = ATTR_FIELD[attr] ?? (fields[attr] ? attr : "OTHER");
   const f = fields[field];
@@ -315,6 +320,8 @@ export default function ReviewPage({ params }: { params: Promise<{ id: string }>
                 <li key={c.candidate_id}>
                   <span className="badge">{c.extraction_method === "llm" ? "모델" : "규칙"}</span> {TYPE[c.condition_type] ?? c.condition_type} · {c.attribute} {c.operator}{" "}
                   <code>{JSON.stringify(c.value)}</code>
+                  {c.unit && <span className="muted"> {c.unit}</span>}
+                  {c.condition_text && <div>조건 문구: <mark>{c.condition_text}</mark></div>}
                   <div className="muted">“{c.raw_text.slice(0, 80)}”</div>
                   {!locked && (
                     <button type="button" className="link" disabled={!c.evidence_reference} onClick={() => adopt(c)}>

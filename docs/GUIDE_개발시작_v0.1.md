@@ -113,7 +113,7 @@ CI(`.github/workflows/tools-tests.yml`)는 PR마다 `tools/test_*.py`와 데이�
 | 추론 경로 | E-03 `.../path` | P0 | `api/routers/eligibility.py` | 상세 화면 | `GET /api/graph/path`(있음)를 감싼다 | 뼈대 |
 | 되묻기 재판정 | E-04 `POST /api/eligibility/clarify` | P0 | `api/routers/eligibility.py` | 상세 화면 | | 뼈대 |
 | 챗봇 | H-01 `POST /api/chat`(SSE) | P0 | `api/routers/chat.py`, `agent/` | 홈(`web/app/page.tsx`) | 모델 대역 서버 | 있음(대역 모델) |
-| 운영 현황 | M-01 `GET /api/admin/status` | P0 | `api/routers/admin.py` | `web/app/admin/page.tsx` | 수집 보고서, `/health/*` | 뼈대 |
+| 운영 현황 | M-01 `GET /api/admin/status` | P0 | `api/routers/admin.py` | `web/app/admin/page.tsx` | 수집 보고서, `/health/*` | 구현(출처별 수집 시각·건수, 검수·재처리 대기열, 기간 상태. 새로 들어온·바뀐 건수와 Langfuse·GPU는 수집 기록 표·관측 연결 전이라 null) |
 | 실패 건 재처리 | M-03 `POST /api/admin/reprocess` | P0 | `api/routers/admin.py` | 운영자 화면 | 첨부 추출 보고서 | 뼈대 |
 | 기준 시각·버전·면책 | S-01 `GET /api/meta` | P0 | `api/routers/meta.py` | 모든 화면 배지 | 수집 manifest | 구현(구간표는 API-9 확정 전 임시 기본값, 수집 시각은 공고 `fetched_at`). 웹 바닥글에 수집 시각·면책 문구 표시 |
 | P1 기능(동의·내 조건·대화 이력·신청 문서·what-if·검수) | 명세 §5~§9 | P1 | 새 라우터 파일 | | | 없음 |

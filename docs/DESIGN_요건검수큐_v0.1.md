@@ -61,7 +61,7 @@
 | `notice_id`, `title`, `source_system`, `detail_url`, `is_open`, `deadline` | 공고 정보 |
 | `priority_rank`, `priority_reasons` | 검수 순서(Q-2) |
 | `source_text`, `source_hash`, `segments[]` | 원문(자격·제외 구역 청크를 고치지 않고 `\n\n`으로 이음)과 구역별 위치·조건 종류. 해시는 다시 만들 때 원문 변경 감지에 쓴다 |
-| `prefill_candidates[]` | 규칙(`extraction_method=rule`)·모델(`llm`) 후보. 근거 위치는 원문 기준이다. 여러 번 나오는 근거는 첫 위치를 고르지 않고 위치 없이 둔다 |
+| `prefill_candidates[]` | 규칙(`extraction_method=rule`)·모델(`llm`) 후보. 근거 위치는 원문 기준이다. 여러 번 나오는 근거는 첫 위치를 고르지 않고 위치 없이 둔다. 규칙 후보는 문장 위치(`evidence_reference`, 문맥용)와 조건 문구 위치(`condition_reference`·`condition_text`, 예: "창업 7년 미만의 기업")를 함께 싣고, **채택하면 조건 문구 위치가 근거가 된다**. 「중소기업기본법」처럼 법령 이름 속 규모 낱말은 후보로 내지 않는다. 모델 후보의 단위 표기(명·%·억원 등)는 정답셋 코드(PERSON·PERCENT·KRW, 금액은 원 단위)로 바꾸고 원래 표기는 `unit_raw`에 남긴다(임시 기본값 2026-11-28, 팀 검토 전) |
 | `gold_conditions[]`, `missed_condition_candidates[]` | **검수자가 쓴다.** id는 `make_id(notice_id, 종류, 시작, 끝, 근거문)`(골든셋과 같은 결정적 규칙)이고, 조건마다 `review_status=VERIFIED` |
 | `gold_logic_roots[]` | 검수자가 쓰는 요건 논리(AND/OR). 없으면 AND로 가정한다(`logic_basis=assumed`) |
 | `whole_notice_conditions_complete` | **공고 전체의 자격 조건을 확인했는가.** 참일 때만 `reviewed`가 된다(Q-3) |
@@ -123,7 +123,7 @@
 | # | 결정할 것 | 선택지 | 임시 기본값 | 고칠 곳 |
 |---|---|---|---|---|
 | Q-1 | 큐 저장소 | ① 로컬 jsonl(지금) ② Supabase `review_queue` 테이블(설계서 §3 저장소 표) | ① 첫 구현. 팀이 같이 검수하려면 ②가 필요하다. 테이블은 만들지 않았다 | `QUEUE`, `read_jsonl`·`write_jsonl` |
-| Q-2 | 검수 순서 | ① 모집 중 → 마감 14일 이내 → 마감일 ② 조회 많은 공고 ③ 판정 후보에 자주 나온 공고 | ① | `priority()` |
+| Q-2 | 검수 순서 | ① 모집 중 → 마감 14일 이내 → 마감일 ② 조회 많은 공고 ③ 판정 후보에 자주 나온 공고 | ① + 판정 일치율 측정용 파일럿 공고(`data/goldset/pilot/pilot_assignment.csv`)를 맨 앞에(임시 기본값 2026-11-28, 팀 검토 전) | `priority()` |
 | Q-3 | 공고 전체 확인(`reviewed`) 기준 | ① 검수자 1명이 원문 전체를 보고 체크 ② 2명이 일치해야 함 ③ 1명 + 표본 이중 검수 | 정하지 않았다. 코드는 체크 여부만 본다. 큐 원문이 공고 전체가 아닐 수 있다(K-Startup은 첨부 본문이 청크에 없다). 체크 전에 공고 원문 링크를 확인하도록 안내해야 한다 | 검수 화면 안내, `check_row()` |
 | Q-4 | 골든셋과 서비스 검수가 겹칠 때 | ① 골든셋 우선 ② 나중 검수 우선 | ① | `gold_bridge.load_all()` |
 | Q-5 | 사전 채움 | ① 규칙만 ② 규칙 + 모델(비용·F1 낮음) ③ 사전 채움 없이 검수(편향 방지) | ① 기본, ②는 `--proposals`로 선택 | `build()` |

@@ -87,6 +87,27 @@ class TestBuild(unittest.TestCase):
         self.assertIsNone(out[0]["evidence_reference"])
         self.assertTrue(out[1]["anchored"])
 
+    def test_llm_units_become_codes(self):
+        self.assertEqual(Q.normalize_unit(3, "억원"), (300000000, "KRW"))
+        self.assertEqual(Q.normalize_unit(5, "명"), (5, "PERSON"))
+        self.assertEqual(Q.normalize_unit(10, "%"), (10, "PERCENT"))
+        self.assertEqual(Q.normalize_unit({"lower": {"value": 1, "inclusive": True}}, "백만원"),
+                         ({"lower": {"value": 1000000, "inclusive": True}}, "KRW"))
+        self.assertEqual(Q.normalize_unit(7, "YEAR"), (7, "YEAR"))  # 이미 코드면 그대로
+        out, _ = Q.proposal_prefill(NID, "매출 3억원 이상", [{"field": "REVENUE", "value": 3, "unit": "억원", "raw_text": "매출 3억원 이상"}])
+        self.assertEqual((out[0]["value"], out[0]["unit"], out[0]["unit_raw"]), (300000000, "KRW", "억원"))
+
+    def test_real_rule_extractor_gives_condition_phrase(self):
+        """실제 규칙 추출기: 조건 문구 위치는 문장 안의 좁은 위치이고, 법령 이름 속 규모 낱말은 후보가 아니다."""
+        text = "「중소기업기본법」 제2조에 따른 중소기업 중 창업 7년 미만의 기업\n대표자 만 39세 이하"
+        seg = {"section": "eligibility_api", "condition_type": "ELIGIBILITY", "start": 0, "end": len(text)}
+        cands = {c["rule_id"]: c for c in Q.rule_prefill(NID, "BIZINFO", text, [seg])}
+        for rule, phrase in (("bage_years", "창업 7년 미만의 기업"), ("founder_age", "만 39세 이하"), ("company_size", "중소기업")):
+            ref = cands[rule]["condition_reference"]
+            self.assertEqual(text[ref["start_char"]:ref["end_char"]], phrase)
+            self.assertEqual(cands[rule]["condition_text"], phrase)
+        self.assertGreater(cands["company_size"]["condition_reference"]["start_char"], text.index("」"))  # 법령 이름 밖
+
     def test_priority_open_soon_first(self):
         k_soon, _ = Q.priority({**NOTICE, "deadline": "2026-11-30"}, True, "2026-11-24")
         k_open, _ = Q.priority({**NOTICE, "deadline": "2027-03-01"}, True, "2026-11-24")
@@ -94,6 +115,13 @@ class TestBuild(unittest.TestCase):
         self.assertLess(k_soon, k_open)
         self.assertLess(k_open, k_closed)
         self.assertIn("마감·상태 미상", reasons)
+
+    def test_pilot_notice_goes_first(self):
+        k_pilot, reasons = Q.priority(NOTICE, False, "2026-11-24", focus=True)
+        k_soon, _ = Q.priority({**NOTICE, "deadline": "2026-11-30"}, True, "2026-11-24")
+        self.assertLess(k_pilot, k_soon)  # 마감된 파일럿 공고도 모집 중 공고보다 앞
+        self.assertEqual(reasons[0], "판정 일치율 측정 공고(파일럿)")
+        self.assertIn("BIZINFO:PBLN_000000000125770", Q.pilot_ids())
 
     def test_rebuild_keeps_reviewer_work_and_marks_stale(self):
         r = row()
