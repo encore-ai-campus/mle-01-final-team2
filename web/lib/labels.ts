@@ -9,6 +9,11 @@ export const ATTR: Record<string, string> = {
   applicant_type: "신청 대상",
   business_type: "기업 유형",
 };
+export const REASON: Record<string, string> = {
+  REQ_UNPARSED: "본문·첨부 자격 요건을 자동으로 해석하지 못함",
+  UNKNOWN_CONDITION: "입력하지 않았거나 확인할 수 없는 조건이 있음",
+  SOFT_CONDITION_UNSATISFIED: "권장 조건 일부를 충족하지 않음",
+};
 export const SOURCE: Record<string, string> = { BIZINFO: "기업마당", KSTARTUP: "K-Startup" };
 export const AGENT: Record<string, string> = {
   auto: "자동",

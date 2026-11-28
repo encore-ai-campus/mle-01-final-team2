@@ -53,7 +53,7 @@ API는 모델을 **OpenAI 호환 API**(`/v1/chat/completions`, `/v1/embeddings`)
 | `retrieval` | 공고 질의 검색 결과: 청크 id·공고 제목·섹션·밀집 유사도·BM25/밀집 순위·본문 앞부분, `mode`(`hybrid`·`bm25`) |
 | `citation` | 답변이 실제로 인용한 청크 id |
 | `ask` | 되묻기(조건이 하나도 없을 때, 최대 2회) |
-| `verdict` | 공고별 판정, 미확인 조건 id, 출처 주소, 수집 시각 |
+| `verdict` | 공고별 판정, 미확인 조건 id, 출처 주소, 수집 시각. `REQ_UNPARSED`면 `unparsed_text`(자동으로 해석하지 못한 자격·제외 요건 원문 구역 최대 3개, 판정에는 쓰지 않음). 설명은 이 구역 id를 `[id]`로 인용해 사용자가 확인할 항목을 짚는다 |
 | `requirement` | 조건별 평가 값, 사유, 원문 근거 |
 | `path` | 지역 계층 경로. Neo4j가 있으면 `source: "neo4j"`(사용자 지역 → `WITHIN`·`MEMBER_OF` ≤3 hop → 조건 지역), 없거나 장애면 `source: "evaluator"` |
 | `definition` | 조건 개념의 정의 → 법령 조문(`law`, `article_no`, `law_url`). 법령이 끊기면 `broken: true` |

@@ -46,6 +46,7 @@ export type NoticeView = {
   requirements: AgentEvent[];
   paths: AgentEvent[];
   definitions: AgentEvent[];
+  unparsed: Chunk[]; // 자동으로 해석하지 못한 자격 요건 원문(REQ_UNPARSED). 설명의 [id] 인용이 여기를 가리킨다
 };
 export type Chunk = {
   chunk_id: string;
@@ -56,6 +57,7 @@ export type Chunk = {
   detail_url?: string;
   score?: number;
   text?: string;
+  label?: string;
   agent: string;
   n: number; // 화면 인용 번호(1부터)
 };
@@ -76,10 +78,13 @@ export type TurnView = {
   usage?: AgentEvent;
 };
 
+/** 미해석 요건 원문 청크의 agent 표시. 검색 근거 목록에는 넣지 않고 판정 카드에서 보인다. */
+export const UNPARSED = "unparsed";
+
 export function buildTurn(events: AgentEvent[]): TurnView {
   const notices = new Map<string, NoticeView>();
   const get = (id: string) => {
-    if (!notices.has(id)) notices.set(id, { id, requirements: [], paths: [], definitions: [] });
+    if (!notices.has(id)) notices.set(id, { id, requirements: [], paths: [], definitions: [], unparsed: [] });
     return notices.get(id)!;
   };
   const steps = new Map<string, AgentStep>();
@@ -117,9 +122,17 @@ export function buildTurn(events: AgentEvent[]): TurnView {
       case "citation":
         for (const id of (e.chunk_ids as string[] | undefined) ?? []) cited.add(id);
         break;
-      case "verdict":
-        get(nid).verdict = e;
+      case "verdict": {
+        const nv = get(nid);
+        nv.verdict = e;
+        for (const u of (e.unparsed_text as Omit<Chunk, "agent" | "n">[] | undefined) ?? []) {
+          if (!u?.chunk_id || chunks.has(u.chunk_id)) continue;
+          const c: Chunk = { ...u, notice_id: nid, title: s(e.title), agent: UNPARSED, n: chunks.size + 1 };
+          chunks.set(u.chunk_id, c);
+          nv.unparsed.push(c);
+        }
         break;
+      }
       case "requirement":
         get(nid).requirements.push(e);
         break;

@@ -186,6 +186,49 @@ class TestOrchestrator(unittest.TestCase):
 
 
 @unittest.skipUnless(HAS_DEPS, "openai·langgraph·fastapi·httpx·pyyaml·numpy가 필요하다")
+class TestUnparsedRequirements(unittest.TestCase):
+    """REQ_UNPARSED 공고: 판정은 그대로(NEEDS_CHECK) 두고, 읽지 못한 자격 요건 원문을 보이고 설명에서 인용하게 한다."""
+
+    def test_excerpts_pick_eligibility_sections_in_order(self):
+        from api.services.eligibility import MAX_UNPARSED, unparsed_excerpts
+
+        chunks = [{"chunk_id": "N#apply_method:0", "section": "apply_method", "text": "온라인 접수합니다. 사업계획서를 제출합니다."},
+                  {"chunk_id": "N#att_exclusion@f0-1:0", "section": "att_exclusion@f0-1", "text": "국세 체납 기업은 신청할 수 없습니다(제외 대상)."},
+                  {"chunk_id": "N#eligibility_api:0", "section": "eligibility_api", "text": "서울 소재 창업 3년 이내 중소기업 ※ 자세한 지원대상 공고문 참조"},
+                  {"chunk_id": "N#att_eligibility@f0-2:0", "section": "att_eligibility@f0-2", "text": "짧음"}]
+        out = unparsed_excerpts(chunks)
+        self.assertEqual([u["chunk_id"] for u in out], ["N#eligibility_api:0", "N#att_exclusion@f0-1:0"])  # 신청 방법·너무 짧은 글 제외
+        self.assertTrue(all(u["label"] for u in out))
+        many = [{"chunk_id": f"N#att_eligibility@f0-{i}:0", "section": f"att_eligibility@f0-{i}", "text": f"참여 대상 {i}번 문단입니다. " * 5}
+                for i in range(6)]
+        self.assertEqual(len(unparsed_excerpts(many)), MAX_UNPARSED)
+
+    def test_explanation_context_and_citation_allow_unparsed_text(self):
+        from agent.graph import _context, cite_ids
+        from agent.guards import sentence_guard
+
+        r = {"notice_id": "N1", "title": "t", "verdict": "NEEDS_CHECK", "reasons": ["REQ_UNPARSED"], "conditions": [],
+             "unparsed_text": [{"chunk_id": "N1#eligibility_api:0", "section": "eligibility_api", "label": "신청 자격", "text": "서울 소재 기업"}]}
+        ctx = _context([r])["notices"][0]
+        self.assertEqual(ctx["reasons"], ["REQ_UNPARSED"])
+        self.assertEqual(ctx["unparsed_requirements"][0]["id"], "N1#eligibility_api:0")
+        known = cite_ids([r])
+        self.assertIsNone(sentence_guard("소재지 요건을 원문에서 확인해 주세요 [N1#eligibility_api:0]", known, False))
+        self.assertEqual(sentence_guard("업력 요건을 확인해 주세요 [N1#att_eligibility@f0-9:0]", known, False), "citation")
+
+    def test_verdict_event_carries_unparsed_text(self):
+        from agent.graph import build_graph, run_events
+        from tests.test_agent import fake_judge, notice
+
+        n = {**notice(), "notice_id": "N1", "reasons": ["REQ_UNPARSED"],
+             "unparsed_text": [{"chunk_id": "N1#eligibility_api:0", "section": "eligibility_api", "label": "신청 자격", "text": "서울 소재 기업"}]}
+        ev = collect(run_events(build_graph(fake_judge([n]), None, None), {"question": "신청할 수 있는 공고", "profile": {"business_age_years": 1}}))
+        v = next(e for e in ev if e["type"] == "verdict")
+        self.assertEqual(v["unparsed_text"][0]["chunk_id"], "N1#eligibility_api:0")
+        self.assertEqual(v["verdict"], n["verdict"])  # 판정은 바꾸지 않는다
+
+
+@unittest.skipUnless(HAS_DEPS, "openai·langgraph·fastapi·httpx·pyyaml·numpy가 필요하다")
 class TestGateway(unittest.TestCase):
     def test_translate_and_unsupported_param(self):
         from deploy.llm_gateway import app as gw
