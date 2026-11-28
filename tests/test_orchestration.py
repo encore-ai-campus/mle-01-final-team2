@@ -121,7 +121,16 @@ class TestOrchestrator(unittest.TestCase):
         terms = {"중소기업": {"term": "중소기업", "law": "중소기업기본법", "article": "제2조", "text": "중소기업은 …",
                            "law_url": None, "needs_review": False, "review_status": "확인", "delegated_basis": [], "concept": None}}
         dg = build_definition(r, lambda: terms)
-        self.g = build_orchestrator(make_runners(elig, qa, dg), r, is_term=lambda q: "중소기업" in q)
+        runners = make_runners(elig, qa, dg)
+        self.elig_reqs = []
+        inner = runners["eligibility"]
+
+        def capture(req):
+            self.elig_reqs.append(req)
+            return inner(req)
+
+        runners["eligibility"] = capture
+        self.g = build_orchestrator(runners, r, is_term=lambda q: "중소기업" in q)
 
     def run_req(self, **req):
         from agent.orchestrator import run_orchestrated
@@ -141,6 +150,19 @@ class TestOrchestrator(unittest.TestCase):
         self.assertEqual(kinds.count("done"), 1)
         self.assertEqual(ev[-1]["agents"], ["eligibility", "notice_qa"])
         self.assertEqual(ev[-1]["outcome"], "answered")
+
+    def test_eligibility_explanation_defers_content_question(self):
+        from agent.graph import DEFER_QUESTION, answer_messages
+
+        self.run_req(question="창업 3년차인데 신청할 수 있는 공고와 신청 방법 알려줘", profile={"business_age_years": 3})
+        self.assertTrue(self.elig_reqs[-1]["defer_content"])  # 뒤에 공고 질의가 있으면 판정 설명은 판정만
+        self.run_req(question="맞는 공고 추천해줘", profile={"business_age_years": 3})
+        self.assertFalse(self.elig_reqs[-1]["defer_content"])
+        q = "창업 3년차 신청 방법 알려줘"
+        deferred = answer_messages("{}", q, True)
+        self.assertNotIn(q, deferred[1]["content"])  # 내용 질문을 모델에 보이지 않는다
+        self.assertIn(DEFER_QUESTION, deferred[1]["content"])
+        self.assertIn(q, answer_messages("{}", q, False)[1]["content"])
 
     def test_definition_and_replan_when_term_unknown(self):
         ev = self.run_req(question="중소기업이 뭐야?")

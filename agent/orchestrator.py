@@ -146,7 +146,8 @@ def build_orchestrator(runners: dict[str, Runner], router: LLMRouter | None = No
         base = {"question": s.get("question", ""), "include_closed": s.get("include_closed", False)}
         if name == "eligibility":
             return {**base, "profile": s.get("profile") or {}, "notice_id": s.get("notice_id"), "top": s.get("top", 5),
-                    "ask_count": s.get("ask_count", 0)}
+                    "ask_count": s.get("ask_count", 0),
+                    "defer_content": "notice_qa" in s.get("plan", [])[s.get("step", 0) + 1:]}  # 내용 질문은 뒤 단계가 답한다
         if name == "notice_qa":
             scope = [s["notice_id"]] if s.get("notice_id") else (s.get("carry") or None)
             return {**base, "notice_ids": scope}

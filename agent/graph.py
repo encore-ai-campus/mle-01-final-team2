@@ -29,7 +29,7 @@ from . import templates
 from .guards import input_guard, sentence_guard, split_sentences
 from .llm import AllProvidersFailed, LLMError, LLMRouter
 
-PROMPT_VERSION = "answer-v0.1"
+PROMPT_VERSION = "answer-v0.2"
 RECURSION_LIMIT = 20          # 노드 수(8)보다 넉넉히, 그래도 명시한다(GraphRecursionError 방지)
 MAX_ASK = 2                   # 되묻기 최대 2회
 MAX_NOTICES_IN_PROMPT = 3
@@ -47,6 +47,7 @@ class AgentState(TypedDict, total=False):
     notice_id: str | None
     top: int
     include_closed: bool
+    defer_content: bool                # 뒤에 공고 질의 단계가 있다(오케스트레이터). 설명은 판정만 다룬다
     ask_count: int
     intent: str
     reason_code: str | None
@@ -69,8 +70,20 @@ SYSTEM_PROMPT = """너는 정부지원사업 공고의 자격 판정 결과를 �
 2. <context>에 있는 조건만 설명한다. 조건을 말할 때는 해당 조건 id를 [조건id] 형태로 붙인다. 없는 id를 만들지 않는다.
 3. "선정", "받을 수 있습니다", "확실히" 같은 확정·수혜 표현을 쓰지 않는다. 최종 판단은 주관 기관이 한다고 안내한다.
 4. 확인이 필요한 조건(UNKNOWN)은 무엇을 확인하면 되는지 알려 준다. 모르는 것을 추측하지 않는다.
-5. 한국어로, 공고당 2~3문장으로 짧게 쓴다.
-6. 질문 중 신청 방법·제출 서류·지원 내용처럼 공고 내용을 묻는 부분은 다음 단계가 공고 원문으로 답하므로 다루지 않는다."""
+5. 한국어로, 공고당 2~3문장으로 짧게 쓴다."""
+# 뒤에 공고 질의 단계가 있을 때 붙인다. 질문 원문도 넘기지 않는다(모델이 보지 못한 질문에는 답할 수 없다)
+DEFER_RULE = """
+6. 이 단계는 판정 결과 설명만 한다. 신청 방법·제출 서류·지원 내용 같은 공고 내용, 목록에 없는 공고는 언급하지 않는다(다음 단계가 공고 원문으로 답한다)."""
+DEFER_QUESTION = "내 조건으로 본 공고별 판정 결과와 확인할 조건을 설명해 줘."
+
+
+def answer_messages(ctx: str, question: str, defer_content: bool) -> list[dict]:
+    """설명 프롬프트. 가변 값은 뒤에 둔다."""
+    if defer_content:
+        return [{"role": "system", "content": SYSTEM_PROMPT + DEFER_RULE},
+                {"role": "user", "content": f"<context>{ctx}</context>\n질문: {DEFER_QUESTION}"}]
+    return [{"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": f"<context>{ctx}</context>\n질문: {question}"}]
 
 
 def _emit(kind: str, **data) -> None:
@@ -267,8 +280,7 @@ def build_graph(judge: Judge, router: LLMRouter | None, graph: Any = None,
         known = {c["cond_id"] for r in results for c in r.get("conditions", [])}
         any_eligible = any(r["verdict"] == "ELIGIBLE" for r in results)
         ctx = json.dumps(_context(results, s.get("definitions", [])), ensure_ascii=False)
-        messages = [{"role": "system", "content": SYSTEM_PROMPT},
-                    {"role": "user", "content": f"<context>{ctx}</context>\n질문: {s.get('question', '')}"}]  # 가변 값은 뒤에
+        messages = answer_messages(ctx, s.get("question", ""), bool(s.get("defer_content")))
         try:
             h = await router.open_stream("answer", messages)
         except (AllProvidersFailed, LLMError) as e:
@@ -352,7 +364,8 @@ async def run_events(graph, request: dict) -> AsyncIterator[dict]:
     """그래프를 돌리며 이벤트를 차례로 낸다. SSE 라우터와 평가 스크립트가 같이 쓴다."""
     state: AgentState = {"question": request.get("question", ""), "profile": request.get("profile") or {},
                          "notice_id": request.get("notice_id"), "top": request.get("top", 5),
-                         "include_closed": request.get("include_closed", False), "ask_count": request.get("ask_count", 0),
+                         "include_closed": request.get("include_closed", False),
+                         "defer_content": bool(request.get("defer_content")), "ask_count": request.get("ask_count", 0),
                          "tools_used": [], "failures": {}, "banners": []}
     async for ev in graph.astream(state, stream_mode="custom", config={"recursion_limit": RECURSION_LIMIT}):
         yield ev
