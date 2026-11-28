@@ -11,7 +11,7 @@
 
 | 항목 | 값 |
 |---|---|
-| 서버 | FastAPI (Python), Google Cloud Run |
+| 서버 | FastAPI (Python), AWS CPU 서버(Docker). 모델 서버(vLLM)는 RunPod (2026-11 팀 결정, 예전 값은 Cloud Run) |
 | 기본 경로 | `/api` (버전은 `/api/v1`로 올릴지 팀 결정, §10) |
 | 인증 | Supabase Auth(Google 로그인)가 발급한 JWT를 `Authorization: Bearer <token>`으로 보낸다. 서버는 JWT를 검증하고 역할(`user` / `admin`)을 서버 쪽 허용 목록으로 확인한다 |
 | 형식 | JSON(UTF-8). 챗봇만 SSE(`text/event-stream`) |
